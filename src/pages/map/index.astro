@@ -305,7 +305,17 @@ const routeD = smooth(STAGES);
       padding: 16px 0;
     }
 
-    .dot { position: relative; z-index: 1; width: 52px; }
+    /* Explicit box on both axes: without a fixed height the dots stretched
+       to whatever their label needed, so no two were the same shape. */
+    .dot {
+      position: relative;
+      z-index: 1;
+      width: 52px;
+      height: 52px;
+      flex: 0 0 52px;
+      align-self: flex-start;
+      border-radius: 50%;
+    }
     .label { align-items: flex-start; padding-top: 6px; }
     .name, .peek { text-align: left; }
 

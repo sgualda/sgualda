@@ -201,6 +201,17 @@ test('the mobile menu traps focus', async ({ page }) => {
   // Background must be inert, or Tab walks the page underneath.
   expect(await page.locator('main').evaluate((el) => (el as HTMLElement).inert)).toBe(true);
 
+  // There must be a visible way out that is not a keyboard shortcut.
+  const close = page.locator('#sheet-close');
+  await expect(close).toBeVisible();
+  const box = await close.boundingBox();
+  expect(box!.width).toBeGreaterThanOrEqual(44);
+  await close.click();
+  await expect(page.locator('.sheet')).not.toBeVisible();
+
+  // And Escape still works.
+  await page.locator('.burger').click();
+  await expect(page.locator('.sheet')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('.sheet')).not.toBeVisible();
   expect(await page.locator('main').evaluate((el) => (el as HTMLElement).inert)).toBe(false);

@@ -25,6 +25,8 @@ That is not a content problem, it is a **returning problem**, and it is the one 
 
 So the product is not organised around discovery. It is organised around **resumption**.
 
+![The glintale home screen: streak, daily mission, continue reading and leaderboard](../../assets/cases/glintale-home.png)
+
 ## The decisions I would defend
 
 **Continue Reading sits above everything else, with progress on every card.** The default in this category is to open with a catalogue, because a catalogue looks like abundance. But somebody arriving at glintale has almost always already started something, and a wall of new options makes that moment harder, not easier. The percentage is there so resuming is one glance rather than an act of memory: *67% through, 51 minutes total.*

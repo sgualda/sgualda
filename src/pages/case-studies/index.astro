@@ -17,13 +17,6 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order || b.data.published.valueOf() - a.data.published.valueOf()
 );
 
-const count = (s: string) => cases.filter((c) => c.data.status === s).length;
-const filters = [
-  { key: 'all', label: 'All', n: cases.length },
-  { key: 'alive', label: 'Alive', n: count('alive') },
-  { key: 'in-progress', label: 'In progress', n: count('in-progress') },
-  { key: 'buried', label: 'Buried', n: count('buried') },
-];
 ---
 
 <Base
@@ -49,26 +42,11 @@ const filters = [
   </section>
 
   <div class="col">
-    <div class="filters" role="group" aria-label="Filter by status">
-      {
-        filters.map((f, i) => (
-          <button
-            class:list={['chip', { on: i === 0 }]}
-            type="button"
-            data-filter={f.key}
-            aria-pressed={i === 0}
-          >
-            {f.label} <span>{f.n}</span>
-          </button>
-        ))
-      }
-    </div>
-
     <div class="grid" id="grid">
       {
         cases.length
           ? cases.map((c) => (
-              <a class="card" href={`/case-studies/${c.id}/`} data-status={c.data.status}>
+              <a class="card" href={`/case-studies/${c.id}/`} >
                 <div class="thumb" aria-hidden="true"></div>
                 <h2>{c.data.title}</h2>
                 <p class="role">{c.data.role} · {c.data.year}</p>
@@ -101,24 +79,6 @@ const filters = [
   .intro .eyebrow { margin-bottom: 16px; }
   .intro h1 { margin-bottom: 18px; }
 
-  .filters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 52px; }
-  .chip {
-    font-family: var(--font-body);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    padding: 9px 18px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--hair);
-    background: transparent;
-    color: var(--ink);
-    cursor: pointer;
-    transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
-  }
-  .chip span { color: var(--dim); margin-left: 3px; }
-  .chip:hover { border-color: var(--ink); }
-  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-  .chip.on span { color: color-mix(in srgb, var(--paper) 60%, transparent); }
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
   .thumb {
@@ -169,21 +129,3 @@ const filters = [
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
 </style>
 
-<script>
-  const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
-  const cards = document.querySelectorAll<HTMLElement>('.card');
-
-  chips.forEach((chip) =>
-    chip.addEventListener('click', () => {
-      const f = chip.dataset.filter;
-      chips.forEach((c) => {
-        const on = c === chip;
-        c.classList.toggle('on', on);
-        c.setAttribute('aria-pressed', String(on));
-      });
-      cards.forEach((card) => {
-        card.hidden = f !== 'all' && card.dataset.status !== f;
-      });
-    })
-  );
-</script>

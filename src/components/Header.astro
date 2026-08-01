@@ -30,6 +30,12 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 
 <!-- Full-screen mobile menu -->
 <div class="sheet" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <button class="sheet-close" type="button" id="sheet-close" aria-label="Close menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  </button>
+
   <ul class="sheet-links">
     {
       NAV.map(({ label, href }, i) => (
@@ -126,6 +132,36 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
   .sheet[hidden] { display: none; }
   .sheet.open { clip-path: circle(150% at calc(100% - 40px) 34px); }
 
+  /* The burger sits inside .site-header, which has z-index 60 and therefore
+     creates a stacking context — its own z-index cannot lift it above the
+     sheet. So the close control lives inside the sheet instead. */
+  .sheet-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: none;
+    border: 0;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 50%;
+    opacity: 0;
+    /* Fades in, never scales: a scaled-down button is a smaller touch target
+       for the length of the animation, and 48px × 0.9 is below the minimum. */
+    transition: opacity 0.3s var(--ease), background 0.2s var(--ease);
+    transition-delay: 0.2s;
+  }
+  .sheet.open .sheet-close { opacity: 1; }
+  .sheet-close:hover { background: var(--surface); }
+  .sheet-close svg {
+    width: 22px; height: 22px;
+    stroke: currentColor; stroke-width: 1.6; fill: none;
+    stroke-linecap: round;
+  }
+
   .sheet-links { list-style: none; text-align: center; }
   .sheet-links li {
     opacity: 0;
@@ -179,6 +215,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
     const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
     let lastFocused: HTMLElement | null = null;
     let hideTimer = 0;
+    let openFrame = 0;
 
     const setOpen = (open: boolean) => {
       burger.setAttribute('aria-expanded', String(open));
@@ -195,11 +232,17 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
         lastFocused = document.activeElement as HTMLElement;
         clearTimeout(hideTimer);
         sheet.hidden = false;
-        requestAnimationFrame(() => {
+        // The class goes on next frame so the clip-path has something to
+        // animate from. If the menu is dismissed inside that frame the
+        // callback must not fire, or it re-opens a sheet that is closing and
+        // leaves it stuck open with no way out.
+        openFrame = requestAnimationFrame(() => {
+          openFrame = 0;
           sheet.classList.add('open');
           sheet.querySelector<HTMLElement>(FOCUSABLE)?.focus();
         });
       } else {
+        if (openFrame) { cancelAnimationFrame(openFrame); openFrame = 0; }
         sheet.classList.remove('open');
         // Deliberately a timer, not transitionend. That event does not fire at
         // all under prefers-reduced-motion, and it fires unreliably when the
@@ -217,6 +260,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
     burger.addEventListener('click', () =>
       setOpen(burger.getAttribute('aria-expanded') !== 'true')
     );
+    document.getElementById('sheet-close')?.addEventListener('click', () => setOpen(false));
 
     sheet.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('a')) setOpen(false);
