@@ -202,21 +202,30 @@ test('required public files exist', () => {
 });
 
 test('js errors are reported, and the page survives reporting', async ({ page }) => {
-  const beacons: string[] = [];
-  await page.route('**/api/log.php', (r) => {
-    beacons.push(r.request().postData() ?? '');
-    r.fulfill({ status: 200, body: '{"ok":true}' });
-  });
-
   await page.goto('/');
-  await page.evaluate(() => {
-    window.dispatchEvent(new ErrorEvent('error', { message: 'test failure', filename: 'x.js', lineno: 7 }));
+
+  // Spy inside the page rather than on the network: WebKit does not expose a
+  // sendBeacon body to route interception, so intercepting proves nothing.
+  const payload = await page.evaluate(async () => {
+    return new Promise<string>((resolve) => {
+      const real = navigator.sendBeacon.bind(navigator);
+      navigator.sendBeacon = (url, data) => {
+        if (String(url).includes('/api/log.php') && data instanceof Blob) {
+          data.text().then(resolve);
+          return true;
+        }
+        return real(url, data as BodyInit);
+      };
+      window.dispatchEvent(
+        new ErrorEvent('error', { message: 'test failure', filename: 'x.js', lineno: 7 })
+      );
+    });
   });
 
-  await expect(async () => expect(beacons.length).toBeGreaterThan(0)).toPass();
-  const body = JSON.parse(beacons[0]);
+  const body = JSON.parse(payload);
   expect(body.message).toContain('test failure');
-  // Nothing that could identify a person.
+  expect(body.line).toBe(7);
+  // Nothing in here can identify a person.
   expect(Object.keys(body).sort()).toEqual(['line', 'message', 'page', 'source']);
 });
 
