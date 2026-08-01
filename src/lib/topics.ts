@@ -60,4 +60,3 @@ export const TOPICS: Topic[] = [
   },
 ];
 
-export const topicBySlug = (slug: string) => TOPICS.find((t) => t.slug === slug);

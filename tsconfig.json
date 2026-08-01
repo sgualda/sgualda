@@ -25,9 +25,6 @@
       "@styles/*": [
         "src/styles/*"
       ]
-    },
-    "types": [
-      "@cloudflare/workers-types"
-    ]
+    }
   }
 }

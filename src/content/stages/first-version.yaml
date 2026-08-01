@@ -3,6 +3,7 @@
 n: "02"
 name: "First version"
 lead: "You know what to build. Now you decide how much of it."
+meta: "Everyone agrees on building something small until somebody has to name what gets cut. How to decide what the first version has to prove."
 question: "What is the smallest version that is still worth showing?"
 x: 28
 y: 26

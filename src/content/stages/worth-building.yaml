@@ -3,6 +3,7 @@
 n: "01"
 name: "Worth building?"
 lead: "Before you build anything. Most of the cost is decided here."
+meta: "Most of what a product costs is decided before anybody builds anything. How to tell a real problem from an idea you like, and what to look for first."
 question: "Is there a problem here worth anyone’s time?"
 x: 6
 y: 72

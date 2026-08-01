@@ -134,8 +134,12 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   .pills span {
     font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim);
     border: 1px solid var(--hair); border-radius: var(--radius-pill); padding: 5px 10px;
-    background: var(--paper);
+    /* Derived from the card, not fixed: the card turns white on hover, and a
+       fixed white pill vanished into it leaving a floating outline. */
+    background: color-mix(in srgb, var(--paper) 65%, var(--surface));
+    transition: background 0.3s var(--ease);
   }
+  .card-link:hover .pills span { background: var(--surface); }
   .card h2 { font-size: 1.0625rem; margin-bottom: 10px; }
   .card .use {
     font-size: 0.875rem; line-height: 1.55; letter-spacing: 0; color: var(--dim);

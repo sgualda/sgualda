@@ -11,7 +11,8 @@
     "audit:urls": "node scripts/check-urls.mjs",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "cms": "CMS=1 astro dev"
+    "cms": "CMS=1 astro dev",
+    "audit:budget": "node scripts/check-budget.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.12",
@@ -23,7 +24,6 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^6.0.2",
     "@axe-core/playwright": "^4.12.1",
-    "@cloudflare/workers-types": "^5.20260801.1",
     "@keystatic/astro": "^5.2.0",
     "@keystatic/core": "^0.6.4",
     "@playwright/test": "^1.62.1",
@@ -32,8 +32,6 @@
     "http-server": "^14.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "typescript": "^5.9.3",
-    "wrangler": "^4.118.0",
-    "yaml": "^2.9.0"
+    "typescript": "^5.9.3"
   }
 }

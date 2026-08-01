@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/pages/**/*.{astro,ts}",
+    "scripts/*.mjs",
+    "keystatic.config.ts"
+  ],
+  "project": [
+    "src/**/*.{astro,ts,css}",
+    "scripts/**"
+  ],
+  "ignoreDependencies": [
+    "http-server"
+  ]
+}

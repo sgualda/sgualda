@@ -3,6 +3,7 @@
 n: "03"
 name: "Nobody came"
 lead: "You launched. Nothing happened. This is where I have lost the most."
+meta: "Five completely different reasons produce the same flat graph after launch, and their fixes point in opposite directions. How to tell which one you have."
 question: "Which of the five reasons is behind a flat graph?"
 x: 50
 y: 64

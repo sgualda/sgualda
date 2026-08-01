@@ -6,7 +6,7 @@
  * the Figma frame "Work with me".
  */
 
-export type Option = [string, string, string];
+type Option = [string, string, string];
 export type Question = { k: string; q: string; o: Option[] };
 
 /** The four qualifier questions. */

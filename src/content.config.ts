@@ -101,6 +101,8 @@ const stages = defineCollection({
     name: z.string(),
     lead: z.string(),
     question: z.string(),
+    /** Written by hand. Concatenating fields produced five near-identical ones. */
+    meta: z.string().min(70).max(160),
     /** Percentage position on the route diagram. */
     x: z.number().min(0).max(100),
     y: z.number().min(0).max(100),

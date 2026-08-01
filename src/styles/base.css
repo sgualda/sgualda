@@ -194,6 +194,14 @@ input, textarea, select { text-align: left; font-family: inherit; }
   transition: background 0.3s var(--ease), transform 0.3s var(--ease);
 }
 .card-link > a { display: block; padding: 26px; }
+/* Without @property the browser cannot interpolate an angle, so the gradient
+   would sit frozen at whatever angle it started on. A plain border is a
+   better degraded state than a stuck animation. */
+@supports not (background: conic-gradient(from var(--ang), red, blue)) {
+  .card-link:hover, .card-link:focus-within { border: 1px solid var(--ink); }
+  .card-link::before { display: none; }
+}
+
 .card-link::before {
   content: '';
   position: absolute;

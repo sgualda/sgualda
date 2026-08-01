@@ -92,6 +92,10 @@ export const CTA = { label: 'Start here', href: '/work-with-me/' } as const;
  *
  * Both old shapes 301 from public/_redirects, so nothing dangles.
  */
+/**
+ * Read as text by scripts/check-urls.mjs rather than imported, so a tool that
+ * scans for unused exports will report it. It is not unused.
+ */
 export const URL_MAP = {
   pages: [
     '/',
@@ -148,18 +152,7 @@ export const URL_MAP = {
   ],
 } as const;
 
-/** Flat list for the build-time URL check. */
-export const ALL_URLS = [...URL_MAP.pages, ...URL_MAP.tools, ...URL_MAP.writing];
 
-/** Tool pages, with the short labels used in the footer sitemap. */
-export const TOOLS = [
-  { label: 'Why nobody uses your product', href: '/tools/why-is-nobody-using-your-product/' },
-  { label: 'Is that feedback real?', href: '/tools/is-user-feedback-real-or-just-polite/' },
-  { label: 'Is this feature worth building?', href: '/tools/is-this-feature-worth-building/' },
-  { label: 'Decide now, or wait?', href: '/tools/should-you-decide-now-or-think-longer/' },
-  { label: 'Can you charge yet?', href: '/tools/can-you-charge-for-your-product-yet/' },
-  { label: 'Why work gets redone', href: '/tools/why-your-team-keeps-redoing-the-same-work/' },
-] as const;
 
 /** Pages that belong in the footer sitemap, beyond the main nav. */
 export const MORE = [

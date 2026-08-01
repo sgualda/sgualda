@@ -105,6 +105,17 @@ if (existsSync(rPath)) {
 
 // Publishing a legal notice with placeholder identification is worse than
 // not publishing one at all. Loud, every single build.
+// /privacy/ states, in writing, that there is no analytics and no cookies.
+// If that stops being true the page has to change in the same commit.
+const privacy = readFileSync(join(root, 'src/pages/privacy/index.astro'), 'utf8');
+const analytics = readdirSync(join(root, 'src'), { recursive: true })
+  .filter((f) => typeof f === 'string' && /\.(astro|ts)$/.test(f))
+  .some((f) => /googletagmanager|plausible\.io|umami|gtag\(/.test(readFileSync(join(root, 'src', f), 'utf8')));
+if (analytics && /No analytics\. No cookies\./.test(privacy)) {
+  console.error('\n✗ Analytics is installed but /privacy/ still claims there is none (#Q-103)');
+  process.exit(1);
+}
+
 if (/trading: true/.test(src) && /nif: ''/.test(src)) {
   console.log(`  ${Y}!${X} LEGAL.trading is on but the NIF is empty — /legal/ would be incomplete (#Q-104)`);
   console.log('');
