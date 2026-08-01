@@ -1,0 +1,41 @@
+# Stage 05 — Charging for it
+
+n: "05"
+name: "Charging for it"
+lead: "Someone has to pay. This is the part I am weakest at."
+question: "Can you put a price on it yet?"
+x: 94
+y: 70
+tools:
+  - "can-you-charge-for-your-product-yet"
+  - "is-user-feedback-real-or-just-polite"
+body:
+  - "I will be honest: this is the part I am weakest at, and I think it is common among
+    designers. We are comfortable talking about value right up until it has a number
+    attached to it."
+  - "The first time I put a price on something of my own, I picked the number by looking at
+    what other people charged and going slightly under. Nobody bought it. Then somebody
+    wrote to ask whether there was a version with support, and offered roughly three times
+    what I was asking. I had not been too expensive. I had been describing the wrong thing,
+    cheaply."
+  - "What I have learned since is that the signal you are waiting for is simpler than the
+    one you are looking for. It is not a survey and it is not a competitor's pricing page.
+    It is <strong>whether anybody has asked what it costs before you brought it up.</strong>
+    That question is a person telling you they have already decided."
+  - "The other thing worth knowing: a price is far easier to change than to introduce.
+    Waiting until the number feels right is a way of not deciding, and free users teach you
+    almost nothing about what somebody will pay for. The first number will be wrong. Pick it
+    anyway, tell your existing users before it goes public, and watch who leaves."
+  - "If nobody leaves, you were too cheap. That is information, not a failure — and it took
+    me an embarrassingly long time to hear it that way."
+traps:
+  - "Building a pricing page before a single person has asked the price."
+  - "Tiers. They are usually a sign of not being sure what you are selling, and people read
+    that uncertainty accurately."
+  - "Discounting to close the first customer. You learn nothing about what it is worth and
+    you have set the anchor."
+signal: "Somebody asked how much it costs before you told them."
+cta:
+  title: "A working session on pricing"
+  body: "Bring what you know about who pays for what today. We pick a number, decide what
+    would make you change it, and write down how you will tell the people already using it."

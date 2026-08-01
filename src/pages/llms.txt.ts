@@ -1,8 +1,7 @@
 import { getCollection } from 'astro:content';
 import { SITE } from '@lib/site';
 import { TOPICS } from '@lib/topics';
-import { STAGES } from '@lib/stages';
-import { TOOLS } from '@lib/tools';
+import { getStages, getTools } from '@lib/content';
 import type { APIContext } from 'astro';
 
 /**
@@ -13,6 +12,8 @@ import type { APIContext } from 'astro';
  * cannot disagree with the site.
  */
 export async function GET(_: APIContext) {
+  const STAGES = await getStages();
+  const TOOLS = await getTools();
   const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
   );

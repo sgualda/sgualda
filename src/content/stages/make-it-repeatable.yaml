@@ -1,0 +1,42 @@
+# Stage 04 — Make it repeatable
+
+n: "04"
+name: "Make it repeatable"
+lead: "It works. Now do it again, with other people."
+question: "Why does the same work keep coming back?"
+x: 72
+y: 24
+tools:
+  - "why-your-team-keeps-redoing-the-same-work"
+  - "should-you-decide-now-or-think-longer"
+body:
+  - "Doing something once is a story. Doing it again, with different people, is a business —
+    and it is a completely different skill. I was much better at the first one for a long
+    time."
+  - "What breaks here is never the product. It is that every important decision lives inside
+    somebody's head, usually the person who was there at the start. Nothing got written down
+    because everyone was in the room. Then the room changes, and the same argument comes
+    back every few weeks with slightly different people in it."
+  - "For about a year I was that person. I knew why every component looked the way it did,
+    and I mistook that for the system being in good shape. It was not a system, it was me.
+    The month I was away, three people made three reasonable and mutually incompatible
+    decisions, and none of them did anything wrong — there was simply nothing to consult."
+  - "The fix is unglamorous and takes ten minutes a week. <strong>Write down what was
+    decided, why, what you rejected, and what would make you change your mind.</strong> Four
+    lines. It ends an entire category of argument and it is worth more than any process
+    anyone will propose instead."
+  - "Be careful here, because this is the stage where teams reach for ceremony. Messy and
+    broken are different things, and process only improves one of them."
+traps:
+  - "Adding process because things feel chaotic. Feeling chaotic and being broken are not
+    the same measurement."
+  - "Hiring to solve a decision problem. You get more opinions in the room and the same
+    unclear owner."
+  - "Assuming what worked at five people works at fifteen. In my experience it starts
+    creaking at about eight."
+signal: "Something shipped well while you were not paying attention to it."
+cta:
+  title: "Time inside the team"
+  body: "A few months in your tools, your standups and your arguments — deciding with you
+    rather than for you, and leaving behind a written decision log that still works after I
+    am gone."

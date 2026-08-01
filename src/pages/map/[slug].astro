@@ -3,18 +3,28 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import { STAGES, type Stage } from '@lib/stages';
-import { TOOLS } from '@lib/tools';
+import { getStages, getTools, type Stage } from '@lib/content';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const STAGES = await getStages();
+  const TOOLS = await getTools();
   return STAGES.map((s, i) => ({
     params: { slug: s.slug },
-    props: { s, prev: STAGES[i - 1] ?? null, next: STAGES[i + 1] ?? null },
+    props: {
+      s,
+      prev: STAGES[i - 1] ?? null,
+      next: STAGES[i + 1] ?? null,
+      tools: s.tools.map((slug) => TOOLS.find((t) => t.slug === slug)).filter(Boolean),
+    },
   }));
 }
 
-const { s, prev, next } = Astro.props as { s: Stage; prev: Stage | null; next: Stage | null };
-const tools = s.tools.map((slug) => TOOLS.find((t) => t.slug === slug)!).filter(Boolean);
+const { s, prev, next, tools } = Astro.props as {
+  s: Stage;
+  prev: Stage | null;
+  next: Stage | null;
+  tools: any[];
+};
 ---
 
 <Base

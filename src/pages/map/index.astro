@@ -3,7 +3,9 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Newsletter from '@components/Newsletter.astro';
-import { STAGES } from '@lib/stages';
+import { getStages } from '@lib/content';
+
+const STAGES = await getStages();
 
 /** /map/ — the Figma frame "Map", with the route made interactive. */
 

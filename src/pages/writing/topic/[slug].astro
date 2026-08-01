@@ -5,8 +5,10 @@ import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import { TOPICS, type Topic } from '@lib/topics';
-import { STAGES } from '@lib/stages';
-import { TOOLS } from '@lib/tools';
+import { getStages, getTools } from '@lib/content';
+
+const STAGES = await getStages();
+const TOOLS = await getTools();
 
 export async function getStaticPaths() {
   const essays = await getCollection('essays', ({ data }) => !data.draft);

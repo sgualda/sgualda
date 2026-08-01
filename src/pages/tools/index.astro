@@ -2,7 +2,10 @@
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
-import { TOOLS, CATS, INDEX_FAQ_HTML } from '@lib/tools';
+import { INDEX_FAQ_HTML } from '@lib/tools';
+import { getTools, CATS } from '@lib/content';
+
+const TOOLS = await getTools();
 
 /** /tools/ — matches the Figma frame "Tools". */
 

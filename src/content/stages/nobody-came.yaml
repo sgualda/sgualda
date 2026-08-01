@@ -1,0 +1,43 @@
+# Stage 03 — Nobody came
+
+n: "03"
+name: "Nobody came"
+lead: "You launched. Nothing happened. This is where I have lost the most."
+question: "Which of the five reasons is behind a flat graph?"
+x: 50
+y: 64
+tools:
+  - "why-is-nobody-using-your-product"
+  - "is-user-feedback-real-or-just-polite"
+body:
+  - "This is the stage that has cost me the most, and the reason is boring: <strong>five
+    completely different problems look identical from here.</strong>"
+  - "Nobody saw it. They saw it and did not understand it. They understood it and did not
+    need it. They needed it but moving to you was too much work. Or they tried it and it is
+    not good enough yet. All five produce the same flat graph — and, worse, all five produce
+    the same feeling."
+  - "I got this wrong on a product I cared about. Signups were flat, so we assumed reach and
+    spent a quarter on distribution. Traffic went up a lot. Activation did not move at all.
+    We had been in the third one the whole time: people understood it perfectly and did not
+    need it. The quarter was not wasted because we worked badly. It was wasted because we
+    never stopped to ask which problem we had."
+  - "The fixes point in opposite directions, which is what makes guessing expensive. More
+    traffic only helps the first one. A better product only helps the last one. So the real
+    mistake is not picking wrong — it is <strong>acting quickly without picking at
+    all</strong>, which in practice means doing marketing, because marketing feels the most
+    like doing something."
+  - "The diagnosis is cheap. An afternoon and nine honest conversations about the last time
+    the problem happened, without mentioning your product. I wish I had spent that afternoon
+    before spending the quarter."
+traps:
+  - "Reading the silence as rejection. It usually is not. Rejection would require them to
+    have understood you first."
+  - "Adding features to fix something that has nothing to do with features."
+  - "Asking your existing users why other people are not using it. They are the least
+    qualified people in the world to answer that."
+signal: "You can say which of the five you are in, and say out loud why the other four are not it."
+cta:
+  title: "A product review"
+  body: "Five days on the product, your numbers, and up to nine conversations with your actual
+    users. You get a ranked answer on which of the five you are in, with the reasoning
+    attached so your team can argue with it."

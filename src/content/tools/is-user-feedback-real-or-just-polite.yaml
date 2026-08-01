@@ -1,0 +1,143 @@
+# Was that feedback real, or just polite?
+# Questions, outcomes and FAQs for one free check.
+
+cat: "users"
+n: "Was that feedback real, or just polite?"
+time: "1 minute"
+count: "5 questions"
+title: "Is That User Feedback Real, or Just Polite? — Free Check"
+meta: "Five questions about one user conversation tell you whether what somebody said is
+  evidence you can build on or good manners you should not. Free, takes a minute, nothing
+  saved."
+lead: "Somebody told you they would use it, or that they loved it. Before you build anything
+  on top of that sentence, five questions about that exact conversation will tell you
+  whether it was evidence or good manners."
+out: "A verdict on that one conversation, and the cheapest next move for it."
+answers:
+  - - "Real signal"
+    - "Unprompted, repeated, with a workaround they would have to give up."
+  - - "Promising, but a leg is missing"
+    - "One more conversation before you build anything."
+  - - "A polite no"
+    - "Enthusiasm after a demo, with nothing underneath it."
+  - - "No signal at all"
+    - "Nothing here says the problem exists outside your own head."
+faqs:
+  - - "How do I know if user feedback is real or just polite?"
+    - "Four things separate evidence from good manners: whether they said it before you
+      showed your solution rather than after, whether they already have a workaround they
+      dislike, whether they have done the thing again without you in the room, and whether
+      you can name a second person who asked unprompted. Enthusiasm after a demo, with no
+      workaround and no repeat use, is a no in better clothes."
+  - - "Why do users say they like something and then never use it?"
+    - "Because in a demo they are reacting to your effort, not to their problem. Being
+      encouraging is the socially correct response to somebody showing you something they
+      made, and “that’s interesting” is what a considerate person says instead of “no”. It
+      is indistinguishable from real interest at the moment it happens, which is what makes
+      it expensive."
+  - - "What questions should I ask in a user interview?"
+    - "Ask about the last time the problem happened, in detail, before you describe your
+      solution — or ideally without describing it at all. What did they do, what did it cost
+      them, what did they try first. Past behaviour is checkable. Any question about the
+      future, including “would you use this”, produces a polite guess rather than
+      information."
+q:
+  - - "Did they say it before or after you showed your solution?"
+    - - - "Before, unprompted"
+        - 0
+      - - "After I described it"
+        - 2
+      - - "After I demoed it"
+        - 4
+  - - "Do they already have a workaround for this?"
+    - - - "Yes, an ugly one they hate"
+        - 0
+      - - "Yes, and they seem fine with it"
+        - 2
+      - - "No workaround at all"
+        - 4
+  - - "Have they done the thing again since, without you in the room?"
+    - - - "Yes, more than once"
+        - 0
+      - - "Once"
+        - 2
+      - - "Not yet"
+        - 4
+  - - "What did they ask next?"
+    - - - "How much does it cost"
+        - 0
+      - - "When can I have it"
+        - 1
+      - - "Nothing"
+        - 3
+      - - "“That’s interesting”"
+        - 4
+  - - "Can you name a second person who asked for this, unprompted?"
+    - - - "Yes, by name"
+        - 0
+      - - "Sort of"
+        - 2
+      - - "No"
+        - 4
+b:
+  - max: 3
+    name: "That one counts."
+    sub: "About as close to evidence as you get before shipping anything."
+    body: "<p>Unprompted, an ugly workaround they would have to give up, repeat behaviour
+      without you watching, and a second person you can name. Any one alone is weak.
+      <strong>Together they are rare and worth moving on quickly.</strong></p><p>The waste
+      here is treating it as encouragement and going back to your roadmap. It is not
+      encouragement, it is a specification. The workaround they described is the product —
+      copy it in their words, including the parts that look stupid. Those parts are usually
+      load-bearing.</p>"
+    next:
+      - "Write their workaround down step by step, in their language, today."
+      - "Build the smallest thing that removes the worst step. Not the whole flow."
+      - "Check the second person describes the same problem. If not, you have two products."
+  - max: 8
+    name: "Promising, but a leg is missing."
+    sub: "There is something real here. Have one more conversation before you build."
+    body: "<p>Most of the signal is there, but one piece is not — usually the second person, or
+      evidence they did it again on their own. Those two separate a real pattern from one
+      enthusiastic individual.</p><p>The trap is that it feels close enough to justify
+      starting, and starting feels better than asking. <strong>A prototype built on four
+      fifths of a signal takes weeks and answers nothing you could not have learned in an
+      hour.</strong></p>"
+    next:
+      - "Find one more person with the same problem, through them if possible."
+      - "Ask about the last time it happened. Do not mention your solution until the end, if
+        at all."
+      - "If they describe it the same way, you are clear to build the smallest version."
+  - max: 13
+    name: "That was a polite no."
+    sub: "Enthusiasm after a demo, no workaround, no repeat use, no second person. Each of those
+      is the shape of somebody being kind to you."
+    body: "<p>People are generous in demos. They are reacting to your effort, not to their
+      problem, and “that’s interesting” is what a considerate person says instead of
+      “no”.</p><p>This one is worth catching early because it is <strong>indistinguishable
+      from real interest at the moment it happens</strong>, and it feels great. That
+      combination is how good teams spend months on something nobody was waiting
+      for.</p><p>None of it means the idea is dead. It means this conversation was not the
+      evidence you thought, and you should stop counting it as one.</p>"
+    next:
+      - "Go back and ask what they do about it today. If the honest answer is “nothing”, you
+        have your answer."
+      - "Stop demoing. Ask about the last time, before you show anything."
+      - "Set a rule: two people who found their own workaround, or you do not build it."
+  - max: 99
+    name: "There is no signal here yet."
+    sub: "Nothing in this conversation says the problem exists outside your own head."
+    body: "<p>Not fatal, and not an insult — plenty of good products started as somebody’s
+      private annoyance. It becomes fatal the moment you stop looking for the second person
+      and start looking for encouragement, which is an easy switch to make without
+      noticing.</p><p>The honest question, and it is not rhetorical: <strong>if nobody has
+      ever built an ugly manual version of this by hand, is the pain actually
+      there?</strong> People solve problems that hurt. Badly, in spreadsheets, with a lot of
+      copy-pasting — but they solve them.</p>"
+    next:
+      - "Go looking for the ugly manual version. Forums, spreadsheets, a channel someone
+        maintains by hand."
+      - "Find one and that is your product and its users. Find none after a week and believe
+        it."
+      - "Keep the idea. Change the question from “would you use this” to “what did you do
+        last time”."

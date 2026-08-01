@@ -1,0 +1,133 @@
+# Is this feature worth building?
+# Questions, outcomes and FAQs for one free check.
+
+cat: "decisions"
+n: "Is this feature worth building?"
+time: "40 seconds"
+count: "4 questions"
+title: "Is This Feature Worth Building? — Free 4-Question Check"
+meta: "Four questions separate a real user need from a loud request before it reaches your
+  roadmap — and give you a reason you can say out loud to whoever asked. Free, no account."
+lead: "Something has been requested enough times that it is getting hard to say no. Four
+  questions separate a real need from a loud request, and give you a reason you can say out
+  loud to the person who asked."
+out: "Build it, build a smaller version, wait, or say no — with the reason behind it."
+answers:
+  - - "Build it"
+    - "Unprompted demand, a workaround people maintain by hand, a measurable cost to doing
+      nothing."
+  - - "Build the smallest version"
+    - "Real demand underneath, not enough to justify the full thing yet."
+  - - "Not yet"
+    - "The request is loud but nothing under it proves the need."
+  - - "This is a request, not a need"
+    - "It arrived from inside, with nothing behind it."
+faqs:
+  - - "How do I decide if a feature is worth building?"
+    - "Look at who asked and whether it was unprompted, what those people do about the
+      problem today, and what measurably happens if you never build it. Several users who
+      each built their own ugly workaround is a need. One loud voice with no workaround
+      behind it is a preference, and preferences do not belong on a roadmap."
+  - - "Should I build what a big customer asks for?"
+    - "Only if you can find the same need in people who are not that customer. A large
+      account can fund a feature and still be the only place it is ever used, which leaves
+      you maintaining it forever. The question that settles it is what they do about the
+      problem today — if the answer is nothing, they are describing a preference with a
+      budget attached."
+  - - "How do I say no to a feature request?"
+    - "Say what you would need to see to say yes, and mean it. “Nobody who asked for this
+      has built a workaround for it, so we do not think the need is there yet — if that
+      changes, tell me” is refusable, checkable, and does not sound like a brush-off. A
+      vague “it is not on the roadmap” invites the same request again next month."
+q:
+  - - "Who asked for it?"
+    - - - "Several users, unprompted"
+        - 0
+      - - "One user, repeatedly"
+        - 2
+      - - "One large customer"
+        - 3
+      - - "Somebody inside the company"
+        - 4
+  - - "What do those people do about it today?"
+    - - - "An ugly manual workaround"
+        - 0
+      - - "They use a competitor for this bit"
+        - 1
+      - - "Nothing, they live with it"
+        - 3
+      - - "We do not actually know"
+        - 4
+  - - "If you never built it, what happens?"
+    - - - "We lose a paying customer"
+        - 0
+      - - "Some people stay annoyed"
+        - 2
+      - - "Nothing we could measure"
+        - 4
+  - - "How long would a rough version take?"
+    - - - "A few days"
+        - 0
+      - - "Two or three weeks"
+        - 2
+      - - "More than a month"
+        - 3
+      - - "Nobody has estimated it"
+        - 4
+b:
+  - max: 3
+    name: "Build it. This one is real."
+    sub: "Unprompted demand, a workaround people already maintain by hand, and a measurable cost
+      to doing nothing."
+    body: "<p>This is the rare case where the request and the need are the same thing. The
+      people asking have already proved it matters by doing the work manually.</p><p>One
+      warning: <strong>build what their workaround does, not what they asked for.</strong>
+      Requests arrive as solutions, and the solution somebody imagines is usually a worse
+      version of what they actually do every day.</p>"
+    next:
+      - "Watch two of them do the manual version. Record it if they let you."
+      - "Build the smallest thing that removes the worst step of it."
+      - "Ship to those people first and check they stop doing the manual version. If they do
+        not, you built the wrong part."
+  - max: 8
+    name: "Build the smallest version of it."
+    sub: "There is real demand under this, but not enough to justify the full thing yet."
+    body: "<p>Something is here — the signal just is not strong enough to earn a month of work.
+      The mistake at this point is treating the choice as build-or-not, when the useful
+      third option is <strong>build a tenth of it and see who uses it.</strong></p><p>A
+      rough version that solves eighty percent for the people asking will tell you more in
+      two weeks than any amount of further discussion, and it costs a fraction of being
+      wrong at full scale.</p>"
+    next:
+      - "Define the smallest version that would still be genuinely useful. Not a demo —
+        usable."
+      - "Ship it to the people who asked, by name, and watch what they do."
+      - "Decide in advance what usage would justify building the rest."
+  - max: 12
+    name: "Not yet. Find out what they actually do."
+    sub: "The request is loud but nothing underneath it proves the need."
+    body: "<p>Nobody has a workaround, or nothing measurable happens if this never exists. Those
+      are the two signs that you are looking at a preference rather than a problem — and
+      preferences are infinite, which is why roadmaps built on them never end.</p><p>This is
+      not a no. It is a <strong>“we do not know yet”</strong>, and the difference matters
+      when you go back to the person who asked.</p>"
+    next:
+      - "Ask three people who requested it what they did the last time they needed it."
+      - "If the answer is “nothing”, it is a preference. Say so kindly and move on."
+      - "If a workaround appears, come back and run this check again."
+  - max: 99
+    name: "This is a request, not a need."
+    sub: "It came from inside, or from one voice, with nothing behind it and no measurable cost
+      to ignoring it."
+    body: "<p>The most expensive features are rarely the ones users demanded. They are the ones
+      that arrived from a meeting, sounded reasonable, and nobody had a good reason to
+      refuse.</p><p><strong>“No good reason to refuse” is not a reason to build.</strong>
+      Everything on a roadmap costs the thing it displaced, and that cost never shows up in
+      the discussion about whether to add it.</p>"
+    next:
+      - "Ask what problem it solves and who has it. If the answer is a job title, not a
+        person, stop."
+      - "Write it down somewhere visible instead of building it. Most of these never come
+        back."
+      - "If it returns three times from three different people, run this check again. It
+        will score differently."

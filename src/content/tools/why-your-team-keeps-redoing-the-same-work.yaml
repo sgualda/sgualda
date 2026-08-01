@@ -1,0 +1,125 @@
+# Why does your team keep redoing the same work?
+# Questions, outcomes and FAQs for one free check.
+
+cat: "team"
+n: "Why does your team keep redoing the same work?"
+time: "40 seconds"
+count: "4 questions"
+title: "Why Does Your Team Keep Redoing The Same Work? — Free Check"
+meta: "Four questions find out why settled decisions keep coming back and work gets thrown
+  away — and the smallest change that stops it. Free, forty seconds, nothing saved."
+lead: "You ship constantly and it does not feel like progress. Decisions come back, work
+  gets thrown away, and the same argument returns every few weeks. Four questions and you
+  will know which of four causes it is."
+out: "Which of four things is causing it, and the smallest change that stops it."
+answers:
+  - - "This is normal"
+    - "Work gets redone because you learned something. That is not waste."
+  - - "Decisions are not written down"
+    - "Made in conversation, remembered differently, quietly relitigated."
+  - - "Somebody is left out of the room"
+    - "The same objection, arriving at the most expensive moment."
+  - - "Nobody can end an argument"
+    - "Decisions are not made, they are abandoned — and abandoned things come back."
+faqs:
+  - - "Why does my team keep redoing the same work?"
+    - "Usually one of four reasons: you genuinely learned something new, which is not waste;
+      decisions are made in conversation and never written down, so they get remembered
+      differently and quietly relitigated; somebody with real veto power finds out too late
+      and objects when the work is already done; or nobody is able to end an argument, so
+      decisions are abandoned rather than made."
+  - - "How should a small team record decisions?"
+    - "One running page, newest at the top, four lines per decision: what was decided, why,
+      what was rejected, and what would change it. It takes ten minutes a week and it ends
+      the category of argument where everyone remembers the same meeting differently.
+      Anything heavier will be abandoned within a month."
+  - - "Who should make the final decision in a product team?"
+    - "Name one person per area, chosen by who lives with the consequences rather than by
+      seniority, and say it out loud in writing. Everyone else gets the right to be heard
+      before the decision and no right to reopen it afterwards. Consensus is a good input
+      and a terrible decision rule, because anything that cannot be closed comes back."
+q:
+  - - "How do decisions get recorded?"
+    - - - "Written down where anyone can find them"
+        - 0
+      - - "In a doc one person owns"
+        - 1
+      - - "In chat, somewhere"
+        - 3
+      - - "They do not"
+        - 4
+  - - "How often does a settled decision come back?"
+    - - - "Rarely"
+        - 0
+      - - "Every month or so"
+        - 2
+      - - "Every sprint"
+        - 4
+  - - "When work gets redone, why usually?"
+    - - - "New information arrived"
+        - 0
+      - - "Somebody was not consulted"
+        - 3
+      - - "Somebody changed their mind"
+        - 4
+  - - "Who can end an argument?"
+    - - - "One clear person, and everyone knows who"
+        - 0
+      - - "Depends on the topic"
+        - 2
+      - - "Nobody. It just fades out"
+        - 4
+b:
+  - max: 3
+    name: "This is normal. Do not fix it."
+    sub: "Work gets redone because new information arrived, and decisions mostly stay decided."
+    body: "<p>Redoing work in response to something you learned is not waste — it is the entire
+      point of working iteratively. The waste is redoing it because nobody remembered why it
+      was decided.</p><p><strong>You do not have a process problem.</strong> Adding process
+      here would slow you down and solve nothing, which is the most common way good teams
+      get worse.</p>"
+    next:
+      - "Leave it alone."
+      - "If it starts to hurt, run this again. The answer will change."
+      - "Spend the energy you were about to spend on process on talking to users instead."
+  - max: 8
+    name: "Your decisions are not written down."
+    sub: "They are made in conversation, remembered differently by everyone, and quietly
+      relitigated later."
+    body: "<p>The tell is arguments that feel familiar. Nobody is being difficult — they
+      genuinely remember it differently, and without a record the loudest or most recent
+      version wins.</p><p>The fix is smaller than any process anyone will propose in
+      response. <strong>Four lines, written the day of the decision: what we decided, why,
+      what we rejected, what would change it.</strong> Ten minutes, and it ends the
+      category.</p>"
+    next:
+      - "Start a single running document. One page, newest at the top, nothing fancy."
+      - "Four lines per decision. What, why, what we rejected, what would change it."
+      - "When an old argument returns, do not re-argue it. Link the entry and move on."
+  - max: 12
+    name: "Somebody is being left out of the room."
+    sub: "Work gets redone because a person who could have objected found out too late."
+    body: "<p>This is usually structural rather than personal. Someone with real veto power — an
+      engineer who knows what is expensive, a support lead who knows what breaks — is not
+      present when the decision happens, and finds out when the work is already
+      done.</p><p>By then their objection costs a rebuild, so it feels like obstruction.
+      <strong>It is not obstruction. It is the same objection, arriving at the most
+      expensive possible moment.</strong></p>"
+    next:
+      - "List the last three things that got redone. Write down who objected each time."
+      - "If it is the same name, they belong in the room before the decision, not after."
+      - "Ask them directly what they would have said. It takes five minutes and saves weeks."
+  - max: 99
+    name: "Nobody can end an argument."
+    sub: "Decisions do not get made, they get abandoned — and anything abandoned comes back."
+    body: "<p>Nothing is written down, decisions return every sprint, and no one person can
+      close a discussion. That is not a communication problem. It is <strong>an unclear
+      owner,</strong> and it will not be fixed by a better tool or a longer
+      meeting.</p><p>The uncomfortable part is that the fix is not more consensus. It is
+      naming who decides when there is no consensus — and accepting that being overruled
+      sometimes is the price of moving.</p>"
+    next:
+      - "Name the decider for each area, in writing. Not by seniority — by who lives with
+        the consequences."
+      - "Give everyone else the right to be heard before, and no right to reopen it after."
+      - "Write down what was decided, or the previous point does not hold."

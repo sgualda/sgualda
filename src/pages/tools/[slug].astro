@@ -3,15 +3,16 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import { TOOLS, CATS, type Tool } from '@lib/tools';
+import { getTools, CATS, type Tool } from '@lib/content';
 import { SITE } from '@lib/site';
 import '@styles/quiz.css';
 
-export function getStaticPaths() {
-  return TOOLS.map((t) => ({ params: { slug: t.slug }, props: { t } }));
+export async function getStaticPaths() {
+  const tools = await getTools();
+  return tools.map((t) => ({ params: { slug: t.slug }, props: { t, tools } }));
 }
 
-const { t } = Astro.props as { t: Tool };
+const { t, tools } = Astro.props as { t: Tool; tools: Tool[] };
 const url = `${SITE.url}/tools/${t.slug}/`;
 
 /**
@@ -100,7 +101,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
     <h2>Other checks.</h2>
     <ul class="more">
       {
-        TOOLS.filter((o) => o.id !== t.id).slice(0, 3).map((o) => (
+        tools.filter((o) => o.slug !== t.slug).slice(0, 3).map((o) => (
           <li class="card-link">
             <a href={`/tools/${o.slug}/`}>
               <h3>{o.n}</h3>
