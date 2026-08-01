@@ -187,6 +187,7 @@ test('required public files exist', () => {
     'dist/robots.txt',
     'dist/.htaccess',
     'dist/api/brief.php',
+    'dist/api/log.php',
     'dist/_redirects',
     'dist/favicon.svg',
     'dist/site.webmanifest',
@@ -198,6 +199,25 @@ test('required public files exist', () => {
   ]) {
     expect(existsSync(f), f).toBe(true);
   }
+});
+
+test('js errors are reported, and the page survives reporting', async ({ page }) => {
+  const beacons: string[] = [];
+  await page.route('**/api/log.php', (r) => {
+    beacons.push(r.request().postData() ?? '');
+    r.fulfill({ status: 200, body: '{"ok":true}' });
+  });
+
+  await page.goto('/');
+  await page.evaluate(() => {
+    window.dispatchEvent(new ErrorEvent('error', { message: 'test failure', filename: 'x.js', lineno: 7 }));
+  });
+
+  await expect(async () => expect(beacons.length).toBeGreaterThan(0)).toPass();
+  const body = JSON.parse(beacons[0]);
+  expect(body.message).toContain('test failure');
+  // Nothing that could identify a person.
+  expect(Object.keys(body).sort()).toEqual(['line', 'message', 'page', 'source']);
 });
 
 test('the legal notice is reachable from every page', async ({ page }) => {

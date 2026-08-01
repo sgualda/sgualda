@@ -3,6 +3,7 @@ import '@styles/fonts.css';
 import '@styles/tokens.css';
 import '@styles/base.css';
 import { SITE } from '@lib/site';
+import ErrorLog from '@components/ErrorLog.astro';
 
 interface Props {
   title: string;
@@ -89,6 +90,7 @@ const graph = [
 
     <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
     <slot name="head" />
+    <ErrorLog />
   </head>
 
   <body>

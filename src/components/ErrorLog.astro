@@ -1,0 +1,37 @@
+---
+/**
+ * Reports uncaught JavaScript errors so a break in one browser does not go
+ * unnoticed. The site runs real logic in the browser — six questionnaires,
+ * a five-step form — and until now a failure in Safari would simply have
+ * left those broken with nobody the wiser.
+ *
+ * Sends the error and nothing else. No identifiers, no analytics.
+ */
+---
+
+<script is:inline>
+  (() => {
+    let sent = 0;
+    const report = (message, source, line) => {
+      // Three per page load. A loop must not turn into a flood.
+      if (sent >= 3 || !message) return;
+      sent++;
+      try {
+        navigator.sendBeacon?.(
+          '/api/log.php',
+          new Blob(
+            [JSON.stringify({ message: String(message), source, line, page: location.pathname })],
+            { type: 'application/json' }
+          )
+        );
+      } catch {
+        /* Reporting must never itself break the page. */
+      }
+    };
+
+    addEventListener('error', (e) => report(e.message, e.filename, e.lineno));
+    addEventListener('unhandledrejection', (e) =>
+      report('Unhandled rejection: ' + (e.reason?.message ?? e.reason), location.pathname, 0)
+    );
+  })();
+</script>
