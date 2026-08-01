@@ -37,6 +37,9 @@ jobs:
       - name: Quality backlog is in sync with itself
         run: npm run audit:quality
 
+      - name: Prose follows BRAND.md
+        run: npm run audit:prose
+
       - name: Install browsers
         run: npx playwright install --with-deps chromium webkit
 

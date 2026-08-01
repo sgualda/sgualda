@@ -1,90 +1,87 @@
 ---
-title: 'Claude changed how I work, and I’m still not sure if that’s a good thing '
-description: 'I’ve used Claude AI for product design and strategy for months. Here’s what actually works, what does not, and what it’s quietly changing about creative work'
+title: 'Claude changed how I work, and I’m still not sure that’s a good thing'
+seoTitle: 'Using Claude for product design: an honest review'
+description: 'Months of using Claude for product design and strategy. What it genuinely accelerates, the thinking habit it replaced, and the trade-off nobody mentions.'
 published: 2026-03-18
-updated: 2026-03-18
+updated: 2026-08-01
 migrated: true
 draft: false
 topics: ['craft', 'process']
+hook: 'Before, when I hit a hard design problem, I sat with it. Now my first move is to open a conversation. That worries me.'
+faqs:
+  - q: 'Is Claude useful for product design work?'
+    a: 'For synthesis, structure and argument, yes — pattern-finding across interview notes, drafting and critiquing product documents, being a fast second opinion at 11pm. For deciding what to build, no, and treating it as though it can is where teams get into trouble. It is an accelerator for thinking you are already doing, not a substitute for the thinking.'
+  - q: 'Can AI replace a product designer?'
+    a: 'It replaces the parts of the job that were always the least valuable — producing screens, writing up what was decided, tidying documents. It does not replace the part that is scarce, which is being able to say why this decision and not another one, and being accountable for it. What changes is that the scarce part becomes the whole job rather than half of it.'
+  - q: 'What are the risks of using AI in a design process?'
+    a: 'The one I have felt personally is that the muscle for sitting with an unsolved problem atrophies. Good ideas often need the slow version — a walk, a night, a second angle — and the speed removes the pause where that happens. The second risk is organisational: AI lets a team of four look like twelve, and looking like twelve to your investors is a debt rather than an asset.'
+  - q: 'Which AI tool is best for product work?'
+    a: 'I use Claude and this is a report on that, not a comparison. The honest answer is that the gap between tools is now much smaller than the gap between using one thoughtfully and using one to avoid thinking, and only the second one shows up in your product.'
 ---
-I’ve been using AI tools in my daily workflow for a couple of years now. ChatGPT, Midjourney, Copilot, whatever came out.
+I have been using AI tools in my daily workflow for a couple of years. ChatGPT, Midjourney, Copilot, whatever came out.
 
-I was an early adopter, not out of FOMO but because I work in product and design, and if there’s a tool that can remove friction from the creative process, I’ll try it.
+Not out of FOMO. I work in product and design, and if a tool removes friction from the creative process I will try it.
 
-## Why this one felt different
-
-But Claude is different. And I need to explain why.
-
-The first thing I noticed: this model thinks differently.
+Claude is the first one that changed *how* I work rather than how fast, and I have spent a while trying to decide whether that is good.
 
 ![Claude Code running in a terminal, showing a session in progress](../../assets/essays/claude-code-terminal-1024x552.webp)
 
-## What it actually changed in my day
+## What is actually different about it
 
-When you open Claude for the first time, you expect more of the same. Another chatbot wrapping answers in bubble wrap. What you actually get is something else: responses that feel like they were written by someone who read the same books you did, who gets context, who does not pad the answer.
+You open it expecting another chatbot wrapping answers in bubble wrap. What you get reads more like somebody who has read the same books, understands context, and does not pad.
 
-For someone who works in product design and business strategy, that matters a lot. Because most of the time I do not need an AI to generate text, I need it to help me think. And Claude, for reasons I cannot fully articulate, does that better.
+For product design and strategy work that matters more than it sounds. **Most of the time I do not need an AI to generate text. I need one to help me think.** Whether that comes from [Anthropic’s](https://www.anthropic.com/constitution) training approach, their constitutional AI philosophy, or better internal prompt engineering, I cannot tell you. But the difference is real, and it changed which tasks I bring to it.
 
-## Where the discomfort comes from
+## Where it genuinely earns its place
 
-I do not know if it’s [Anthropic’s](https://www.anthropic.com/constitution) training approach, their constitutional AI philosophy, or just better internal prompt engineers. But the difference is real.
+I will be specific, because vague opinion pieces about AI are the single most common thing on the internet right now.
 
-Claude as a product tool: what actually works
+**Research synthesis.** I paste interview notes, qualitative findings and raw observations, and ask it to find patterns. The output is not right, but it is a first pass on affinity mapping that used to take me most of a day. Is it a substitute for thinking? No. Is it a substitute for the tedious first two hours of thinking? Almost entirely.
 
-I’ll be specific because vague opinion pieces bore me.
+**Product documents.** This is where I get the most out of it, and not because it writes them. It helps me structure, finds gaps in my reasoning, and plays devil’s advocate on demand. I tell it "critique this requirement" and get three angles I had not considered. A good colleague does this better — but not at 11pm, and not fifteen times in a row without getting bored of me.
 
-User research synthesis and discovery. I have long conversations with Claude where I paste interview notes, qualitative findings, raw data, and ask it to find patterns. The output is not perfect, but it saves me hours of affinity mapping I used to do by hand. Is it a substitute for thinking? No. Is it an accelerator? Absolutely.
+**Unblocking.** Twenty minutes into a blank canvas, it is a way to start. I use less of what it produces than you would expect. Mostly it moves me from nothing to something-to-react-against, and reacting is far easier than starting.
 
-Writing PRDs and technical documentation. This is where I get the most ROI. Not because Claude writes the docs for me, but because it helps me structure, spots gaps in my reasoning, plays devil’s advocate. I tell it “critique this requirement” and it gives me three angles I hadn’t considered. A junior PM would do the same thing, but I need it available at 11pm.
+Notice what is not on that list: **deciding what to build.** I have tried. It is confident, articulate and unaccountable, which is the most dangerous combination available.
 
-Feature brainstorming. More reservations here, but it works for unblocking sessions when you’ve been staring at a blank canvas for twenty minutes.
+## The part that actually worries me
 
-The real problem: what nobody tells you
+Here is the uncomfortable bit.
 
-Here’s the uncomfortable part.
+I have noticed in myself, and in teams I work with, that the muscle for thinking without assistance atrophies. Before Claude, when I had a hard design problem, I sat with it. Let it simmer. Went for a walk, came back, tried a different angle.
 
-Claude is very good. Too good at some things. And that creates a dependency that is not innocent.
+Now the first reaction is to open a new conversation.
 
-I’ve noticed in myself, and in teams I work with, that the muscle of thinking without assistance atrophies. Before Claude, when I’d a hard design problem, I sat with it. Let it simmer. Went for a walk, came back, tried a different angle. Now the first reaction is to open a new conversation. And that worries me.
+Not because the AI is bad. Because **the speed comes at the cost of a slower process where, often, the better ideas live.** Traditional design thinking has intentional friction in it. A Google Design Sprint is not badly designed — the pace it forces is a deliberate trade, and what you give up is idea maturity. Claude accelerates that further, which is useful for a startup in survival mode and dangerous for a product that needs depth.
 
-Not because AI is bad. But because the speed it gives you comes at the cost of a deeper thinking process where, often, the best ideas live.
+I do not have a clean solution. What I do now is crude: for anything that looks like a [one-way door](/glossary/#one-way-door), I make myself write my own answer first, badly, before opening a conversation. It is slower, and I skip it more often than I should.
 
-Traditional design thinking has intentional friction. The Google Design Sprint is not poorly designed, the pace it forces comes with a tradeoff: you sacrifice idea maturity. Claude accelerates that process even further. Which can be great for startups in survival mode, but dangerous for products that need depth.
+## What it means for a team, honestly
 
-And for business? An honest breakdown
+Three situations, three different answers.
 
-Three profiles, because the answer is very different depending on who you are:
+**Working solo.** A straightforward multiplier. If you bill by project, the time it saves converts directly into margin and you ship more without hiring. For this situation it is probably the best software money you can spend right now.
 
-Freelance / consultant. Claude is a brutal force multiplier. If you work solo and bill by project, the productivity it gives you translates directly into margin. You ship more in less time without hiring. For this profile, it’s probably the best software investment you can make right now.
+**Early-stage startup.** It works well for fast iteration — copy, documentation, analysis, exploring options. The risk is using it to look more advanced than you are, internally and to investors. AI can make a team of four look like twelve. What it cannot replace is what team size actually buys you: friction, disagreement, and people who learned the same lesson at the same time.
 
-Early-stage startup. Works really well for fast iteration: copy, documentation, analysis, idea exploration. The risk is using Claude to appear more advanced than you actually are, both internally and in front of investors. AI can make a team of four look like twelve, but team size cannot replace certain things: friction, debate, shared learning.
+**Larger company.** The most interesting case and the least exploited. Most organisations claiming to "implement AI" are using it to write newsletters. The real opportunity is scaling feedback analysis and supporting decisions with evidence — but that needs integration work and cultural change, and that is where it stalls.
 
-Mid-to-large company. The most interesting use case and the least exploited. Most companies claiming to “implement AI” are using GPT to write newsletters. Claude has real potential in scaling customer feedback analysis, automating content design pipelines, supporting strategic decision-making. But it requires integration investment and cultural change, and that’s where most organizations stall.
+## What I would want from it next
 
-Anthropic vs OpenAI: the battle that matters more than you think
+Three things, in the order they would change my week.
 
-I do not want to do a feature comparison listicle because there are already a thousand of those. But I do want to say something about company philosophy.
+**Memory I can control.** Context handling on long projects is good and not enough. I want it to hold who the user is, what the strategy is, and what we decided and why, without me restating it every week.
 
-Anthropic was founded on the premise that AI can be dangerous and that it’s worth building anyway, but carefully. That’s high-stakes AI with responsibility baked in. OpenAI started in a similar place and pivoted toward the commercial race. I’m not saying one is good and the other bad, I’m saying that the design decisions inside a model reflect the values of whoever built it.
+**Reasoning I can inspect.** When it gives me a strategic recommendation I want the actual decision tree, not a generic explanation. Extended reasoning gets partway there and is still clunky.
 
-When I use Claude and notice it refuses certain things, or hedges more than ChatGPT, or does not give me what I want on the first try, part of that’s intentional design. It creates friction for me as a user because I want the answer fast. But as someone who thinks about product and consequences, I respect it.
+**Integration where the work is.** Inside Figma, Notion, Linear — a contextual layer that knows what is being built, rather than a plugin that knows nothing.
 
-What I’d like to see
+## Where I have landed
 
-If anyone at Anthropic reads this, which they probably will not, but just in case:
+The line everybody repeats is that AI will not take your job but will change it. True, and not enough.
 
-Better integration into design workflows. Claude inside Figma, Notion, Linear, not as a filler plugin but as a contextual intelligence layer that understands what you’re building. This exists in fragments, but the level of integration I need to make it truly transformative is not there yet.
+It is not going to replace me. What it changes is **which skills are scarce.** Knowing how to do things used to be most of the job. Now the job is knowing what to ask for, recognising when the answer is confidently wrong, and being accountable for the decision either way.
 
-More robust and controllable memory. Context handling on long projects is good but not enough. I need Claude to remember who my user is, what the product strategy is, what we’ve decided and why, without me having to repeat it every week.
+That last part does not transfer. An AI can produce the argument. It cannot be the person who was wrong.
 
-Transparency in reasoning. When Claude gives me a strategic recommendation, I want to know why. Not a generic why, but the actual decision tree. This exists partially in extended reasoning models, but it’s still clunky.
-
-Conclusion: AI will not take your job, but it’ll change it
-
-I’ve heard that phrase a thousand times and it feels both true and insufficient.
-
-Claude is not going to replace me as a designer or as someone who thinks about product strategy. But it’s changing which skills actually matter. Before, knowing how to do things was the point. Now, knowing what to ask something that knows how to do things is the point.
-
-And that’s a deep cultural shift I do not think we’ve really started to process.
-
-AI is an ally. But like all allies, it comes with its own agenda, its own limitations, and its own cost of entry. Using it well requires more judgment, not less. And judgment is not something you can delegate.
+I am aware this reads as more settled than I feel. Ask me again in a year — the last two have not gone the way I expected, and the honest position is that I am running an experiment on my own working habits with no control group.

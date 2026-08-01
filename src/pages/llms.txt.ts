@@ -118,7 +118,7 @@ ${SITE.url}/llms-full.txt
 ## Terms of use
 
 Quoting and citing this content is welcome. A link back to the source page is
-appreciated. The opinions here are one person's, formed from a specific set of
+appreciated. The opinions here are one person’s, formed from a specific set of
 projects, and are presented as such rather than as universal rules.
 `;
 

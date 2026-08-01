@@ -15,6 +15,6 @@ In the end, what I learned was that, while certifications can be useful to solid
 
 Sometimes, I feel like many people focus too much on certifying everything they learn. But that’s not always necessary. The industry values your projects, your ability to communicate your ideas, and how you solve real problems much more.
 
-If you’re new to UX, I’d suggest focusing on learning through practice: running tests and gathering real feedback. If you can get a certification, great! But do not rely on it as your only path forward.
+If you’re new to UX, I’d suggest focusing on learning through practice: running tests and gathering real feedback. If you can get a certification, take it. Just do not rely on it as your only path forward.
 
 If you’d like to chat more about this or have questions about your UX journey, feel free to reach out. You can send me a DM on [Instagram](https://www.instagram.com/sgualda/) or [LinkedIn](https://www.linkedin.com/in/sgualda/), or simply email me at [sergio@sgualda.com](mailto:sergio@sgualda.com).

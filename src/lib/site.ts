@@ -149,7 +149,7 @@ export const URL_MAP = {
     '/writing/designing-for-scalability/',
     '/writing/good-product-design/',
     '/writing/heart-framework-vs-nps-user-experience/',
-    '/writing/what-is-mvp-and-how-it-drives-growth/',
+    '/writing/mvp-vs-prototype/',
   ],
 } as const;
 

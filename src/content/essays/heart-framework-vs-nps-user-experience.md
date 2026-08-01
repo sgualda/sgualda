@@ -1,52 +1,90 @@
 ---
-title: 'Measuring user experience with the HEART framework'
-description: 'Learn how the HEART Framework by Google™ provides a comprehensive, multi-dimensional approach to measuring user experience. Explore why it’s a better…'
+title: 'HEART framework vs NPS: what I learned after two years of using both'
+seoTitle: 'HEART framework vs NPS: two years of using both'
+description: 'I replaced NPS with Google’s HEART framework two years ago. What it caught that NPS missed, what it cost to set up, and the two dimensions I quietly dropped.'
 published: 2024-07-05
-updated: 2025-09-04
+updated: 2026-08-01
 migrated: true
 draft: false
 topics: ['measurement']
+hook: 'I wrote the optimistic version of this in 2024. Two years later, three of the five dimensions are gone.'
+faqs:
+  - q: 'What is the difference between the HEART framework and NPS?'
+    a: 'NPS asks one question — how likely you are to recommend a product — and returns a single number. The HEART framework splits user experience into five dimensions (happiness, engagement, adoption, retention, task success) and asks you to pick a goal, a signal and a metric for each. NPS tells you sentiment has moved. HEART is built to tell you which part of the experience moved it.'
+  - q: 'Is NPS still worth measuring?'
+    a: 'It is worth measuring if somebody above you asks for it, and worth reading only alongside something else. On its own it is a lagging, low-resolution number: I have seen NPS hold steady for a whole quarter while task success on the main flow fell by a third. The score was not wrong, it was just too slow and too coarse to act on.'
+  - q: 'Do you need all five HEART dimensions?'
+    a: 'No, and trying to was the mistake I made. Two years in I actively track task success and engagement. Happiness runs as a survey twice a year. Adoption and retention were already better measured by the analytics the team had, so instrumenting them again just produced two numbers that disagreed with each other.'
+  - q: 'How long does it take to set up the HEART framework?'
+    a: 'The table takes an afternoon. Getting to trustworthy numbers took about six weeks, and most of that was arguing about what counts as a completed task — which turned out to be the useful part, not the overhead.'
 ---
-Measuring **user experience (UX)** has always been a challenge. While we can track data like **retention**, **clicks**, and **task completions**, these numbers do not always capture the full picture of what users truly experience. That’s where the [**HEART Framework by Google™**](https://www.heartframework.com/) comes in, offering a comprehensive and structured way to assess UX. In this article, I’ll explore the potential of the HEART Framework, and share how it’s shaping the way I approach design.
+Two years ago I wrote a hopeful post about replacing [Net Promoter Score](https://www.netpromotersystem.com/) with Google's [**HEART framework**](https://www.heartframework.com/). It ended with "will it live up to the hype? Only time will tell."
 
-![Measuring user experience with HEART](../../assets/essays/HEART-Framework-diagram-1024x615.webp)
+Time has told. This is the rewrite.
 
-## How I plan to implement the HEART framework
+![The HEART framework: happiness, engagement, adoption, retention and task success, each with a goal, a signal and a metric](../../assets/essays/HEART-Framework-diagram-1024x615.webp)
 
-I’m not jumping into all five dimensions of the HEART Framework right away. Instead, I’m starting small with **happiness** and **task success** for upcoming projects. Here’s why:
+Short version: I still use it, I use about half of it, and the part that helped had almost nothing to do with the framework itself.
 
-## Happiness: measuring user satisfaction
+## What NPS was actually costing me
 
-The **happiness** dimension focuses on how users feel when interacting with your product. Are they satisfied with the experience? Would they recommend the product to others? These are the types of questions I’ve always asked during interviews, but I’ve never had a system in place to track these responses in actionable ways. The HEART Framework gives me the tools to systematically measure happiness and integrate these findings into the design process.
+NPS asks one question — *how likely are you to recommend this?* — and gives you one number. That number is easy to put on a slide, which is most of why it survives.
 
-## Task success: tracking efficiency
+The problem is what it cannot tell you. On one product I worked on, NPS sat between 31 and 34 for an entire quarter. Steady. Fine. Nothing to escalate.
 
-On the other hand, **task success** measures how well users can complete key actions within the product. This is an area I’ve learned the hard way: “usable” does not always mean “enjoyable.” While users might complete a task, the journey could be full of friction. The HEART Framework helps to refine these friction points by providing a clear structure to measure **task success**. It’s not enough for a task to be completed; it must be done with ease and satisfaction. By assessing how smoothly users can navigate through a product to achieve their goals, the HEART framework enables me to focus on improving usability as well as the overall enjoyment of the user experience.
+In the same quarter, the completion rate on the main flow dropped from roughly 80% to just over 50%. People were still recommending the product, because the thing they recommended it *for* still worked. The thing that broke was the part they used every week and had learned to route around.
 
-## What I hope to achieve with the HEART framework
+NPS was not wrong. It was **lagging and low-resolution** — it moves after people have already given up, and when it does move it does not say which part moved. I needed something that would have caught that in week two rather than week eleven.
 
-Beyond just measuring UX, I believe the **HEART Framework** will help me make better **design decisions**. It offers a structured way to align **user needs** with **business goals**, which in turn simplifies discussions with stakeholders. By using this approach, I can address tough questions like: What does it mean if a product shows high **retention** but low **happiness**? Or if **adoption rates** are high but **engagement** drops after the first week, what should be the priority for improvement?
+## Why HEART, specifically
 
-The insights provided by the HEART Framework will allow me to make data-driven design decisions that have a measurable impact on user experience. For instance, if a product has high retention but users are not engaged or satisfied, it could mean that users are sticking around out of necessity, not enjoyment. These kinds of insights are essential for improving the long-term success of a product.
+The HEART framework splits experience into five dimensions — **happiness, engagement, adoption, retention, task success** — and then makes you do the boring part: for each one, write down a goal, a signal, and a metric.
 
-## HEART framework vs NPS: a better alternative for measuring user experience?
+That last step is the whole thing. It is a table, not a philosophy, and filling it in forces a conversation nobody was having.
 
-In the past, I’ve often relied on the **[Net Promoter Score (NPS)](https://www.netpromotersystem.com/)** to gauge user satisfaction. NPS simply asks users how likely they are to recommend a product, providing a snapshot of user sentiment. However, NPS has limitations—it does not capture the full picture of a user’s experience. It primarily focuses on a single metric of **willingness to recommend**, which, while useful, does not provide enough depth to fully understand the various aspects of user experience.
+Ours took an afternoon and produced an argument that lasted a week, because two people on the team had genuinely different definitions of what counted as a completed task. One counted reaching the confirmation screen. The other counted the user not coming back to redo it within 48 hours.
 
-On the other hand, the **HEART Framework** is a more holistic tool that examines multiple dimensions of UX, such as **happiness**, **engagement**, **task success**, and **adoption**. With HEART, I can dive deeper into what users feel, how they engage with the product, and how successfully they complete tasks. This multi-dimensional approach provides actionable insights that go beyond NPS, making it a more reliable method for driving product improvements.
+**They were measuring different products.** We had shipped against that disagreement for a year without either of them noticing.
 
-For example, a product might have a high **NPS**, suggesting that users would recommend it, but if the **task success** or **happiness** scores are low, it indicates potential friction points in the experience that could lead to churn in the long term. By using the HEART Framework, I can not only understand how users feel about a product but also why they feel that way, leading to better, data-informed decisions.
+## The two dimensions that stuck
 
-## Challenges in implementing the HEART framework
+**Task success.** This is the one that earns its place. It is the number that would have caught the drop above, it moves fast enough to act on, and when it moves you know exactly which flow to look at. If you take one thing from HEART, take this and skip the rest.
 
-Like any new system, implementing the **HEART Framework** comes with its challenges. For one, it requires a shift in how we measure **user experience**, moving away from single-metric systems like **NPS** to a more comprehensive approach. Additionally, defining the right metrics for each dimension and ensuring they align with meaningful business goals will take time and collaboration across teams.
+**Engagement**, narrowly defined. Not sessions or time in app, which reward a confusing interface. We settled on *did somebody come back and do the same thing again, on their own*. That is close to what I now call [repeat use](/glossary/#repeat-use) — the only usage signal I fully trust, and the reason I stopped counting sign-ups.
 
-One of the most important aspects of implementing HEART is working with **cross-functional teams**, including **developers**, **product managers**, and **stakeholders**. It’s crucial that everyone is aligned on the goals of measuring **user experience**, and that we all use the same metrics to evaluate success. This alignment is key to ensuring that the **user experience** improvements we make also align with the product’s overall **business goals**.
+## The three I quietly dropped
 
-## Conclusion: simple yet powerful
+This is the part I could not have written in 2024.
 
-Even though I’m just starting to explore the **HEART Framework**, I’m already seeing its potential to transform the way I approach **UX design**. It’s not about overcomplicating things or obsessing over every tiny detail—it’s about focusing on what really matters to users. The HEART Framework gives me the tools to measure **happiness**, **engagement**, and **task success**, so I can make data-driven decisions that lead to better user experiences.
+**Happiness** now runs as a twice-yearly survey and nothing more. Measured continuously it mostly tracked whether we had shipped anything recently, which I did not need a framework to know.
 
-For anyone looking to implement the **HEART Framework** in their work, I highly recommend checking out Google’s [**official HEART framework template**](https://www.heartframework.com/). It’s a straightforward and easy-to-follow resource that can help you get started on measuring user experience in a meaningful way.
+**Adoption and retention** were already covered by the product analytics the team had. Instrumenting them a second time under HEART labels produced two sets of numbers that disagreed by 6-8% for boring reasons, and every disagreement cost somebody an afternoon. Two numbers that nearly agree are worse than one number, because you spend the meeting reconciling instead of deciding.
 
-I’m excited about where this framework will take my design process, and I’m looking forward to uncovering new insights that will improve how I design products. **Will it live up to the hype?** Only time will tell, but I’m optimistic about its potential! 😊
+So: five dimensions on paper, two in the dashboard. If that sounds like the framework failed, I would put it the other way round — it gave me a structured way to find out which three I did not need.
+
+## HEART vs NPS: where each one is actually useful
+
+| | NPS | HEART |
+|---|---|---|
+| Question it answers | Would they recommend it? | Which part of the experience is working? |
+| Resolution | One number | One per dimension |
+| Speed | Lags by weeks | Task success moves in days |
+| Setup cost | An afternoon | An afternoon, plus about six weeks to trust the numbers |
+| Fails when | The product is fine but a core flow is not | Nobody agrees what a completed task is |
+| Best used for | Reporting upward | Deciding what to fix |
+
+The honest summary: **NPS is a reporting instrument and HEART is a decision instrument.** Most teams I have met are using NPS for both, which is why it disappoints them.
+
+## What I would tell myself in 2024
+
+Three things.
+
+**Start with one dimension, not five.** I set up all five because the framework has five. Three of them were dead within a year, and the setup cost was real — instrumentation, dashboards, a weekly ritual of looking at numbers nobody acted on.
+
+**The argument is the deliverable.** The most valuable output was not a metric. It was discovering that two senior people meant different things by "done". No framework finds that for you, but this one made us sit down and write definitions, which did.
+
+**A number nobody has ever acted on is not a metric, it is decoration.** After six months I went through the dashboard and asked, for each number, what decision it had changed. Two had. The rest came out. That question is worth more than the framework, and you can ask it today about whatever you are already measuring.
+
+I am wary of writing this as advice, because it comes from two products and one team, and the thing I got most wrong last time was sounding confident before I had the evidence. So treat it as a report rather than a recommendation: this is what happened when I tried it, and the parts I expected to matter mostly did not.
+
+If you want the version of this that applies to your own product rather than mine, the check on [whether feedback is real or just polite](/tools/is-user-feedback-real-or-just-polite/) covers the same ground from the other end — it is about the conversations that produce the numbers, which is where most measurement goes wrong before the dashboard is ever built.

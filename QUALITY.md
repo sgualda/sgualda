@@ -13,7 +13,7 @@
 
 ---
 
-> **Progreso — 69 de 107 tickets resueltos (64%), 3 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
+> **Progreso — 70 de 107 tickets resueltos (65%), 3 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
 
 ## Resumen Ejecutivo
 
@@ -2448,7 +2448,9 @@ Ninguna
 
 ---
 
-## #Q-063 — Siete artículos delgados republicados sin reescribir
+## #Q-063 ✅ Resuelto — Siete artículos delgados republicados sin reescribir
+
+> ✅ **Resuelto 2026-08-01.** Los cinco artículos publicados reescritos por completo: de 3.752 a 4.453 palabras, cada uno con un incidente propio y su coste, cuatro FAQs reales, tabla comparativa donde el tema lo pide, y enlaces al glosario, a los checks y al mapa. `heart-framework-vs-nps` pasa de especulación en futuro a informe a dos años. `what-is-mvp-and-how-it-drives-growth` se convierte en `/writing/mvp-vs-prototype/` con 301 desde las dos URLs anteriores. Quedan pendientes los dos borradores (`ux-certification-worth-it`, `learning-to-let-go-an-idea`).
 
 ### Categoría
 Copywriting / SEO

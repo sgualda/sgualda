@@ -57,6 +57,12 @@ const stages = STAGES.filter((s) => topics.some((t) => t.stage === s.slug));
 const tools = TOOLS.filter((t) => topics.some((x) => x.tool === t.slug));
 
 const url = `${SITE.url}/writing/${entry.id}/`;
+
+/** Glossary terms this essay actually mentions, matched on the term name. */
+const glossary = await getCollection('glossary');
+const terms = glossary.filter((g) =>
+  new RegExp(`\\b${g.data.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(entry.body ?? '')
+);
 const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
@@ -75,7 +81,29 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
       author: { '@id': `${SITE.url}/#person` },
       publisher: { '@id': `${SITE.url}/#person` },
       inLanguage: 'en',
+      wordCount: words,
+      timeRequired: `PT${minutes}M`,
+      articleSection: topics.map((t) => t.label),
+      keywords: d.topics,
+      // The house terms this essay uses, pointed at their definitions. It is
+      // how a model knows "repeat use" here means the same thing it means on
+      // /glossary/ rather than a phrase that happens to appear twice.
+      ...(terms.length && { about: terms.map((t) => ({ '@id': `${SITE.url}/glossary/#${t.id}` })) }),
     },
+    // Mirrors the rendered FAQ block below. Same source, so they cannot drift.
+    ...(d.faqs?.length
+      ? [
+          {
+            '@type': 'FAQPage',
+            '@id': `${url}#faq`,
+            mainEntity: d.faqs.map(({ q, a }) => ({
+              '@type': 'Question',
+              name: q,
+              acceptedAnswer: { '@type': 'Answer', text: a },
+            })),
+          },
+        ]
+      : []),
   ]}
 >
   <Header slot="nav" />
@@ -107,6 +135,23 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     <div class="col prose">
       <Content />
     </div>
+
+    {/* Real markup, not just schema. A question answered in full on the page
+        is what a model quotes; a paragraph of prose that happens to contain
+        the answer is not. Same source as the FAQPage node above. */}
+    {d.faqs && d.faqs.length > 0 && (
+      <section class="col essay-faq">
+        <h2>Questions people ask about this</h2>
+        <div class="faq">
+          {d.faqs.map(({ q, a }) => (
+            <details>
+              <summary>{q}<span class="pm" aria-hidden="true">+</span></summary>
+              <div class="ans"><p>{a}</p></div>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
 
     {/* An essay is where a stranger from Google lands, and until now nothing on
         the page said who wrote it or why they would know. The face is the
@@ -245,6 +290,38 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     letter-spacing: 0; color: var(--dim); transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
   }
   .topics a:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* The wrapper the rehype plugin adds. The table keeps its own semantics;
+     only the box around it scrolls. */
+  .prose :global(.table-scroll) { overflow-x: auto; margin: var(--space-6) 0; }
+  .prose :global(.table-scroll:focus-visible) {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
+  }
+  .prose :global(table) {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 420px;
+    font-size: 0.875rem;
+    letter-spacing: 0;
+  }
+  .prose :global(th), .prose :global(td) {
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--hair);
+    vertical-align: top;
+  }
+  .prose :global(th) { font-weight: 600; white-space: nowrap; }
+  .prose :global(td:first-child) { color: var(--dim); }
+
+  .essay-faq { margin-top: var(--space-9); text-align: left; }
+  .essay-faq h2 {
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+    text-align: center;
+    margin-bottom: var(--space-6);
+  }
 
   .byline {
     display: flex;

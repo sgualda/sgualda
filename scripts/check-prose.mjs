@@ -1,0 +1,96 @@
+#!/usr/bin/env node
+/**
+ * The mechanically checkable half of BRAND.md.
+ *
+ * The voice guide ended with "enforced by reading it before committing", which
+ * is a weaker mechanism than a test and was immediately proved so: a regex pass
+ * applying the contraction rule produced "when I'd a hard design problem" and
+ * shipped it, plus the same break in a case study description — the text Google
+ * shows under the title.
+ *
+ * Only rules with no judgement in them live here. Tone is not checkable and is
+ * not attempted.
+ *
+ *   npm run audit:prose
+ */
+import { readFileSync, readdirSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+
+const root = resolve(import.meta.dirname, '..');
+const G = '\x1b[32m', R = '\x1b[31m', X = '\x1b[0m';
+
+/**
+ * Determiners. `I’ve`/`I’d` are auxiliaries and must be followed by a verb, so
+ * an article or possessive straight after one means a main verb was eaten:
+ * "I had a problem" became "I’d a problem". Listing what is wrong is far more
+ * reliable than trying to list every participle that is right.
+ */
+const DETERMINER = String.raw`a|an|the|my|your|his|her|their|our|its|this|that|these|those|no|some|any|one|two|three|four|five|six|seven|eight|nine|ten|most|both|each|every`;
+
+const RULES = [
+  {
+    id: 'negation contracted',
+    // BRAND.md: contract everything except a negation.
+    rx: /\b(is|are|was|were|do|does|did|will|would|could|should|has|have|had|ca|wo)n’t\b/gi,
+    say: 'write the negation out in full (BRAND.md)',
+  },
+  {
+    id: 'auxiliary swallowed a verb',
+    // "I’d a hard problem" — the contraction expanded a main verb, not an auxiliary.
+    rx: new RegExp(String.raw`\bI’(?:d|ve)\s+(?:${DETERMINER})\b`, 'g'),
+    say: 'I’d / I’ve only contract an auxiliary — "I had a problem", not "I’d a problem"',
+  },
+  {
+    id: 'clause-final contraction',
+    // "find out what it’s, not to defend" — the verb ends the clause.
+    rx: /\b(?:it|that|there|he|she|who|you|they|we)’(?:s|re)(?=\s*[,.;:!?]|\s+(?:to|and|or|than)\b)/g,
+    say: 'a verb that ends its clause cannot contract',
+  },
+  {
+    id: 'straight apostrophe',
+    rx: /(?<=[A-Za-z])'(?=[A-Za-z])/g,
+    say: 'use the curly apostrophe ’',
+  },
+  {
+    id: 'exclamation mark',
+    rx: /[a-z]!(?:\s|$)/g,
+    say: 'the site has none in its own voice (BRAND.md)',
+  },
+];
+
+/** Prose only — not code, not comments, not URLs. */
+const FILES = [];
+for (const dir of ['src/content', 'src/pages', 'src/lib'])
+  for (const f of readdirSync(join(root, dir), { recursive: true }))
+    if (typeof f === 'string' && /\.(md|yaml|astro|ts)$/.test(f)) FILES.push(join(dir, f));
+
+const findings = [];
+for (const f of FILES) {
+  const lines = readFileSync(join(root, f), 'utf8').split('\n');
+  lines.forEach((line, i) => {
+    const t = line.trim();
+    // Skip code, comments, imports, URLs and quoted product copy — a quotation
+    // of somebody else's interface is not the site speaking.
+    if (/^(\/\/|\*|\/\*|import |export |const |let |#|<)/.test(t)) return;
+    if (/https?:\/\//.test(line) || /\breads\b.*!/.test(line)) return;
+    for (const rule of RULES)
+      for (const m of line.matchAll(rule.rx))
+        findings.push({ f, line: i + 1, id: rule.id, hit: m[0].trim(), say: rule.say });
+  });
+}
+
+if (!findings.length) {
+  console.log(`\n  ${G}✓ Prose follows BRAND.md${X} — ${FILES.length} files checked\n`);
+  process.exit(0);
+}
+
+console.error(`\n  ${R}✗ ${findings.length} prose issues${X}\n`);
+const byRule = {};
+for (const x of findings) (byRule[x.id] ??= []).push(x);
+for (const [id, list] of Object.entries(byRule)) {
+  console.error(`  ${id} — ${list[0].say}`);
+  for (const x of list.slice(0, 6)) console.error(`    ${x.f}:${x.line}  «${x.hit}»`);
+  if (list.length > 6) console.error(`    …and ${list.length - 6} more`);
+  console.error('');
+}
+process.exit(1);

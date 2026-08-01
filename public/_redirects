@@ -15,7 +15,11 @@
 /good-product-design/                     /writing/good-product-design/                     301
 /heart-framework-vs-nps-user-experience/  /writing/heart-framework-vs-nps-user-experience/  301
 /ux-design-principles-manifesto/  /writing/  301
-/what-is-mvp-and-how-it-drives-growth/    /writing/what-is-mvp-and-how-it-drives-growth/    301
+/what-is-mvp-and-how-it-drives-growth/    /writing/mvp-vs-prototype/    301
+# The essay was rewritten around the comparison rather than the definition, and
+# the slug followed the argument. Both the WordPress URL and the first Astro one
+# land on it.
+/writing/what-is-mvp-and-how-it-drives-growth/    /writing/mvp-vs-prototype/    301
 
 # ── unpublished in the August content audit ──
 # Thin, structureless, or written without a point of view. Sent to the index

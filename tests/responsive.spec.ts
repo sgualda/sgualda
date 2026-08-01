@@ -53,6 +53,13 @@ async function overflowing(page: Page) {
       // Parked off-canvas on purpose — the skip link lives at left:-9999px
       // until it takes focus. Anything entirely left of the viewport is that.
       if (r.right <= 0) continue;
+      // Inside a deliberate scroll container. A wide comparison table is meant
+      // to extend past its box; that is what the box is for. What matters is
+      // that the container itself fits, and it is checked on its own turn.
+      let scrollable = false;
+      for (let p = el.parentElement; p && p !== document.body; p = p.parentElement)
+        if (/auto|scroll/.test(getComputedStyle(p).overflowX)) { scrollable = true; break; }
+      if (scrollable) continue;
       // 1px of tolerance: sub-pixel layout rounds up on fractional widths.
       if (r.right > limit + 1 || r.left < -1) {
         const parent = el.parentElement;

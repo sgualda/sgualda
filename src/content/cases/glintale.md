@@ -1,6 +1,6 @@
 ---
 title: 'glintale'
-description: 'A reading platform I’d the idea for and design. Organic traffic, people signing up and coming back — and one question still open: will any of them pay.'
+description: 'A reading platform I had the idea for and designed. Organic traffic, people signing up and coming back — and one question still open: will any of them pay.'
 client: 'glintale — my own company'
 role: 'Co-founder and product designer'
 year: '2026 — now'

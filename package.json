@@ -14,7 +14,8 @@
     "cms": "CMS=1 astro dev",
     "audit:budget": "node scripts/check-budget.mjs",
     "audit:quality": "node scripts/sync-quality.mjs",
-    "audit": "npm run audit:urls && npm run audit:budget && npm run audit:quality"
+    "audit:prose": "node scripts/check-prose.mjs",
+    "audit": "npm run audit:urls && npm run audit:budget && npm run audit:quality && npm run audit:prose"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.12",

@@ -16,7 +16,10 @@ const CMS = process.env.CMS === '1';
  * migrate 19 indexed URLs with zero 301s. `format: 'directory'` writes
  * about/index.html rather than about.html, which is what makes /about/ work.
  */
+import { rehypeTableScroll } from './src/lib/rehype-table-scroll.ts';
+
 export default defineConfig({
+  markdown: { rehypePlugins: [rehypeTableScroll] },
   site: 'https://sgualda.com',
   trailingSlash: 'always',
   build: { format: 'directory', inlineStylesheets: 'auto' },

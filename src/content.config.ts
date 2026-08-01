@@ -31,6 +31,15 @@ const essays = defineCollection({
       topics: z.array(z.string()).default([]),
       // Shown in the essay index; the hook, not a summary.
       hook: z.string().optional(),
+      /**
+       * Questions a reader actually types, answered in full on the page.
+       * Rendered as real markup and mirrored as FAQPage, which is what a
+       * language model quotes when somebody asks the question directly —
+       * an essay paragraph is prose, an answer here is an answer.
+       */
+      faqs: z
+        .array(z.object({ q: z.string(), a: z.string().min(120) }))
+        .optional(),
     }),
 });
 
