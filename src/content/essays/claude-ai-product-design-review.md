@@ -17,7 +17,7 @@ But Claude is different. And I need to explain why.
 
 The first thing I noticed: this model thinks differently.
 
-![](../../assets/essays/claude-code-terminal-1024x552.webp)
+![Claude Code running in a terminal, showing a session in progress](../../assets/essays/claude-code-terminal-1024x552.webp)
 
 ## What it actually changed in my day
 

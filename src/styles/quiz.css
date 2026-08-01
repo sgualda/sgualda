@@ -80,3 +80,8 @@
   text-align: left;
   color: var(--ink);
 }
+
+/* Focus is moved here programmatically after each answer, so the ring would
+   appear without the person having pressed anything. :focus-visible already
+   handles keyboard users. */
+.qq:focus, .vname:focus { outline: none; }

@@ -62,8 +62,10 @@ const url = `${SITE.url}/tools/${t.slug}/`;
 
   <div class="col">
     <div class="panel">
-      <div class="dots" id="dots">{t.q.map(() => <i></i>)}</div>
-      <div id="box"></div>
+      <div class="dots" id="dots" role="presentation">{t.q.map(() => <i></i>)}</div>
+      {/* The panel rewrites itself on every answer. Without a live region a
+          screen reader user hears nothing change and loses their place. */}
+      <div id="box" role="status" aria-live="polite" aria-atomic="true"></div>
       {/* Only this tool's data, not all six. See #Q-077. */}
       <script
         type="application/json"
@@ -83,13 +85,13 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       {
         t.faqs.map(([q, a]) => (
           <details>
-            <summary>{q}<span class="pm">+</span></summary>
+            <summary>{q}<span class="pm" aria-hidden="true">+</span></summary>
             <div class="ans"><p>{a}</p></div>
           </details>
         ))
       }
       <details>
-        <summary>Is it free, and where do my answers go?<span class="pm">+</span></summary>
+        <summary>Is it free, and where do my answers go?<span class="pm" aria-hidden="true">+</span></summary>
         <div class="ans">
           <p>
             Free, with no account and no email. Everything runs in your browser — nothing is
@@ -202,7 +204,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       `<div class="step">` +
       (at > 0 ? `<button class="back" type="button" id="back">← Back</button>` : '') +
       `<span class="eyebrow">Question ${at + 1} of ${t.q.length}</span>` +
-      `<p class="qq">${q}</p>` +
+      `<h2 class="qq" id="q-head" tabindex="-1">${q}</h2>` +
       opts.map(([label], i) => `<button class="opt" type="button" data-i="${i}">${label}</button>`).join('') +
       `</div>`;
 
@@ -214,6 +216,9 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       })
     );
     document.getElementById('back')?.addEventListener('click', () => history.back());
+    // Move focus to the new question so keyboard and screen reader users are
+    // taken there rather than dumped back at the top of the document.
+    if (at > 0) document.getElementById('q-head')?.focus();
   }
 
   function result() {
@@ -222,8 +227,8 @@ const url = `${SITE.url}/tools/${t.slug}/`;
     const r = t.b.find((x) => score <= x.max) ?? t.b[t.b.length - 1];
 
     $('box').innerHTML =
-      `<div class="step" role="status" aria-live="polite">` +
-      `<span class="vlab">Your answer</span><p class="vname">${r.name}</p>` +
+      `<div class="step">` +
+      `<span class="vlab">Your answer</span><h2 class="vname" id="q-head" tabindex="-1">${r.name}</h2>` +
       `<p class="vnote" style="text-align:center;margin:10px 0 22px">${r.sub}</p>` +
       `<div class="vwhy">${r.body}</div>` +
       `<div class="vcols" style="grid-template-columns:1fr"><div><h4>What I would do next</h4><ul>` +
@@ -242,6 +247,8 @@ const url = `${SITE.url}/tools/${t.slug}/`;
     const panel = document.querySelector('.panel');
     if (r === t.b[0]) celebrate(panel);
     else if (r === t.b[t.b.length - 1]) settle(panel);
+
+    $('q-head')?.focus();
 
     $('again').addEventListener('click', () => {
       answers = [];

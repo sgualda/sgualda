@@ -41,6 +41,18 @@ if (urls.length === 0) {
   process.exit(1);
 }
 
+// An image with no alt text is invisible to a screen reader and wasted in
+// image search. Cheap to catch here, tedious to find later.
+import { readdirSync } from 'node:fs';
+const essayDir = join(root, 'src/content/essays');
+const noAlt = readdirSync(essayDir)
+  .filter((f) => f.endsWith('.md'))
+  .filter((f) => readFileSync(join(essayDir, f), 'utf8').includes(']('.replace(']', '![]')) || readFileSync(join(essayDir, f), 'utf8').includes('![](')); 
+if (noAlt.length) {
+  console.error(`\n✗ Images with no alt text in: ${noAlt.join(', ')}`);
+  process.exit(1);
+}
+
 const G = '\x1b[32m', R = '\x1b[31m', Y = '\x1b[33m', X = '\x1b[0m';
 // Directory routes are dist/<path>/index.html; endpoints like /rss.xml are
 // written as literal files.

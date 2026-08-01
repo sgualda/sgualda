@@ -67,8 +67,8 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
 
   <div class="col">
     <div class="panel">
-      <div class="dots" id="qfDots"><i class="on"></i><i></i><i></i><i></i></div>
-      <div id="qfBox"></div>
+      <div class="dots" id="qfDots" role="presentation"><i class="on"></i><i></i><i></i><i></i></div>
+      <div id="qfBox" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
     <p class="aside">
       Rather just write? <a href="#brief">Skip to the brief</a> or email
@@ -199,7 +199,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
       `<div class="step">` +
       (i > 0 ? `<button class="back" type="button" id="qfBack">← Back</button>` : '') +
       `<span class="eyebrow">Question ${i + 1} of ${Q.length}</span>` +
-      `<p class="qq">${q.q}</p>` +
+      `<h2 class="qq" id="qf-head" tabindex="-1">${q.q}</h2>` +
       q.o.map((o) => `<button class="opt" type="button" data-k="${o[0]}">${o[1]}${o[2] ? `<em>${o[2]}</em>` : ''}</button>`).join('') +
       `</div>`;
 
@@ -210,6 +210,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
       })
     );
     document.getElementById('qfBack')?.addEventListener('click', () => ask(i - 1));
+    if (i > 0) document.getElementById('qf-head')?.focus();
   }
 
   function verdict() {
@@ -217,8 +218,8 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     rec = decide(answers);
     const o = OUT[rec];
     $('qfBox').innerHTML =
-      `<div class="step" role="status" aria-live="polite">` +
-      `<span class="vlab">${o.lab}</span><p class="vname">${o.name}</p>` +
+      `<div class="step">` +
+      `<span class="vlab">${o.lab}</span><h2 class="vname" id="qf-head" tabindex="-1">${o.name}</h2>` +
       `<span class="vmeta">${o.meta}</span><div class="vwhy">${o.why}</div>` +
       `<div class="vcols"><div><h4>What you would get</h4><ul>` +
       o.get.map((g: string) => `<li>${g}</li>`).join('') +
@@ -236,6 +237,8 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     const panel = $('qfBox').closest('.panel');
     if (rec === 'nope' || rec === 'notyet') settle(panel);
     else celebrate(panel);
+
+    document.getElementById('qf-head')?.focus();
 
     $('qfReset').addEventListener('click', () => {
       for (const k of Object.keys(answers)) delete answers[k];

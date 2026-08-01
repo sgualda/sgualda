@@ -145,32 +145,32 @@ export const BLUNT_HTML = `<div class="b"><span class="x"><svg><use href="#xm"/>
         <p>Whatever I produced in two days would be confident, tidy and probably wrong — and you would act on it, because it would look like an answer. That is worse for you than having nothing.</p></div></div>`;
 
 /** FAQ markup, mirrored by the FAQPage JSON-LD. */
-export const FAQ_HTML = `<details><summary>How does this actually work?<span class="pm">+</span></summary><div class="ans">
+export const FAQ_HTML = `<details><summary>How does this actually work?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>It starts with a written brief rather than a call, because a brief takes you three minutes and a call takes us both an hour to discover something the brief would have said.</p>
       <p>You describe what is stuck. I read it and reply within a day with which kind of engagement fits, what it would involve and what it would cost. If none of them fit, I say that instead and point you somewhere more useful.</p></div></details>
-    <details><summary>What is a product review, and what do I get at the end?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>What is a product review, and what do I get at the end?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>Five days on the product, the flows, whatever research already exists and the numbers, plus up to nine conversations with your actual users.</p>
       <p>What lands is a short ranked document: the five things that matter, in the order to do them, with the reasoning attached so your team can argue with it. Then a ninety-minute session where they do exactly that, and two follow-up calls at two and six weeks — because plans need adjusting once they meet reality, and handing over a PDF and disappearing is not a service.</p></div></details>
-    <details><summary>How much does it cost?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>How much does it cost?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>I am not publishing prices at the moment. Send a brief and you will have a specific figure within a day, along with exactly what is included.</p>
       <p>What I can tell you now: scope and price are fixed before anything starts. No hourly billing, no open-ended engagements, and the number does not move depending on how well funded you look.</p></div></details>
-    <details><summary>Do you really need to talk to our users?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>Do you really need to talk to our users?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>For a review, yes, and this is the part clients resist most. Nine conversations is usually enough.</p>
       <p>Without them I am reviewing your product against my own assumptions. A guess delivered with confidence is more dangerous than no answer, because you will act on it.</p></div></details>
-    <details><summary>What size of company do you work with?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>What size of company do you work with?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>Teams of roughly two to forty people building SaaS, mobile apps or internal tools.</p>
       <p>Above about a hundred people, or in enterprise and heavily regulated contexts, the bottleneck is almost always organisational rather than a design problem. I will tell you that in the first reply rather than take the money and find out together.</p></div></details>
-    <details><summary>Can you just do the design work?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>Can you just do the design work?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>No, and not out of principle. Execution-only work is better done by somebody you hire full-time — cheaper, faster, and much closer to the product than I can be from outside.</p>
       <p>What an outside product designer is useful for is deciding what to build and being able to say why. That only works if the plan can still change.</p></div></details>
-    <details><summary>What if we do not know what we need?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>What if we do not know what we need?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>That is the most common starting point and it is a good one. Describe what is happening rather than what you think the solution is.</p>
       <p>Working out which problem you actually have is most of the job. Getting that wrong is what expensive quarters are made of.</p></div></details>
-    <details><summary>Will you sign an NDA?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>Will you sign an NDA?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>Standard mutual ones, without argument. You own everything produced, including documents and designs.</p>
       <p>One thing worth saying plainly: this site publishes decisions and mistakes, always my own. If I ever wanted to write about something we did together, I would ask first and you can say no.</p></div></details>
-    <details><summary>How quickly do you reply?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>How quickly do you reply?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>Within a day, including to the people I turn down. If something is genuinely urgent, say so in the first line and I will reply the same day when I can.</p></div></details>
-    <details><summary>Where are you, and how do we work together?<span class="pm">+</span></summary><div class="ans">
+    <details><summary>Where are you, and how do we work together?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>Barcelona, CET. Almost everything is remote and works across Europe without friction.</p>
       <p>I use whatever your team already uses — I am not going to make five people learn a new tool for a five-day engagement. For ongoing work I need access to the channels where decisions actually get made, not a new one created for me.</p></div></details>`;

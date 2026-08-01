@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "@axe-core/playwright": "^4.12.1",
     "@cloudflare/workers-types": "^5.20260801.1",
     "@playwright/test": "^1.62.1",
     "http-server": "^14.1.1",

@@ -9,7 +9,7 @@ topics: ['craft']
 ---
 I’ve been thinking about this for a while, and it’s becoming more and more clear to me: **good design isn’t about making things complicated**. And it’s definitely not about worshipping Figma or the latest trendy framework.
 
-![](../../assets/essays/good-product-design-sergio-gualda.jpg)
+![A cluttered workspace with sketches and a laptop, the everyday reality behind product design](../../assets/essays/good-product-design-sergio-gualda.jpg)
 
 I work as a [**Product Designer**](https://www.linkedin.com/in/sgualda/) in a startup and, if there’s one thing I’ve learned over time, it’s that most of the time the most useful thing you can do is simplify. Design only what’s necessary, understand the problem, make clear decisions, and help the team move forward without turning everything into a drama.
 
