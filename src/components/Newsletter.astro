@@ -16,10 +16,19 @@ const {
 <div class="band">
   <h2 set:html={title} />
   <p>{body}</p>
-  <form class="signup" action="https://sgualda.substack.com/subscribe" method="get">
+  <!-- Opens Substack in a new tab rather than navigating away: the reader
+       keeps the page they were on, and comes back to it. -->
+  <form
+    class="signup"
+    action="https://sgualda.substack.com/subscribe"
+    method="get"
+    target="_blank"
+    rel="noopener"
+  >
     <label class="sr-only" for="nl-email">Email address</label>
     <input id="nl-email" name="email" type="email" required placeholder="name@email.com" />
     <button class="btn" type="submit">Subscribe</button>
+    <p class="fine">Opens Substack in a new tab.</p>
   </form>
 </div>
 
@@ -53,6 +62,14 @@ const {
   .signup input:focus { border-color: var(--on-inverse); }
   .signup .btn { background: var(--paper); color: var(--ink); border-color: var(--paper); }
   .signup .btn:hover { background: color-mix(in srgb, var(--paper) 84%, transparent); }
+
+  .fine {
+    flex-basis: 100%;
+    margin-top: var(--space-3);
+    font-size: 0.75rem;
+    letter-spacing: 0;
+    color: color-mix(in srgb, var(--on-inverse) 55%, transparent);
+  }
 
   .sr-only {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
