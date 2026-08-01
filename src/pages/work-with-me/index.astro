@@ -105,6 +105,11 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     <div class="panel" style="margin-top:34px">
       <div class="dots" id="bDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
       <div id="bBox"></div>
+      <!-- Honeypot. Hidden from people, irresistible to bots. -->
+      <div class="hp" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
     </div>
     <p class="aside">
       Or just email me — <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. The form only exists
@@ -163,6 +168,13 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     border: 1px solid var(--hair);
     border-radius: var(--radius-card);
     padding: clamp(26px, 5vw, 38px) clamp(20px, 4vw, 30px);
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
   .aside { margin-top: 16px; font-size: 0.875rem; color: var(--dim); letter-spacing: 0; }
   .aside a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
@@ -276,12 +288,85 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
         $('brief').scrollIntoView({ behavior: 'smooth', block: 'start' });
       })
     );
-    document.getElementById('send')?.addEventListener('click', () => {
+    document.getElementById('send')?.addEventListener('click', submit);
+  }
+
+  /* ── submitting ── */
+  const opened = Date.now();
+  const val = (id: string) => (document.getElementById(id) as HTMLInputElement | null)?.value?.trim() ?? '';
+
+  async function submit() {
+    const btn = document.getElementById('send') as HTMLButtonElement;
+    const email = val('b10');
+    const blocked = val('b4');
+
+    // Validate before touching the network, and say which field is wrong.
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      showError('I need an email address that works, or I cannot reply.');
+      return;
+    }
+    if (blocked.length < 20) {
+      showError('Step 3 is the one I actually read. A couple of sentences is enough.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    document.getElementById('bErr')?.remove();
+
+    const kindEl = document.querySelector<HTMLInputElement>('input[name=kind]:checked');
+    const specifics: Record<string, string> = {};
+    document.querySelectorAll<HTMLElement>('#bBox .f').forEach((f) => {
+      const field = f.querySelector<HTMLInputElement>('input,textarea,select');
+      const label = f.querySelector('label')?.textContent ?? '';
+      if (field && field.value.trim() && !['b1', 'b2', 'b4', 'b9', 'b10'].includes(field.id)) {
+        specifics[label] = field.value.trim();
+      }
+    });
+
+    try {
+      const res = await fetch('/api/brief', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          kind: kindEl?.value,
+          recommendation: rec ? OUT[rec].name : undefined,
+          product: val('b1'),
+          team: val('b2'),
+          blocked,
+          specifics,
+          name: val('b9'),
+          email,
+          website: val('website'),
+          elapsed: Date.now() - opened,
+        }),
+      });
+      const out = await res.json();
+      if (!res.ok || !out.ok) throw new Error(out.error || 'Something went wrong.');
+
       $('bBox').innerHTML =
         `<div class="step" role="status"><p class="vname">That is everything I need.</p>` +
-        `<p class="vnote">I read every brief myself and reply within a day — with what fits, what it would involve and what it costs, or that none of it fits.</p></div>`;
+        `<p class="vnote">I read every brief myself and reply within a day — with what fits, ` +
+        `what it would involve and what it costs, or that none of it fits. ` +
+        `A confirmation is on its way to ${email}.</p></div>`;
       $('bDots').style.display = 'none';
-    });
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Send the brief';
+      showError(
+        err instanceof Error ? err.message : 'Could not send. Email hello@sgualda.com instead.'
+      );
+    }
+  }
+
+  function showError(msg: string) {
+    document.getElementById('bErr')?.remove();
+    const p = document.createElement('p');
+    p.id = 'bErr';
+    p.className = 'formErr';
+    p.setAttribute('role', 'alert');
+    p.textContent = msg;
+    document.querySelector('#bBox .fnav')?.before(p);
   }
 
   ask(0);

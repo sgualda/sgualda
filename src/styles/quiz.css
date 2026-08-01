@@ -66,3 +66,17 @@
   .fnav { display: flex; justify-content: space-between; gap: 10px; margin-top: 24px; align-items: center; }
 
   @media (max-width: 560px) { .vcols { grid-template-columns: 1fr; } }
+
+/* Form-level error. Sits above the buttons so it is impossible to miss. */
+.formErr {
+  margin-top: 18px;
+  padding: 13px 16px;
+  border-radius: 13px;
+  background: var(--surface);
+  border-left: 3px solid var(--ink);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-align: left;
+  color: var(--ink);
+}
