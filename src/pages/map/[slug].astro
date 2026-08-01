@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
@@ -25,6 +26,9 @@ const { s, prev, next, tools } = Astro.props as {
   next: Stage | null;
   tools: any[];
 };
+const terms = (await getCollection('glossary'))
+  .filter((g) => g.data.stage === s.slug)
+  .sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 
 <Base
@@ -126,6 +130,22 @@ const { s, prev, next, tools } = Astro.props as {
     </div>
   </section>
 
+
+  {terms.length > 0 && (
+    <section class="section col">
+      <span class="eyebrow">Vocabulary</span>
+      <h2>Words this check uses.</h2>
+      <dl class="terms-inline">
+        {terms.map((g) => (
+          <div>
+            <dt><a href={`/glossary/#${g.id}`}>{g.data.name}</a></dt>
+            <dd>{g.data.definition}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )}
+
   <Footer slot="footer" />
 </Base>
 
@@ -221,5 +241,27 @@ const { s, prev, next, tools } = Astro.props as {
   .pager span {
     font-family: var(--font-display); font-size: 0.9375rem;
     font-weight: 600; letter-spacing: -0.03em;
+  }
+</style>
+
+<style>
+  .terms-inline { text-align: left; margin-top: var(--space-6); }
+  .terms-inline > div { padding: var(--space-5) 0; }
+  .terms-inline > div + div { border-top: 1px solid var(--hair); }
+  .terms-inline dt {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-2);
+  }
+  .terms-inline dt a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .terms-inline dt a:hover { opacity: 0.6; }
+  .terms-inline dd {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    letter-spacing: 0;
+    color: var(--dim);
   }
 </style>

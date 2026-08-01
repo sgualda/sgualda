@@ -2851,9 +2851,9 @@ Los LLMs citan mejor lo que está definido de forma inequívoca. Un glosario mar
 Página `/glossary/` con 15-20 términos, cada uno con definición corta, ejemplo y enlace al contenido donde se desarrolla. Marcado `DefinedTermSet` + `DefinedTerm` con `@id` estables, referenciados desde el resto del sitio.
 
 ### Criterios de aceptación
-- [ ] Glosario con ≥ 15 términos
-- [ ] `DefinedTerm` con `@id` reutilizados en otras páginas
-- [ ] Enlazado contextualmente desde ensayos y checks
+- [x] Glosario con ≥ 15 términos — 16 en `/glossary/`
+- [x] `DefinedTerm` con `@id` reutilizados en otras páginas
+- [x] Enlazado contextualmente desde ensayos y checks — 11 páginas
 
 ### Dependencias
 `#Q-066`
@@ -4777,7 +4777,7 @@ Ninguna
 - [ ] #Q-069 · [ ] #Q-070 · [ ] #Q-071 · [ ] #Q-072
 
 ### GEO / LLM
-- [ ] #Q-073 · [ ] #Q-074 · [ ] #Q-075 · [ ] #Q-076
+- [ ] #Q-073 · [x] #Q-074 · [ ] #Q-075 · [ ] #Q-076
 
 ### Performance
 - [ ] #Q-077 · [ ] #Q-078 · [ ] #Q-079 · [ ] #Q-080 · [ ] #Q-081
