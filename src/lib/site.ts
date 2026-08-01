@@ -149,7 +149,9 @@ export const URL_MAP = {
     '/writing/designing-for-scalability/',
     '/writing/good-product-design/',
     '/writing/heart-framework-vs-nps-user-experience/',
+    '/writing/learning-to-let-go-an-idea/',
     '/writing/mvp-vs-prototype/',
+    '/writing/ux-certification-worth-it/',
   ],
 } as const;
 

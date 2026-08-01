@@ -2452,7 +2452,7 @@ Ninguna
 
 ## #Q-063 ✅ Resuelto — Siete artículos delgados republicados sin reescribir
 
-> ✅ **Resuelto 2026-08-01.** Los cinco artículos publicados reescritos por completo: de 3.752 a 4.453 palabras, cada uno con un incidente propio y su coste, cuatro FAQs reales, tabla comparativa donde el tema lo pide, y enlaces al glosario, a los checks y al mapa. `heart-framework-vs-nps` pasa de especulación en futuro a informe a dos años. `what-is-mvp-and-how-it-drives-growth` se convierte en `/writing/mvp-vs-prototype/` con 301 desde las dos URLs anteriores. Quedan pendientes los dos borradores (`ux-certification-worth-it`, `learning-to-let-go-an-idea`).
+> ✅ **Resuelto 2026-08-02.** Los siete artículos publicados reescritos por completo: de 3.752 a 4.453 palabras, cada uno con un incidente propio y su coste, cuatro FAQs reales, tabla comparativa donde el tema lo pide, y enlaces al glosario, a los checks y al mapa. `heart-framework-vs-nps` pasa de especulación en futuro a informe a dos años. `what-is-mvp-and-how-it-drives-growth` se convierte en `/writing/mvp-vs-prototype/` con 301 desde las dos URLs anteriores. Los dos borradores que valían la pena (`ux-certification-worth-it`, `learning-to-let-go-an-idea`) pasan de 240 palabras a 885 y 972 y se publican. De 13 artículos migrados quedan 7 publicados y 6 sin publicar, que es la proporción correcta: ninguno de los 6 tiene un incidente propio detrás.
 
 ### Categoría
 Copywriting / SEO
