@@ -5,7 +5,7 @@ published: 2025-10-20
 updated: 2025-10-20
 migrated: true
 draft: false
-topics: []
+topics: ['craft']
 ---
 Design isn’t decoration. It’s not “making it pretty.” It’s choosing what matters so the business moves and someone’s life gets easier. If you want posters, hit a print shop. If you want impact, let’s talk design.
 

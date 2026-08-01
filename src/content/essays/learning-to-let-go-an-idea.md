@@ -6,7 +6,7 @@ updated: 2025-06-10
 migrated: true
 draft: false
 # audit note 2026-07-31 — 242 words. The most on-brand topic you have. Rewrite candidate #2.
-topics: []
+topics: ['discovery']
 ---
 You know, this idea of ‘learning to let go’ in the design world? I’ve been thinking about it a lot, and it just really clicks with me. From what I’ve seen, it’s a super important part of growing and making new things with digital products.
 

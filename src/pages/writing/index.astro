@@ -4,6 +4,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Newsletter from '@components/Newsletter.astro';
+import { TOPICS } from '@lib/topics';
 
 const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
@@ -41,6 +42,13 @@ const PAGE = 6;
     <span class="eyebrow">Journal</span>
     <h1>My journal</h1>
     <p class="sub">Stories, thoughts and reflections</p>
+    <ul class="topics">
+      {
+        TOPICS.filter((t) => essays.some((e) => e.data.topics.includes(t.slug))).map((t) => (
+          <li><a href={`/writing/topic/${t.slug}/`}>{t.label}</a></li>
+        ))
+      }
+    </ul>
   </section>
 
   <div class="col">
@@ -90,6 +98,14 @@ const PAGE = 6;
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro .eyebrow { margin-bottom: 16px; }
   .intro h1 { margin-bottom: 18px; }
+
+  .topics { list-style: none; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+  .topics a {
+    display: block; padding: 8px 16px; border-radius: var(--radius-pill);
+    border: 1px solid var(--hair); font-size: 0.8125rem; font-weight: 500;
+    letter-spacing: -0.01em; transition: border-color 0.2s var(--ease);
+  }
+  .topics a:hover { border-color: var(--ink); }
 
   .list { list-style: none; text-align: left; margin-top: 54px; }
   .row.hidden { display: none; }

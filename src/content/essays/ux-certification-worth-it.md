@@ -6,7 +6,7 @@ updated: 2025-02-13
 migrated: true
 draft: false
 # audit note 2026-07-31 — 236 words. Real search demand and a personal angle — too thin to rank. Rewrite candidate #1.
-topics: []
+topics: ['craft']
 ---
 A few years ago, when I started diving into the UX design world, I came across a ton of certification options. The question I asked myself was: “Do I really need this?” Of course, everyone said that having a certification is almost a requirement to work in UX, but I wasn’t so sure.
 

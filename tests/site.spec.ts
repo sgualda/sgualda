@@ -7,7 +7,7 @@ const section = (name: string) => {
   const m = src.match(new RegExp(`${name}:\\s*\\[([^\\]]*)\\]`));
   return m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]) : [];
 };
-const URLS = [...section('pages'), ...section('tools'), ...section('writing')];
+const URLS = [...section('pages'), ...section('tools'), ...section('topics'), ...section('writing')];
 
 test('the URL contract is not empty', () => {
   expect(URLS.length).toBeGreaterThan(20);

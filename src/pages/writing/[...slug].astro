@@ -4,15 +4,52 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import { SITE } from '@lib/site';
+import { TOPICS } from '@lib/topics';
+import { STAGES } from '@lib/stages';
+import { TOOLS } from '@lib/tools';
 
 export async function getStaticPaths() {
-  const essays = await getCollection('essays', ({ data }) => !data.draft);
-  return essays.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+  );
+
+  return essays.map((entry, i) => {
+    // Related by shared topic, most recent first. Never the essay itself.
+    const related = essays
+      .filter((e) => e.id !== entry.id && e.data.topics.some((t) => entry.data.topics.includes(t)))
+      .slice(0, 3);
+
+    return {
+      params: { slug: entry.id },
+      props: {
+        entry,
+        related,
+        newer: essays[i - 1] ?? null,
+        older: essays[i + 1] ?? null,
+      },
+    };
+  });
 }
 
-const { entry } = Astro.props as { entry: CollectionEntry<'essays'> };
-const { Content, remarkPluginFrontmatter } = await render(entry);
+const { entry, related, newer, older } = Astro.props as {
+  entry: CollectionEntry<'essays'>;
+  related: CollectionEntry<'essays'>[];
+  newer: CollectionEntry<'essays'> | null;
+  older: CollectionEntry<'essays'> | null;
+};
+const { Content } = await render(entry);
 const d = entry.data;
+
+// Reading time from the raw markdown. 200 wpm is the usual figure for
+// non-fiction; rounded up so it never claims less than it takes.
+const words = entry.body?.split(/\s+/).length ?? 0;
+const minutes = Math.max(1, Math.ceil(words / 200));
+
+const topics = TOPICS.filter((t) => d.topics.includes(t.slug));
+// The stages and checks this essay's topics belong to — the cross-links that
+// tie the three content systems together.
+const stages = STAGES.filter((s) => topics.some((t) => t.stage === s.slug));
+const tools = TOOLS.filter((t) => topics.some((x) => x.tool === t.slug));
 
 const url = `${SITE.url}/writing/${entry.id}/`;
 const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -44,18 +81,85 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
       <h1>{d.title}</h1>
       <p class="meta">
         <time datetime={d.published.toISOString()}>{fmt(d.published)}</time>
+        {' · '}{minutes} min read
         {
           d.updated && d.updated.valueOf() !== d.published.valueOf() && (
             <> · updated {fmt(d.updated)}</>
           )
         }
       </p>
+      {
+        topics.length > 0 && (
+          <ul class="topics">
+            {topics.map((t) => (
+              <li><a href={`/writing/topic/${t.slug}/`}>{t.label}</a></li>
+            ))}
+          </ul>
+        )
+      }
     </header>
 
     <div class="col prose">
       <Content />
     </div>
   </article>
+
+  {
+    (stages.length > 0 || tools.length > 0) && (
+      <section class="section col">
+        <span class="eyebrow">Put it to work</span>
+        <h2>Where this applies.</h2>
+        <ul class="cross">
+          {stages.map((s) => (
+            <li class="card-link">
+              <a href={`/map/${s.slug}/`}>
+                <h3>Stage {s.n} — {s.name}</h3>
+                <p>{s.lead}</p>
+              </a>
+            </li>
+          ))}
+          {tools.map((t) => (
+            <li class="card-link">
+              <a href={`/tools/${t.slug}/`}>
+                <h3>{t.n}</h3>
+                <p>{t.out}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    related.length > 0 && (
+      <section class="section col">
+        <span class="eyebrow">Related</span>
+        <h2>More like this.</h2>
+        <ul class="related">
+          {related.map((e) => (
+            <li>
+              <a href={`/writing/${e.id}/`}>
+                <span class="h">{e.data.title}</span>
+                <span class="p">{e.data.description}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="section col">
+    <nav class="pager" aria-label="Essays">
+      {older ? (
+        <a href={`/writing/${older.id}/`} class="prev"><em>Older</em><span>{older.data.title}</span></a>
+      ) : <span />}
+      {newer ? (
+        <a href={`/writing/${newer.id}/`} class="next-link"><em>Newer</em><span>{newer.data.title}</span></a>
+      ) : <span />}
+    </nav>
+  </section>
 
   <section class="col next">
     <p class="sub">Something here you disagree with? That is the useful kind of email.</p>
@@ -121,6 +225,42 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     padding: 18px;
     overflow-x: auto;
     font-size: 0.9rem;
+  }
+
+  .topics { list-style: none; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+  .topics a {
+    display: block; padding: 6px 14px; border-radius: var(--radius-pill);
+    border: 1px solid var(--hair); font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0; color: var(--dim); transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .topics a:hover { border-color: var(--ink); color: var(--ink); }
+
+  .cross, .related { list-style: none; text-align: left; margin-top: 32px; display: grid; gap: 14px; }
+  .cross h3 { font-size: 1rem; margin-bottom: 8px; }
+  .cross p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
+  .related li + li { border-top: 1px solid var(--hair); }
+  .related a { display: block; padding: 20px 0; transition: opacity 0.2s var(--ease); }
+  .related a:hover { opacity: 0.55; }
+  .related .h {
+    display: block; font-family: var(--font-display); font-size: 1.0625rem;
+    font-weight: 600; letter-spacing: -0.03em; margin-bottom: 6px;
+  }
+  .related .p { font-size: 0.9375rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
+
+  .pager {
+    display: flex; justify-content: space-between; gap: 20px;
+    padding-top: 26px; border-top: 1px solid var(--hair); text-align: left;
+  }
+  .pager a { display: block; max-width: 46%; transition: opacity 0.2s var(--ease); }
+  .pager a:hover { opacity: 0.6; }
+  .pager .next-link { text-align: right; }
+  .pager em {
+    display: block; font-style: normal; font-size: 0.6875rem;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px;
+  }
+  .pager span {
+    font-family: var(--font-display); font-size: 0.9375rem;
+    font-weight: 600; letter-spacing: -0.03em; line-height: 1.3;
   }
 
   .next { margin-top: var(--gap); padding-top: 44px; border-top: 1px solid var(--hair); }

@@ -5,7 +5,7 @@ published: 2025-02-17
 updated: 2025-07-15
 migrated: true
 draft: false
-topics: []
+topics: ['scope', 'discovery']
 ---
 ![Image showing MVP concept for business growth](../../assets/essays/Image-showing-MVP-concept-for-business-growth.jpg)
 

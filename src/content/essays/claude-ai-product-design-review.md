@@ -5,7 +5,7 @@ published: 2026-03-18
 updated: 2026-03-18
 migrated: true
 draft: false
-topics: []
+topics: ['craft', 'process']
 ---
 I’ve been using AI tools in my daily workflow for a couple of years now. ChatGPT, Midjourney, Copilot, whatever came out.
 

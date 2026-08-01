@@ -6,7 +6,7 @@ updated: 2025-02-18
 migrated: true
 draft: false
 # audit note 2026-07-31 — 1149 words, well written, but personal productivity — not product design. Belongs on Substack.
-topics: []
+topics: ['process']
 ---
 ## Introduction
 

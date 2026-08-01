@@ -6,7 +6,7 @@ updated: 2025-02-07
 migrated: true
 draft: false
 # audit note 2026-07-31 — 316 words, no headings. A note, not an essay.
-topics: []
+topics: ['craft', 'process']
 ---
 When I hear the phrase “Product Design,” the first thing that comes to mind is that fine line between **people’s needs and companies’ dreams** (or goals). It’s like walking a tightrope, where your balance depends on how well you understand users and how aligned you are with what the business is aiming for.
 

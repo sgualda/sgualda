@@ -6,7 +6,7 @@ updated:
 migrated: true
 draft: false
 # audit note 2026-07-31 — 182 words, no headings, zero first person. Keyword filler.
-topics: []
+topics: ['discovery']
 ---
 ![Team collaboration in product discovery](../../assets/essays/Product-discovery-process-1024x576.jpg)
 

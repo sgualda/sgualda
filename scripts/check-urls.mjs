@@ -30,6 +30,7 @@ const section = (name) => {
 const groups = {
   pages: section('pages'),
   tools: section('tools'),
+  topics: section('topics'),
   writing: section('writing'),
 };
 // Promised in the nav, not written yet. Reported, never fatal.

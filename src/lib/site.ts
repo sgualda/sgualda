@@ -83,6 +83,19 @@ export const URL_MAP = {
    */
   pending: ['/case-studies/truvi/', '/case-studies/ecoco-mobile-app/'],
 
+  /**
+   * Topic hubs. Only topics that actually have an essay get a page — an empty
+   * hub is thin content and a dead end. 'launch' is defined in topics.ts and
+   * deliberately absent here until something is written for it.
+   */
+  topics: [
+    '/writing/topic/craft/',
+    '/writing/topic/discovery/',
+    '/writing/topic/measurement/',
+    '/writing/topic/process/',
+    '/writing/topic/scope/',
+  ],
+
   /** Essays. Generated from the collection. */
   writing: [
     '/writing/claude-ai-product-design-review/',

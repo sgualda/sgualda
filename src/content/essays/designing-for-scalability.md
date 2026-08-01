@@ -5,7 +5,7 @@ published: 2024-12-01
 updated: 2024-12-23
 migrated: true
 draft: false
-topics: []
+topics: ['scope', 'craft']
 ---
 When I sit down to design a product, there’s one question I keep asking myself: *How will this grow?* Designing with scalability in mind isn’t an extra or a luxury—it’s a necessity. But I didn’t always see it that way, and I want to share why it’s become such a priority for me.
 

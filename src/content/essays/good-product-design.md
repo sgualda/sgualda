@@ -5,7 +5,7 @@ published: 2025-07-29
 updated: 2025-07-29
 migrated: true
 draft: false
-topics: []
+topics: ['craft']
 ---
 I’ve been thinking about this for a while, and it’s becoming more and more clear to me: **good design isn’t about making things complicated**. And it’s definitely not about worshipping Figma or the latest trendy framework.
 
