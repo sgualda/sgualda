@@ -66,7 +66,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       <div id="box"></div>
     </div>
     <p class="aside">
-      Everything runs in your browser. Nothing is sent anywhere and I never see your answers.
+      Everything runs in your browser. Nothing is sent anywhere, and the answer gets its own link you can send to your team.
     </p>
   </div>
 
@@ -151,14 +151,43 @@ const url = `${SITE.url}/tools/${t.slug}/`;
   const slug = location.pathname.replace(/\/tools\/|\/$/g, '');
   const t = TOOLS.find((x) => x.slug === slug)!;
   const $ = (id: string) => document.getElementById(id)!;
-  let at = 0;
-  let score = 0;
-  const history: number[] = [];
+
+  /**
+   * Answers live in the hash: #a=0,2,4
+   *
+   * That gives every result a URL you can send to your team — which is the
+   * point of these, and the page says so itself — and it makes the browser
+   * back button walk back through the questions instead of leaving the site.
+   * Nothing is sent anywhere: a hash never reaches a server.
+   */
+  let answers: number[] = [];
+
+  const readHash = (): number[] => {
+    const m = location.hash.match(/a=([\d,]*)/);
+    if (!m || !m[1]) return [];
+    return m[1]
+      .split(',')
+      .filter(Boolean)
+      .map(Number)
+      .filter((n, i) => Number.isInteger(n) && n >= 0 && n < (t.q[i]?.[1].length ?? 0))
+      .slice(0, t.q.length);
+  };
+
+  const writeHash = (next: number[], push: boolean) => {
+    const url = next.length ? `#a=${next.join(',')}` : location.pathname;
+    if (push) history.pushState({ a: next }, '', url);
+    else history.replaceState({ a: next }, '', url);
+  };
 
   const setDots = (i: number) =>
     $('dots').querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k <= i));
 
-  function ask() {
+  function render() {
+    const at = answers.length;
+    at < t.q.length ? ask(at) : result();
+  }
+
+  function ask(at: number) {
     setDots(at);
     const [q, opts] = t.q[at];
     $('box').innerHTML =
@@ -166,28 +195,24 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       (at > 0 ? `<button class="back" type="button" id="back">← Back</button>` : '') +
       `<span class="eyebrow">Question ${at + 1} of ${t.q.length}</span>` +
       `<p class="qq">${q}</p>` +
-      opts.map(([label, v]) => `<button class="opt" type="button" data-v="${v}">${label}</button>`).join('') +
+      opts.map(([label], i) => `<button class="opt" type="button" data-i="${i}">${label}</button>`).join('') +
       `</div>`;
 
     $('box').querySelectorAll<HTMLButtonElement>('.opt').forEach((b) =>
       b.addEventListener('click', () => {
-        const v = Number(b.dataset.v);
-        history.push(v);
-        score += v;
-        at++;
-        at < t.q.length ? ask() : result();
+        answers = [...answers, Number(b.dataset.i)];
+        writeHash(answers, true);
+        render();
       })
     );
-    document.getElementById('back')?.addEventListener('click', () => {
-      score -= history.pop() ?? 0;
-      at--;
-      ask();
-    });
+    document.getElementById('back')?.addEventListener('click', () => history.back());
   }
 
   function result() {
     setDots(t.q.length);
+    const score = answers.reduce((sum, choice, i) => sum + (t.q[i][1][choice]?.[1] ?? 0), 0);
     const r = t.b.find((x) => score <= x.max) ?? t.b[t.b.length - 1];
+
     $('box').innerHTML =
       `<div class="step" role="status" aria-live="polite">` +
       `<span class="vlab">Your answer</span><p class="vname">${r.name}</p>` +
@@ -196,17 +221,39 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       `<div class="vcols" style="grid-template-columns:1fr"><div><h4>What I would do next</h4><ul>` +
       r.next.map((n) => `<li>${n}</li>`).join('') +
       `</ul></div></div>` +
-      `<p class="vnote">${t.q.length} questions cannot know your product. Treat this as a strong opinion from somebody who has made the same call.</p>` +
-      `<div class="vacts"><a class="btn btn--dark" href="/work-with-me/">See if I can help</a>` +
-      `<button class="btn btn--ghost" type="button" id="again">Run it again</button></div></div>`;
+      `<p class="vnote">${t.q.length} questions cannot know your product. Treat this as a strong ` +
+      `opinion from somebody who has made the same call.</p>` +
+      `<div class="vacts">` +
+      `<a class="btn btn--dark" href="/work-with-me/">See if I can help</a>` +
+      `<button class="btn btn--ghost" type="button" id="share">Copy link to this answer</button>` +
+      `</div>` +
+      `<button class="again" type="button" id="again">Run it again</button></div>`;
 
     $('again').addEventListener('click', () => {
-      at = 0;
-      score = 0;
-      history.length = 0;
-      ask();
+      answers = [];
+      writeHash(answers, true);
+      render();
+    });
+
+    $('share').addEventListener('click', async () => {
+      const btn = $('share');
+      try {
+        await navigator.clipboard.writeText(location.href);
+        btn.textContent = 'Copied';
+      } catch {
+        btn.textContent = location.href;
+      }
+      setTimeout(() => (btn.textContent = 'Copy link to this answer'), 2200);
     });
   }
 
-  ask();
+  // Back and forward both just re-read the hash.
+  addEventListener('popstate', () => {
+    answers = readHash();
+    render();
+  });
+
+  answers = readHash();
+  writeHash(answers, false);
+  render();
 </script>

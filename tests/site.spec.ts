@@ -85,10 +85,40 @@ test.describe('the tools actually work', () => {
     await expect(page.locator('.qq')).toBeVisible();
   });
 
+  test('a result has its own URL and can be reopened', async ({ page }) => {
+    await page.goto('/tools/why-is-nobody-using-your-product/');
+    for (let i = 0; i < 3; i++) await page.locator('.opt').first().click();
+
+    const verdict = await page.locator('.vname').textContent();
+    expect(page.url()).toContain('#a=');
+
+    // The whole point: send that URL to somebody and they see the same answer.
+    await page.goto(page.url());
+    expect(await page.locator('.vname').textContent()).toBe(verdict);
+  });
+
+  test('the browser back button walks back through the questions', async ({ page }) => {
+    await page.goto('/tools/why-is-nobody-using-your-product/');
+    await page.locator('.opt').first().click();
+    await page.locator('.opt').first().click();
+    await expect(page.locator('.eyebrow').first()).toContainText('Question 3');
+
+    await page.goBack();
+    await expect(page.locator('.eyebrow').first()).toContainText('Question 2');
+    await page.goBack();
+    await expect(page.locator('.eyebrow').first()).toContainText('Question 1');
+  });
+
+  test('a tampered hash does not break the page', async ({ page }) => {
+    await page.goto('/tools/why-is-nobody-using-your-product/#a=99,abc,-4');
+    // Out-of-range answers are dropped rather than scoring nonsense.
+    await expect(page.locator('.qq')).toBeVisible();
+  });
+
   test('going back does not inflate the score', async ({ page }) => {
     await page.goto('/tools/why-is-nobody-using-your-product/');
     await page.locator('.opt').first().click();
-    await page.getByRole('button', { name: /Back/ }).click();
+    await page.getByRole('button', { name: /← Back/ }).click();
     await page.locator('.opt').first().click();
     await page.locator('.opt').first().click();
     await page.locator('.opt').first().click();
