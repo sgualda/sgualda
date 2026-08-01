@@ -3,6 +3,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Pull from '@components/Pull.astro';
 import { STAGES, type Stage } from '@lib/stages';
 import { TOOLS } from '@lib/tools';
 
@@ -33,18 +34,24 @@ const tools = s.tools.map((slug) => TOOLS.find((t) => t.slug === slug)!).filter(
 
   <section class="section col">
     <span class="eyebrow">What this stage is</span>
-    <h2>{s.question}</h2>
+    <h2>{s.name}</h2>
     <div class="body">
       {s.body.map((p) => <p set:html={p} />)}
     </div>
   </section>
 
-  <section class="section col">
+  <div class="col">
+    <Pull>{s.question}</Pull>
+  </div>
+
+  <section class="band">
+    <section class="col">
     <span class="eyebrow">Where it goes wrong</span>
     <h2>Three ways to lose<br />time here.</h2>
     <ol class="traps">
       {s.traps.map((t) => <li>{t}</li>)}
     </ol>
+    </section>
   </section>
 
   <section class="section col">

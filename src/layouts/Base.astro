@@ -2,7 +2,7 @@
 import '@styles/fonts.css';
 import '@styles/tokens.css';
 import '@styles/base.css';
-import { SITE } from '@lib/site';
+import { SITE, SOCIAL, EXPERTISE } from '@lib/site';
 import ErrorLog from '@components/ErrorLog.astro';
 
 interface Props {
@@ -39,7 +39,12 @@ const graph = [
     jobTitle: SITE.role,
     url: SITE.url,
     email: `mailto:${SITE.email}`,
+    image: new URL('/img/logo.png', SITE.url).href,
+    description:
+      'Product designer in Barcelona. Takes vague problems to shipped first versions for small teams building SaaS, mobile apps and internal tools, and publishes what the decisions cost.',
     address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
+    knowsAbout: [...EXPERTISE],
+    sameAs: [SOCIAL.linkedin, SOCIAL.instagram, SOCIAL.community].filter(Boolean),
   },
   {
     '@type': 'WebSite',

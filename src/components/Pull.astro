@@ -1,0 +1,44 @@
+---
+/**
+ * A sentence lifted out of the running text at display size.
+ *
+ * Long pages here run for thousands of pixels with one texture — paragraph
+ * after paragraph — and the eye has nothing to catch on. This is the cheapest
+ * change of texture available: no image needed, and it doubles as the line
+ * somebody remembers.
+ *
+ * Use it for a claim the page is willing to defend. Not for decoration.
+ */
+interface Props { attribution?: string }
+const { attribution } = Astro.props;
+---
+
+<figure class="pull">
+  <blockquote><slot /></blockquote>
+  {attribution && <figcaption>{attribution}</figcaption>}
+</figure>
+
+<style>
+  .pull {
+    margin: var(--space-9) 0;
+    padding-left: var(--space-5);
+    border-left: 2px solid var(--ink);
+    text-align: left;
+  }
+  blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.9vw, 1.45rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.32;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  figcaption {
+    margin-top: var(--space-3);
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+</style>

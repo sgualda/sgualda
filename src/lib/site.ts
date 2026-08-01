@@ -42,10 +42,28 @@ export const LEGAL = {
 } as const;
 
 export const SOCIAL = {
-  linkedin: '',  // TODO(sergio)
-  instagram: '', // TODO(sergio)
+  linkedin: 'https://www.linkedin.com/in/sgualda/',
+  instagram: 'https://www.instagram.com/sgualda/',
   community: 'https://sgualda.substack.com/chat',
 } as const;
+
+/**
+ * What the Person entity is about. `sameAs` is how a search engine reconciles
+ * the string "Sergio Gualda" with a known person rather than treating it as
+ * text; `knowsAbout` is what a language model reads to decide what he is an
+ * authority on.
+ */
+export const EXPERTISE = [
+  'Product design',
+  'Product strategy',
+  'Product discovery',
+  'User research',
+  'Design systems',
+  'SaaS',
+  'Mobile apps',
+  'Minimum viable products',
+  'Design critique',
+] as const;
 
 /** Nav order taken from the Figma header component. */
 export const NAV = [

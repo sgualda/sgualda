@@ -363,6 +363,21 @@ test('no grey placeholder survives in production', async ({ page }) => {
   expect(await portrait.getAttribute('alt')).toBeTruthy();
 });
 
+test('the Person entity is complete enough to be reconciled', async ({ page }) => {
+  await page.goto('/');
+  const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const graph = blocks.flatMap((b) => JSON.parse(b)['@graph'] ?? []);
+  const person = graph.find((n: any) => n['@type'] === 'Person');
+
+  expect(person, 'Person node').toBeTruthy();
+  // sameAs is how a search engine matches the name to a known person rather
+  // than treating it as a string. Empty links used to render as nothing.
+  expect(person.sameAs?.length).toBeGreaterThanOrEqual(2);
+  for (const url of person.sameAs) expect(url).toMatch(/^https:\/\//);
+  expect(person.knowsAbout?.length).toBeGreaterThanOrEqual(5);
+  expect(person.description?.length).toBeGreaterThan(60);
+});
+
 test('the legal notice is reachable from every page', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('footer a[href="/legal/"]')).toBeVisible();

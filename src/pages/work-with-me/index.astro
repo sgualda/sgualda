@@ -5,6 +5,8 @@ import Footer from '@components/Footer.astro';
 import { SITE } from '@lib/site';
 import { BLUNT_HTML, FAQ_HTML } from '@lib/work-with-me';
 import '@styles/quiz.css';
+import Pull from '@components/Pull.astro';
+import Figures from '@components/Figures.astro';
 
 /**
  * /work-with-me/ — matches the Figma frame "Work with me".
@@ -76,8 +78,19 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     </p>
   </div>
 
+  <div class="col">
+    <Figures
+      items={[
+        { value: 'A third', label: 'of enquiries get told that none of it fits' },
+        { value: '1 day', label: 'to a reply, including the ones I turn down' },
+        { value: 'Fixed', label: 'scope and price, agreed before anything starts' },
+      ]}
+    />
+  </div>
+
   <!-- ── do not hire me if ── -->
-  <section class="section col">
+  <section class="band">
+    <section class="col">
     <span class="eyebrow">Read this first</span>
     <h2>Do not hire me if…</h2>
     <p class="sub">
@@ -85,7 +98,12 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
       I would rather lose the project in a paragraph than in month two.
     </p>
     <div class="blunt" set:html={BLUNT_HTML} />
+    </section>
   </section>
+
+  <div class="col">
+    <Pull>I would rather lose the project in a paragraph than in month two.</Pull>
+  </div>
 
   <!-- ── faq ── -->
   <section class="section col">
