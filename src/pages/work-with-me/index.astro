@@ -325,7 +325,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     });
 
     try {
-      const res = await fetch('/api/brief', {
+      const res = await fetch('/api/brief.php', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({

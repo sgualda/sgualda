@@ -148,7 +148,8 @@ test('the mobile menu traps focus', async ({ page }) => {
 test('required public files exist', () => {
   for (const f of [
     'dist/robots.txt',
-    'dist/_headers',
+    'dist/.htaccess',
+    'dist/api/brief.php',
     'dist/_redirects',
     'dist/favicon.svg',
     'dist/site.webmanifest',

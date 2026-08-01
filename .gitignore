@@ -15,3 +15,6 @@ node_modules/
 # Test output
 playwright-report/
 test-results/
+
+# PHP config with the API key — lives outside public_html on the server
+.env-brief.php
