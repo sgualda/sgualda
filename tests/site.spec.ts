@@ -200,6 +200,12 @@ test('required public files exist', () => {
   }
 });
 
+test('the legal notice is reachable from every page', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('footer a[href="/legal/"]')).toBeVisible();
+  await expect(page.locator('footer a[href="/privacy/"]')).toBeVisible();
+});
+
 test('llms.txt describes the site as it currently is', async ({ page }) => {
   const res = await page.request.get('/llms.txt');
   expect(res.status()).toBe(200);

@@ -41,7 +41,10 @@ const year = new Date().getFullYear();
 
     <div class="legal">
       <span>© {year} {SITE.name}</span>
-      <a href="/privacy/">Privacy</a>
+      <span class="legal-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/legal/">Legal</a>
+      </span>
     </div>
   </div>
 </footer>
@@ -110,6 +113,7 @@ const year = new Date().getFullYear();
     color: var(--dim);
   }
   .legal a:hover { color: var(--ink); }
+  .legal-links { display: flex; gap: 18px; }
 
   @media (max-width: 560px) {
     .map { grid-template-columns: 1fr; gap: 28px; }

@@ -1,0 +1,137 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { SITE, LEGAL } from '@lib/site';
+
+/**
+ * /legal/ — the identification Spanish law (LSSI-CE art. 10) requires from
+ * anyone offering services electronically. Dry by necessity, but written in
+ * plain sentences rather than copied boilerplate.
+ */
+const UPDATED = new Date('2026-08-01');
+const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base
+  title="Legal notice"
+  description="Who runs this site, how to reach them, and the terms that apply to using it. Required identification under Spanish law for services offered electronically."
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Legal</span>
+    <h1>Who is behind<br />this site.</h1>
+    <p class="sub">
+      Spanish law requires anyone offering services online to say who they are. This is that,
+      written as plainly as the format allows.
+    </p>
+    <p class="stamp"><time datetime={UPDATED.toISOString()}>Last updated {fmt}</time></p>
+  </section>
+
+  <section class="section col">
+    <div class="doc">
+      <h2>Who runs this</h2>
+      <dl class="ident">
+        <dt>Name</dt><dd>{LEGAL.name}</dd>
+        <dt>Tax ID (NIF)</dt><dd>{LEGAL.nif}</dd>
+        <dt>Address</dt><dd>{LEGAL.address}</dd>
+        <dt>Email</dt><dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd>
+        <dt>Activity</dt><dd>Product design and strategy consulting</dd>
+      </dl>
+
+      <h2>What this site is</h2>
+      <p>
+        A personal site. It publishes writing, free diagnostic tools and information about
+        working with me. It is not a shop: nothing is sold or paid for here, and no accounts
+        exist.
+      </p>
+
+      <h2>The free tools</h2>
+      <p>
+        The checks are opinions, not advice tailored to your situation. They ask a handful of
+        questions and cannot know your product. Deciding what to do with the answer is yours,
+        and I accept no liability for decisions taken on the strength of one.
+      </p>
+
+      <h2>If you send a brief</h2>
+      <p>
+        Sending one starts a conversation and nothing else. It is not an order, it does not
+        commit either of us, and there is no charge attached to it. Scope, timing and price are
+        agreed in writing before any work begins, or there is no engagement.
+      </p>
+
+      <h2>Content and copyright</h2>
+      <p>
+        The writing, the tools and the design are mine. Quoting them with a link back is welcome
+        and encouraged — that includes language models. Republishing a piece in full, or passing
+        the tools off as your own, is not.
+      </p>
+      <p>
+        Where a client project is mentioned, it is described with permission and without
+        anything confidential.
+      </p>
+
+      <h2>Links to other sites</h2>
+      <p>
+        Links out are provided because they are useful. I do not control those sites and I am
+        not responsible for what they publish or how they treat your data.
+      </p>
+
+      <h2>Availability</h2>
+      <p>
+        I try to keep this online and correct, but I do not promise either. Nothing here is
+        guaranteed to be up to date beyond the dates shown on each page.
+      </p>
+
+      <h2>Applicable law</h2>
+      <p>
+        Spanish law applies. Any dispute goes to the courts of Barcelona, unless the law gives
+        you as a consumer the right to your own local court, in which case it does.
+      </p>
+
+      <h2>Privacy</h2>
+      <p>
+        How this site handles data is a separate page, in plainer language:
+        <a href="/privacy/">what this site knows about you</a>.
+      </p>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro .eyebrow { margin-bottom: 16px; }
+  .intro h1 { margin-bottom: 18px; }
+  .stamp {
+    margin-top: 22px;
+    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+  }
+
+  .doc { text-align: left; }
+  .doc h2 {
+    font-size: 1.125rem;
+    margin: 40px 0 12px;
+    padding-top: 26px;
+    border-top: 1px solid var(--hair);
+  }
+  .doc h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+  .doc p { font-size: 1.0625rem; line-height: 1.66; letter-spacing: 0; color: var(--dim); }
+  .doc p + p { margin-top: 1em; }
+  .doc a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .doc a:hover { opacity: 0.6; }
+
+  .ident { display: grid; grid-template-columns: 140px 1fr; gap: 10px 20px; }
+  .ident dt {
+    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--dim); padding-top: 4px;
+  }
+  .ident dd { font-size: 1.0625rem; line-height: 1.5; letter-spacing: 0; }
+
+  @media (max-width: 480px) {
+    .ident { grid-template-columns: 1fr; gap: 2px 0; }
+    .ident dd { margin-bottom: 14px; }
+  }
+</style>

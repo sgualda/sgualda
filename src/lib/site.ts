@@ -18,6 +18,18 @@ export const SITE = {
   tagline: 'Product designer in Barcelona',
 } as const;
 
+/**
+ * Identification required by LSSI-CE art. 10 for services offered online.
+ * TODO(sergio): the two placeholders below must be real before launch —
+ * publishing a legal notice with fake identification is worse than not
+ * publishing one. See #Q-104.
+ */
+export const LEGAL = {
+  name: 'Sergio Gualda',
+  nif: '00000000X',                              // TODO(sergio)
+  address: 'Barcelona, Spain',                   // TODO(sergio): full address
+} as const;
+
 export const SOCIAL = {
   linkedin: '',  // TODO(sergio)
   instagram: '', // TODO(sergio)
@@ -67,6 +79,7 @@ export const URL_MAP = {
     '/community/',
     '/now/',
     '/privacy/',
+    '/legal/',
   ],
   tools: [
     '/tools/',
