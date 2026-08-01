@@ -1,0 +1,96 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { SITE } from '@lib/site';
+
+/**
+ * /now/ — deliberately small.
+ *
+ * The only thing that makes a now page worth having is the date. Update the
+ * constant below whenever you change the text; if it goes stale it says the
+ * opposite of what it is here to say.
+ */
+const UPDATED = new Date('2026-07-31');
+
+const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' });
+---
+
+<Base
+  title="Now — what I am working on"
+  description="What I am working on right now: Glintale, the writing, and whether I have room for new work. Updated monthly."
+  schema={[
+    {
+      '@type': 'WebPage',
+      name: 'Now',
+      dateModified: UPDATED.toISOString(),
+      about: { '@id': `${SITE.url}/#person` },
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Now</span>
+    <h1>What I am<br />working on.</h1>
+    <p class="sub">
+      This page is about the current month, not the last ten years. If the date below is old,
+      so is everything under it.
+    </p>
+    <p class="stamp">
+      <time datetime={UPDATED.toISOString()}>Updated {fmt}</time> · Barcelona
+    </p>
+  </section>
+
+  <section class="section col">
+    <dl class="blocks">
+      <dt>Building</dt>
+      <dd>
+        <strong>Glintale.</strong>
+        {/* TODO(sergio): one or two sentences on what Glintale is and what
+            you are trying to find out with it. */}
+        Early. I will write about it here as it goes, including the parts that do not work.
+      </dd>
+
+      <dt>Writing</dt>
+      <dd>
+        One thing I got wrong, every other week, and what it cost.
+        <a href="/writing/">The essays are here</a>.
+      </dd>
+
+      <dt>Work</dt>
+      <dd>
+        Open to a small number of projects.
+        <a href="/work-with-me/">Four questions</a> will tell you whether I am the right person
+        for yours — including when I am not.
+      </dd>
+    </dl>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro .eyebrow { margin-bottom: 16px; }
+  .intro h1 { margin-bottom: 18px; }
+  .stamp {
+    margin-top: 22px;
+    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+  }
+
+  .blocks { text-align: left; }
+  .blocks dt {
+    font-family: var(--font-body);
+    font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--dim);
+    padding-top: 26px; border-top: 1px solid var(--hair); margin-bottom: 10px;
+  }
+  .blocks dd {
+    font-size: 1.0625rem; line-height: 1.62; letter-spacing: 0; color: var(--dim);
+    padding-bottom: 26px;
+  }
+  .blocks strong { color: var(--ink); font-weight: 600; }
+  .blocks a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .blocks a:hover { opacity: 0.6; }
+</style>

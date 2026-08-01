@@ -1,0 +1,68 @@
+/* Shared chrome for every question-and-answer panel: the qualifier on
+   /work-with-me/ and the six tool checks. Imported by both. */
+
+/* Shared chrome for both interactive panels. */
+  .dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 24px; }
+  .dots i { width: 22px; height: 3px; border-radius: 99px; background: var(--hair); transition: background 0.3s var(--ease); }
+  .dots i.on { background: var(--ink); }
+
+  .step { animation: rise 0.4s var(--ease) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .qq {
+    font-family: var(--font-display); font-size: 1.25rem; font-weight: 700;
+    letter-spacing: -0.03em; line-height: 1.25; margin: 14px 0 20px;
+  }
+  .opt, .ck {
+    display: block; width: 100%; text-align: left; font-family: var(--font-body);
+    font-size: 0.9375rem; line-height: 1.45; letter-spacing: 0;
+    background: var(--surface); color: var(--ink);
+    border: 1px solid transparent; border-radius: 14px;
+    padding: 14px 17px; cursor: pointer;
+    transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .opt + .opt, .ck + .ck { margin-top: 8px; }
+  .opt:hover, .ck:hover { border-color: var(--ink); transform: translateX(3px); }
+  .opt em { font-style: normal; display: block; font-size: 0.8125rem; color: var(--dim); margin-top: 3px; }
+  .ck { display: flex; gap: 10px; align-items: center; }
+  .ck input { accent-color: var(--ink); }
+
+  .back {
+    font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--dim); background: none; border: 0;
+    cursor: pointer; padding: 0; margin-top: 20px;
+  }
+  .back:hover { color: var(--ink); }
+
+  .vlab {
+    display: inline-block; font-size: 0.6875rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--dim); margin-bottom: 14px;
+  }
+  .vname { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: -0.035em; line-height: 1.15; }
+  .vmeta { display: block; font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin: 8px 0 22px; }
+  .vwhy { text-align: left; font-size: 1rem; line-height: 1.7; letter-spacing: 0; color: var(--dim); }
+  .vwhy p + p { margin-top: 12px; }
+  .vwhy strong { color: var(--ink); font-weight: 600; }
+  .vcols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; text-align: left; margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--hair); }
+  .vcols h4 { font-family: var(--font-body); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); font-weight: 500; margin-bottom: 10px; }
+  .vcols ul { list-style: none; }
+  .vcols li { font-size: 0.9375rem; line-height: 1.5; letter-spacing: 0; padding: 5px 0 5px 16px; position: relative; }
+  .vcols li::before { content: ''; position: absolute; left: 0; top: 13px; width: 6px; height: 1px; background: var(--ink); }
+  .vcols .no li::before { width: 6px; height: 6px; border-radius: 99px; background: none; border: 1px solid var(--dim); top: 11px; }
+  .vnote { font-size: 0.875rem; line-height: 1.6; letter-spacing: 0; color: var(--dim); text-align: left; margin-top: 22px; }
+  .vacts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 26px; }
+  .tag { font-size: 0.75rem; letter-spacing: 0.06em; color: var(--dim); margin-top: 10px; }
+
+  .f { text-align: left; margin-bottom: 16px; }
+  .f label { display: block; font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; }
+  .f input, .f textarea, .f select {
+    width: 100%; font-family: var(--font-body); font-size: 0.9375rem;
+    padding: 12px 15px; color: var(--ink); background: var(--surface);
+    border: 1px solid transparent; border-radius: 13px; outline: none;
+  }
+  .f textarea { min-height: 104px; resize: vertical; line-height: 1.55; }
+  .f input:focus, .f textarea:focus, .f select:focus { border-color: var(--ink); }
+  .f .hint { font-size: 0.75rem; color: var(--dim); margin-top: 6px; letter-spacing: 0; }
+  .fnav { display: flex; justify-content: space-between; gap: 10px; margin-top: 24px; align-items: center; }
+
+  @media (max-width: 560px) { .vcols { grid-template-columns: 1fr; } }

@@ -1,0 +1,118 @@
+---
+import { SITE, SOCIAL, NAV, MORE } from '@lib/site';
+
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <nav class="map" aria-label="Footer">
+      <div class="group">
+        <h2>Site</h2>
+        <ul>
+          <li><a href="/">Home</a></li>
+          {NAV.map(({ label, href }) => <li><a href={href}>{label}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="group">
+        <h2>More</h2>
+        <ul>
+          {MORE.map(({ label, href }) => <li><a href={href}>{label}</a></li>)}
+        </ul>
+      </div>
+
+    </nav>
+
+    <div class="bottom">
+      <p class="who">
+        <strong>{SITE.name}</strong> <span>— {SITE.role}</span><br />
+        {SITE.location}<br />
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </p>
+
+      <ul class="elsewhere">
+        {SOCIAL.linkedin && <li><a href={SOCIAL.linkedin} rel="me noopener">LinkedIn</a></li>}
+        {SOCIAL.instagram && <li><a href={SOCIAL.instagram} rel="me noopener">Instagram</a></li>}
+        <li><a href={SOCIAL.community} rel="me noopener">Substack</a></li>
+      </ul>
+    </div>
+
+    <div class="legal">
+      <span>© {year} {SITE.name}</span>
+      <a href="/privacy/">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--gap);
+    padding: 54px 0 44px;
+    border-top: 1px solid var(--hair);
+  }
+  .inner { width: var(--shell); margin-inline: auto; text-align: left; }
+
+  .map {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 34px 24px;
+  }
+  .group h2 {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 14px;
+  }
+  .group ul { list-style: none; }
+  .group li + li { margin-top: 8px; }
+  .group a {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    transition: opacity 0.2s var(--ease);
+  }
+  .group a:hover { opacity: 0.55; text-decoration: underline; text-underline-offset: 3px; }
+
+  .bottom {
+    margin-top: 44px;
+    padding-top: 28px;
+    border-top: 1px solid var(--hair);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px 32px;
+    flex-wrap: wrap;
+  }
+  .who { font-size: 0.9375rem; line-height: 1.75; letter-spacing: -0.01em; color: var(--dim); }
+  .who strong { color: var(--ink); font-weight: 600; }
+  .who a { color: var(--ink); }
+  .who a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* One row, not a stacked column — it read as a second menu before. */
+  .elsewhere { list-style: none; display: flex; gap: 20px; }
+  .elsewhere a { font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--ink); }
+  .elsewhere a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  .legal {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hair);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.8125rem;
+    color: var(--dim);
+  }
+  .legal a:hover { color: var(--ink); }
+
+  @media (max-width: 560px) {
+    .map { grid-template-columns: 1fr; gap: 28px; }
+    .bottom { flex-direction: column; align-items: flex-start; }
+  }
+</style>

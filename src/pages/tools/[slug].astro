@@ -1,0 +1,212 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { TOOLS, CATS, type Tool } from '@lib/tools';
+import { SITE } from '@lib/site';
+import '@styles/quiz.css';
+
+export function getStaticPaths() {
+  return TOOLS.map((t) => ({ params: { slug: t.slug }, props: { t } }));
+}
+
+const { t } = Astro.props as { t: Tool };
+const url = `${SITE.url}/tools/${t.slug}/`;
+
+/**
+ * A dedicated landing per tool. The check itself is the interactive part; the
+ * FAQs are server-rendered, which is what a crawler that does not run
+ * JavaScript actually sees on these pages.
+ */
+---
+
+<Base
+  title={t.title}
+  description={t.meta}
+  schema={[
+    {
+      '@type': 'WebApplication',
+      name: t.n,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web browser',
+      url,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      description: t.lead,
+      author: { '@id': `${SITE.url}/#person` },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: `${SITE.url}/tools/` },
+        { '@type': 'ListItem', position: 3, name: t.n },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: t.faqs.map(([q, a]) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <p class="crumb"><a href="/tools/">Tools</a> · {CATS[t.cat]}</p>
+    <h1>{t.n}</h1>
+    <p class="sub">{t.lead}</p>
+  </section>
+
+  <div class="col">
+    <div class="panel">
+      <div class="dots" id="dots">{t.q.map(() => <i></i>)}</div>
+      <div id="box"></div>
+    </div>
+    <p class="aside">
+      Everything runs in your browser. Nothing is sent anywhere and I never see your answers.
+    </p>
+  </div>
+
+  <section class="section col">
+    <span class="eyebrow">Questions</span>
+    <h2>About this check.</h2>
+    <div class="faq">
+      {
+        t.faqs.map(([q, a]) => (
+          <details>
+            <summary>{q}<span class="pm">+</span></summary>
+            <div class="ans"><p>{a}</p></div>
+          </details>
+        ))
+      }
+      <details>
+        <summary>Is it free, and where do my answers go?<span class="pm">+</span></summary>
+        <div class="ans">
+          <p>
+            Free, with no account and no email. Everything runs in your browser — nothing is
+            sent to a server, nothing is stored, and I never see what you clicked.
+          </p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="section col">
+    <span class="eyebrow">More</span>
+    <h2>Other checks.</h2>
+    <ul class="more">
+      {
+        TOOLS.filter((o) => o.id !== t.id).slice(0, 3).map((o) => (
+          <li class="card-link">
+            <a href={`/tools/${o.slug}/`}>
+              <h3>{o.n}</h3>
+              <p>{o.out}</p>
+              <span class="go">Start the check <i aria-hidden="true">→</i></span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="actions" style="margin-top:30px">
+      <a class="btn btn--ghost" href="/tools/">See all checks</a>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(44px, 8vh, 72px); }
+  .crumb {
+    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--dim); margin-bottom: 18px;
+  }
+  .crumb a:hover { color: var(--ink); }
+  .intro h1 { font-size: clamp(1.75rem, 4.2vw, 2.5rem); margin-bottom: 18px; }
+  .panel {
+    margin-top: 32px; background: var(--paper);
+    border: 1px solid var(--hair); border-radius: var(--radius-card);
+    padding: clamp(26px, 5vw, 38px) clamp(20px, 4vw, 30px);
+  }
+  .aside { margin-top: 14px; font-size: 0.8125rem; color: var(--dim); letter-spacing: 0; }
+
+
+  .more { list-style: none; text-align: left; margin-top: 34px; display: grid; gap: 14px; }
+  .more h3 { font-size: 1rem; margin-bottom: 8px; }
+  .more p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); margin-bottom: 18px; }
+  .go {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.875rem; font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
+  }
+  .go i { font-style: normal; transition: transform 0.3s var(--ease); }
+  .card-link:hover .go i { transform: translateX(5px); }
+</style>
+
+<script>
+  import { TOOLS } from '@lib/tools';
+
+  const slug = location.pathname.replace(/\/tools\/|\/$/g, '');
+  const t = TOOLS.find((x) => x.slug === slug)!;
+  const $ = (id: string) => document.getElementById(id)!;
+  let at = 0;
+  let score = 0;
+  const history: number[] = [];
+
+  const setDots = (i: number) =>
+    $('dots').querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k <= i));
+
+  function ask() {
+    setDots(at);
+    const [q, opts] = t.q[at];
+    $('box').innerHTML =
+      `<div class="step">` +
+      (at > 0 ? `<button class="back" type="button" id="back">← Back</button>` : '') +
+      `<span class="eyebrow">Question ${at + 1} of ${t.q.length}</span>` +
+      `<p class="qq">${q}</p>` +
+      opts.map(([label, v]) => `<button class="opt" type="button" data-v="${v}">${label}</button>`).join('') +
+      `</div>`;
+
+    $('box').querySelectorAll<HTMLButtonElement>('.opt').forEach((b) =>
+      b.addEventListener('click', () => {
+        const v = Number(b.dataset.v);
+        history.push(v);
+        score += v;
+        at++;
+        at < t.q.length ? ask() : result();
+      })
+    );
+    document.getElementById('back')?.addEventListener('click', () => {
+      score -= history.pop() ?? 0;
+      at--;
+      ask();
+    });
+  }
+
+  function result() {
+    setDots(t.q.length);
+    const r = t.b.find((x) => score <= x.max) ?? t.b[t.b.length - 1];
+    $('box').innerHTML =
+      `<div class="step" role="status" aria-live="polite">` +
+      `<span class="vlab">Your answer</span><p class="vname">${r.name}</p>` +
+      `<p class="vnote" style="text-align:center;margin:10px 0 22px">${r.sub}</p>` +
+      `<div class="vwhy">${r.body}</div>` +
+      `<div class="vcols" style="grid-template-columns:1fr"><div><h4>What I would do next</h4><ul>` +
+      r.next.map((n) => `<li>${n}</li>`).join('') +
+      `</ul></div></div>` +
+      `<p class="vnote">${t.q.length} questions cannot know your product. Treat this as a strong opinion from somebody who has made the same call.</p>` +
+      `<div class="vacts"><a class="btn btn--dark" href="/work-with-me/">See if I can help</a>` +
+      `<button class="btn btn--ghost" type="button" id="again">Run it again</button></div></div>`;
+
+    $('again').addEventListener('click', () => {
+      at = 0;
+      score = 0;
+      history.length = 0;
+      ask();
+    });
+  }
+
+  ask();
+</script>

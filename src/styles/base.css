@@ -1,0 +1,215 @@
+/* Reset + primitives. Everything reads from tokens.css — no literals here. */
+
+*,
+*::before,
+*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-size);
+  line-height: var(--text-lh);
+  letter-spacing: var(--text-ls);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+/* Headings: Zalando Sans Expanded across h1–h6, sizes per level.
+   No `text-wrap: balance` — it evens out line lengths, which is what was
+   breaking headings early and leaving a short first line. Lines fill to the
+   end; where a specific break is wanted, the markup uses <br>. */
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); text-wrap: wrap; }
+
+h1 {
+  font-size: var(--title-size);
+  line-height: var(--title-lh);
+  letter-spacing: var(--title-ls);
+  font-weight: var(--title-weight);
+}
+h2 {
+  font-size: var(--h2-size);
+  line-height: var(--h2-lh);
+  letter-spacing: var(--h2-ls);
+  font-weight: var(--h2-weight);
+}
+h3 {
+  font-size: var(--h3-size);
+  line-height: var(--h3-lh);
+  letter-spacing: var(--h3-ls);
+  font-weight: var(--h3-weight);
+}
+/* h4–h6 are not in the Figma file. Stepped down from h3 so the scale stays
+   consistent rather than invented from nothing. */
+h4 { font-size: 1.0625rem; line-height: 1.25; letter-spacing: -0.03em; font-weight: 600; }
+h5 { font-size: 0.9375rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 600; }
+h6 { font-size: 0.8125rem; line-height: 1.35; letter-spacing: 0; font-weight: 600; text-transform: uppercase; }
+
+p { text-wrap: pretty; }
+
+img, picture, svg, video { max-width: 100%; height: auto; display: block; }
+
+/* Keyboard users get a way past the nav. */
+.skip { position: absolute; left: -9999px; }
+.skip:focus {
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  z-index: 99;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+}
+
+/* Layout primitives. Sergio's rule: everything centred, except form fields. */
+/* Every container is the same width. .col and .wide are kept as aliases so
+   pages read naturally, but they resolve to the identical shell — that is
+   what makes the header, footer and banners align. */
+.shell,
+.col,
+.wide { width: var(--shell); margin-inline: auto; text-align: center; }
+input, textarea, select { text-align: left; font-family: inherit; }
+
+/* Sub-heading: the paragraph that sits under a title. */
+.sub {
+  font-size: var(--sub-size);
+  line-height: var(--sub-lh);
+  letter-spacing: var(--sub-ls);
+  font-weight: var(--sub-weight);
+  color: var(--dim);
+  max-width: 52ch;
+  margin-inline: auto;
+  text-wrap: pretty;
+}
+
+/* Eyebrow: — WHAT I DO — */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--font-body);
+  font-size: var(--eyebrow-size);
+  letter-spacing: var(--eyebrow-ls);
+  text-transform: uppercase;
+  color: var(--dim);
+  font-weight: 500;
+}
+.eyebrow::before,
+.eyebrow::after { content: ''; width: 20px; height: 1px; background: var(--hair); }
+
+/* ── buttons ──
+   Two shapes in the Figma: a dark filled pill and an outlined pill. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  padding: 14px 26px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease),
+    border-color 0.2s var(--ease), transform 0.15s var(--ease);
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.975); }
+
+.btn--dark { background: var(--ink); color: var(--paper); }
+.btn--dark:hover { background: color-mix(in srgb, var(--ink) 78%, #fff); border-color: color-mix(in srgb, var(--ink) 78%, #fff); }
+
+.btn--ghost { background: transparent; color: var(--ink); }
+.btn--ghost:hover { background: var(--surface); }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+/* Vertical rhythm between full sections. */
+.section { padding-top: var(--gap); }
+
+
+/* ── FAQ ──
+   One definition for the whole site. These lived in per-page `is:global`
+   blocks, which meant /tools/<slug>/ rendered <details> with no styling at
+   all. Every FAQ on the site now uses this. */
+.faq { text-align: left; margin-top: 40px; }
+.faq details { border-top: 1px solid var(--hair); }
+.faq details:last-child { border-bottom: 1px solid var(--hair); }
+.faq summary {
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  padding: 22px 40px 22px 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.35;
+  transition: opacity 0.2s var(--ease);
+}
+/* Both are needed: the second kills the default ▶ marker in WebKit. */
+.faq summary::marker { content: ''; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary:hover { opacity: 0.6; }
+.faq summary .pm {
+  position: absolute; right: 4px; top: 50%; margin-top: -11px;
+  color: var(--dim); font-weight: 400;
+  transition: transform 0.28s var(--ease);
+}
+.faq details[open] summary .pm { transform: rotate(45deg); color: var(--ink); }
+.faq .ans {
+  padding: 0 40px 24px 0;
+  font-size: 1rem; line-height: 1.68; letter-spacing: 0; color: var(--dim);
+}
+.faq .ans p + p { margin-top: 12px; }
+
+/* ── card-link ──
+   A whole card that is a single link: grey by default, white with an animated
+   grey gradient ring on hover. Used by the tools index and by "Other checks";
+   defined once here so a third use does not become a third copy. */
+.card-link {
+  position: relative;
+  isolation: isolate;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  text-align: left;
+  transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.card-link > a { display: block; padding: 26px; }
+.card-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--ring);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: turn 5.5s linear infinite;
+}
+@keyframes turn { to { --ang: 360deg; } }
+.card-link:hover,
+.card-link:focus-within { background: var(--paper); transform: translateY(-2px); }
+.card-link:hover::before,
+.card-link:focus-within::before { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card-link::before { animation: none; }
+  .card-link:hover { transform: none; }
+}

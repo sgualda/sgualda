@@ -1,0 +1,34 @@
+# Cloudflare Pages redirects. <from> <to> <status>
+#
+# The old WordPress site put essays at the root and called the section /blog/.
+# The new site puts them under /writing/. Nothing here is about protecting
+# rankings — it is about not serving a 404 to anyone holding an old link.
+
+# ── section ──
+/blog/       /writing/  301
+/feed/       /rss.xml   301
+/blog/feed/  /rss.xml   301
+
+# ── essays that survived the content audit ──
+/claude-ai-product-design-review/         /writing/claude-ai-product-design-review/         301
+/designing-for-scalability/               /writing/designing-for-scalability/               301
+/good-product-design/                     /writing/good-product-design/                     301
+/heart-framework-vs-nps-user-experience/  /writing/heart-framework-vs-nps-user-experience/  301
+/ux-design-principles-manifesto/          /writing/ux-design-principles-manifesto/          301
+/what-is-mvp-and-how-it-drives-growth/    /writing/what-is-mvp-and-how-it-drives-growth/    301
+
+# ── the rest ──
+# Unpublished in the July audit, republished at Sergio's request.
+/product-discovery-make-or-break-idea/  /writing/product-discovery-make-or-break-idea/  301
+/intuitive-design-new-standard/  /writing/intuitive-design-new-standard/  301
+/ux-certification-worth-it/  /writing/ux-certification-worth-it/  301
+/learning-to-let-go-an-idea/  /writing/learning-to-let-go-an-idea/  301
+/product-design-challenges/  /writing/product-design-challenges/  301
+/nps-outdated-user-experience/  /writing/nps-outdated-user-experience/  301
+/getting-things-done-transformed-my-life/  /writing/getting-things-done-transformed-my-life/  301
+
+# ── retired page ──
+/mvp-prototype-design-startups/  /work-with-me/  301
+
+# The chooser is now a section of /tools/ rather than its own page.
+/tools/which-check-do-you-need/  /tools/  301

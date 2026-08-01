@@ -1,0 +1,187 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import Newsletter from '@components/Newsletter.astro';
+import { SITE } from '@lib/site';
+
+/**
+ * Home — built to match the Figma frame "Home" section by section.
+ * Empty image slots are intentional placeholders; Sergio supplies the
+ * project shots later.
+ */
+
+const principles = [
+  {
+    n: '01',
+    title: 'Most of the work is avoiding work',
+    body: 'What you do not build shapes the product more than what you do. Products rarely die of one bad feature. They die of forty reasonable ones.',
+  },
+  {
+    n: '02',
+    title: 'Enthusiasm is not demand',
+    body: 'The only signal that means anything is somebody using the thing a second time, on their own, without you in the room. Everything else is manners.',
+  },
+  {
+    n: '03',
+    title: 'The cost is the lesson',
+    // TODO(sergio): this reads as though it is missing its opening clause.
+    // Kept verbatim from Figma. Suggested: "If it cost me nothing, then I read
+    // it somewhere and I am repeating it."
+    body: 'I read it somewhere and I am repeating it. That is the filter for everything I publish here.',
+  },
+];
+---
+
+<Base
+  title={`${SITE.role} in Barcelona — ${SITE.name}`}
+  description="I build products from zero, and I write down what the mistakes cost. Product design and strategy for small teams, from Barcelona."
+>
+  <Header slot="nav" />
+
+  <!-- ── hero ── -->
+  <section class="col hero">
+    <h1>Building<br />experiences<br />through design</h1>
+    <p class="sub">
+      I've built products from zero, failed, iterated, and figured out what actually matters in
+      the early stages of a business. Now I help others skip the expensive mistakes.
+    </p>
+    <div class="actions">
+      <a class="btn btn--dark" href="/case-studies/">See the work</a>
+      <a class="btn btn--ghost" href="/work-with-me/">Book a call</a>
+    </div>
+    <p class="email"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+  </section>
+
+  <!-- ── what I do ── -->
+  <section class="section">
+    <div class="col">
+      <span class="eyebrow">What I do</span>
+      <h2>I take vague problems<br />to shipped first versions.</h2>
+      <p class="sub">
+        Usually with two or three other people, usually with less time than the plan needed.
+        Ten years of it, mostly SaaS and mobile apps.
+      </p>
+    </div>
+
+    <div class="wide grid">
+      {[0, 1, 2, 3].map(() => <div class="slot" aria-hidden="true"></div>)}
+    </div>
+
+    <div class="col actions" style="margin-top:34px">
+      <a class="btn btn--ghost" href="/case-studies/">All the work</a>
+    </div>
+  </section>
+
+  <!-- ── the idea ── -->
+  <section class="section">
+    <div class="col">
+      <h2>Making things is<br />no longer the hard part.</h2>
+      <p class="sub">
+        Anyone can produce a screen. Almost nobody can say why that one and not another.
+        That is the part I work on, and the only part worth writing down.
+      </p>
+    </div>
+    <div class="wide">
+      <div class="slot slot--wide" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ── how I decide ── -->
+  <section class="section">
+    <div class="col">
+      <span class="eyebrow">How I decide</span>
+      <h2>Three things<br />I am fairly sure of.</h2>
+      <p class="sub">Each one cost me something specific, which is the only reason I trust them.</p>
+    </div>
+
+    <ol class="col principles">
+      {
+        principles.map((p) => (
+          <li>
+            <span class="n" aria-hidden="true">{p.n}</span>
+            <div>
+              <h3>{p.title}</h3>
+              <p>{p.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- ── what it cost ── -->
+  <section class="section col">
+    <span class="eyebrow">What it cost</span>
+    <h2>Some of my projects<br />are buried, in public.</h2>
+    <p class="sub">
+      A portfolio of things that worked teaches nobody anything, because what worked depended
+      on a team, a market and a moment you will never have.
+    </p>
+    <div class="actions" style="margin-top:30px">
+      <a class="btn btn--dark" href="/case-studies/">Read the post mortems</a>
+    </div>
+  </section>
+
+  <!-- ── newsletter ── -->
+  <section class="section">
+    <div class="wide">
+      <Newsletter />
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .hero { padding-top: clamp(56px, 10vh, 96px); }
+  .hero h1 { margin-bottom: 22px; }
+  .hero .actions { margin-top: 30px; }
+  .email { margin-top: 20px; font-size: 0.9375rem; color: var(--dim); }
+  .email a:hover { color: var(--accent); }
+
+  .eyebrow { margin-bottom: 16px; }
+  h2 + .sub { margin-top: 16px; }
+
+  /* Project slots: 2×2, empty until the images exist. aspect-ratio holds the
+     space so nothing shifts when they land. */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 42px;
+  }
+  .slot {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    aspect-ratio: 4 / 3;
+  }
+  .slot--wide { aspect-ratio: 16 / 9; margin-top: 42px; }
+
+  .principles {
+    list-style: none;
+    text-align: left;
+    margin-top: 54px;
+  }
+  .principles li {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 10px;
+    padding: 22px 0;
+  }
+  .principles .n {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: var(--dim);
+  }
+  .principles h3 { margin-bottom: 10px; }
+  .principles p { color: var(--dim); font-size: 1.0625rem; line-height: 1.5; }
+
+
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+    .principles li { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

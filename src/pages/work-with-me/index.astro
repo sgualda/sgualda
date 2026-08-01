@@ -1,0 +1,291 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { SITE } from '@lib/site';
+import { BLUNT_HTML, FAQ_HTML } from '@lib/work-with-me';
+import '@styles/quiz.css';
+
+/**
+ * /work-with-me/ — matches the Figma frame "Work with me".
+ *
+ * Deliberately no prices: Sergio cannot publish them while employed.
+ * The qualifier is the point of the page, so it sits above everything else.
+ */
+
+// Build the FAQPage schema from the rendered markup, so the structured data
+// can never drift from what a visitor actually reads.
+const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?<div class="ans">([\s\S]*?)<\/div>/g)].map(
+  (m) => ({
+    q: m[1].replace(/<[^>]+>/g, '').trim(),
+    a: m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+  })
+);
+---
+
+<Base
+  title="Work with me — product design help for small teams"
+  description="Answer four questions and get a straight recommendation on how I would help: a working session, a product review, a written critique, embedded work, or none of them."
+  schema={[
+    {
+      '@type': 'ProfessionalService',
+      name: `${SITE.name} — Product Design Consulting`,
+      areaServed: 'Worldwide',
+      email: SITE.email,
+      address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
+      serviceType: [
+        'Product Design Consulting',
+        'Product Strategy',
+        'Product Discovery',
+        'Design Critique',
+        'Design Systems',
+      ],
+      provider: { '@id': `${SITE.url}/#person` },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <!-- ── hero + qualifier ── -->
+  <section class="col hero">
+    <span class="eyebrow">Work with me</span>
+    <h1>Let's find out<br />if I can actually help</h1>
+    <p class="sub">
+      Four questions, half a minute, and you get a straight answer on how I would work with
+      you — or that I would not, which happens about a third of the time. Nothing is booked
+      and nothing is sent.
+    </p>
+  </section>
+
+  <div class="col">
+    <div class="panel">
+      <div class="dots" id="qfDots"><i class="on"></i><i></i><i></i><i></i></div>
+      <div id="qfBox"></div>
+    </div>
+    <p class="aside">
+      Rather just write? <a href="#brief">Skip to the brief</a> or email
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+    </p>
+  </div>
+
+  <!-- ── do not hire me if ── -->
+  <section class="section col">
+    <span class="eyebrow">Read this first</span>
+    <h2>Do not hire me if…</h2>
+    <p class="sub">
+      Every one of these has happened, more than once.<br />
+      I would rather lose the project in a paragraph than in month two.
+    </p>
+    <div class="blunt" set:html={BLUNT_HTML} />
+  </section>
+
+  <!-- ── faq ── -->
+  <section class="section col">
+    <span class="eyebrow">Questions</span>
+    <h2>The things<br />people ask me.</h2>
+    <div class="faq" set:html={FAQ_HTML} />
+  </section>
+
+  <!-- ── brief ── -->
+  <section class="section col" id="brief">
+    <span class="eyebrow">No call required</span>
+    <h2>Send a brief.</h2>
+    <p class="sub">
+      Five short steps, about three minutes. I read every one myself and reply within a day
+      with what fits, what it would involve and what it costs — or that none of it fits.
+    </p>
+    <div class="panel" style="margin-top:34px">
+      <div class="dots" id="bDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      <div id="bBox"></div>
+    </div>
+    <p class="aside">
+      Or just email me — <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. The form only exists
+      so you do not have to work out what to tell me.
+    </p>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+
+<style is:global>
+  /* "Do not hire me if…" — the markup arrives via set:html, so these cannot be
+     scoped. Matches the Figma frame: an empty outlined circle set well apart
+     from the text, and no dividing lines between items. */
+  .blunt { text-align: left; margin-top: 44px; }
+  .blunt .b {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 26px;
+    align-items: start;
+  }
+  .blunt .b + .b { margin-top: 40px; }
+  .blunt .x {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+    margin-top: 3px;
+  }
+  .blunt .x svg { display: none; }
+  .blunt h3 {
+    font-family: var(--font-display);
+    font-size: 1rem; font-weight: 600;
+    letter-spacing: -0.03em; line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .blunt p {
+    font-size: 0.9375rem; line-height: 1.55;
+    letter-spacing: 0; color: var(--dim);
+  }
+
+  @media (max-width: 480px) {
+    .blunt .b { grid-template-columns: 16px 1fr; gap: 16px; }
+    .blunt .x { width: 16px; height: 16px; }
+  }
+</style>
+
+<style>
+  .hero { padding-top: clamp(52px, 9vh, 84px); }
+  .hero .eyebrow { margin-bottom: 16px; }
+  .hero h1 { margin-bottom: 18px; }
+
+  .panel {
+    margin-top: 34px;
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-card);
+    padding: clamp(26px, 5vw, 38px) clamp(20px, 4vw, 30px);
+  }
+  .aside { margin-top: 16px; font-size: 0.875rem; color: var(--dim); letter-spacing: 0; }
+  .aside a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+</style>
+
+<script>
+  import { Q, OUT, decide, KIND, SPECIFIC } from '@lib/work-with-me';
+
+  const $ = (id: string) => document.getElementById(id)!;
+  const answers: Record<string, string> = {};
+  let rec: string | null = null;
+
+  /* ── qualifier ── */
+  const setDots = (el: HTMLElement, i: number) =>
+    el.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k <= i));
+
+  function ask(i: number) {
+    setDots($('qfDots'), i);
+    const q = Q[i];
+    $('qfBox').innerHTML =
+      `<div class="step">` +
+      (i > 0 ? `<button class="back" type="button" id="qfBack">← Back</button>` : '') +
+      `<span class="eyebrow">Question ${i + 1} of ${Q.length}</span>` +
+      `<p class="qq">${q.q}</p>` +
+      q.o.map((o) => `<button class="opt" type="button" data-k="${o[0]}">${o[1]}${o[2] ? `<em>${o[2]}</em>` : ''}</button>`).join('') +
+      `</div>`;
+
+    $('qfBox').querySelectorAll<HTMLButtonElement>('.opt').forEach((b) =>
+      b.addEventListener('click', () => {
+        answers[q.k] = b.dataset.k!;
+        i < Q.length - 1 ? ask(i + 1) : verdict();
+      })
+    );
+    document.getElementById('qfBack')?.addEventListener('click', () => ask(i - 1));
+  }
+
+  function verdict() {
+    setDots($('qfDots'), Q.length);
+    rec = decide(answers);
+    const o = OUT[rec];
+    $('qfBox').innerHTML =
+      `<div class="step" role="status" aria-live="polite">` +
+      `<span class="vlab">${o.lab}</span><p class="vname">${o.name}</p>` +
+      `<span class="vmeta">${o.meta}</span><div class="vwhy">${o.why}</div>` +
+      `<div class="vcols"><div><h4>What you would get</h4><ul>` +
+      o.get.map((g: string) => `<li>${g}</li>`).join('') +
+      `</ul></div><div class="no"><h4>What it is not</h4><ul>` +
+      o.not.map((g: string) => `<li>${g}</li>`).join('') +
+      `</ul></div></div><p class="vnote">${o.note}</p>` +
+      `<div class="vacts">` +
+      (rec === 'notyet'
+        ? `<a class="btn btn--dark" href="/tools/">Try a free check</a><a class="btn btn--ghost" href="/writing/">Read something instead</a>`
+        : `<a class="btn btn--dark" href="#brief" id="toBrief">Send a tailored brief</a><a class="btn btn--ghost" href="mailto:hello@sgualda.com">Just email me</a>`) +
+      `</div><button class="back" type="button" id="qfReset">Start over</button></div>`;
+
+    $('qfReset').addEventListener('click', () => {
+      for (const k of Object.keys(answers)) delete answers[k];
+      rec = null;
+      ask(0);
+    });
+    document.getElementById('toBrief')?.addEventListener('click', () => paint(kindOf()));
+  }
+
+  /* ── brief ── */
+  const kindOf = () => (rec && SPECIFIC[OUT[rec].kind] ? OUT[rec].kind : 'unsure');
+  let step = 1;
+
+  function paint(kind: string) {
+    const f = SPECIFIC[kind] ?? SPECIFIC.unsure;
+    const field = ([id, lab, type, hint]: string[]) => {
+      const h = hint ? `<p class="hint">${hint}</p>` : '';
+      if (type.startsWith('select|'))
+        return `<div class="f"><label for="${id}">${lab}</label><select id="${id}">${type
+          .split('|')
+          .slice(1)
+          .map((o) => `<option>${o}</option>`)
+          .join('')}</select>${h}</div>`;
+      if (type === 'input') return `<div class="f"><label for="${id}">${lab}</label><input id="${id}">${h}</div>`;
+      return `<div class="f"><label for="${id}">${lab}</label><textarea id="${id}"></textarea>${h}</div>`;
+    };
+
+    const panes: string[] = [
+      `<span class="eyebrow">Step 1 of 5</span>` +
+        (rec ? `<p class="tag">Based on your answers: ${OUT[rec].name}</p>` : '') +
+        `<p class="qq">What kind of help are you after?</p>` +
+        KIND.map(([k, label]) => `<label class="ck"><input type="radio" name="kind" value="${label}" data-k="${k}"${k === kind ? ' checked' : ''}><span>${label}</span></label>`).join(''),
+      `<span class="eyebrow">Step 2 of 5</span><p class="qq">What are you building?</p>` +
+        field(['b1', 'Product name and link', 'input', 'A link is worth more than a description.']) +
+        field(['b2', 'Team size', 'select|Just me|2–5|6–15|16–40|More than 40', '']),
+      `<span class="eyebrow">Step 3 of 5</span><p class="qq">What is actually blocked?</p>` +
+        field(['b4', 'In your own words', 'textarea', 'Do not polish it. The messy version is more useful.']),
+      `<span class="eyebrow">Step 4 of 5</span><p class="qq">A few specifics.</p>` + f.map(field).join(''),
+      `<span class="eyebrow">Step 5 of 5</span><p class="qq">Where do I reply?</p>` +
+        field(['b9', 'Name', 'input', '']) +
+        field(['b10', 'Email', 'input', '']),
+    ];
+
+    $('bBox').innerHTML =
+      `<div class="step">${panes[step - 1]}<div class="fnav">` +
+      (step > 1 ? `<button class="btn btn--ghost" type="button" data-go="${step - 1}">Back</button>` : `<span></span>`) +
+      (step < 5
+        ? `<button class="btn btn--dark" type="button" data-go="${step + 1}">Continue</button>`
+        : `<button class="btn btn--dark" type="button" id="send">Send the brief</button>`) +
+      `</div></div>`;
+
+    setDots($('bDots'), step - 1);
+    $('bBox').querySelectorAll<HTMLButtonElement>('[data-go]').forEach((b) =>
+      b.addEventListener('click', () => {
+        step = +b.dataset.go!;
+        paint(kindOf());
+        $('brief').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      })
+    );
+    document.getElementById('send')?.addEventListener('click', () => {
+      $('bBox').innerHTML =
+        `<div class="step" role="status"><p class="vname">That is everything I need.</p>` +
+        `<p class="vnote">I read every brief myself and reply within a day — with what fits, what it would involve and what it costs, or that none of it fits.</p></div>`;
+      $('bDots').style.display = 'none';
+    });
+  }
+
+  ask(0);
+  paint('unsure');
+</script>
+
+

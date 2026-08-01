@@ -1,0 +1,196 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import Newsletter from '@components/Newsletter.astro';
+
+const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+);
+
+/** The comp shows the month on one line and DD/YY under it. */
+const month = (d: Date) => d.toLocaleDateString('en-GB', { month: 'long' });
+const dayYear = (d: Date) =>
+  `${String(d.getDate()).padStart(2, '0')}/${String(d.getFullYear()).slice(-2)}`;
+
+/** Rendered up front, revealed six at a time. */
+const PAGE = 6;
+---
+
+<Base
+  title="My journal — product design, honestly"
+  description="Essays on product design, discovery and the decisions that cost me something. Written from ten years of building products in small teams."
+  schema={[
+    {
+      '@type': 'CollectionPage',
+      name: 'Writing',
+      description: 'Essays on product design and the decisions behind it.',
+      hasPart: essays.map((e) => ({
+        '@type': 'BlogPosting',
+        headline: e.data.title,
+        datePublished: e.data.published.toISOString(),
+        url: `https://sgualda.com/writing/${e.id}/`,
+      })),
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Journal</span>
+    <h1>My journal</h1>
+    <p class="sub">Stories, thoughts and reflections</p>
+  </section>
+
+  <div class="col">
+    <!-- Every essay is in the HTML from the start; the ones past the first six
+         are only hidden. Loading them over the network would make them
+         invisible to crawlers, which is the usual way infinite scroll quietly
+         costs a site its long tail. -->
+    <ol class="list" id="list">
+      {
+        essays.map((e, i) => (
+          <li class:list={['row', { hidden: i >= PAGE }]}>
+            <a href={`/writing/${e.id}/`}>
+              <span class="when">
+                <em>{month(e.data.published)}</em>
+                <b>{dayYear(e.data.published)}</b>
+              </span>
+              <span class="what">{e.data.title}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+
+    {
+      essays.length > PAGE && (
+        <div class="more">
+          <button class="btn btn--ghost" type="button" id="more">
+            <span id="moreLabel">Show {Math.min(PAGE, essays.length - PAGE)} more</span>
+            <span class="dots" id="dots" hidden aria-hidden="true"><i /><i /><i /></span>
+          </button>
+          <p class="count">
+            <span id="shown">{PAGE}</span> of {essays.length}
+          </p>
+        </div>
+      )
+    }
+  </div>
+
+  <section class="section col">
+    <Newsletter />
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro .eyebrow { margin-bottom: 16px; }
+  .intro h1 { margin-bottom: 18px; }
+
+  .list { list-style: none; text-align: left; margin-top: 54px; }
+  .row.hidden { display: none; }
+  .row + .row { margin-top: 34px; }
+  .list a {
+    display: grid; grid-template-columns: 96px 1fr; gap: 24px; align-items: start;
+    transition: opacity 0.2s var(--ease);
+  }
+  .list a:hover { opacity: 0.55; }
+  .when { color: var(--dim); }
+  .when em { display: block; font-style: normal; font-size: 0.8125rem; letter-spacing: 0; line-height: 1.2; }
+  .when b {
+    display: block; margin-top: 2px;
+    font-family: var(--font-display); font-size: 1.125rem; font-weight: 600;
+    letter-spacing: -0.03em; line-height: 1.2;
+  }
+  .what {
+    font-family: var(--font-display);
+    font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.03em; line-height: 1.32;
+  }
+  /* Rows below the fold are skipped by layout and paint until revealed. */
+  .row.hidden { content-visibility: hidden; }
+  .row.enter { animation: rise 0.45s var(--ease) both; animation-delay: calc(var(--d) * 70ms); }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .more { margin-top: 52px; text-align: center; }
+  .more .btn { min-width: 168px; }
+  .more .btn[disabled] { cursor: default; }
+
+  .dots { display: inline-flex; gap: 6px; align-items: center; }
+  .dots[hidden] { display: none; }
+  .dots i {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: currentColor;
+    animation: bounce 1.05s var(--ease) infinite;
+  }
+  .dots i:nth-child(2) { animation-delay: 0.14s; }
+  .dots i:nth-child(3) { animation-delay: 0.28s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+    30% { transform: translateY(-7px); opacity: 1; }
+  }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row.enter { animation: none; }
+    .dots i { animation: none; }
+  }
+  .count {
+    margin-top: 18px; text-align: center;
+    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+  }
+  @media (max-width: 480px) { .list a { grid-template-columns: 74px 1fr; gap: 16px; } }
+</style>
+
+<script>
+  const PAGE = 6;
+  const rows = [...document.querySelectorAll<HTMLElement>('.row')];
+  const btn = document.getElementById('more') as HTMLButtonElement | null;
+  const label = document.getElementById('moreLabel');
+  const dots = document.getElementById('dots');
+  const shown = document.getElementById('shown');
+
+  if (btn && rows.length > PAGE) {
+    let visible = PAGE;
+
+    btn.addEventListener('click', () => {
+      // Loading state first, so the button acknowledges the press before
+      // anything moves. Without it the rows just appear and the click feels
+      // like it did nothing.
+      btn.disabled = true;
+      label?.setAttribute('hidden', '');
+      dots?.removeAttribute('hidden');
+
+      setTimeout(() => {
+        const batch = rows.slice(visible, visible + PAGE);
+        batch.forEach((r, i) => {
+          r.style.setProperty('--d', String(i));
+          r.classList.remove('hidden');
+          r.classList.add('enter');
+        });
+        visible += batch.length;
+        if (shown) shown.textContent = String(visible);
+
+        const left = rows.length - visible;
+        if (left <= 0) {
+          btn.closest('.more')?.remove();
+          return;
+        }
+        if (label) label.textContent = `Show ${Math.min(PAGE, left)} more`;
+        dots?.setAttribute('hidden', '');
+        label?.removeAttribute('hidden');
+        btn.disabled = false;
+      }, 480);
+    });
+  }
+</script>

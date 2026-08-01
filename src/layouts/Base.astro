@@ -1,0 +1,88 @@
+---
+import '@styles/tokens.css';
+import '@styles/base.css';
+import { SITE } from '@lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Override the canonical. Defaults to the current page URL. */
+  canonical?: string;
+  /** Social share image, absolute or site-relative. */
+  image?: string;
+  /** Extra JSON-LD nodes to merge into the @graph. */
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description, canonical, image = '/og-default.png', schema = [], noindex = false } = Astro.props;
+
+const url = canonical ?? new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = new URL(image, SITE.url).href;
+const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
+
+// Person + WebSite ship on every page; page-specific nodes get merged in.
+const graph = [
+  {
+    '@type': 'Person',
+    '@id': `${SITE.url}/#person`,
+    name: SITE.name,
+    jobTitle: SITE.role,
+    url: SITE.url,
+    email: `mailto:${SITE.email}`,
+    address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
+  },
+  {
+    '@type': 'WebSite',
+    '@id': `${SITE.url}/#website`,
+    url: SITE.url,
+    name: SITE.name,
+    inLanguage: SITE.locale,
+    publisher: { '@id': `${SITE.url}/#person` },
+  },
+  ...schema,
+];
+---
+
+<!doctype html>
+<html lang={SITE.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — essays`} href="/rss.xml" />
+
+    <!-- Zalando Sans Expanded (headings) + Archivo (body), per Figma.
+         TODO: self-host both before launch. Google Fonts costs a third-party
+         connection and a round trip on every single page load. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
+    <slot name="head" />
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <slot name="nav" />
+    <main id="main"><slot /></main>
+    <slot name="footer" />
+  </body>
+</html>

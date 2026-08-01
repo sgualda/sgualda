@@ -1,0 +1,189 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+
+/**
+ * /case-studies/ — matches the Figma frame "Work".
+ *
+ * The grid and the filter counts are driven by the `cases` collection, so the
+ * numbers can never disagree with what is on the page. While the collection is
+ * empty it renders the four placeholder cards from the comp.
+ *
+ * Note: the comp says "Burried". Fixed to "Buried".
+ */
+const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order || b.data.published.valueOf() - a.data.published.valueOf()
+);
+
+const count = (s: string) => cases.filter((c) => c.data.status === s).length;
+const filters = [
+  { key: 'all', label: 'All', n: cases.length },
+  { key: 'alive', label: 'Alive', n: count('alive') },
+  { key: 'in-progress', label: 'In progress', n: count('in-progress') },
+  { key: 'buried', label: 'Buried', n: count('buried') },
+];
+---
+
+<Base
+  title="Work — products I designed and built"
+  description="Products I designed or built, alive and dead. The dead ones have post-mortems, which is the part most portfolios leave out."
+  schema={[
+    {
+      '@type': 'CollectionPage',
+      name: 'Work',
+      description: 'Products designed or built by Sergio Gualda, with post-mortems.',
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Work</span>
+    <h1>Things I've built</h1>
+    <p class="sub">
+      Products I designed or built, alive and dead. The dead ones have post-mortems, which is
+      the part most portfolios leave out.
+    </p>
+  </section>
+
+  <div class="col">
+    <div class="filters" role="group" aria-label="Filter by status">
+      {
+        filters.map((f, i) => (
+          <button
+            class:list={['chip', { on: i === 0 }]}
+            type="button"
+            data-filter={f.key}
+            aria-pressed={i === 0}
+          >
+            {f.label} <span>{f.n}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="grid" id="grid">
+      {
+        cases.length
+          ? cases.map((c) => (
+              <a class="card" href={`/case-studies/${c.id}/`} data-status={c.data.status}>
+                <div class="thumb" aria-hidden="true"></div>
+                <h2>{c.data.title}</h2>
+                <p class="role">{c.data.role} · {c.data.year}</p>
+                <p class="summary">{c.data.summary}</p>
+              </a>
+            ))
+          : [0, 1, 2, 3].map(() => <div class="thumb placeholder" aria-hidden="true" />)
+      }
+    </div>
+
+    {cases.length === 0 && (
+      <p class="empty">Case studies are being written. <a href="/writing/">Read something meanwhile</a>.</p>
+    )}
+  </div>
+
+  <section class="section col">
+    <div class="band">
+      <h2>Want to build<br />something together?</h2>
+      <p>Tell me where you are and where you want to go.</p>
+      <a class="btn book" href="/work-with-me/">Book an intro call →</a>
+      <p class="fine">First call is 20 minutes</p>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro .eyebrow { margin-bottom: 16px; }
+  .intro h1 { margin-bottom: 18px; }
+
+  .filters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 52px; }
+  .chip {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    padding: 9px 18px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hair);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .chip span { color: var(--dim); margin-left: 3px; }
+  .chip:hover { border-color: var(--ink); }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .chip.on span { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
+  .thumb {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    aspect-ratio: 4 / 3.4;
+  }
+  .card { text-align: left; display: block; }
+  .card h2 { font-size: 1.0625rem; margin-top: 14px; }
+  .card .role {
+    font-size: 0.8125rem;
+    color: var(--dim);
+    letter-spacing: 0;
+    margin-top: 4px;
+  }
+  .card .summary { font-size: 0.9375rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); margin-top: 8px; }
+  .card:hover .thumb { opacity: 0.82; }
+  .card[hidden] { display: none; }
+
+  .empty { margin-top: 26px; font-size: 0.9375rem; color: var(--dim); }
+  .empty a { text-decoration: underline; text-underline-offset: 3px; }
+
+  .band {
+    background: var(--inverse);
+    color: var(--on-inverse);
+    border-radius: var(--radius-band);
+    padding: clamp(38px, 6vw, 58px) 24px;
+  }
+  .band h2 { color: var(--on-inverse); }
+  .band p {
+    margin-top: 12px;
+    font-size: 1rem;
+    color: color-mix(in srgb, var(--on-inverse) 70%, transparent);
+  }
+  .book {
+    margin-top: 26px;
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+  .book:hover { background: color-mix(in srgb, var(--paper) 84%, transparent); }
+  .fine {
+    margin-top: 16px;
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--on-inverse) 55%, transparent);
+  }
+
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
+  const cards = document.querySelectorAll<HTMLElement>('.card');
+
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => {
+        const on = c === chip;
+        c.classList.toggle('on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+      cards.forEach((card) => {
+        card.hidden = f !== 'all' && card.dataset.status !== f;
+      });
+    })
+  );
+</script>

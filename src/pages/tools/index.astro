@@ -1,0 +1,168 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { TOOLS, CATS, INDEX_FAQ_HTML } from '@lib/tools';
+
+/** /tools/ — matches the Figma frame "Tools". */
+
+const cats = [
+  { key: 'all', label: 'All', n: TOOLS.length },
+  ...Object.entries(CATS).map(([key, label]) => ({
+    key,
+    label,
+    n: TOOLS.filter((t) => t.cat === key).length,
+  })),
+];
+
+// FAQPage schema derived from the rendered markup, so the two cannot drift.
+const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?<div class="ans">([\s\S]*?)<\/div>/g)].map(
+  (m) => ({
+    q: m[1].replace(/<[^>]+>/g, '').trim(),
+    a: m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+  })
+);
+---
+
+<Base
+  title="Free checks on your product"
+  description="Six free checks on your product: why nobody is using it, whether that feedback was real, if a feature is worth building, and whether you can charge yet. Under a minute each."
+  schema={[
+    {
+      '@type': 'ItemList',
+      name: 'Free product tools',
+      numberOfItems: TOOLS.length,
+      itemListElement: TOOLS.map((t, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `https://sgualda.com/tools/${t.slug}/`,
+        item: {
+          '@type': 'WebApplication',
+          name: t.n,
+          applicationCategory: 'BusinessApplication',
+          operatingSystem: 'Web browser',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+          description: t.lead,
+        },
+      })),
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Tools</span>
+    <h1>Free checks<br />on your product</h1>
+    <p class="sub">
+      Pick the one that matches what you are stuck on. Each asks you a few multiple-choice
+      questions and gives you a straight answer — not a score, not a report you have to interpret.
+    </p>
+  </section>
+
+  <div class="col">
+    <div class="filters" role="group" aria-label="Filter by topic">
+      {
+        cats.map((c, i) => (
+          <button class:list={['chip', { on: i === 0 }]} type="button" data-filter={c.key} aria-pressed={i === 0}>
+            {c.label} <span>{c.n}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="cards">
+      {
+        TOOLS.map((t) => (
+          <article class="card card-link" data-cat={t.cat}>
+            <a href={`/tools/${t.slug}/`}>
+              <p class="pills"><span>Free</span><span>{t.time}</span></p>
+              <h2>{t.n}</h2>
+              <p class="use">{t.lead}</p>
+              <span class="go">Start the check <i aria-hidden="true">→</i></span>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <section class="section col">
+    <span class="eyebrow">Questions</span>
+    <h2>Before you start.</h2>
+    <div class="faq" set:html={INDEX_FAQ_HTML} />
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro .eyebrow { margin-bottom: 16px; }
+  .intro h1 { margin-bottom: 18px; }
+
+  .filters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 54px; }
+  .chip {
+    font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500; letter-spacing: -0.01em;
+    padding: 9px 18px; border-radius: var(--radius-pill);
+    border: 1px solid var(--hair); background: transparent; color: var(--ink); cursor: pointer;
+    transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .chip span { color: var(--dim); margin-left: 2px; }
+  .chip:hover { border-color: var(--ink); }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .chip.on span { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+
+  /* Two columns, as in the comp. */
+  /* One card per row. */
+  .cards { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 30px; }
+  .card[hidden] { display: none; }
+
+  .go {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
+  }
+  .go i { font-style: normal; transition: transform 0.3s var(--ease); }
+  .card:hover .go i { transform: translateX(5px); }
+
+  .pills { display: flex; gap: 6px; margin-bottom: 16px; }
+  .pills span {
+    font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim);
+    border: 1px solid var(--hair); border-radius: var(--radius-pill); padding: 5px 10px;
+    background: var(--paper);
+  }
+  .card h2 { font-size: 1.0625rem; margin-bottom: 10px; }
+  .card .use {
+    font-size: 0.875rem; line-height: 1.55; letter-spacing: 0; color: var(--dim);
+    margin-bottom: 22px;
+  }
+
+
+</style>
+
+<script>
+  /* ── category filter ── */
+  const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
+  const cards = document.querySelectorAll<HTMLElement>('.card');
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => {
+        const on = c === chip;
+        c.classList.toggle('on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+      cards.forEach((card) => {
+        card.hidden = f !== 'all' && card.dataset.cat !== f;
+      });
+    })
+  );
+</script>

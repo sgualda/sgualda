@@ -1,0 +1,47 @@
+// @ts-check
+import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
+
+/**
+ * CRITICAL — do not change these two lines without planning redirects.
+ *
+ * The existing WordPress site serves every URL with a trailing slash
+ * (/about/, /good-product-design/). Matching that exactly is what lets us
+ * migrate 19 indexed URLs with zero 301s. `format: 'directory'` writes
+ * about/index.html rather than about.html, which is what makes /about/ work.
+ */
+export default defineConfig({
+  site: 'https://sgualda.com',
+  trailingSlash: 'always',
+  build: { format: 'directory', inlineStylesheets: 'auto' },
+
+  // Static output. Every page is real HTML on disk, so crawlers that do not
+  // run JavaScript — Googlebot's first pass, GPTBot, ClaudeBot, PerplexityBot —
+  // see the full content. Interactive parts are islands, loaded per page.
+  output: 'static',
+
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/draft/'),
+      serialize(item) {
+        // Essays and case studies change; the tools do not.
+        if (item.url === 'https://sgualda.com/') item.priority = 1.0;
+        else if (item.url.includes('/case-studies/')) item.priority = 0.9;
+        else if (item.url.includes('/tools/')) item.priority = 0.7;
+        return item;
+      },
+    }),
+  ],
+
+  image: {
+    // Astro's built-in image pipeline: AVIF/WebP, correct width/height
+    // attributes, so no layout shift.
+    responsiveStyles: true,
+  },
+
+  vite: {
+    build: { cssCodeSplit: true },
+  },
+});

@@ -1,0 +1,128 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { SITE } from '@lib/site';
+
+export async function getStaticPaths() {
+  const essays = await getCollection('essays', ({ data }) => !data.draft);
+  return essays.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: CollectionEntry<'essays'> };
+const { Content, remarkPluginFrontmatter } = await render(entry);
+const d = entry.data;
+
+const url = `${SITE.url}/writing/${entry.id}/`;
+const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base
+  title={d.seoTitle ?? d.title}
+  description={d.description}
+  schema={[
+    {
+      '@type': 'BlogPosting',
+      headline: d.title,
+      description: d.description,
+      datePublished: d.published.toISOString(),
+      dateModified: (d.updated ?? d.published).toISOString(),
+      url,
+      mainEntityOfPage: url,
+      author: { '@id': `${SITE.url}/#person` },
+      publisher: { '@id': `${SITE.url}/#person` },
+      inLanguage: 'en',
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <article>
+    <header class="col head">
+      <p class="crumb"><a href="/writing/">Writing</a></p>
+      <h1>{d.title}</h1>
+      <p class="meta">
+        <time datetime={d.published.toISOString()}>{fmt(d.published)}</time>
+        {
+          d.updated && d.updated.valueOf() !== d.published.valueOf() && (
+            <> · updated {fmt(d.updated)}</>
+          )
+        }
+      </p>
+    </header>
+
+    <div class="col prose">
+      <Content />
+    </div>
+  </article>
+
+  <section class="col next">
+    <p class="sub">Something here you disagree with? That is the useful kind of email.</p>
+    <div class="actions">
+      <a class="btn btn--dark" href={`mailto:${SITE.email}`}>Tell me why</a>
+      <a class="btn btn--ghost" href="/writing/">More essays</a>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .head { padding-top: clamp(44px, 8vh, 72px); }
+  .crumb {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 20px;
+  }
+  .crumb a:hover { color: var(--accent); }
+  .head h1 { font-size: clamp(1.9rem, 4.4vw, 2.9rem); }
+  .meta { margin-top: 18px; font-size: 0.875rem; color: var(--dim); }
+
+  /* Article body: left-aligned. Centred text is fine for headings and short
+     blocks, but it destroys readability over 400 words. */
+  .prose {
+    margin-top: 52px;
+    text-align: left;
+    font-size: 1.125rem;
+    line-height: 1.72;
+    letter-spacing: -0.011em;
+  }
+  .prose :global(p) { margin-bottom: 1.35em; }
+  .prose :global(h2) { margin: 2.2em 0 0.7em; font-size: clamp(1.4rem, 3vw, 1.75rem); }
+  .prose :global(h3) { margin: 1.8em 0 0.6em; }
+  .prose :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .prose :global(strong) { font-weight: 600; }
+  .prose :global(ul),
+  .prose :global(ol) { margin: 0 0 1.35em 1.2em; }
+  .prose :global(li) { margin-bottom: 0.5em; padding-left: 0.3em; }
+  .prose :global(img) {
+    border-radius: var(--radius-card);
+    margin: 2em 0;
+    width: 100%;
+  }
+  .prose :global(blockquote) {
+    border-left: 2px solid var(--hair);
+    padding-left: 1.2em;
+    margin: 1.8em 0;
+    color: var(--dim);
+  }
+  .prose :global(hr) { border: 0; border-top: 1px solid var(--hair); margin: 2.4em 0; }
+  .prose :global(pre) {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 18px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+
+  .next { margin-top: var(--gap); padding-top: 44px; border-top: 1px solid var(--hair); }
+  .next .actions { margin-top: 22px; }
+</style>

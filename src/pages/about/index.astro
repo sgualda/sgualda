@@ -1,0 +1,143 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { SITE } from '@lib/site';
+
+/**
+ * /about/ — matches the Figma frame "About".
+ *
+ * Note this page is LEFT-aligned, unlike the Home. That is deliberate in the
+ * comp: it is one long first-person read, and centred paragraphs would fight it.
+ */
+
+const goodAt = [
+  {
+    title: '0-1 product',
+    body: 'Taking a vague problem to a shipped first version with a small team. This is where I am most useful and where most of the work on this site comes from.',
+  },
+  {
+    title: 'Scoping under a real deadline',
+    body: 'Finding the version that can exist in the time available and still be worth showing. Six weeks to a working demo, twice.',
+  },
+  {
+    title: 'Design systems that survive year two',
+    body: 'Twelve components across four teams instead of the forty that were planned, with a named owner and a written path for exceptions.',
+  },
+];
+
+const notFor = [
+  { title: 'Pricing', body: 'If pricing is your main problem I am not your best option.' },
+  { title: 'Brand and marketing design', body: 'I will point you at someone better.' },
+  { title: 'Illustration and motion', body: 'Same.' },
+];
+---
+
+<Base
+  title="About — Sergio Gualda, product designer in Barcelona"
+  description="I am a product designer based in Barcelona, originally from Almeria. I help founders and companies turn messy ideas into clear, usable products."
+  schema={[
+    {
+      '@type': 'AboutPage',
+      name: 'About Sergio Gualda',
+      mainEntity: { '@id': `${SITE.url}/#person` },
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <article class="shell page">
+    <!-- Portrait. Placeholder until Sergio supplies the photo. -->
+    <div class="portrait" aria-hidden="true"></div>
+
+    <h1>Hello,</h1>
+
+    <div class="bio">
+      <p>
+        My name is Sergio, and I'm a product designer based in Barcelona, originally from
+        Almeria (southern Spain).
+      </p>
+      <p>
+        I've always been drawn to understanding how things could be different. As a kid, I was
+        more interested in possibilities than instructions. Fascinated by the logic behind how
+        things behaved. That same mindset is what led me into product design.
+      </p>
+      <p>
+        The road here wasn't exactly planned. I started out learning how to build things with
+        code. Later, I got into visual work and communication. Somewhere along the way, I
+        realized what I really cared about was creating things that make sense to people, things
+        that feel good to use and solve real problems.
+      </p>
+      <p>
+        Now I help founders and companies turn messy ideas into clear, usable products. I care
+        about flow, simplicity, and making digital experiences feel effortless. If someone
+        doesn't have to think too hard while using something, I've done my job right.
+      </p>
+      <p>
+        I believe in being honest, staying curious, and not taking things too seriously. I enjoy
+        working with people who are passionate, open to experimenting (and messing up), and who
+        see feedback as a way to get better, not as something personal. Bonus points if you can
+        make me laugh in the process.
+      </p>
+      <p>Let's build things that matter and enjoy the ride while we're at it.</p>
+    </div>
+
+    <section class="block">
+      <h2>What I am good at.</h2>
+      <dl>
+        {goodAt.map((x) => (<><dt>{x.title}</dt><dd>{x.body}</dd></>))}
+      </dl>
+    </section>
+
+    <section class="block">
+      <h2>…and what I am not.</h2>
+      <dl class="spaced">
+        {notFor.map((x) => (<><dt>{x.title}</dt><dd>{x.body}</dd></>))}
+      </dl>
+    </section>
+  </article>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .page { text-align: left; padding-top: clamp(40px, 7vh, 72px); }
+
+  .portrait {
+    width: 96px;
+    height: 108px;
+    border-radius: 18px;
+    background: var(--surface);
+    margin-bottom: 34px;
+  }
+
+  h1 { margin-bottom: 26px; }
+
+  .bio p {
+    font-size: 1.0625rem;
+    line-height: 1.62;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+  .bio p + p { margin-top: 1.15em; }
+
+  .block { margin-top: clamp(58px, 8vw, 86px); }
+  .block h2 { margin-bottom: 26px; }
+
+  dl dt {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  dl dd {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+  dl dd + dt { margin-top: 26px; }
+  .spaced dd + dt { margin-top: 34px; }
+</style>

@@ -1,0 +1,133 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { SITE } from '@lib/site';
+
+/**
+ * /privacy/ — describes what this site ACTUALLY does, not what a generic
+ * template says. If we ever add analytics, a form backend or a cookie, this
+ * page has to change in the same commit.
+ */
+const UPDATED = new Date('2026-07-31');
+const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base
+  title="Privacy"
+  description="What this site collects, which is almost nothing. No analytics, no cookies, no tracking. The free tools run entirely in your browser and nothing you answer is ever sent anywhere."
+  noindex={false}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Privacy</span>
+    <h1>What this site<br />knows about you.</h1>
+    <p class="sub">
+      Almost nothing, and I would rather explain it in plain language than in three pages of
+      boilerplate nobody reads.
+    </p>
+    <p class="stamp"><time datetime={UPDATED.toISOString()}>Last updated {fmt}</time></p>
+  </section>
+
+  <section class="section col">
+    <div class="doc">
+      <h2>The short version</h2>
+      <p>
+        No analytics. No cookies. No tracking pixels. No advertising. I do not know how many
+        people read this page, and I have decided I can live with that.
+      </p>
+
+      <h2>The free tools</h2>
+      <p>
+        Every check on this site runs entirely in your browser. The questions and answers are
+        part of the page itself — nothing you click is sent to a server, nothing is stored, and
+        I never see any of it. That is also why your result disappears when you close the tab.
+      </p>
+
+      <h2>If you send me a brief</h2>
+      <p>
+        The form on <a href="/work-with-me/">Work with me</a> reaches me by email. I use what
+        you write to reply to you and, if we work together, to do the work. I do not add you to
+        a mailing list, and I do not pass it to anyone.
+      </p>
+      <p>
+        Ask me to delete it and I will, without asking why. My address is
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      </p>
+
+      <h2>The newsletter</h2>
+      <p>
+        The newsletter runs on Substack. If you subscribe, your email address goes to them and
+        is covered by
+        <a href="https://substack.com/privacy" rel="noopener">their privacy policy</a>, not by
+        this page. Every issue has an unsubscribe link and it works immediately.
+      </p>
+
+      <h2>Hosting and logs</h2>
+      <p>
+        This site is served by Cloudflare Pages. Like any web host, their servers process the
+        requests needed to deliver a page — including your IP address — for security and to keep
+        the site up. I do not have access to those logs as an analytics tool and I do not use
+        them to build any profile of you.
+      </p>
+
+      <h2>Fonts</h2>
+      <p>
+        The typefaces currently load from Google Fonts, which means your browser makes a request
+        to a Google server and your IP address is visible to them. I am not comfortable with
+        that and it is being fixed: the fonts will be served from this domain, so no third party
+        is involved in loading a page here.
+      </p>
+
+      <h2>Links out</h2>
+      <p>
+        Links to other sites — LinkedIn, Substack, anything I reference in an essay — are their
+        responsibility once you click. This page only covers what happens on sgualda.com.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        I am based in Spain, so the GDPR applies. You can ask what I hold about you, ask for a
+        copy, ask me to correct it, or ask me to delete it. In practice the answer is usually
+        “an email you sent me”, and one message to
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a> resolves any of the above.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this site ever starts collecting something — analytics, a form that stores data, a
+        cookie of any kind — this page changes at the same time, and the date at the top changes
+        with it. It is not a page I intend to quietly update.
+      </p>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro .eyebrow { margin-bottom: 16px; }
+  .intro h1 { margin-bottom: 18px; }
+  .stamp {
+    margin-top: 22px;
+    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+  }
+
+  /* Left-aligned: it is a document, and nobody reads a centred one. */
+  .doc { text-align: left; }
+  .doc h2 {
+    font-size: 1.125rem;
+    margin: 40px 0 12px;
+    padding-top: 26px;
+    border-top: 1px solid var(--hair);
+  }
+  .doc h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+  .doc p {
+    font-size: 1.0625rem; line-height: 1.66; letter-spacing: 0; color: var(--dim);
+  }
+  .doc p + p { margin-top: 1em; }
+  .doc a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .doc a:hover { opacity: 0.6; }
+</style>

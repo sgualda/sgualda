@@ -1,0 +1,69 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { SITE, SOCIAL } from '@lib/site';
+
+/**
+ * /community/ was live on the old WordPress site. Kept as a real page rather
+ * than a bare 301 to Substack: a redirect hands the URL's value to a domain
+ * that is not ours, and gives the visitor no idea what they are joining.
+ */
+---
+
+<Base
+  title="The community — product people who ship"
+  description="A small Substack chat for people building products: what you are stuck on, what you got wrong, and what it cost. No promotion, no growth hacks, no lurking gurus."
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Community</span>
+    <h1>Somewhere to say<br />what is not working.</h1>
+    <p class="sub">
+      A small chat on Substack for people building products. You bring the thing you are stuck
+      on, other people tell you what they tried. That is the whole format.
+    </p>
+    <div class="actions">
+      <a class="btn btn--dark" href={SOCIAL.community} rel="noopener">Join the chat</a>
+      <a class="btn btn--ghost" href="/writing/">Read something first</a>
+    </div>
+  </section>
+
+  <section class="section col">
+    <h2>What it is not.</h2>
+    <ul class="nots">
+      <li>Not a Slack you will mute in four days.</li>
+      <li>Not a place to post your launch.</li>
+      <li>Not a course, a cohort, or a funnel with a nice name.</li>
+      <li>Not free advice from me on demand — I am in there as one more person.</li>
+    </ul>
+    <p class="sub small">
+      It is on Substack because it is one login you already have, and because if it ever stops
+      being useful you can leave in one click. Both of those matter more than they sound.
+    </p>
+    <div class="actions">
+      <a class="btn btn--dark" href={SOCIAL.community} rel="noopener">Join the chat</a>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro .eyebrow { margin-bottom: 16px; }
+  .intro h1 { margin-bottom: 18px; }
+  .intro .actions { margin-top: 30px; }
+
+  .nots { list-style: none; text-align: left; margin: 34px 0 30px; }
+  .nots li {
+    padding: 16px 0;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--dim);
+  }
+  .nots li + li { border-top: 1px solid var(--hair); }
+  .small { font-size: 1rem; }
+  .actions { margin-top: 28px; }
+</style>

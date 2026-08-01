@@ -1,0 +1,305 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import Newsletter from '@components/Newsletter.astro';
+import { STAGES } from '@lib/stages';
+
+/** /map/ — the Figma frame "Map", with the route made interactive. */
+
+/**
+ * A smooth path through the five stages, not five straight segments.
+ * Catmull-Rom through the points, converted to cubic béziers: each control
+ * point is derived from the neighbours, so the curve passes exactly through
+ * every stage instead of near it.
+ */
+function smooth(pts: { x: number; y: number }[], tension = 0.42) {
+  const d = [`M ${pts[0].x} ${pts[0].y}`];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] ?? pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] ?? p2;
+    const c1x = p1.x + ((p2.x - p0.x) / 6) * tension * 2;
+    const c1y = p1.y + ((p2.y - p0.y) / 6) * tension * 2;
+    const c2x = p2.x - ((p3.x - p1.x) / 6) * tension * 2;
+    const c2y = p2.y - ((p3.y - p1.y) / 6) * tension * 2;
+    d.push(`C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${p2.x} ${p2.y}`);
+  }
+  return d.join(' ');
+}
+const routeD = smooth(STAGES);
+---
+
+<Base
+  title="The five stages of building a product"
+  description="Each stage of building a product has a different problem, and advice that saves you in one can hurt you in another. Worth building, first version, nobody came, make it repeatable, charging for it."
+  schema={[
+    {
+      '@type': 'DefinedTermSet',
+      name: 'The five stages of building a product',
+      hasDefinedTerm: STAGES.map((s) => ({
+        '@type': 'DefinedTerm',
+        name: s.name,
+        description: s.lead,
+        url: `https://sgualda.com/map/${s.slug}/`,
+      })),
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Map</span>
+    <h1>The five stages of building a product.</h1>
+    <p class="sub">
+      Each stage has a different problem, and advice that saves you in one can hurt you in
+      another. Pick the one you are in.
+    </p>
+  </section>
+
+  <!-- The only element allowed to break out of the shell. A five-point route
+       is unreadable at 560px. Everything else on the site stays put. -->
+  <div class="map-wide">
+    <figure class="diagram">
+      <div class="route" id="route">
+        <svg class="line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <!-- The route fades in at both ends rather than stopping dead. -->
+            <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="var(--ink)" stop-opacity="0" />
+              <stop offset="0.07" stop-color="var(--ink)" stop-opacity="1" />
+              <stop offset="0.93" stop-color="var(--ink)" stop-opacity="1" />
+              <stop offset="1" stop-color="var(--ink)" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path class="track" d={routeD} />
+          <path class="draw" d={routeD} />
+        </svg>
+
+        <ol class="stops">
+          {
+            STAGES.map((s, i) => (
+              <li class:list={['stop', { up: s.y < 50 }]} style={`--x:${s.x}%; --y:${s.y}%; --i:${i}`}>
+                <a href={`/map/${s.slug}/`} aria-label={`Stage ${s.n} — ${s.name}`}>
+                  <span class="dot"><span class="ring" /><span class="num">{s.n}</span></span>
+                  <span class="label">
+                    <span class="name">{s.name}</span>
+                    <span class="peek">{s.lead}</span>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <figcaption>Every one of them has cost me something. Stage 03 the most.</figcaption>
+    </figure>
+  </div>
+
+  <section class="section col">
+    <span class="eyebrow">Pick one</span>
+    <h2>Where are you right now?</h2>
+    <ol class="stages">
+      {
+        STAGES.map((s) => (
+          <li>
+            <a href={`/map/${s.slug}/`}>
+              <span class="idx"><em>Stage</em>{s.n}</span>
+              <span class="text">
+                <span class="h">{s.name}</span>
+                <span class="p">{s.lead}</span>
+              </span>
+              <span class="go" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section col">
+    <Newsletter
+      title="One decision every other<br />week, and what it cost."
+      body="Free. Leave whenever. No roundups, no five tips, no news."
+    />
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro .eyebrow { margin-bottom: 16px; }
+  .intro h1 { margin-bottom: 18px; }
+
+  .map-wide { width: min(1040px, calc(100vw - 40px)); margin: 44px auto 0; }
+  .diagram {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    padding: clamp(28px, 4vw, 52px) clamp(20px, 4vw, 44px);
+  }
+  .route { position: relative; aspect-ratio: 1040 / 340; }
+
+  .line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .line path { fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; }
+  .track { stroke: var(--hair); stroke-width: 1.25; stroke-dasharray: 3 5; }
+  /* The route draws itself once, on entry. */
+  .draw {
+    stroke: url(#fade);
+    stroke-width: 1.5;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw 1.9s cubic-bezier(0.65, 0, 0.35, 1) 0.25s forwards;
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  /* Faint baseline the route sits on, with a tick under each stage. */
+  .route::after {
+    content: '';
+    position: absolute; left: 0; right: 0; bottom: 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .stops { list-style: none; position: absolute; inset: 0; }
+  .stop::after {
+    content: '';
+    position: absolute; left: 50%; top: 50%;
+    width: 1px;
+    height: calc(50vh);
+    background: linear-gradient(var(--hair), transparent);
+    opacity: 0;
+    transition: opacity 0.35s var(--ease);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .stop {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    animation: pop 0.55s var(--ease) forwards;
+    animation-delay: calc(0.55s + var(--i) * 0.34s);
+  }
+  @keyframes pop { from { opacity: 0; } to { opacity: 1; } }
+
+  .stop a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: max-content;
+    max-width: 160px;
+  }
+  .stop.up a { flex-direction: column-reverse; }
+
+  /* First and last sit at the edges: centring their labels would push them
+     outside the card. */
+  .stop:first-child { transform: translate(0, -50%); }
+  .stop:first-child a { align-items: flex-start; }
+  .stop:first-child .name, .stop:first-child .peek { text-align: left; }
+  .stop:last-child { transform: translate(-100%, -50%); }
+  .stop:last-child a { align-items: flex-end; }
+  .stop:last-child .name, .stop:last-child .peek { text-align: right; }
+
+  .dot {
+    position: relative;
+    width: 52px; height: 52px;
+    border-radius: var(--radius-pill);
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    display: grid; place-items: center;
+    transition: transform 0.32s var(--ease), border-color 0.32s var(--ease),
+      background 0.32s var(--ease);
+  }
+  .num { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink); transition: color 0.32s var(--ease); }
+  /* Halo that expands on hover. */
+  .ring {
+    position: absolute; inset: -1px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--ink);
+    opacity: 0;
+    transform: scale(1);
+    transition: transform 0.5s var(--ease), opacity 0.5s var(--ease);
+  }
+
+  .label { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .name {
+    font-family: var(--font-display);
+    font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.03em;
+    line-height: 1.25; text-align: center;
+    transition: color 0.3s var(--ease);
+  }
+  /* The description is hidden until you reach for the node. */
+  .peek {
+    font-size: 0.75rem; line-height: 1.4; letter-spacing: 0; color: var(--dim);
+    text-align: center;
+    max-height: 0; opacity: 0; overflow: hidden;
+    transition: max-height 0.42s var(--ease), opacity 0.32s var(--ease);
+  }
+
+  .stop a:hover .dot,
+  .stop a:focus-visible .dot { transform: scale(1.12); border-color: var(--ink); background: var(--ink); }
+  .stop a:hover .num,
+  .stop a:focus-visible .num { color: var(--paper); }
+  .stop a:hover .ring,
+  .stop a:focus-visible .ring { opacity: 0.28; transform: scale(1.7); }
+  .stop a:hover .peek,
+  .stop a:focus-visible .peek { max-height: 4.5em; opacity: 1; }
+  .stop:hover::after, .stop:focus-within::after { opacity: 0.7; }
+
+  .diagram figcaption {
+    margin-top: 30px; text-align: center;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
+  }
+
+  /* ── mobile ──
+     Hidden below 760px. A five-point horizontal route needs width it does not
+     have on a phone, and every attempt to fold it into a vertical timeline was
+     worse than not showing it: the "Where are you right now?" list underneath
+     already carries the same five links and the same descriptions. Nothing is
+     lost by removing it here. */
+  @media (max-width: 760px) {
+    .map-wide { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .draw { animation: none; stroke-dashoffset: 0; }
+    .stop { opacity: 1; animation: none; }
+  }
+
+  /* ── pick one ── */
+  .stages { list-style: none; text-align: left; margin-top: 40px; }
+  .stages li + li { border-top: 1px solid var(--hair); }
+  .stages a {
+    display: grid;
+    grid-template-columns: 84px 1fr 20px;
+    gap: 12px;
+    align-items: center;
+    padding: 22px 0;
+    transition: opacity 0.2s var(--ease);
+  }
+  .idx {
+    font-family: var(--font-display); font-size: 1.375rem; font-weight: 600;
+    letter-spacing: -0.04em; color: var(--dim); line-height: 1.1;
+  }
+  .idx em {
+    display: block; font-family: var(--font-body); font-style: normal;
+    font-size: 0.6875rem; font-weight: 400; letter-spacing: 0.02em; margin-bottom: 2px;
+  }
+  .text .h {
+    display: block; font-family: var(--font-display); font-size: 1.0625rem;
+    font-weight: 600; letter-spacing: -0.03em; margin-bottom: 6px;
+  }
+  .text .p { font-size: 1rem; line-height: 1.55; letter-spacing: 0; color: var(--dim); }
+  .go { color: var(--dim); transition: transform 0.28s var(--ease), color 0.28s var(--ease); }
+  .stages a:hover .go { transform: translateX(5px); color: var(--ink); }
+  .stages a:hover .idx { color: var(--ink); }
+
+  @media (max-width: 560px) {
+    .stages a { grid-template-columns: 1fr 20px; }
+    .idx { display: flex; align-items: baseline; gap: 6px; font-size: 1.125rem; }
+    .idx em { margin-bottom: 0; }
+    .stages a > .idx { grid-column: 1 / -1; }
+  }
+</style>

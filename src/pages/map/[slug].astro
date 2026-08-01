@@ -1,0 +1,227 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { STAGES, type Stage } from '@lib/stages';
+import { TOOLS } from '@lib/tools';
+
+export function getStaticPaths() {
+  return STAGES.map((s, i) => ({
+    params: { slug: s.slug },
+    props: { s, prev: STAGES[i - 1] ?? null, next: STAGES[i + 1] ?? null },
+  }));
+}
+
+const { s, prev, next } = Astro.props as { s: Stage; prev: Stage | null; next: Stage | null };
+const tools = s.tools.map((slug) => TOOLS.find((t) => t.slug === slug)!).filter(Boolean);
+---
+
+<Base
+  title={`Stage ${s.n}: ${s.name} — building a product`}
+  description={`${s.lead} ${s.question} The free checks that apply at this stage, and what usually goes wrong.`}
+  schema={[
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://sgualda.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Map', item: 'https://sgualda.com/map/' },
+        { '@type': 'ListItem', position: 3, name: s.name },
+      ],
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <p class="crumb"><a href="/map/">Map</a> · Stage {s.n} of 05</p>
+    <h1>{s.name}</h1>
+    <p class="sub">{s.lead}</p>
+  </section>
+
+  <section class="section col">
+    <span class="eyebrow">What this stage is</span>
+    <h2>{s.question}</h2>
+    <div class="body">
+      {s.body.map((p) => <p set:html={p} />)}
+    </div>
+  </section>
+
+  <section class="section col">
+    <span class="eyebrow">Where it goes wrong</span>
+    <h2>Three ways to lose<br />time here.</h2>
+    <ol class="traps">
+      {s.traps.map((t) => <li>{t}</li>)}
+    </ol>
+  </section>
+
+  <section class="section col">
+    <div class="signal">
+      <span class="eyebrow">You are past this stage when</span>
+      <p>{s.signal}</p>
+    </div>
+  </section>
+
+  <section class="section col">
+    <span class="eyebrow">Start here</span>
+    <h2>The checks that<br />apply at this stage.</h2>
+    <p class="sub">Free, under a minute each, and written for this exact moment.</p>
+    <ul class="tools">
+      {
+        tools.map((t) => (
+          <li>
+            <a href={`/tools/${t.slug}/`}>
+              <span class="pill">{t.time}</span>
+              <span class="h">{t.n}</span>
+              <span class="p">{t.out}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- Converts a reader who recognised themselves in this stage. No price:
+       Sergio cannot publish one, so the CTA sells the next conversation. -->
+  <section class="section col">
+    <span class="eyebrow">If you are stuck here right now</span>
+    <h2>There is a version<br />where I help.</h2>
+    <div class="offer">
+      <div>
+        <h3>{s.cta.title}</h3>
+        <p>{s.cta.body}</p>
+      </div>
+      <a class="btn btn--dark" href="/work-with-me/">See how it works</a>
+    </div>
+    <p class="fine">
+      Four questions on that page tell you whether this is worth it for you — including when it is not.
+    </p>
+  </section>
+
+  <section class="section col">
+    <nav class="pager" aria-label="Stages">
+      {
+        prev ? (
+          <a href={`/map/${prev.slug}/`} class="prev">
+            <em>Previous</em>
+            <span>{prev.n} · {prev.name}</span>
+          </a>
+        ) : <span />
+      }
+      {
+        next ? (
+          <a href={`/map/${next.slug}/`} class="next">
+            <em>Next</em>
+            <span>{next.n} · {next.name}</span>
+          </a>
+        ) : <span />
+      }
+    </nav>
+
+    <div class="actions" style="margin-top:38px">
+      <a class="btn btn--dark" href="/work-with-me/">See if I can help</a>
+      <a class="btn btn--ghost" href="/map/">Back to the map</a>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(44px, 8vh, 72px); }
+  .crumb {
+    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--dim); margin-bottom: 18px;
+  }
+  .crumb a:hover { color: var(--ink); }
+  .intro h1 { margin-bottom: 18px; }
+
+  .question {
+    margin-top: 34px;
+    padding: 26px;
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    font-family: var(--font-display);
+    font-size: 1.125rem; font-weight: 600; letter-spacing: -0.03em; line-height: 1.35;
+  }
+
+  .body {
+    margin-top: 28px;
+    font-size: 1.0625rem; line-height: 1.68; letter-spacing: 0; color: var(--dim);
+  }
+  .body :global(p + p) { margin-top: 1.1em; }
+  .body :global(strong) { color: var(--ink); font-weight: 600; }
+  .body :global(em) { font-style: italic; }
+
+  .traps { list-style: none; counter-reset: t; text-align: left; margin-top: 34px; }
+  .traps li {
+    counter-increment: t; position: relative; padding: 18px 0 18px 40px;
+    font-size: 1rem; line-height: 1.55; letter-spacing: 0; color: var(--dim);
+  }
+  .traps li + li { border-top: 1px solid var(--hair); }
+  .traps li::before {
+    content: counter(t, decimal-leading-zero);
+    position: absolute; left: 0; top: 21px;
+    font-family: var(--font-mono); font-size: 0.6875rem; color: var(--ink);
+  }
+
+  .signal {
+    background: var(--inverse); color: var(--on-inverse);
+    border-radius: var(--radius-band);
+    padding: clamp(56px, 9vw, 88px) clamp(26px, 5vw, 44px);
+  }
+  .signal .eyebrow { color: color-mix(in srgb, var(--on-inverse) 60%, transparent); }
+  .signal .eyebrow::before, .signal .eyebrow::after {
+    background: color-mix(in srgb, var(--on-inverse) 26%, transparent);
+  }
+  .signal p {
+    margin-top: 16px;
+    font-family: var(--font-display); font-size: 1.25rem; font-weight: 600;
+    letter-spacing: -0.035em; line-height: 1.3;
+  }
+
+  .tools { list-style: none; text-align: left; margin-top: 34px; display: grid; gap: 12px; }
+  .tools a {
+    display: block; background: var(--surface); border-radius: 18px; padding: 22px;
+    transition: background 0.2s var(--ease);
+  }
+  .tools a:hover { background: color-mix(in srgb, var(--surface) 60%, var(--hair)); }
+  .pill {
+    display: inline-block; font-size: 0.625rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--dim);
+    background: var(--paper); border-radius: var(--radius-pill); padding: 5px 10px;
+    margin-bottom: 12px;
+  }
+  .tools .h {
+    display: block; font-family: var(--font-display); font-size: 1rem;
+    font-weight: 600; letter-spacing: -0.03em; margin-bottom: 6px;
+  }
+  .tools .p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
+
+  .offer {
+    margin-top: 32px;
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    padding: clamp(30px, 5vw, 40px);
+    text-align: left;
+    display: flex; flex-direction: column; gap: 22px; align-items: flex-start;
+  }
+  .offer h3 { margin-bottom: 10px; }
+  .offer p { font-size: 1rem; line-height: 1.6; letter-spacing: 0; color: var(--dim); }
+  .fine { margin-top: 18px; font-size: 0.8125rem; letter-spacing: 0; color: var(--dim); }
+
+  .pager {
+    display: flex; justify-content: space-between; gap: 16px;
+    padding-top: 26px; border-top: 1px solid var(--hair); text-align: left;
+  }
+  .pager a { display: block; transition: opacity 0.2s var(--ease); }
+  .pager a:hover { opacity: 0.6; }
+  .pager .next { text-align: right; }
+  .pager em {
+    display: block; font-style: normal; font-size: 0.6875rem;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 5px;
+  }
+  .pager span {
+    font-family: var(--font-display); font-size: 0.9375rem;
+    font-weight: 600; letter-spacing: -0.03em;
+  }
+</style>
