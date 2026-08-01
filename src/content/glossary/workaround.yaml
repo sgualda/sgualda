@@ -1,0 +1,7 @@
+name: "Workaround"
+definition: "The ugly, manual thing somebody already does to cope with a problem — a spreadsheet, a group chat, a recurring reminder. It is the strongest evidence a problem is real, because nobody maintains one for fun."
+note: "When you ask what somebody does about a problem today and the honest answer is “nothing”, you are usually looking at a preference rather than a need."
+topics:
+  - "discovery"
+tool: "is-user-feedback-real-or-just-polite"
+stage: "worth-building"

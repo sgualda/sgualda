@@ -1,0 +1,7 @@
+name: "Nine conversations"
+definition: "The cheap version of research: nine people, one afternoon, asked only about the last time the problem happened to them, with no mention of your product."
+note: "Any question about the future produces a polite guess. Past behaviour is checkable."
+topics:
+  - "discovery"
+tool: "why-is-nobody-using-your-product"
+stage: "worth-building"

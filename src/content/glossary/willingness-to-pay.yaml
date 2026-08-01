@@ -1,0 +1,7 @@
+name: "Willingness to pay"
+definition: "Whether somebody would actually hand over money, which usage does not measure. The strongest signal is somebody asking what it costs before you bring price up."
+note: "Free users tolerate things paying users will not, so a large free audience tells you almost nothing about a price."
+topics:
+  - "scope"
+tool: "can-you-charge-for-your-product-yet"
+stage: "charging-for-it"

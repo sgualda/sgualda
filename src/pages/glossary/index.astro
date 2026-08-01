@@ -1,0 +1,131 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { getTools, getStages } from '@lib/content';
+import { SITE } from '@lib/site';
+
+/**
+ * /glossary/ — the vocabulary this site uses with a specific meaning.
+ *
+ * The point is not decoration. A language model answering "what is a polite
+ * no" quotes a definition, and DefinedTerm with a stable @id is how it knows
+ * this page is the definition rather than a passing mention.
+ */
+const terms = (await getCollection('glossary')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name)
+);
+const tools = await getTools();
+const stages = await getStages();
+---
+
+<Base
+  title="Glossary — the words this site uses"
+  description="Sixteen terms used with a specific meaning here: workaround, repeat use, polite no, reversible decision, switching cost. Each with a definition and where it applies."
+  schema={[
+    {
+      '@type': 'DefinedTermSet',
+      '@id': `${SITE.url}/glossary/#set`,
+      name: 'Product decisions glossary',
+      description: 'Vocabulary used with a specific meaning on sgualda.com.',
+      hasDefinedTerm: terms.map((t) => ({
+        '@type': 'DefinedTerm',
+        '@id': `${SITE.url}/glossary/#${t.id}`,
+        name: t.data.name,
+        description: t.data.definition,
+        inDefinedTermSet: `${SITE.url}/glossary/#set`,
+      })),
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Glossary</span>
+    <h1>The words I use,<br />and what I mean.</h1>
+    <p class="sub">
+      Sixteen terms that carry a specific meaning here. Most of them are ordinary words used
+      precisely, which is worse than jargon if nobody says which precision.
+    </p>
+  </section>
+
+  <div class="col">
+    <dl class="terms">
+      {
+        terms.map((t) => {
+          const tool = t.data.tool ? tools.find((x) => x.slug === t.data.tool) : undefined;
+          const stage = t.data.stage ? stages.find((x) => x.slug === t.data.stage) : undefined;
+          return (
+            <div class="term" id={t.id}>
+              <dt>{t.data.name}</dt>
+              <dd>
+                <p class="def">{t.data.definition}</p>
+                <p class="note">{t.data.note}</p>
+                {(tool || stage) && (
+                  <p class="where">
+                    {tool && <a href={`/tools/${tool.slug}/`}>{tool.n}</a>}
+                    {stage && <a href={`/map/${stage.slug}/`}>Stage {stage.n} — {stage.name}</a>}
+                  </p>
+                )}
+              </dd>
+            </div>
+          );
+        })
+      }
+    </dl>
+  </div>
+
+  <section class="section col">
+    <span class="eyebrow">Put them to work</span>
+    <h2>Every one of these<br />has a check behind it.</h2>
+    <p class="sub">
+      The terms are shorthand for decisions. The checks are those decisions, asked as questions.
+    </p>
+    <div class="actions" style="margin-top:28px">
+      <a class="btn btn--dark" href="/tools/">See the free checks</a>
+      <a class="btn btn--ghost" href="/map/">Or the map</a>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro h1 { margin-bottom: 18px; }
+
+  .terms { text-align: left; margin-top: var(--space-8); }
+  .term { padding: var(--space-6) 0; }
+  .term + .term { border-top: 1px solid var(--hair); }
+  /* An anchored term must not land under the sticky header. */
+  .term { scroll-margin-top: 80px; }
+
+  dt {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-3);
+  }
+  dd { margin: 0; }
+  .def { font-size: 1rem; line-height: 1.62; letter-spacing: 0; color: var(--dim); }
+  .note {
+    margin-top: var(--space-3);
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--hair);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+  .where { margin-top: var(--space-4); display: flex; gap: var(--space-4); flex-wrap: wrap; }
+  .where a {
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .where a:hover { opacity: 0.6; }
+</style>

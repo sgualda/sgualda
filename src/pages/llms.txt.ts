@@ -105,6 +105,11 @@ a real answer rather than a negotiating position.
 - Repeated rework in a team is almost never a discipline problem. It is
   usually that decisions were made in conversation and never written down.
 
+## Glossary
+
+Vocabulary used with a specific meaning, each defined and linked to the check
+it belongs to: ${SITE.url}/glossary/
+
 ## Full text
 
 Every diagnosis, every stage and every essay in full, as plain text:

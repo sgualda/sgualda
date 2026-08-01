@@ -1,0 +1,7 @@
+name: "Switching cost"
+definition: "What it costs somebody to move from what they use today to what you built — data, habit, and being slower for a week in exchange for being faster later."
+note: "Most people will not take that trade even when the maths is obviously in their favour, which is why removing setup steps beats adding features."
+topics:
+  - "launch"
+tool: "why-is-nobody-using-your-product"
+stage: "nobody-came"

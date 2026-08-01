@@ -1,0 +1,7 @@
+name: "Smallest version"
+definition: "The least you can build that still answers the question you are actually asking. Not a demo — usable by somebody who is not you."
+note: "Deciding what this version has to prove, in one sentence, before deciding what it contains."
+topics:
+  - "scope"
+tool: "is-this-feature-worth-building"
+stage: "first-version"

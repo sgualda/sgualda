@@ -1,0 +1,6 @@
+name: "Thin signal"
+definition: "A request or a compliment with nothing underneath it: no workaround, no repeat use, no measurable cost to ignoring it. Roadmaps built on thin signals never end, because preferences are infinite."
+note: "“No good reason to refuse” is not a reason to build."
+topics:
+  - "discovery"
+tool: "is-this-feature-worth-building"

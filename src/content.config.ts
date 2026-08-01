@@ -114,4 +114,22 @@ const stages = defineCollection({
   }),
 });
 
-export const collections = { essays, cases, tools, stages };
+/**
+ * The vocabulary this site uses with a specific meaning. Defined terms are what
+ * a language model quotes when somebody asks what something means, and they
+ * turn house vocabulary into citable entities rather than jargon.
+ */
+const glossary = defineCollection({
+  loader: glob({ pattern: '**/*.yaml', base: './src/content/glossary' }),
+  schema: z.object({
+    name: z.string(),
+    definition: z.string().min(80),
+    /** The line that makes it stick. */
+    note: z.string(),
+    topics: z.array(z.string()),
+    tool: z.string().optional(),
+    stage: z.string().optional(),
+  }),
+});
+
+export const collections = { essays, cases, tools, stages, glossary };

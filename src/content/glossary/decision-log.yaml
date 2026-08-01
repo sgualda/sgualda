@@ -1,0 +1,7 @@
+name: "Decision log"
+definition: "Four lines written the day a decision is made: what was decided, why, what was rejected, and what would change it. Ten minutes a week, and it ends an entire category of repeated argument."
+note: "Most repeated arguments are not disagreement. They are people genuinely remembering the same meeting differently, and without a record the loudest or most recent version wins."
+topics:
+  - "process"
+tool: "why-your-team-keeps-redoing-the-same-work"
+stage: "make-it-repeatable"

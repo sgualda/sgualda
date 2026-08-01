@@ -1,0 +1,6 @@
+name: "Repeat use"
+definition: "Somebody doing the thing again, on their own, without you in the room. It is the only usage signal worth trusting, because every other one can be produced by politeness or curiosity."
+note: "A demo generates enthusiasm. A second unprompted visit generates evidence."
+topics:
+  - "measurement"
+tool: "is-user-feedback-real-or-just-polite"

@@ -1,0 +1,7 @@
+name: "The second person"
+definition: "Somebody other than your first enthusiastic user who describes the same problem unprompted. One person with a problem is an anecdote; two who found it independently is a pattern."
+note: "If you cannot name them, you are not ready to build."
+topics:
+  - "discovery"
+tool: "is-user-feedback-real-or-just-polite"
+stage: "worth-building"
