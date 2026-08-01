@@ -18,3 +18,7 @@ User-agent: Google-Extended
 Allow: /
 
 Sitemap: https://sgualda.com/sitemap-index.xml
+
+# Structured summary of the whole site, generated from the same content.
+# https://sgualda.com/llms.txt
+# https://sgualda.com/llms-full.txt

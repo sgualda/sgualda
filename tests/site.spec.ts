@@ -193,9 +193,30 @@ test('required public files exist', () => {
     'dist/rss.xml',
     'dist/sitemap-index.xml',
     'dist/404.html',
+    'dist/llms.txt',
+    'dist/llms-full.txt',
   ]) {
     expect(existsSync(f), f).toBe(true);
   }
+});
+
+test('llms.txt describes the site as it currently is', async ({ page }) => {
+  const res = await page.request.get('/llms.txt');
+  expect(res.status()).toBe(200);
+  const txt = await res.text();
+
+  // Generated, not hand-written — so it must contain today's content, and no
+  // unresolved template placeholders.
+  expect(txt).toContain('Sergio Gualda');
+  expect(txt).toContain('/llms-full.txt');
+  expect(txt).not.toContain('${');
+
+  const full = await (await page.request.get('/llms-full.txt')).text();
+  expect(full.length).toBeGreaterThan(50_000);
+  expect(full).not.toContain('${');
+  // The diagnoses that are otherwise trapped inside the JS bundle.
+  expect(full).toContain('They did not need it');
+  expect(full).toContain('That was a polite no');
 });
 
 test('every redirect target resolves', async ({ page }) => {
