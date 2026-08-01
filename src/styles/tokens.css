@@ -132,6 +132,63 @@
   /* ── motion ── */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --shadow: 0 30px 90px rgb(30 28 28 / 12%), 0 4px 14px rgb(30 28 28 / 6%);
+
+  color-scheme: light;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DARK
+   Not an inversion. Two things carry over deliberately:
+
+   1. The warmth. Figma's Body Text is #1E1C1C — red slightly above green
+      and blue, a near-black rather than a true one. A pure #000 ground next
+      to that reads cold and unrelated, so the dark ground keeps the same
+      bias and the type keeps it too.
+   2. The contrast *relationships*, not the raw numbers. Light runs body at
+      16.96:1 and secondary text at 5.33:1; dark runs 16.45:1 and 5.96:1.
+      Secondary sits slightly higher because thin light-on-dark type loses
+      apparent weight, which is a rendering fact rather than a preference.
+
+   Applied by @media for people who never touch the control, and by
+   [data-theme] for those who do. Both are here so the toggle can override
+   the system in either direction.
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #131111;
+    --surface: #1c1a19;
+    --ink: #f2efee;
+    --dim: #949090;
+    --hair: #312d2c;
+    --accent: #f2efee;
+    --inverse: #f2efee;
+    --on-inverse: #131111;
+    /* The chasing hover border, re-lit. The light version runs pale greys on
+       white; on a dark ground the same values glare, so the range shifts down
+       and keeps the same spread. */
+    --ring: conic-gradient(from var(--ang), #3a3636, #8e8a88, #2b2827, #6d6968, #454140, #3a3636);
+    /* A shadow cannot be seen on a dark ground. What separates a raised
+       surface here is a lighter edge, so the shadow does the least harm by
+       being nearly absent. */
+    --shadow: 0 30px 90px rgb(0 0 0 / 45%), 0 4px 14px rgb(0 0 0 / 30%);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --paper: #131111;
+  --surface: #1c1a19;
+  --ink: #f2efee;
+  --dim: #949090;
+  --hair: #312d2c;
+  --accent: #f2efee;
+  --inverse: #f2efee;
+  --on-inverse: #131111;
+  --ring: conic-gradient(from var(--ang), #3a3636, #8e8a88, #2b2827, #6d6968, #454140, #3a3636);
+  --shadow: 0 30px 90px rgb(0 0 0 / 45%), 0 4px 14px rgb(0 0 0 / 30%);
+
+  color-scheme: dark;
 }
 
 /* Dark mode is NOT in the Figma file. Deriving one by inverting the palette

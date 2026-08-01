@@ -5,7 +5,7 @@
  * The redirect list stays in one file. Writing the same 17 rules twice, in two
  * syntaxes, is how they drift apart.
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, unlinkSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -15,6 +15,29 @@ if (!existsSync(dist)) {
   console.error('✗ No dist/. Run `npm run build` first.');
   process.exit(1);
 }
+
+/**
+ * iCloud conflict copies, swept from dist on every build.
+ *
+ * ~/Documents is synced, and a build writing 200 files while the sync is
+ * mid-flight reliably produces "index 2.html", "brief 2.php", a second copy
+ * of every font. dist is generated, so deleting them here is safe and saves
+ * a manual step before every deploy.
+ *
+ * check-urls.mjs still fails the build if any turn up in src, public or
+ * scripts — there they would be real content, and quietly deleting somebody's
+ * file is not a thing a build script gets to do.
+ */
+let swept = 0;
+const sweep = (dir) => {
+  for (const f of readdirSync(dir, { recursive: true, withFileTypes: true })) {
+    if (!f.isFile() || !/ \d+\.\w+$/.test(f.name)) continue;
+    unlinkSync(join(f.parentPath ?? f.path, f.name));
+    swept++;
+  }
+};
+sweep(dist);
+if (swept) console.log(`  · swept ${swept} iCloud conflict copies from dist/`);
 
 const rules = readFileSync(join(root, 'public/_redirects'), 'utf8')
   .split('\n')

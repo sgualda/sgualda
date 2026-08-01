@@ -4,6 +4,7 @@ import '@styles/tokens.css';
 import '@styles/base.css';
 import { SITE, SOCIAL, EXPERTISE } from '@lib/site';
 import ErrorLog from '@components/ErrorLog.astro';
+import ThemeToggle from '@components/ThemeToggle.astro';
 
 interface Props {
   title: string;
@@ -82,7 +83,18 @@ const graph = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#1e1c1c" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Blocking on purpose, and the only inline script on the site. Anything
+         async here means the page paints in the wrong theme and then corrects
+         itself, which is worse than no dark mode at all. Two lines, no
+         dependencies, runs before the first paint. -->
+    <script is:inline>
+      try {
+        const t = localStorage.getItem('theme');
+        if (t) document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
 
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
@@ -103,5 +115,6 @@ const graph = [
     <slot name="nav" />
     <main id="main"><slot /></main>
     <slot name="footer" />
+    <ThemeToggle />
   </body>
 </html>

@@ -69,8 +69,8 @@ img, picture, svg, video { max-width: 100%; height: auto; display: block; }
   top: 12px;
   transform: translateX(-50%);
   z-index: 99;
-  background: var(--accent);
-  color: #fff;
+  background: var(--inverse);
+  color: var(--on-inverse);
   padding: 10px 20px;
   border-radius: var(--radius-pill);
   font-size: 0.875rem;
@@ -135,7 +135,9 @@ input, textarea, select { text-align: left; font-family: inherit; }
 .btn:active { transform: scale(0.975); }
 
 .btn--dark { background: var(--ink); color: var(--paper); }
-.btn--dark:hover { background: color-mix(in srgb, var(--ink) 78%, #fff); border-color: color-mix(in srgb, var(--ink) 78%, #fff); }
+/* Recedes toward the page rather than toward white, so it dims on a dark
+   ground instead of glaring. Identical result in light, where paper is white. */
+.btn--dark:hover { background: color-mix(in srgb, var(--ink) 78%, var(--paper)); border-color: color-mix(in srgb, var(--ink) 78%, var(--paper)); }
 
 .btn--ghost { background: transparent; color: var(--ink); }
 .btn--ghost:hover { background: var(--surface); }
@@ -270,3 +272,33 @@ h2 + .sub, h1 + .sub { margin-top: var(--space-4); }
   }
 }
 
+
+
+/* ── images on a dark ground ──
+   Most of the pictures on this site are illustrations and screenshots with a
+   white background. Unmodified, each one is a lit panel on a dark page: the
+   eye adapts to it, and the paragraph underneath goes grey by comparison.
+
+   Dimmed slightly rather than filtered heavily, and restored on hover and
+   focus so nothing is permanently hidden from anybody who wants to look
+   properly. Photographs survive this comfortably; white blocks stop shouting. */
+:root[data-theme='dark'] :is(.prose, .byline, article, figure) img,
+:root[data-theme='dark'] :is(.prose, .byline, article, figure) picture {
+  filter: brightness(0.86) contrast(1.02);
+  transition: filter 0.3s var(--ease);
+}
+:root[data-theme='dark'] :is(.prose, .byline, article, figure) img:hover,
+:root[data-theme='dark'] :is(.prose, .byline, article, figure) img:focus-visible {
+  filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) :is(.prose, .byline, article, figure) img,
+  :root:not([data-theme='light']) :is(.prose, .byline, article, figure) picture {
+    filter: brightness(0.86) contrast(1.02);
+    transition: filter 0.3s var(--ease);
+  }
+  :root:not([data-theme='light']) :is(.prose, .byline, article, figure) img:hover {
+    filter: none;
+  }
+}

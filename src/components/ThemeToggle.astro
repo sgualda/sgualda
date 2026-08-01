@@ -1,0 +1,137 @@
+---
+/**
+ * Theme toggle — floating, bottom right.
+ *
+ * The icon is not a sun and a moon. Those are borrowed from an interface
+ * language this site does not otherwise speak, and it is the only place a
+ * pictogram would appear on a page made entirely of type and hairlines. It is
+ * a circle with one half filled: the site's own subject, contrast, drawn at
+ * 18px. It rotates 180° on switch, so the filled half moves from one side to
+ * the other and the two states are legible as a pair rather than two symbols.
+ *
+ * Placement is Sergio's call and a good one — a control nobody needs twice per
+ * visit belongs out of the reading path, and the bottom corner is the one
+ * place on a centred, 560px-wide site that is permanently empty.
+ */
+---
+
+<button
+  class="theme-toggle"
+  type="button"
+  id="theme-toggle"
+  aria-label="Switch to dark theme"
+  aria-pressed="false"
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 3a9 9 0 0 1 0 18z" class="fill" />
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    position: fixed;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 50;
+
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+
+    /* The same recipe as the sticky header, so it reads as part of the same
+       surface rather than a widget dropped on top. */
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-pill);
+    color: var(--ink);
+    cursor: pointer;
+
+    transition:
+      border-color 0.24s var(--ease),
+      transform 0.24s var(--ease),
+      opacity 0.24s var(--ease);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
+  .theme-toggle:active { transform: translateY(0); }
+
+  .theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    /* The rotation is the whole animation. Slower than the hover, because it
+       is a state change rather than a response to the pointer. */
+    transition: transform 0.5s var(--ease);
+  }
+  :global(:root[data-theme='dark']) .theme-toggle svg { transform: rotate(180deg); }
+
+  .theme-toggle circle {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+  }
+  .theme-toggle .fill { fill: currentColor; }
+
+  /* Out of the way on a phone, where 44px in the corner is a real cost and
+     the thumb is often already there. Still full size, just quieter until
+     touched or focused. */
+  @media (max-width: 560px) {
+    .theme-toggle { opacity: 0.72; }
+    .theme-toggle:focus-visible,
+    .theme-toggle:active { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-toggle,
+    .theme-toggle svg { transition: none; }
+    .theme-toggle:hover { transform: none; }
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+
+  if (btn) {
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+
+    const isDark = () =>
+      root.dataset.theme === 'dark' ||
+      (!root.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+
+    const label = () => {
+      const dark = isDark();
+      btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+      btn.setAttribute('aria-pressed', String(dark));
+      // The browser chrome on iOS and Android tints itself from this, so a
+      // theme change that skips it leaves a bright bar above a dark page.
+      if (meta) meta.content = dark ? '#131111' : '#ffffff';
+    };
+
+    btn.addEventListener('click', () => {
+      const next = isDark() ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {
+        // Safari in private mode throws on setItem. The theme still applies
+        // for this page; it just will not survive a navigation.
+      }
+      label();
+    });
+
+    // Somebody who has never touched the control follows their system, so a
+    // change to it should still be picked up while the page is open.
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (!root.dataset.theme) label();
+    });
+
+    label();
+  }
+</script>

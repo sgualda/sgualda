@@ -23,7 +23,7 @@ const {
     action="https://sgualda.substack.com/subscribe"
     method="get"
     target="_blank"
-    rel="noopener"
+    {...{ rel: 'noopener' }}
   >
     <label class="sr-only" for="nl-email">Email address</label>
     <input id="nl-email" name="email" type="email" required placeholder="name@email.com" />

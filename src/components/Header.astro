@@ -226,7 +226,9 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 
       // Everything behind the sheet is removed from the accessibility tree and
       // the tab order. Without this, Tab walked through the page underneath.
-      for (const el of document.querySelectorAll('main, footer, .site-header nav')) {
+      // The theme toggle is fixed and sits below the sheet, so it is hidden
+      // but still tabbable unless it is named here too.
+      for (const el of document.querySelectorAll('main, footer, .site-header nav, .theme-toggle')) {
         if (el !== sheet) (el as HTMLElement).inert = open;
       }
 

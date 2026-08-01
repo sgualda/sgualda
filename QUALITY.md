@@ -13,7 +13,7 @@
 
 ---
 
-> **Progreso — 70 de 107 tickets resueltos (65%), 3 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
+> **Progreso — 71 de 107 tickets resueltos (66%), 3 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
 
 ## Resumen Ejecutivo
 
@@ -813,7 +813,9 @@ Dos opciones, elegir una y documentarla:
 
 ---
 
-## #Q-026 — Modo oscuro eliminado sin alternativa
+## #Q-026 ✅ Resuelto — Modo oscuro eliminado sin alternativa
+
+> ✅ **Resuelto 2026-08-02.** Paleta oscura derivada, no invertida: conserva el matiz cálido de `#1E1C1C` y las *relaciones* de contraste del modo claro (16,45:1 el cuerpo, 5,96:1 el secundario). Control flotante abajo a la derecha con un círculo medio relleno que gira 180°, no un sol y una luna. Se aplica por `@media` para quien nunca lo toca y por `[data-theme]` para quien sí, de modo que el botón puede contradecir al sistema en ambas direcciones. Script inline bloqueante para que no haya flash. 20 tests, incluido axe midiendo contraste en oscuro en cuatro páginas.
 
 ### Categoría
 Visual

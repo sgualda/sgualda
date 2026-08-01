@@ -32,7 +32,17 @@ function surface() {
   return { c, ctx };
 }
 
-const ink = ['#1e1c1c', '#4a4a4a', '#6b6b6b', '#a8a8a8', '#d4d4d4'];
+/**
+ * Five steps between the text colour and the page colour, mixed at runtime.
+ * They were five fixed greys, which is fine on white and invisible on a dark
+ * ground — confetti that cannot be seen is just a dropped frame budget.
+ */
+function inks(): string[] {
+  const cs = getComputedStyle(document.documentElement);
+  const ink = cs.getPropertyValue('--ink').trim() || '#1e1c1c';
+  const paper = cs.getPropertyValue('--paper').trim() || '#ffffff';
+  return [0, 22, 44, 66, 84].map((p) => `color-mix(in srgb, ${ink} ${100 - p}%, ${paper})`);
+}
 
 /**
  * Positive answer. A burst from the element that produced it, so the reaction
@@ -46,6 +56,7 @@ export function celebrate(from?: Element | null) {
   const ox = box ? box.left + box.width / 2 : innerWidth / 2;
   const oy = box ? box.top + Math.min(box.height / 2, 160) : innerHeight / 3;
 
+  const ink = inks();
   const bits = Array.from({ length: 90 }, () => {
     const angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
     const speed = 7 + Math.random() * 11;
@@ -134,7 +145,7 @@ export function settle(from?: Element | null) {
       alive = true;
 
       ctx.globalAlpha = Math.max(0, m.life) * 0.5;
-      ctx.fillStyle = '#6b6b6b';
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--dim').trim() || '#6b6b6b';
       ctx.beginPath();
       ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
       ctx.fill();
