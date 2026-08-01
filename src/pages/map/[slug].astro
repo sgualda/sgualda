@@ -183,13 +183,14 @@ const terms = (await getCollection('glossary'))
   }
 
   .signal {
-    background: var(--inverse); color: var(--on-inverse);
+    background: var(--band); color: var(--on-band);
+    border: 1px solid color-mix(in srgb, var(--on-band) 8%, var(--band));
     border-radius: var(--radius-band);
     padding: clamp(56px, 9vw, 88px) clamp(26px, 5vw, 44px);
   }
-  .signal .eyebrow { color: color-mix(in srgb, var(--on-inverse) 60%, transparent); }
+  .signal .eyebrow { color: color-mix(in srgb, var(--on-band) 60%, transparent); }
   .signal .eyebrow::before, .signal .eyebrow::after {
-    background: color-mix(in srgb, var(--on-inverse) 26%, transparent);
+    background: color-mix(in srgb, var(--on-band) 26%, transparent);
   }
   .signal p {
     margin-top: 16px;

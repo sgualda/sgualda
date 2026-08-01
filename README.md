@@ -207,3 +207,26 @@ Cutover, in this order:
 
 Code is Sergio's. The writing is his too — quoting with a link is welcome,
 including by language models. See `/legal/`.
+
+## A note on iCloud
+
+`dist`, `.astro` and `test-results` are symlinks to `*.nosync` directories.
+
+This project sits under `~/Documents`, which macOS syncs to iCloud. A build
+writes a couple of hundred files in about a second, and if a sync is in flight
+while that happens iCloud keeps both versions and names the loser `index 2.html`.
+190 of those accumulated in `dist/` at one point — duplicate fonts, a second
+copy of the brief endpoint pointing at an older config path — and because
+`dist/` is gitignored, nothing caught them until they were being served to the
+test run.
+
+iCloud ignores anything whose name ends in `.nosync`. So the generated
+directories are real folders with that suffix, and a symlink carries the
+original name for every script, the deploy and the Playwright server.
+
+**`node_modules` is deliberately left alone.** The same treatment breaks
+Playwright, which transpiles anything resolved outside a literal `node_modules/`
+path — axe-core ends up in a context with no `window` and every accessibility
+test dies. It syncs, it is slow, and that is the lesser problem.
+
+If you clone this fresh, run `npm run setup:nosync` before the first build.

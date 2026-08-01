@@ -42,6 +42,15 @@
   --inverse: var(--ink);
   --on-inverse: #ffffff;
 
+  /* The full-width bands — newsletter, the case-studies footer, the "you are
+     past this stage when" panel. In light they are the inverse of the page,
+     which is the Figma design. In dark they cannot be: inverting an already
+     dark page produces a cream slab that is the brightest thing on screen and
+     drags the eye off the text. So they get their own pair, and in dark they
+     become a raised grey instead of a flip. */
+  --band: var(--inverse);
+  --on-band: var(--on-inverse);
+
   /* ── type ───────────────────────────────────────────────
      Two families:
        Zalando Sans Expanded → all headings (h1–h6)
@@ -163,6 +172,11 @@
     --accent: #f2efee;
     --inverse: #f2efee;
     --on-inverse: #131111;
+    /* Lighter than the page, not lighter than everything. 1.21:1 against the
+       ground — enough to read as a separate block, low enough that the eye
+       stays on the heading. Secondary text on it still clears AA at 4.94:1. */
+    --band: #262322;
+    --on-band: var(--ink);
     /* The chasing hover border, re-lit. The light version runs pale greys on
        white; on a dark ground the same values glare, so the range shifts down
        and keeps the same spread. */
@@ -185,6 +199,11 @@
   --accent: #f2efee;
   --inverse: #f2efee;
   --on-inverse: #131111;
+  /* Lighter than the page, not lighter than everything. 1.21:1 against the
+     ground — enough to read as a separate block, low enough that the eye
+     stays on the heading. Secondary text on it still clears AA at 4.94:1. */
+  --band: #262322;
+  --on-band: var(--ink);
   --ring: conic-gradient(from var(--ang), #3a3636, #8e8a88, #2b2827, #6d6968, #454140, #3a3636);
   --shadow: 0 30px 90px rgb(0 0 0 / 45%), 0 4px 14px rgb(0 0 0 / 30%);
 

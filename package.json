@@ -15,6 +15,7 @@
     "audit:budget": "node scripts/check-budget.mjs",
     "audit:quality": "node scripts/sync-quality.mjs",
     "audit:prose": "node scripts/check-prose.mjs",
+    "setup:nosync": "for d in dist .astro test-results; do [ -L $d ] || { rm -rf $d; mkdir -p $d.nosync; ln -sfn $d.nosync $d; }; done && echo '  ✓ dist, .astro and test-results kept out of iCloud'",
     "audit": "npm run audit:urls && npm run audit:budget && npm run audit:quality && npm run audit:prose"
   },
   "dependencies": {

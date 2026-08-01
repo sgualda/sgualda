@@ -22,3 +22,15 @@ test-results/
 # Raw assets waiting to be processed
 incoming/*
 !incoming/README.md
+
+# ── iCloud ──
+# This project lives under ~/Documents, which macOS syncs. A build writing 200
+# files while a sync is mid-flight produces conflict copies — "index 2.html",
+# "brief 2.php", a second copy of every font — and dist/ is ignored, so nothing
+# caught them until 190 of them broke the test run. iCloud skips anything whose
+# name ends in .nosync, so the generated directories are real folders with that
+# suffix and a symlink under the original name.
+#
+# node_modules deliberately NOT done this way: Playwright transpiles anything
+# outside a literal node_modules/ path, which breaks axe-core.
+*.nosync
