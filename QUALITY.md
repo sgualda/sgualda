@@ -506,12 +506,21 @@ Analítica **respetuosa con la privacidad y sin cookies**, coherente con lo que 
 
 # 1. Visual
 
-## #Q-020 — Densidad visual insuficiente: el sitio es un muro de texto centrado
+## #Q-020 ⛔ Descartado — Densidad visual insuficiente: el sitio es un muro de texto centrado
 
 ### Categoría
 Visual
 
 ### Severidad
+
+> ⛔ **Descartado por el propietario, 2026-08-01.** Se implementaron tres componentes
+> —cita destacada, fila de cifras y secciones en banda— y se aplicaron a `/work-with-me/`
+> y a las cinco etapas. Sergio pidió revertirlo y se revirtió por completo.
+>
+> La observación de origen sigue en pie: `/work-with-me/` recorre unos 5.700px con cuatro
+> tipos de elemento y ninguna alternancia de fondo. Si en algún momento se decide abordarlo,
+> conviene hacerlo desde el Figma en lugar de proponerlo desde el código — el problema no era
+> la idea sino que llegó sin diseñar.
 **Alta**
 
 ### Impacto

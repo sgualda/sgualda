@@ -262,15 +262,3 @@ h2 + .sub, h1 + .sub { margin-top: var(--space-4); }
   }
 }
 
-/* ── banded sections ──
-   Everything sits on white, so a long page has no segmentation and the scroll
-   reads as one undifferentiated column. A section on --surface gives the eye
-   somewhere to register that a new idea has started. */
-.band {
-  background: var(--surface);
-  padding-block: var(--gap);
-  margin-top: var(--gap);
-}
-.band + .band { margin-top: 0; }
-.band > .col:first-child,
-.band > .wide:first-child { padding-top: 0; }
