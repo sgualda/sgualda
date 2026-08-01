@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
 import { SITE } from '@lib/site';
 import { TOPICS } from '@lib/topics';
 import { STAGES } from '@lib/stages';
@@ -77,7 +78,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
 
   <article>
     <header class="col head">
-      <p class="crumb"><a href="/writing/">Writing</a></p>
+      <Breadcrumbs items={[{ label: 'Writing', href: '/writing/' }, { label: 'Essay' }]} />
       <h1>{d.title}</h1>
       <p class="meta">
         <time datetime={d.published.toISOString()}>{fmt(d.published)}</time>
@@ -174,14 +175,6 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
 
 <style>
   .head { padding-top: clamp(44px, 8vh, 72px); }
-  .crumb {
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dim);
-    margin-bottom: 20px;
-  }
-  .crumb a:hover { color: var(--accent); }
   .head h1 { font-size: clamp(1.9rem, 4.4vw, 2.9rem); }
   .meta { margin-top: 18px; font-size: 0.875rem; color: var(--dim); }
 

@@ -2,6 +2,7 @@
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
 import { STAGES, type Stage } from '@lib/stages';
 import { TOOLS } from '@lib/tools';
 
@@ -20,20 +21,12 @@ const tools = s.tools.map((slug) => TOOLS.find((t) => t.slug === slug)!).filter(
   title={`Stage ${s.n}: ${s.name} — building a product`}
   description={`${s.lead} ${s.question} The free checks that apply at this stage, and what usually goes wrong.`}
   schema={[
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://sgualda.com/' },
-        { '@type': 'ListItem', position: 2, name: 'Map', item: 'https://sgualda.com/map/' },
-        { '@type': 'ListItem', position: 3, name: s.name },
-      ],
-    },
   ]}
 >
   <Header slot="nav" />
 
   <section class="col intro">
-    <p class="crumb"><a href="/map/">Map</a> · Stage {s.n} of 05</p>
+    <Breadcrumbs items={[{ label: 'Map', href: '/map/' }, { label: `Stage ${s.n} of 05` }]} />
     <h1>{s.name}</h1>
     <p class="sub">{s.lead}</p>
   </section>
@@ -128,11 +121,6 @@ const tools = s.tools.map((slug) => TOOLS.find((t) => t.slug === slug)!).filter(
 
 <style>
   .intro { padding-top: clamp(44px, 8vh, 72px); }
-  .crumb {
-    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--dim); margin-bottom: 18px;
-  }
-  .crumb a:hover { color: var(--ink); }
   .intro h1 { margin-bottom: 18px; }
 
   .question {

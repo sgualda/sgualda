@@ -3738,12 +3738,18 @@ Ninguna
 
 > Ver también el bloqueante `#Q-001` (el formulario no envía).
 
-## #Q-097 — Cero prueba social en todo el sitio
+## #Q-097 ⛔ Descartado — Cero prueba social en todo el sitio
 
 ### Categoría
 CRO / Branding
 
 ### Severidad
+
+> ⛔ **Descartado por el propietario, 2026-08-01.** Se implementó con tres testimonios
+> reales y Sergio pidió retirarlos. La sección, el componente y los datos se eliminaron.
+> El riesgo sigue existiendo y queda documentado: es el único sitio del que un cliente
+> potencial puede obtener evidencia que no venga del propio autor. Reabrir si la tasa de
+> conversión del brief resulta baja tras el lanzamiento.
 **Crítica**
 
 ### Impacto

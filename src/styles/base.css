@@ -242,3 +242,22 @@ input, textarea, select { text-align: left; font-family: inherit; }
    page had been setting its own margins. Set once here so they cannot drift. */
 .eyebrow { margin-bottom: var(--space-4); }
 h2 + .sub, h1 + .sub { margin-top: var(--space-4); }
+
+/* ── touch targets ──
+   WCAG 2.2 asks for 24×24 minimum; Apple recommends 44×44. Several links here
+   are 20px of text, which is a mis-tap every time on a phone. The area grows
+   with a pseudo-element so nothing moves visually. */
+@media (pointer: coarse) {
+  .site-footer a,
+  .legal a,
+  .crumb a {
+    position: relative;
+  }
+  .site-footer a::after,
+  .legal a::after,
+  .crumb a::after {
+    content: '';
+    position: absolute;
+    inset: -12px -8px;
+  }
+}

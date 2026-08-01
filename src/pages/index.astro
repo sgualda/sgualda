@@ -3,7 +3,6 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Newsletter from '@components/Newsletter.astro';
-import Testimonials from '@components/Testimonials.astro';
 import { Image } from 'astro:assets';
 import studio from '../assets/studio.jpg';
 import { SITE } from '@lib/site';
@@ -115,8 +114,6 @@ const principles = [
     </ol>
   </section>
 
-  <Testimonials title="Three people<br />I have worked with." />
-
   <!-- ── what it cost ── -->
   <section class="section col">
     <span class="eyebrow">What it cost</span>
@@ -189,7 +186,6 @@ const principles = [
   }
   .principles h3 { margin-bottom: 10px; }
   .principles p { color: var(--dim); font-size: 1.0625rem; line-height: 1.5; }
-
 
   @media (max-width: 720px) {
     .grid { grid-template-columns: 1fr; }

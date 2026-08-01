@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
 import { TOPICS, type Topic } from '@lib/topics';
 import { STAGES } from '@lib/stages';
 import { TOOLS } from '@lib/tools';
@@ -48,7 +49,7 @@ const dayYear = (d: Date) =>
   <Header slot="nav" />
 
   <section class="col intro">
-    <p class="crumb"><a href="/writing/">Journal</a> · Topic</p>
+    <Breadcrumbs items={[{ label: 'Journal', href: '/writing/' }, { label: topic.label }]} />
     <h1>{topic.label}</h1>
     <p class="sub">{topic.blurb}</p>
   </section>
@@ -116,11 +117,6 @@ const dayYear = (d: Date) =>
 
 <style>
   .intro { padding-top: clamp(44px, 8vh, 72px); }
-  .crumb {
-    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--dim); margin-bottom: 18px;
-  }
-  .crumb a:hover { color: var(--ink); }
   .intro h1 { margin-bottom: 18px; }
 
   .list { list-style: none; text-align: left; margin-top: 48px; }
