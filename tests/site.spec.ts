@@ -261,9 +261,13 @@ test('the styleguide exists but stays out of search', async ({ page }) => {
   const sitemap = await (await page.request.get('/sitemap-0.xml')).text();
   expect(sitemap).not.toContain('/styleguide/');
 
-  // It must render the real components, not copies of them.
-  await expect(page.locator('.card-link').first()).toBeVisible();
-  await expect(page.locator('.btn--dark').first()).toBeVisible();
+  // It must render the real components, not copies of them. Scoped to the
+  // page body: the first .btn--dark in the DOM is the header CTA, which is
+  // hidden below 820px.
+  const sg = page.locator('.sg');
+  await expect(sg.locator('.card-link').first()).toBeVisible();
+  await expect(sg.locator('.btn--dark').first()).toBeVisible();
+  await expect(sg.locator('.opt').first()).toBeVisible();
 
   // Contrast is computed live; nothing should be failing AA.
   const failing = await page.locator('[data-fail="true"]').count();
