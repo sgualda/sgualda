@@ -81,8 +81,8 @@ if (existsSync(rPath)) {
 
 // Publishing a legal notice with placeholder identification is worse than
 // not publishing one at all. Loud, every single build.
-if (/nif: '0{8}X'/.test(src)) {
-  console.log(`  ${Y}!${X} /legal/ still has a placeholder NIF — must be real before launch (#Q-104)`);
+if (/trading: true/.test(src) && /nif: ''/.test(src)) {
+  console.log(`  ${Y}!${X} LEGAL.trading is on but the NIF is empty — /legal/ would be incomplete (#Q-104)`);
   console.log('');
 }
 

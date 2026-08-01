@@ -19,15 +19,26 @@ export const SITE = {
 } as const;
 
 /**
- * Identification required by LSSI-CE art. 10 for services offered online.
- * TODO(sergio): the two placeholders below must be real before launch —
- * publishing a legal notice with fake identification is worse than not
- * publishing one. See #Q-104.
+ * Identification for the legal notice.
+ *
+ * LSSI-CE art. 10 applies to those carrying out economic activity online.
+ * Sergio is not registered as self-employed, publishes no prices and invoices
+ * nothing from here, so the site is closer to informational than commercial
+ * and the lighter version below is defensible.
+ *
+ * Flip `trading` to true on the day he registers. At that point the full NIF
+ * and a fiscal address become required — and that address should be a
+ * registered office, never a home address, which stays indexed forever.
+ *
+ * Not legal advice. Worth twenty minutes with a gestor before launch.
  */
 export const LEGAL = {
   name: 'Sergio Gualda',
-  nif: '00000000X',                              // TODO(sergio)
-  address: 'Barcelona, Spain',                   // TODO(sergio): full address
+  /** Set to true once registered as autónomo. */
+  trading: false,
+  nif: '',        // DNI with its letter. Only published when trading.
+  address: '',    // Registered office. Never the home address.
+  city: 'Barcelona, Spain',
 } as const;
 
 export const SOCIAL = {

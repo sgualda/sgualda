@@ -64,6 +64,12 @@ const url = `${SITE.url}/tools/${t.slug}/`;
     <div class="panel">
       <div class="dots" id="dots">{t.q.map(() => <i></i>)}</div>
       <div id="box"></div>
+      {/* Only this tool's data, not all six. See #Q-077. */}
+      <script
+        type="application/json"
+        id="tool-data"
+        set:html={JSON.stringify({ q: t.q, b: t.b })}
+      />
     </div>
     <p class="aside">
       Everything runs in your browser. Nothing is sent anywhere, and the answer gets its own link you can send to your team.
@@ -146,11 +152,11 @@ const url = `${SITE.url}/tools/${t.slug}/`;
 </style>
 
 <script>
-  import { TOOLS } from '@lib/tools';
+  type Bucket = { max: number; name: string; sub: string; body: string; next: string[] };
+  type Data = { q: [string, [string, number][]][]; b: Bucket[] };
 
-  const slug = location.pathname.replace(/\/tools\/|\/$/g, '');
-  const t = TOOLS.find((x) => x.slug === slug)!;
   const $ = (id: string) => document.getElementById(id)!;
+  const t: Data = JSON.parse($('tool-data').textContent!);
 
   /**
    * Answers live in the hash: #a=0,2,4

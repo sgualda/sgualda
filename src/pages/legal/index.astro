@@ -34,11 +34,21 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
       <h2>Who runs this</h2>
       <dl class="ident">
         <dt>Name</dt><dd>{LEGAL.name}</dd>
-        <dt>Tax ID (NIF)</dt><dd>{LEGAL.nif}</dd>
-        <dt>Address</dt><dd>{LEGAL.address}</dd>
+        {LEGAL.trading && LEGAL.nif && (<><dt>Tax ID (NIF)</dt><dd>{LEGAL.nif}</dd></>)}
+        {LEGAL.trading && LEGAL.address
+          ? (<><dt>Address</dt><dd>{LEGAL.address}</dd></>)
+          : (<><dt>Based in</dt><dd>{LEGAL.city}</dd></>)}
         <dt>Email</dt><dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd>
-        <dt>Activity</dt><dd>Product design and strategy consulting</dd>
+        <dt>Activity</dt><dd>Product design and strategy</dd>
       </dl>
+      {
+        !LEGAL.trading && (
+          <p class="note">
+            Nothing is sold on this site: there are no prices, no payments and no accounts.
+            When that changes, full tax identification appears here.
+          </p>
+        )
+      }
 
       <h2>What this site is</h2>
       <p>
@@ -129,6 +139,11 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
     color: var(--dim); padding-top: 4px;
   }
   .ident dd { font-size: 1.0625rem; line-height: 1.5; letter-spacing: 0; }
+  .note {
+    margin-top: 24px; padding: 16px 18px;
+    background: var(--surface); border-radius: 14px;
+    font-size: 0.9375rem; line-height: 1.55; letter-spacing: 0; color: var(--dim);
+  }
 
   @media (max-width: 480px) {
     .ident { grid-template-columns: 1fr; gap: 2px 0; }
