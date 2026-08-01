@@ -156,6 +156,56 @@ test.describe('the tools actually work', () => {
   });
 });
 
+test.describe('the answer gets a reaction', () => {
+  // Scores for "why is nobody using your product":
+  //   Q1 [4,3,1,0] · Q2 [0,2,4] · Q3 [0,2,4]
+  // so the options are not ordered best-to-worst and picking .first()
+  // three times lands in the middle, not on the good news.
+  test('the best outcome celebrates', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/tools/why-is-nobody-using-your-product/');
+    await page.locator('.opt').last().click();   // 0
+    await page.locator('.opt').first().click();  // 0
+    await page.locator('.opt').first().click();  // 0 → first bucket
+    await expect(page.locator('.vname')).toContainText('came back');
+    await expect(page.locator('canvas')).toBeAttached();
+  });
+
+  test('the worst outcome settles instead', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/tools/why-is-nobody-using-your-product/');
+    await page.locator('.opt').first().click();  // 4
+    await page.locator('.opt').last().click();   // 4
+    await page.locator('.opt').last().click();   // 4 → last bucket
+    await expect(page.locator('.vname')).toContainText('did not need it');
+    await expect(page.locator('canvas')).toBeAttached();
+  });
+
+  test('nothing animates when motion is reduced', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/tools/why-is-nobody-using-your-product/');
+    await page.locator('.opt').last().click();
+    await page.locator('.opt').first().click();
+    await page.locator('.opt').first().click();
+    await expect(page.locator('.vname')).toBeVisible();
+    expect(await page.locator('canvas').count()).toBe(0);
+  });
+
+  test('a rejection from the qualifier does not celebrate', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/work-with-me/');
+    // All four questions are always asked; decide() runs at the end.
+    // 'do' on question two — "somebody to execute a plan we have agreed" —
+    // is the answer that routes to 'nope'.
+    await page.locator('.opt').first().click();
+    await page.locator('.opt').last().click();
+    await page.locator('.opt').first().click();
+    await page.locator('.opt').first().click();
+    await expect(page.locator('.vname')).toContainText('Not me');
+    await expect(page.locator('canvas')).toBeAttached();
+  });
+});
+
 test('the qualifier reaches a recommendation', async ({ page }) => {
   await page.goto('/work-with-me/');
   for (let i = 0; i < 4; i++) await page.locator('.opt').first().click();

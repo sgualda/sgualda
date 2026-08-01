@@ -182,6 +182,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
 
 <script>
   import { Q, OUT, decide, KIND, SPECIFIC } from '@lib/work-with-me';
+  import { celebrate, settle } from '@lib/feedback';
 
   const $ = (id: string) => document.getElementById(id)!;
   const answers: Record<string, string> = {};
@@ -229,6 +230,12 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
         ? `<a class="btn btn--dark" href="/tools/">Try a free check</a><a class="btn btn--ghost" href="/writing/">Read something instead</a>`
         : `<a class="btn btn--dark" href="#brief" id="toBrief">Send a tailored brief</a><a class="btn btn--ghost" href="mailto:hello@sgualda.com">Just email me</a>`) +
       `</div><button class="back" type="button" id="qfReset">Start over</button></div>`;
+
+    // 'nope' and 'notyet' are the two answers that turn somebody away. They
+    // are honest, they are a third of replies, and they are not a celebration.
+    const panel = $('qfBox').closest('.panel');
+    if (rec === 'nope' || rec === 'notyet') settle(panel);
+    else celebrate(panel);
 
     $('qfReset').addEventListener('click', () => {
       for (const k of Object.keys(answers)) delete answers[k];
@@ -344,6 +351,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
       const out = await res.json();
       if (!res.ok || !out.ok) throw new Error(out.error || 'Something went wrong.');
 
+      celebrate($('bBox').closest('.panel'));
       $('bBox').innerHTML =
         `<div class="step" role="status"><p class="vname">That is everything I need.</p>` +
         `<p class="vnote">I read every brief myself and reply within a day — with what fits, ` +

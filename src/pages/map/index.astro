@@ -317,7 +317,12 @@ const routeD = smooth(STAGES);
       border-radius: 50%;
     }
     .label { align-items: flex-start; padding-top: 6px; }
-    .name, .peek { text-align: left; }
+    /* The horizontal diagram right-aligns the last stop so its label cannot
+       spill outside the card. Vertically there is no such risk, and that rule
+       was left-over-riding stage 05 into a ragged right edge. */
+    .name, .peek,
+    .stop:first-child .name, .stop:first-child .peek,
+    .stop:last-child .name, .stop:last-child .peek { text-align: left; }
 
     /* No hover on a touch screen, so the description is simply shown. */
     .peek { max-height: none; opacity: 1; }
