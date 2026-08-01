@@ -4,8 +4,9 @@ description: 'Intuitive design is the new standard. Learn why user friendly soft
 published: 2024-11-15
 updated: 2025-08-25
 migrated: true
-draft: false
-# audit note 2026-07-31 — 188 words, no headings, no point of view.
+draft: true
+# unpublished 2026-08-01 — 188 words, no structure, no point of view.
+
 topics: ['craft']
 ---
 Most apps today fail at something fundamental: being **intuitive**. And it’s frustrating because, honestly, no one wants to **spend weeks trying to figure out how new software works**. We’re surrounded by technology that is supposed to make our lives easier, but often it feels like it’s just adding more complications.

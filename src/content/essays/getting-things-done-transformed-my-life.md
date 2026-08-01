@@ -4,8 +4,9 @@ description: 'Discover how the Getting Things Done method transformed my work an
 published: 2024-10-20
 updated: 2025-02-18
 migrated: true
-draft: false
-# audit note 2026-07-31 — 1149 words, well written, but personal productivity — not product design. Belongs on Substack.
+draft: true
+# unpublished 2026-08-01 — Well written, 1149 words, and about personal productivity. Dilutes the topic authority of a product design domain. Belongs on Substack.
+
 topics: ['process']
 ---
 ## Introduction

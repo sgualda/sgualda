@@ -4,7 +4,8 @@ description: 'My honest take on UX design principles that actually work: start w
 published: 2025-10-20
 updated: 2025-10-20
 migrated: true
-draft: false
+draft: true
+# unpublished 2026-08-01 — A manifesto with no author in it: 0 first person across 352 words. Rewrite with opinions or leave down.
 topics: ['craft']
 ---
 Design isn’t decoration. It’s not “making it pretty.” It’s choosing what matters so the business moves and someone’s life gets easier. If you want posters, hit a print shop. If you want impact, let’s talk design.

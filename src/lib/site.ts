@@ -123,16 +123,8 @@ export const URL_MAP = {
   writing: [
     '/writing/claude-ai-product-design-review/',
     '/writing/designing-for-scalability/',
-    '/writing/getting-things-done-transformed-my-life/',
     '/writing/good-product-design/',
     '/writing/heart-framework-vs-nps-user-experience/',
-    '/writing/intuitive-design-new-standard/',
-    '/writing/learning-to-let-go-an-idea/',
-    '/writing/nps-outdated-user-experience/',
-    '/writing/product-design-challenges/',
-    '/writing/product-discovery-make-or-break-idea/',
-    '/writing/ux-certification-worth-it/',
-    '/writing/ux-design-principles-manifesto/',
     '/writing/what-is-mvp-and-how-it-drives-growth/',
   ],
 } as const;

@@ -4,8 +4,9 @@ description: 'Explore the significance of ''letting go'' in product design. Lear
 published: 2024-01-28
 updated: 2025-06-10
 migrated: true
-draft: false
-# audit note 2026-07-31 — 242 words. The most on-brand topic you have. Rewrite candidate #2.
+draft: true
+# unpublished 2026-08-01 — 242 words on the most on-brand subject Sergio has. Second rewrite candidate.
+
 topics: ['discovery']
 ---
 You know, this idea of ‘learning to let go’ in the design world? I’ve been thinking about it a lot, and it just really clicks with me. From what I’ve seen, it’s a super important part of growing and making new things with digital products.

@@ -4,8 +4,9 @@ description: 'Learn why Net Promoter Score (NPS) may be outdated for measuring u
 published: 2024-07-02
 updated: 2025-08-24
 migrated: true
-draft: false
-# audit note 2026-07-31 — 413 words. Same topic as the HEART piece, which is better. Cannibalises it.
+draft: true
+# unpublished 2026-08-01 — Same subject as the HEART essay, which is longer and has a view. Folded into it.
+
 topics: ['measurement']
 ---
 As a product designer, I’ve always felt that **Net Promoter Score (NPS)** sounds good at first. But when you think about it, it doesn’t really tell you much. NPS has been around since 2003, thanks to Fred Reichheld and [**Bain & Company**](https://www.bain.com/). It was originally designed to measure customer loyalty for businesses. However, its roots are in **industrial design**, and it focuses primarily on customer loyalty. This makes it not the best fit for measuring **user experience** in digital products.

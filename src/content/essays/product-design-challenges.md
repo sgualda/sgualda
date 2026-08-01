@@ -4,8 +4,9 @@ description: 'Discover how to balance user needs and business goals as a product
 published: 2025-01-22
 updated: 2025-02-07
 migrated: true
-draft: false
-# audit note 2026-07-31 — 316 words, no headings. A note, not an essay.
+draft: true
+# unpublished 2026-08-01 — 316 words, no headings. A note, not an essay. Merge into a longer piece on trade-offs.
+
 topics: ['craft', 'process']
 ---
 When I hear the phrase “Product Design,” the first thing that comes to mind is that fine line between **people’s needs and companies’ dreams** (or goals). It’s like walking a tightrope, where your balance depends on how well you understand users and how aligned you are with what the business is aiming for.

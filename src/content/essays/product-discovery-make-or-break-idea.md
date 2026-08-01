@@ -4,8 +4,9 @@ description: 'The product discovery stage is crucial for validating your idea. L
 published: 2025-02-19
 updated: 
 migrated: true
-draft: false
-# audit note 2026-07-31 — 182 words, no headings, zero first person. Keyword filler.
+draft: true
+# unpublished 2026-08-01 — 182 words, no headings, zero first person, zero stance. Nothing here is Sergio.
+
 topics: ['discovery']
 ---
 ![Team collaboration in product discovery](../../assets/essays/Product-discovery-process-1024x576.jpg)

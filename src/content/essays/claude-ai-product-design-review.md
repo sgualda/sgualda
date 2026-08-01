@@ -11,15 +11,21 @@ I’ve been using AI tools in my daily workflow for a couple of years now. ChatG
 
 I was an early adopter, not out of FOMO but because I work in product and design, and if there’s a tool that can remove friction from the creative process, I’ll try it.
 
+## Why this one felt different
+
 But Claude is different. And I need to explain why.
 
 The first thing I noticed: this model thinks differently.
 
 ![](../../assets/essays/claude-code-terminal-1024x552.webp)
 
+## What it actually changed in my day
+
 When you open Claude for the first time, you expect more of the same. Another chatbot wrapping answers in bubble wrap. What you actually get is something else: responses that feel like they were written by someone who read the same books you did, who gets context, who doesn’t pad the answer.
 
 For someone who works in product design and business strategy, that matters a lot. Because most of the time I don’t need an AI to generate text, I need it to help me think. And Claude, for reasons I can’t fully articulate, does that better.
+
+## Where the discomfort comes from
 
 I don’t know if it’s [Anthropic’s](https://www.anthropic.com/constitution) training approach, their constitutional AI philosophy, or just better internal prompt engineers. But the difference is real.
 

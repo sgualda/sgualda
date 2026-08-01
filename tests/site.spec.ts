@@ -223,21 +223,39 @@ test('the brief refuses to submit without an email', async ({ page }) => {
 });
 
 test.describe('the journal', () => {
-  test('shows six and loads six more', async ({ page }) => {
-    await page.goto('/writing/');
-    await expect(page.locator('.row:visible')).toHaveCount(6);
+  const PAGE = 6;
 
-    await page.getByRole('button', { name: /Show \d+ more/ }).click();
-    await expect(page.locator('.row:visible').first()).toBeVisible();
-    await expect(async () => {
-      expect(await page.locator('.row:visible').count()).toBeGreaterThan(6);
-    }).toPass();
+  test('shows at most six, and the button only exists when there are more', async ({ page }) => {
+    await page.goto('/writing/');
+    const total = await page.locator('.row').count();
+    const visible = await page.locator('.row:visible').count();
+
+    expect(visible).toBe(Math.min(PAGE, total));
+
+    const more = page.getByRole('button', { name: /Show \d+ more/ });
+    if (total > PAGE) {
+      await expect(more).toBeVisible();
+      await more.click();
+      await expect(async () => {
+        expect(await page.locator('.row:visible').count()).toBeGreaterThan(visible);
+      }).toPass();
+    } else {
+      // No button, and nothing hidden with nothing to reveal.
+      await expect(more).toHaveCount(0);
+      expect(visible).toBe(total);
+    }
   });
 
-  test('every essay is in the HTML before any clicking', async ({ page }) => {
+  test('every published essay is in the HTML before any clicking', async ({ page }) => {
     await page.goto('/writing/');
-    // Hidden, but present — this is what keeps the archive indexable.
-    expect(await page.locator('.row').count()).toBeGreaterThanOrEqual(13);
+    const rows = await page.locator('.row').count();
+    expect(rows).toBeGreaterThan(0);
+    // Each row is a real link to a page that exists.
+    for (const href of await page.locator('.row a').evaluateAll((els) =>
+      els.map((e) => (e as HTMLAnchorElement).getAttribute('href'))
+    )) {
+      expect((await page.request.get(href!)).status()).toBe(200);
+    }
   });
 });
 
