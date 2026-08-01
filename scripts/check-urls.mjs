@@ -19,8 +19,11 @@ if (!existsSync(dist)) {
 }
 
 const src = readFileSync(join(root, 'src/lib/site.ts'), 'utf8');
+// Handles both single-line and multi-line arrays. The earlier version only
+// matched multi-line ones and silently swallowed everything up to the next
+// closing bracket.
 const section = (name) => {
-  const m = src.match(new RegExp(`${name}:\\s*\\[([\\s\\S]*?)\\n\\s*\\]`));
+  const m = src.match(new RegExp(`${name}:\\s*\\[([^\\]]*)\\]`));
   return m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]) : [];
 };
 

@@ -4,7 +4,7 @@ import { readFileSync, existsSync } from 'node:fs';
 /** Every URL the site promises to serve, read from the contract itself. */
 const src = readFileSync('src/lib/site.ts', 'utf8');
 const section = (name: string) => {
-  const m = src.match(new RegExp(`${name}:\\s*\\[([\\s\\S]*?)\\n\\s*\\]`));
+  const m = src.match(new RegExp(`${name}:\\s*\\[([^\\]]*)\\]`));
   return m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]) : [];
 };
 const URLS = [...section('pages'), ...section('tools'), ...section('writing')];
