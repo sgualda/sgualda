@@ -1134,12 +1134,14 @@ Un único componente `<Card>` con variantes `interactive | static | inverse`, ra
 
 ---
 
-## #Q-034 — No existe documentación del design system
+## #Q-034 ✅ Resuelto — No existe documentación del design system
 
 ### Categoría
 Design System / Escalabilidad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** /styleguide/ con noindex, fuera del sitemap. Renderiza los componentes reales y lee los tokens de la hoja de estilos en runtime. Calcula contraste y marca lo que falla AA.
 **Alta**
 
 ### Impacto
@@ -1553,12 +1555,14 @@ Es el comportamiento que todo usuario espera, y especialmente en móvil, donde e
 
 ---
 
-## #Q-044 — `/case-studies/` está vacía y es una de las 4 entradas del menú
+## #Q-044 ✅ Resuelto — `/case-studies/` está vacía y es una de las 4 entradas del menú
 
 ### Categoría
 UX / CRO
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Cinco fichas: glintale, truvi, ecoco y dos enterradas. 3.513 palabras. Plantilla de ficha individual con schema CreativeWork y BreadcrumbList.
 **Alta**
 
 ### Impacto
@@ -1808,12 +1812,14 @@ Integrar agenda (Cal.com, autoalojable y sin coste) para la llamada de 20 minuto
 
 # 4. Responsive
 
-## #Q-050 — El diagrama del mapa se oculta en móvil en lugar de adaptarse
+## #Q-050 ✅ Resuelto — El diagrama del mapa se oculta en móvil en lugar de adaptarse
 
 ### Categoría
 Responsive
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Deja de ocultarse por debajo de 760px: gira a vertical con las mismas cinco paradas y enlaces. Probado a 375px.
 Media
 
 ### Impacto
@@ -4350,12 +4356,14 @@ Un activo derivado del contenido existente: *"The nine questions"* como PDF de u
 
 ---
 
-## #Q-013 — Ninguna imagen real en todo el sitio
+## #Q-013 ✅ Resuelto — Ninguna imagen real en todo el sitio
 
 ### Categoría
 Visual / Contenido
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Recuperadas las 3 imágenes reales de ecoco desde WordPress, más la captura de glintale y el retrato. Quedan las del grid de la home.
 **Alta**
 
 ### Impacto
@@ -4784,10 +4792,10 @@ Ninguna
 | Métrica | Valor |
 |---|---|
 | Tickets totales | 78 |
-| Cerrados | 33 |
-| Abiertos | 45 |
+| Cerrados | 37 |
+| Abiertos | 41 |
 | Reabiertos | 0 |
-| **Progreso** | **42%** |
+| **Progreso** | **47%** |
 
 ### Bloqueantes de lanzamiento
 
