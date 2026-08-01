@@ -11,3 +11,7 @@ node_modules/
 # Secrets — never commit
 .dev.vars
 .wrangler/
+
+# Test output
+playwright-report/
+test-results/

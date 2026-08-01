@@ -199,11 +199,13 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
         });
       } else {
         sheet.classList.remove('open');
-        sheet.addEventListener(
-          'transitionend',
-          () => { if (!sheet.classList.contains('open')) sheet.hidden = true; },
-          { once: true }
-        );
+        // transitionend never fires when the transition is disabled — which is
+        // exactly what prefers-reduced-motion does — so the sheet stayed open
+        // forever for those users. Read the real duration instead.
+        const ms = parseFloat(getComputedStyle(sheet).transitionDuration) * 1000;
+        const hide = () => { if (!sheet.classList.contains('open')) sheet.hidden = true; };
+        if (ms > 20) sheet.addEventListener('transitionend', hide, { once: true });
+        else hide();
         lastFocused?.focus();
       }
     };

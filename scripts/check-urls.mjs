@@ -29,6 +29,8 @@ const groups = {
   tools: section('tools'),
   writing: section('writing'),
 };
+// Promised in the nav, not written yet. Reported, never fatal.
+const pending = section('pending');
 const urls = Object.values(groups).flat();
 
 // A guard that checks nothing must not report success.
@@ -70,6 +72,12 @@ if (existsSync(rPath)) {
   console.log(`  ${rules.length} redirects`);
   for (const [from, to] of bad) console.log(`    ${Y}!${X} ${from} → ${to} (target not built)`);
   if (!bad.length) console.log(`    ${G}✓${X} every target resolves`);
+  console.log('');
+}
+
+if (pending.length) {
+  console.log(`  ${Y}pending content${X}`);
+  for (const u of pending) console.log(`    ${Y}·${X} ${u}  (see #Q-044)`);
   console.log('');
 }
 

@@ -8,7 +8,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "audit:urls": "node scripts/check-urls.mjs"
+    "audit:urls": "node scripts/check-urls.mjs",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.12",
@@ -19,6 +21,8 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@cloudflare/workers-types": "^5.20260801.1",
+    "@playwright/test": "^1.62.1",
+    "http-server": "^14.1.1",
     "typescript": "^5.9.3",
     "wrangler": "^4.118.0"
   }

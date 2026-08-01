@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The URL guard and the smoke tests only protect the site if they run without
+# anyone having to remember. That is the entire point of this file.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Types
+        run: npx astro check
+
+      - name: Build
+        run: npm run build
+
+      - name: URL contract
+        run: npm run audit:urls
+
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke tests
+        run: npm test
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

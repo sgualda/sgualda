@@ -57,8 +57,6 @@ export const URL_MAP = {
     '/about/',
     '/work-with-me/',
     '/case-studies/',
-    '/case-studies/truvi/',
-    '/case-studies/ecoco-mobile-app/',
     '/writing/',
     '/map/',
     '/map/worth-building/',
@@ -79,7 +77,13 @@ export const URL_MAP = {
     '/tools/can-you-charge-for-your-product-yet/',
     '/tools/why-your-team-keeps-redoing-the-same-work/',
   ],
-  /** Essays that survived the content audit. Generated from the collection. */
+  /**
+   * Promised in the navigation but not written yet. Kept separate so the
+   * build check reports them without failing CI — see #Q-044.
+   */
+  pending: ['/case-studies/truvi/', '/case-studies/ecoco-mobile-app/'],
+
+  /** Essays. Generated from the collection. */
   writing: [
     '/writing/claude-ai-product-design-review/',
     '/writing/designing-for-scalability/',
