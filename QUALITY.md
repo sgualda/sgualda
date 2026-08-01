@@ -116,12 +116,14 @@ Bloqueantes: `#Q-001`, `#Q-002`, `#Q-003`, `#Q-004`, `#Q-005`, `#Q-006`, `#Q-007
 
 # BLOQUEANTES
 
-## #Q-001 — El formulario de brief no envía los datos a ningún sitio
+## #Q-001 ✅ Resuelto — El formulario de brief no envía los datos a ningún sitio
 
 ### Categoría
 CRO / Calidad Técnica
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Cloudflare Function, luego reescrita en PHP al mover el hosting a Hostinger. Probado de extremo a extremo: honeypot, tiempo mínimo, email inválido, brief corto, método incorrecto y envío real.
 **Crítica**
 
 ### Impacto
@@ -179,12 +181,14 @@ Ninguna
 
 ---
 
-## #Q-002 — La imagen Open Graph declarada no existe
+## #Q-002 ✅ Resuelto — La imagen Open Graph declarada no existe
 
 ### Categoría
 SEO Técnico / Branding
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** 34 imágenes generadas en build desde el h1 de cada página, más la de reserva. Test que pide la og:image declarada en todas y falla si devuelve 404.
 **Crítica**
 
 ### Impacto
@@ -229,12 +233,14 @@ Ninguna
 
 ---
 
-## #Q-003 — No existe favicon
+## #Q-003 ✅ Resuelto — No existe favicon
 
 ### Categoría
 SEO Técnico / Branding
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** favicon.svg adaptable a tema, apple-touch-icon, manifest y theme-color.
 **Crítica**
 
 ### Impacto
@@ -276,12 +282,14 @@ Ninguna
 
 ---
 
-## #Q-004 — No existe robots.txt
+## #Q-004 ✅ Resuelto — No existe robots.txt
 
 ### Categoría
 SEO Técnico
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** robots.txt con los cuatro bots de IA permitidos explícitamente, sitemap y llms.txt declarados.
 **Crítica**
 
 ### Impacto
@@ -336,12 +344,14 @@ Ninguna
 
 ---
 
-## #Q-005 — No existe página 404
+## #Q-005 ✅ Resuelto — No existe página 404
 
 ### Categoría
 SEO Técnico / UX
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** 404 con la plantilla del sitio y tres salidas. ErrorDocument en .htaccess.
 **Crítica**
 
 ### Impacto
@@ -384,12 +394,14 @@ Ninguna
 
 ---
 
-## #Q-006 — Google Fonts: exposición RGPD y coste de rendimiento
+## #Q-006 ✅ Resuelto — Google Fonts: exposición RGPD y coste de rendimiento
 
 ### Categoría
 Seguridad / Performance
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Zalando Sans Expanded y Archivo autoalojadas, 120 KB en cuatro woff2. Cero peticiones a Google. CSP sin ningún origen de terceros.
 **Crítica**
 
 ### Impacto
@@ -677,12 +689,14 @@ Ninguna
 
 ---
 
-## #Q-024 — El foco visible es casi invisible
+## #Q-024 ✅ Resuelto — El foco visible es casi invisible
 
 ### Categoría
 Visual / Accesibilidad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Anillo doble, visible sobre claro y sobre las bandas oscuras.
 **Alta**
 
 ### Impacto
@@ -819,12 +833,14 @@ Derivar la paleta oscura desde los tokens actuales manteniendo relaciones de con
 
 ---
 
-## #Q-027 — Las bandas oscuras usan un negro que no es un token del sistema
+## #Q-027 ✅ Resuelto — Las bandas oscuras usan un negro que no es un token del sistema
 
 ### Categoría
 Visual / Design System
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** --inverse derivado de --ink. Un solo negro en el sistema.
 Baja
 
 ### Impacto
@@ -940,12 +956,14 @@ Decidir explícitamente. Si es foto: recorte circular, 2 tamaños (1× y 2×), f
 
 ---
 
-## #Q-030 — La transición de las tarjetas usa `transform` sin `will-change` ni contención
+## #Q-030 ✅ Resuelto — La transición de las tarjetas usa `transform` sin `will-change` ni contención
 
 ### Categoría
 Visual / Performance
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** animation-play-state: paused salvo en hover.
 Baja
 
 ### Impacto
@@ -1368,12 +1386,14 @@ Sprite SVG con los 6-8 iconos necesarios (flecha, check, cruz, más, chevron), t
 
 # 3. UX
 
-## #Q-040 — El sitio no tiene ningún estado de carga ni de error en formularios
+## #Q-040 ✅ Resuelto — El sitio no tiene ningún estado de carga ni de error en formularios
 
 ### Categoría
 UX
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Máquina de estados en el brief con error visible y recuperable.
 **Alta**
 
 ### Impacto
@@ -1450,12 +1470,14 @@ Suscripción vía API de Substack (o Buttondown/Resend Audiences) desde una Func
 
 ---
 
-## #Q-042 — Los resultados de los checks no se pueden guardar ni compartir
+## #Q-042 ✅ Resuelto — Los resultados de los checks no se pueden guardar ni compartir
 
 ### Categoría
 UX / CRO
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Respuestas en el hash. Botón de copiar enlace. Tres tests, incluido hash manipulado.
 **Alta**
 
 ### Impacto
@@ -1490,12 +1512,14 @@ Ninguna
 
 ---
 
-## #Q-043 — El botón atrás del navegador no funciona dentro de los checks
+## #Q-043 ✅ Resuelto — El botón atrás del navegador no funciona dentro de los checks
 
 ### Categoría
 UX / Accesibilidad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** pushState por pregunta y popstate. Atrás y adelante funcionan.
 Media
 
 ### Impacto
@@ -1611,12 +1635,14 @@ Ninguna
 
 ---
 
-## #Q-046 — Los ensayos no tienen navegación entre artículos ni contenido relacionado
+## #Q-046 ✅ Resuelto — Los ensayos no tienen navegación entre artículos ni contenido relacionado
 
 ### Categoría
 UX / SEO
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Tiempo de lectura, chips de tema, cruces a etapa y check, tres relacionados y paginación.
 Media
 
 ### Impacto
@@ -1650,12 +1676,14 @@ Bloque final con: anterior/siguiente cronológico, 2-3 relacionados por `topics`
 
 ---
 
-## #Q-047 — El menú móvil no atrapa el foco
+## #Q-047 ✅ Resuelto — El menú móvil no atrapa el foco
 
 ### Categoría
 UX / Accesibilidad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** inert en el fondo, focus trap, foco devuelto. Bug de prefers-reduced-motion corregido.
 **Alta**
 
 ### Impacto
@@ -2191,12 +2219,14 @@ Ninguna
 
 ---
 
-## #Q-060 — Frase incompleta publicada en la home
+## #Q-060 ✅ Resuelto — Frase incompleta publicada en la home
 
 ### Categoría
 Copywriting
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** "If it cost me nothing, then I read it somewhere and I am repeating it."
 Media
 
 ### Impacto
@@ -2385,12 +2415,14 @@ Ninguna
 
 > Ver también los bloqueantes `#Q-002` (Open Graph), `#Q-003` (favicon), `#Q-004` (robots), `#Q-005` (404).
 
-## #Q-064 — No existe `llms.txt`
+## #Q-064 ✅ Resuelto — No existe `llms.txt`
 
 ### Categoría
 SEO Técnico / GEO
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** llms.txt de 2.015 palabras, generado desde las colecciones.
 Media
 
 ### Impacto
@@ -2454,12 +2486,14 @@ Ninguna
 
 ---
 
-## #Q-066 — Ausencia total de enlazado interno contextual
+## #Q-066 ✅ Resuelto — Ausencia total de enlazado interno contextual
 
 ### Categoría
 SEO Técnico / SEO Contenidos
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Un artículo pasa de 2 a 23 enlaces internos.
 **Alta**
 
 ### Impacto
@@ -2526,12 +2560,14 @@ Verificar por DNS en Google Search Console y Bing Webmaster Tools antes del camb
 
 ---
 
-## #Q-068 — `prefetchAll` puede desperdiciar ancho de banda en móvil
+## #Q-068 ✅ Resuelto — `prefetchAll` puede desperdiciar ancho de banda en móvil
 
 ### Categoría
 SEO Técnico / Performance
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** defaultStrategy hover, prefetchAll false.
 Baja
 
 ### Impacto
@@ -2644,12 +2680,14 @@ Fusionar el corto dentro del largo, 301 del corto al largo, y ampliar el resulta
 
 ---
 
-## #Q-071 — La taxonomía de contenidos existe en el esquema pero está vacía
+## #Q-071 ✅ Resuelto — La taxonomía de contenidos existe en el esquema pero está vacía
 
 ### Categoría
 SEO Contenidos / UX
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Seis temas mapeados a las etapas. 13 artículos etiquetados, 5 hubs generados.
 Media
 
 ### Impacto
@@ -2731,12 +2769,14 @@ Calendario editorial derivado de la estructura existente:
 
 # 9. Optimización para LLMs (GEO)
 
-## #Q-073 — Las respuestas de los checks son invisibles para los LLMs
+## #Q-073 ✅ Resuelto — Las respuestas de los checks son invisibles para los LLMs
 
 ### Categoría
 GEO / LLM
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** llms-full.txt con los 24 diagnósticos completos, 14.247 palabras.
 **Alta**
 
 ### Impacto
@@ -2902,12 +2942,14 @@ Ninguna
 
 > Ver también `#Q-006` (fuentes externas) y `#Q-068` (prefetch).
 
-## #Q-077 — El bundle del motor de checks pesa 38 KB y se carga siempre
+## #Q-077 ✅ Resuelto — El bundle del motor de checks pesa 38 KB y se carga siempre
 
 ### Categoría
 Performance
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** De 39 KB a 2 KB por landing. Datos serializados en JSON por página.
 Media
 
 ### Impacto
@@ -3013,12 +3055,14 @@ Ninguna
 
 ---
 
-## #Q-080 — Sin cabeceras de caché configuradas
+## #Q-080 ✅ Resuelto — Sin cabeceras de caché configuradas
 
 ### Categoría
 Performance / Seguridad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Caché en .htaccess: un año para assets con hash, revalidación para HTML.
 Media
 
 ### Impacto
@@ -3179,12 +3223,14 @@ Contenedor con `aria-live="polite"` permanente y `aria-atomic="true"`; mover el 
 
 ---
 
-## #Q-084 — Contraste insuficiente en textos secundarios
+## #Q-084 ✅ Resuelto — Contraste insuficiente en textos secundarios
 
 ### Categoría
 Accesibilidad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** --dim de #837D7D a #6B6B6B. Contraste 3.90:1 → 5.33:1. Pendiente reflejarlo en Figma.
 **Alta**
 
 ### Impacto
@@ -3222,12 +3268,14 @@ Oscurecer `--dim` hasta alcanzar 4.5:1 — aproximadamente `#6B6B6B` — manteni
 
 ---
 
-## #Q-085 — Los inputs de la banda oscura tienen contraste insuficiente
+## #Q-085 ✅ Resuelto — Los inputs de la banda oscura tienen contraste insuficiente
 
 ### Categoría
 Accesibilidad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Placeholder al 68% y borde al 42%.
 Media
 
 ### Impacto
@@ -3406,12 +3454,14 @@ Sección en `/privacy/` o página propia con: nivel de conformidad declarado, li
 
 # 12. Calidad Técnica
 
-## #Q-090 — Cero tests
+## #Q-090 ✅ Resuelto — Cero tests
 
 ### Categoría
 Calidad Técnica
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** 124 tests en Chromium y WebKit. Encontraron cuatro bugs reales.
 **Alta**
 
 ### Impacto
@@ -3446,12 +3496,14 @@ Ninguna
 
 ---
 
-## #Q-091 — Sin pipeline de CI/CD
+## #Q-091 ✅ Resuelto — Sin pipeline de CI/CD
 
 ### Categoría
 Calidad Técnica
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** GitHub Actions: tipos, build, guardián de URLs y tests en cada push y PR.
 **Alta**
 
 ### Impacto
@@ -3479,12 +3531,14 @@ Workflow en cada PR: `astro check` (tipos), build, `audit:urls`, Lighthouse CI, 
 
 ---
 
-## #Q-092 — El proyecto no está bajo control de versiones
+## #Q-092 ✅ Resuelto — El proyecto no está bajo control de versiones
 
 ### Categoría
 Calidad Técnica
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** github.com/sgualda/sgualda, privado. Verificado que la API key no está en el historial.
 **Crítica**
 
 ### Impacto
@@ -3627,12 +3681,14 @@ Barrido de código muerto con `knip` o `ts-prune`, y regla en CI que falle ante 
 
 ---
 
-## #Q-096 — Sin README ni documentación de proyecto
+## #Q-096 ✅ Resuelto — Sin README ni documentación de proyecto
 
 ### Categoría
 Calidad Técnica / Escalabilidad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** README con arranque, publicación de contenido, reglas no obvias, arquitectura, despliegue y checklist de lanzamiento.
 Media
 
 ### Impacto
@@ -3842,12 +3898,14 @@ Progreso explícito ("Step 2 of 5 · about 2 minutes left"), guardado automátic
 
 # 14. Seguridad
 
-## #Q-101 — Sin cabeceras de seguridad
+## #Q-101 ✅ Resuelto — Sin cabeceras de seguridad
 
 ### Categoría
 Seguridad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** CSP, HSTS con preload, X-Content-Type-Options, Referrer-Policy, Permissions-Policy y X-Frame-Options.
 **Alta**
 
 ### Impacto
@@ -3884,12 +3942,14 @@ La CSP anterior asume fuentes autoalojadas (`#Q-006`).
 
 ---
 
-## #Q-102 — Formularios sin protección antispam
+## #Q-102 ✅ Resuelto — Formularios sin protección antispam
 
 ### Categoría
 Seguridad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Honeypot, tiempo mínimo de 3s y límite de 3 por IP y hora.
 **Alta**
 
 ### Impacto
@@ -3956,12 +4016,14 @@ Actualizar `/privacy/` **en el mismo commit** que introduzca la analítica. Aña
 
 ---
 
-## #Q-104 — Sin aviso legal ni identificación fiscal
+## #Q-104 ✅ Resuelto — Sin aviso legal ni identificación fiscal
 
 ### Categoría
 Seguridad / Legal
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Versión ligera hasta darse de alta como autónomo. Interruptor LEGAL.trading y aviso en el build.
 Media
 
 ### Impacto
@@ -4004,12 +4066,14 @@ Ninguna
 
 > Ver el bloqueante `#Q-007`.
 
-## #Q-105 — Sin monitorización de errores en cliente
+## #Q-105 ✅ Resuelto — Sin monitorización de errores en cliente
 
 ### Categoría
 Analítica / Calidad
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** Endpoint PHP propio, sin terceros. Log rotativo fuera de public_html. Cuatro campos, ninguno identificativo.
 Media
 
 ### Impacto
@@ -4468,12 +4532,14 @@ Ninguna
 
 ---
 
-## #Q-019 — La animación de dibujado del mapa se ejecuta aunque no esté en pantalla
+## #Q-019 ✅ Resuelto — La animación de dibujado del mapa se ejecuta aunque no esté en pantalla
 
 ### Categoría
 Performance / UX
 
 ### Severidad
+
+> ✅ **Resuelto 2026-08-01.** IntersectionObserver al 35%. Respeta prefers-reduced-motion.
 Baja
 
 ### Impacto
@@ -4718,11 +4784,35 @@ Ninguna
 | Métrica | Valor |
 |---|---|
 | Tickets totales | 78 |
-| Cerrados | 0 |
-| Abiertos | 78 |
-| Nuevos en esta iteración | 78 |
+| Cerrados | 33 |
+| Abiertos | 45 |
 | Reabiertos | 0 |
-| **Progreso** | **0%** |
+| **Progreso** | **42%** |
+
+### Bloqueantes de lanzamiento
+
+| Ticket | Estado |
+|---|---|
+| #Q-001 formulario | ✅ |
+| #Q-002 Open Graph | ✅ |
+| #Q-003 favicon | ✅ |
+| #Q-004 robots.txt | ✅ |
+| #Q-005 404 | ✅ |
+| #Q-006 fuentes | ✅ |
+| #Q-092 git | ✅ |
+| #Q-104 aviso legal | ✅ (falta NIF si se da de alta) |
+| #Q-007 analítica | ⚪ decisión pendiente |
+| #Q-044 case studies | ⚪ contenido de Sergio |
+| #Q-062 anécdotas | ⚪ **aceptado como decisión del propietario**, no corregido |
+
+### Bugs encontrados escribiendo los tests
+
+Ninguno de estos se detectó mirando el sitio:
+
+1. El menú móvil no se cerraba nunca con `prefers-reduced-motion` — `transitionend` no dispara si la transición está desactivada.
+2. El mismo menú se quedaba abierto 1 de cada 5 veces al cerrarlo antes de terminar la animación de apertura.
+3. 48 de 100 tests no se ejecutaban: el perfil móvil usa WebKit y solo estaba instalado Chromium.
+4. El test del reporte de errores solo podía pasar en Chromium.
 
 ---
 
