@@ -1,0 +1,4 @@
+# Copy to .dev.vars and fill in. Never commit the real file.
+RESEND_API_KEY=re_xxxxxxxxxxxx
+MAIL_TO=hello@sgualda.com
+MAIL_FROM=brief@sgualda.com
