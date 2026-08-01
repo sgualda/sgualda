@@ -150,8 +150,10 @@ const routeD = smooth(STAGES);
     stroke-width: 1.5;
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
-    animation: draw 1.9s cubic-bezier(0.65, 0, 0.35, 1) 0.25s forwards;
+    animation: draw 1.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation-play-state: paused;
   }
+  .route.go .draw { animation-play-state: running; }
   @keyframes draw { to { stroke-dashoffset: 0; } }
 
   /* Faint baseline the route sits on, with a tick under each stage. */
@@ -179,9 +181,12 @@ const routeD = smooth(STAGES);
     transform: translate(-50%, -50%);
     opacity: 0;
     animation: pop 0.55s var(--ease) forwards;
-    animation-delay: calc(0.55s + var(--i) * 0.34s);
+    animation-delay: calc(0.3s + var(--i) * 0.34s);
+    animation-play-state: paused;
   }
   @keyframes pop { from { opacity: 0; } to { opacity: 1; } }
+
+  .route.go .stop { animation-play-state: running; }
 
   .stop a {
     display: flex;
@@ -303,3 +308,27 @@ const routeD = smooth(STAGES);
     .stages a > .idx { grid-column: 1 / -1; }
   }
 </style>
+
+<script>
+  /* The route drew itself on load, so anyone who had not scrolled to it yet
+     missed the whole thing. Now it starts when it is actually on screen. */
+  const route = document.getElementById('route');
+  if (route) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      route.classList.add('go');
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              route.classList.add('go');
+              io.disconnect();
+            }
+          }
+        },
+        { threshold: 0.35 }
+      );
+      io.observe(route);
+    }
+  }
+</script>

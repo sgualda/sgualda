@@ -1,6 +1,9 @@
 # Cloudflare Pages headers.
 
 /*
+  # Fonts still come from Google (see #Q-006). Once self-hosted, drop the two
+  # fonts.* origins and this becomes default-src 'self' with nothing external.
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'self' https://sgualda.substack.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
