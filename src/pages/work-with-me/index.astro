@@ -181,72 +181,82 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
 <script>
   import { Q, OUT, decide, KIND, SPECIFIC } from '@lib/work-with-me';
   import { celebrate, settle } from '@lib/feedback';
+  import { createQuiz } from '@lib/quiz';
 
   const $ = (id: string) => document.getElementById(id)!;
   const answers: Record<string, string> = {};
   let rec: string | null = null;
 
   /* ── qualifier ── */
+
+  createQuiz<string>({
+    questions: Q.map((q) => ({
+      key: q.k,
+      text: q.q,
+      options: q.o.map(([value, label, note]) => ({ value, label, note })),
+    })),
+    box: $('qfBox'),
+    dots: $('qfDots'),
+
+    resolve(picked) {
+      Q.forEach((q, i) => (answers[q.k] = String(picked[i].value)));
+      rec = decide(answers);
+      return rec;
+    },
+
+    renderQuestion: (q, i, total) =>
+      `<div class="step">` +
+      (i > 0 ? `<button class="back" type="button" data-quiz-back>← Back</button>` : '') +
+      `<span class="eyebrow">Question ${i + 1} of ${total}</span>` +
+      `<h2 class="qq" data-quiz-head tabindex="-1">${q.text}</h2>` +
+      q.options
+        .map((o, n) =>
+          `<button class="opt" type="button" data-quiz-opt="${n}">${o.label}` +
+          (o.note ? `<em>${o.note}</em>` : '') + `</button>`)
+        .join('') +
+      `</div>`,
+
+    renderVerdict(key) {
+      const o = OUT[key];
+      return (
+        `<div class="step">` +
+        `<span class="vlab">${o.lab}</span>` +
+        `<h2 class="vname" data-quiz-head tabindex="-1">${o.name}</h2>` +
+        `<span class="vmeta">${o.meta}</span><div class="vwhy">${o.why}</div>` +
+        `<div class="vcols"><div><h4>What you would get</h4><ul>` +
+        o.get.map((g: string) => `<li>${g}</li>`).join('') +
+        `</ul></div><div class="no"><h4>What it is not</h4><ul>` +
+        o.not.map((g: string) => `<li>${g}</li>`).join('') +
+        `</ul></div></div><p class="vnote">${o.note}</p>` +
+        `<div class="vacts">` +
+        (key === 'notyet'
+          ? `<a class="btn btn--dark" href="/tools/">Try a free check</a>` +
+            `<a class="btn btn--ghost" href="/writing/">Read something instead</a>`
+          : `<a class="btn btn--dark" href="#brief" id="toBrief">Send a tailored brief</a>` +
+            `<a class="btn btn--ghost" href="mailto:hello@sgualda.com">Just email me</a>`) +
+        `</div><button class="back" type="button" data-quiz-restart>Start over</button></div>`
+      );
+    },
+
+    onRender({ verdict }) {
+      if (!verdict) return;
+
+      // 'nope' and 'notyet' turn somebody away. Honest, a third of replies,
+      // and not a celebration.
+      const panel = $('qfBox').closest('.panel');
+      if (verdict === 'nope' || verdict === 'notyet') settle(panel);
+      else celebrate(panel);
+
+      document.getElementById('toBrief')?.addEventListener('click', () => paint(kindOf()));
+    },
+  });
+
+  /* ── brief ── */
+  // The quiz engine tracks its own dots; the brief is a form, not a quiz, so
+  // it keeps its own.
   const setDots = (el: HTMLElement, i: number) =>
     el.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k <= i));
 
-  function ask(i: number) {
-    setDots($('qfDots'), i);
-    const q = Q[i];
-    $('qfBox').innerHTML =
-      `<div class="step">` +
-      (i > 0 ? `<button class="back" type="button" id="qfBack">← Back</button>` : '') +
-      `<span class="eyebrow">Question ${i + 1} of ${Q.length}</span>` +
-      `<h2 class="qq" id="qf-head" tabindex="-1">${q.q}</h2>` +
-      q.o.map((o) => `<button class="opt" type="button" data-k="${o[0]}">${o[1]}${o[2] ? `<em>${o[2]}</em>` : ''}</button>`).join('') +
-      `</div>`;
-
-    $('qfBox').querySelectorAll<HTMLButtonElement>('.opt').forEach((b) =>
-      b.addEventListener('click', () => {
-        answers[q.k] = b.dataset.k!;
-        i < Q.length - 1 ? ask(i + 1) : verdict();
-      })
-    );
-    document.getElementById('qfBack')?.addEventListener('click', () => ask(i - 1));
-    if (i > 0) document.getElementById('qf-head')?.focus();
-  }
-
-  function verdict() {
-    setDots($('qfDots'), Q.length);
-    rec = decide(answers);
-    const o = OUT[rec];
-    $('qfBox').innerHTML =
-      `<div class="step">` +
-      `<span class="vlab">${o.lab}</span><h2 class="vname" id="qf-head" tabindex="-1">${o.name}</h2>` +
-      `<span class="vmeta">${o.meta}</span><div class="vwhy">${o.why}</div>` +
-      `<div class="vcols"><div><h4>What you would get</h4><ul>` +
-      o.get.map((g: string) => `<li>${g}</li>`).join('') +
-      `</ul></div><div class="no"><h4>What it is not</h4><ul>` +
-      o.not.map((g: string) => `<li>${g}</li>`).join('') +
-      `</ul></div></div><p class="vnote">${o.note}</p>` +
-      `<div class="vacts">` +
-      (rec === 'notyet'
-        ? `<a class="btn btn--dark" href="/tools/">Try a free check</a><a class="btn btn--ghost" href="/writing/">Read something instead</a>`
-        : `<a class="btn btn--dark" href="#brief" id="toBrief">Send a tailored brief</a><a class="btn btn--ghost" href="mailto:hello@sgualda.com">Just email me</a>`) +
-      `</div><button class="back" type="button" id="qfReset">Start over</button></div>`;
-
-    // 'nope' and 'notyet' are the two answers that turn somebody away. They
-    // are honest, they are a third of replies, and they are not a celebration.
-    const panel = $('qfBox').closest('.panel');
-    if (rec === 'nope' || rec === 'notyet') settle(panel);
-    else celebrate(panel);
-
-    document.getElementById('qf-head')?.focus();
-
-    $('qfReset').addEventListener('click', () => {
-      for (const k of Object.keys(answers)) delete answers[k];
-      rec = null;
-      ask(0);
-    });
-    document.getElementById('toBrief')?.addEventListener('click', () => paint(kindOf()));
-  }
-
-  /* ── brief ── */
   const kindOf = () => (rec && SPECIFIC[OUT[rec].kind] ? OUT[rec].kind : 'unsure');
   let step = 1;
 
@@ -378,6 +388,6 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     document.querySelector('#bBox .fnav')?.before(p);
   }
 
-  ask(0);
+  // The qualifier starts itself; the brief needs its first step painted.
   paint('unsure');
 </script>

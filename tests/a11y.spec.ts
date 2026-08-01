@@ -44,21 +44,29 @@ test('a check announces each question and moves focus to it', async ({ page }) =
   await expect(box).toHaveAttribute('aria-atomic', 'true');
 
   // Answering moves focus onto the new question rather than losing it.
+  // Both quizzes share one engine, which marks the heading with data-quiz-head.
+  const focused = () =>
+    page.evaluate(() => ({
+      head: document.activeElement?.hasAttribute('data-quiz-head'),
+      tag: document.activeElement?.tagName,
+    }));
+
   await page.locator('.opt').first().click();
-  expect(await page.evaluate(() => document.activeElement?.id)).toBe('q-head');
+  expect(await focused()).toEqual({ head: true, tag: 'H2' });
 
   // And onto the verdict at the end.
   await page.locator('.opt').first().click();
   await page.locator('.opt').first().click();
-  expect(await page.evaluate(() => document.activeElement?.id)).toBe('q-head');
-  expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('H2');
+  expect(await focused()).toEqual({ head: true, tag: 'H2' });
 });
 
 test('the qualifier does the same', async ({ page }) => {
   await page.goto('/work-with-me/');
   await expect(page.locator('#qfBox')).toHaveAttribute('aria-live', 'polite');
   await page.locator('.opt').first().click();
-  expect(await page.evaluate(() => document.activeElement?.id)).toBe('qf-head');
+  expect(
+    await page.evaluate(() => document.activeElement?.hasAttribute('data-quiz-head'))
+  ).toBe(true);
 });
 
 // WebKit only honours Tab when macOS Full Keyboard Access is on, so this one

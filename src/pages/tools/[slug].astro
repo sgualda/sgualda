@@ -137,127 +137,73 @@ const url = `${SITE.url}/tools/${t.slug}/`;
 </style>
 
 <script>
+  import { createQuiz, type Question } from '@lib/quiz';
+  import { celebrate, settle } from '@lib/feedback';
+
   type Bucket = { max: number; name: string; sub: string; body: string; next: string[] };
   type Data = { q: [string, [string, number][]][]; b: Bucket[] };
-
-  import { celebrate, settle } from '@lib/feedback';
 
   const $ = (id: string) => document.getElementById(id)!;
   const t: Data = JSON.parse($('tool-data').textContent!);
 
-  /**
-   * Answers live in the hash: #a=0,2,4
-   *
-   * That gives every result a URL you can send to your team — which is the
-   * point of these, and the page says so itself — and it makes the browser
-   * back button walk back through the questions instead of leaving the site.
-   * Nothing is sent anywhere: a hash never reaches a server.
-   */
-  let answers: number[] = [];
+  const questions: Question[] = t.q.map(([text, options], i) => ({
+    key: String(i),
+    text,
+    options: options.map(([label, value]) => ({ label, value })),
+  }));
 
-  const readHash = (): number[] => {
-    const m = location.hash.match(/a=([\d,]*)/);
-    if (!m || !m[1]) return [];
-    return m[1]
-      .split(',')
-      .filter(Boolean)
-      .map(Number)
-      .filter((n, i) => Number.isInteger(n) && n >= 0 && n < (t.q[i]?.[1].length ?? 0))
-      .slice(0, t.q.length);
-  };
+  createQuiz<Bucket>({
+    questions,
+    box: $('box'),
+    dots: $('dots'),
+    syncHash: true,
 
-  const writeHash = (next: number[], push: boolean) => {
-    const url = next.length ? `#a=${next.join(',')}` : location.pathname;
-    if (push) history.pushState({ a: next }, '', url);
-    else history.replaceState({ a: next }, '', url);
-  };
+    resolve(answers) {
+      const score = answers.reduce((sum, a) => sum + Number(a.value), 0);
+      return t.b.find((x) => score <= x.max) ?? t.b[t.b.length - 1];
+    },
 
-  const setDots = (i: number) =>
-    $('dots').querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k <= i));
-
-  function render() {
-    const at = answers.length;
-    at < t.q.length ? ask(at) : result();
-  }
-
-  function ask(at: number) {
-    setDots(at);
-    const [q, opts] = t.q[at];
-    $('box').innerHTML =
+    renderQuestion: (q, i, total) =>
       `<div class="step">` +
-      (at > 0 ? `<button class="back" type="button" id="back">← Back</button>` : '') +
-      `<span class="eyebrow">Question ${at + 1} of ${t.q.length}</span>` +
-      `<h2 class="qq" id="q-head" tabindex="-1">${q}</h2>` +
-      opts.map(([label], i) => `<button class="opt" type="button" data-i="${i}">${label}</button>`).join('') +
-      `</div>`;
+      (i > 0 ? `<button class="back" type="button" data-quiz-back>← Back</button>` : '') +
+      `<span class="eyebrow">Question ${i + 1} of ${total}</span>` +
+      `<h2 class="qq" data-quiz-head tabindex="-1">${q.text}</h2>` +
+      q.options.map((o, n) => `<button class="opt" type="button" data-quiz-opt="${n}">${o.label}</button>`).join('') +
+      `</div>`,
 
-    $('box').querySelectorAll<HTMLButtonElement>('.opt').forEach((b) =>
-      b.addEventListener('click', () => {
-        answers = [...answers, Number(b.dataset.i)];
-        writeHash(answers, true);
-        render();
-      })
-    );
-    document.getElementById('back')?.addEventListener('click', () => history.back());
-    // Move focus to the new question so keyboard and screen reader users are
-    // taken there rather than dumped back at the top of the document.
-    if (at > 0) document.getElementById('q-head')?.focus();
-  }
-
-  function result() {
-    setDots(t.q.length);
-    const score = answers.reduce((sum, choice, i) => sum + (t.q[i][1][choice]?.[1] ?? 0), 0);
-    const r = t.b.find((x) => score <= x.max) ?? t.b[t.b.length - 1];
-
-    $('box').innerHTML =
+    renderVerdict: (r) =>
       `<div class="step">` +
-      `<span class="vlab">Your answer</span><h2 class="vname" id="q-head" tabindex="-1">${r.name}</h2>` +
+      `<span class="vlab">Your answer</span>` +
+      `<h2 class="vname" data-quiz-head tabindex="-1">${r.name}</h2>` +
       `<p class="vnote" style="text-align:center;margin:10px 0 22px">${r.sub}</p>` +
       `<div class="vwhy">${r.body}</div>` +
       `<div class="vcols" style="grid-template-columns:1fr"><div><h4>What I would do next</h4><ul>` +
       r.next.map((n) => `<li>${n}</li>`).join('') +
       `</ul></div></div>` +
-      `<p class="vnote">${t.q.length} questions cannot know your product. Treat this as a strong ` +
-      `opinion from somebody who has made the same call.</p>` +
+      `<p class="vnote">${questions.length} questions cannot know your product. Treat this as a ` +
+      `strong opinion from somebody who has made the same call.</p>` +
       `<div class="vacts">` +
       `<a class="btn btn--dark" href="/work-with-me/">See if I can help</a>` +
       `<button class="btn btn--ghost" type="button" id="share">Copy link to this answer</button>` +
-      `</div>` +
-      `<button class="again" type="button" id="again">Run it again</button></div>`;
+      `</div><button class="again" type="button" data-quiz-restart>Run it again</button></div>`,
 
-    // The first bucket is the good news, the last is the expensive one.
-    // Anything between gets no reaction: a shrug is not an event.
-    const panel = document.querySelector('.panel');
-    if (r === t.b[0]) celebrate(panel);
-    else if (r === t.b[t.b.length - 1]) settle(panel);
+    onRender({ verdict }) {
+      if (!verdict) return;
 
-    $('q-head')?.focus();
+      const panel = document.querySelector('.panel');
+      if (verdict === t.b[0]) celebrate(panel);
+      else if (verdict === t.b[t.b.length - 1]) settle(panel);
 
-    $('again').addEventListener('click', () => {
-      answers = [];
-      writeHash(answers, true);
-      render();
-    });
-
-    $('share').addEventListener('click', async () => {
-      const btn = $('share');
-      try {
-        await navigator.clipboard.writeText(location.href);
-        btn.textContent = 'Copied';
-      } catch {
-        btn.textContent = location.href;
-      }
-      setTimeout(() => (btn.textContent = 'Copy link to this answer'), 2200);
-    });
-  }
-
-  // Back and forward both just re-read the hash.
-  addEventListener('popstate', () => {
-    answers = readHash();
-    render();
+      document.getElementById('share')?.addEventListener('click', async () => {
+        const btn = $('share');
+        try {
+          await navigator.clipboard.writeText(location.href);
+          btn.textContent = 'Copied';
+        } catch {
+          btn.textContent = location.href;
+        }
+        setTimeout(() => (btn.textContent = 'Copy link to this answer'), 2200);
+      });
+    },
   });
-
-  answers = readHash();
-  writeHash(answers, false);
-  render();
 </script>
