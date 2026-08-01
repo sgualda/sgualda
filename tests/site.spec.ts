@@ -32,6 +32,13 @@ test.describe('every page', () => {
       expect(desc?.length ?? 0, 'meta description length').toBeGreaterThan(60);
       await expect(page.locator('link[rel=canonical]')).toHaveCount(1);
 
+      // The declared social card must actually exist. It did not for weeks:
+      // every page announced /og-default.png and the file was never created.
+      const og = await page.locator('meta[property="og:image"]').getAttribute('content');
+      expect(og, 'og:image declared').toBeTruthy();
+      const ogRes = await page.request.get(new URL(og!).pathname);
+      expect(ogRes.status(), `og:image ${og}`).toBe(200);
+
       // Chrome and footer are present. This is the check that would have
       // caught the newsletter band disappearing from /map/.
       await expect(page.locator('header.site-header')).toBeVisible();
