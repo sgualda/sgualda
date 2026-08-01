@@ -178,6 +178,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
   if (burger && sheet) {
     const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
     let lastFocused: HTMLElement | null = null;
+    let hideTimer = 0;
 
     const setOpen = (open: boolean) => {
       burger.setAttribute('aria-expanded', String(open));
@@ -192,6 +193,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 
       if (open) {
         lastFocused = document.activeElement as HTMLElement;
+        clearTimeout(hideTimer);
         sheet.hidden = false;
         requestAnimationFrame(() => {
           sheet.classList.add('open');
@@ -199,13 +201,15 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
         });
       } else {
         sheet.classList.remove('open');
-        // transitionend never fires when the transition is disabled — which is
-        // exactly what prefers-reduced-motion does — so the sheet stayed open
-        // forever for those users. Read the real duration instead.
-        const ms = parseFloat(getComputedStyle(sheet).transitionDuration) * 1000;
-        const hide = () => { if (!sheet.classList.contains('open')) sheet.hidden = true; };
-        if (ms > 20) sheet.addEventListener('transitionend', hide, { once: true });
-        else hide();
+        // Deliberately a timer, not transitionend. That event does not fire at
+        // all under prefers-reduced-motion, and it fires unreliably when the
+        // menu is closed before the opening transition has finished — which
+        // left the sheet stuck open about one time in five.
+        const ms = parseFloat(getComputedStyle(sheet).transitionDuration) * 1000 || 0;
+        clearTimeout(hideTimer);
+        hideTimer = window.setTimeout(() => {
+          if (!sheet.classList.contains('open')) sheet.hidden = true;
+        }, ms);
         lastFocused?.focus();
       }
     };
