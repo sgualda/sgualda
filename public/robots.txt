@@ -1,0 +1,20 @@
+# sgualda.com
+
+User-agent: *
+Allow: /
+
+# This site is written to be read and cited by language models.
+# Allowing them is a deliberate decision, not an oversight.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://sgualda.com/sitemap-index.xml

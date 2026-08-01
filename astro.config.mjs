@@ -20,7 +20,9 @@ export default defineConfig({
   // see the full content. Interactive parts are islands, loaded per page.
   output: 'static',
 
-  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+  // Hover, not viewport: prefetchAll pulled a dozen pages the moment anyone
+  // scrolled to the footer. Opt high-intent links in with data-astro-prefetch.
+  prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
 
   integrations: [
     sitemap({

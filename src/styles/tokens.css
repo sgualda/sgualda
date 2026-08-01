@@ -17,7 +17,10 @@
        borde      #DFDFDF
        ACCENT     #1022FF                                   */
   --ink: #1e1c1c;        /* Body Text — headings and body copy */
-  --dim: #837d7d;        /* Grey — sub-headings, captions, meta */
+  /* Figma's Grey is #837D7D, which is 3.9:1 on white — below the 4.5:1 that
+     WCAG AA requires, and it carries most of the body text on the site.
+     Darkened to meet AA. Needs reflecting back into Figma. */
+  --dim: #6b6b6b;
   --surface: #f7f7f7;    /* Fondo — cards, image placeholders, bands */
   --hair: #dfdfdf;       /* borde — every 1px rule and card border */
   /* Figma has ACCENT #1022FF, but Sergio does not want blue anywhere on the
@@ -35,9 +38,8 @@
   /* Page background reads as white in the comps; Fondo is the card fill. */
   --paper: #ffffff;
 
-  /* The newsletter band is a near-black rounded card. Not yet a Figma
-     variable — TODO(sergio): confirm the exact value. */
-  --inverse: #1a1a1a;
+  /* One black in the system, derived rather than a second near-identical hex. */
+  --inverse: var(--ink);
   --on-inverse: #ffffff;
 
   /* ── type ───────────────────────────────────────────────

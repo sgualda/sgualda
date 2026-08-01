@@ -19,7 +19,14 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+/* Double ring so focus stays visible on light and dark backgrounds alike.
+   A single ink-coloured outline vanished on the dark bands. */
+:focus-visible {
+  outline: 2px solid var(--paper);
+  box-shadow: 0 0 0 4px var(--ink);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
 
 /* Headings: Zalando Sans Expanded across h1–h6, sizes per level.
    No `text-wrap: balance` — it evens out line lengths, which is what was
@@ -202,12 +209,13 @@ input, textarea, select { text-align: left; font-family: inherit; }
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   animation: turn 5.5s linear infinite;
+  animation-play-state: paused;
 }
 @keyframes turn { to { --ang: 360deg; } }
 .card-link:hover,
 .card-link:focus-within { background: var(--paper); transform: translateY(-2px); }
 .card-link:hover::before,
-.card-link:focus-within::before { opacity: 1; }
+.card-link:focus-within::before { opacity: 1; animation-play-state: running; }
 
 @media (prefers-reduced-motion: reduce) {
   .card-link::before { animation: none; }

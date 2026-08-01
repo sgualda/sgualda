@@ -1,0 +1,65 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+---
+
+<Base
+  title="Page not found"
+  description="This page does not exist."
+  noindex={true}
+>
+  <Header slot="nav" />
+
+  <section class="col wrap">
+    <span class="eyebrow">404</span>
+    <h1>This page<br />does not exist.</h1>
+    <p class="sub">
+      Which is a little embarrassing on a site about not shipping things that are broken.
+      Either I moved it, or the link was wrong. Here is where everything else lives.
+    </p>
+
+    <ul class="ways">
+      <li>
+        <a href="/tools/">
+          <span class="h">The free checks</span>
+          <span class="p">Six questions-and-answers on your own product. Under a minute each.</span>
+        </a>
+      </li>
+      <li>
+        <a href="/writing/">
+          <span class="h">The journal</span>
+          <span class="p">What I got wrong, and what it cost.</span>
+        </a>
+      </li>
+      <li>
+        <a href="/work-with-me/">
+          <span class="h">Work with me</span>
+          <span class="p">Four questions and a straight answer on whether I can help.</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .wrap { padding-top: clamp(64px, 12vh, 110px); }
+  .eyebrow { margin-bottom: 16px; }
+  h1 { margin-bottom: 18px; }
+
+  .ways { list-style: none; text-align: left; margin-top: 48px; }
+  .ways li + li { border-top: 1px solid var(--hair); }
+  .ways a { display: block; padding: 22px 0; transition: opacity 0.2s var(--ease); }
+  .ways a:hover { opacity: 0.55; }
+  .ways .h {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+  .ways .p { font-size: 0.9375rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
+</style>
