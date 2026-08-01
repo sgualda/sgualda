@@ -13,7 +13,7 @@
 
 ---
 
-> **Progreso — 68 de 107 tickets resueltos (64%), 2 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
+> **Progreso — 69 de 107 tickets resueltos (64%), 3 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
 
 ## Resumen Ejecutivo
 
@@ -1943,7 +1943,9 @@ Ninguna
 
 ---
 
-## #Q-052 — El shell de 560px desaprovecha las pantallas grandes
+## #Q-052 ⛔ Descartado — El shell de 560px desaprovecha las pantallas grandes
+
+> ⛔ **Descartado por decisión de Sergio (2026-08-01).** Se le presentaron las tres opciones con el cálculo del ancho por dispositivo. Elige mantener los 560px fijos. El razonamiento se sostiene: en su portátil son el 37% que pidió, para leer texto 560px es la anchura correcta, y quien lee estos artículos lo hace mayoritariamente en portátil, no en un monitor de 27". Las dos franjas vacías en pantallas grandes son el precio consciente de eso. **No reabrir sin que lo pida él.**
 
 ### Categoría
 Responsive / Visual
