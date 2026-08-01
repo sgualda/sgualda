@@ -7,7 +7,7 @@
  *
  *   npm run build && npm run audit:urls
  */
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -15,6 +15,29 @@ const dist = join(root, 'dist');
 
 if (!existsSync(dist)) {
   console.error('✗ No dist/. Run `npm run build` first.');
+  process.exit(1);
+}
+
+/**
+ * iCloud conflict copies.
+ *
+ * This project lives under ~/Documents, which macOS syncs. When two devices
+ * touch the same file, iCloud keeps both and names the loser "file 2.ext".
+ * 55 of them had accumulated in dist/ — duplicate fonts, duplicate PHP
+ * endpoints, duplicate pages — and dist/ is gitignored, so nothing caught it.
+ * They would have been uploaded to Hostinger verbatim, including a second copy
+ * of the brief endpoint with an older config path.
+ */
+const conflicts = [];
+for (const dir of ['dist', 'public', 'src', 'scripts'])
+  for (const f of readdirSync(join(root, dir), { recursive: true }))
+    if (typeof f === 'string' && / \d+\.\w+$/.test(f)) conflicts.push(`${dir}/${f}`);
+
+if (conflicts.length) {
+  console.error(`\n✗ ${conflicts.length} iCloud conflict copies would ship:`);
+  for (const c of conflicts.slice(0, 8)) console.error(`    ${c}`);
+  if (conflicts.length > 8) console.error(`    …and ${conflicts.length - 8} more`);
+  console.error('  Remove them: find dist public src -name "* [0-9].*" -delete\n');
   process.exit(1);
 }
 
@@ -43,11 +66,10 @@ if (urls.length === 0) {
 
 // An image with no alt text is invisible to a screen reader and wasted in
 // image search. Cheap to catch here, tedious to find later.
-import { readdirSync } from 'node:fs';
 const essayDir = join(root, 'src/content/essays');
 const noAlt = readdirSync(essayDir)
   .filter((f) => f.endsWith('.md'))
-  .filter((f) => readFileSync(join(essayDir, f), 'utf8').includes(']('.replace(']', '![]')) || readFileSync(join(essayDir, f), 'utf8').includes('![](')); 
+  .filter((f) => readFileSync(join(essayDir, f), 'utf8').includes('![]('));
 if (noAlt.length) {
   console.error(`\n✗ Images with no alt text in: ${noAlt.join(', ')}`);
   process.exit(1);

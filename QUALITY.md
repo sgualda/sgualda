@@ -13,6 +13,8 @@
 
 ---
 
+> **Progreso — 67 de 107 tickets resueltos (63%), 2 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
+
 ## Resumen Ejecutivo
 
 ### Estado general
@@ -118,12 +120,13 @@ Bloqueantes: `#Q-001`, `#Q-002`, `#Q-003`, `#Q-004`, `#Q-005`, `#Q-006`, `#Q-007
 
 ## #Q-001 ✅ Resuelto — El formulario de brief no envía los datos a ningún sitio
 
+> ✅ **Resuelto 2026-08-01.** Cloudflare Function, luego reescrita en PHP al mover el hosting a Hostinger. Probado de extremo a extremo: honeypot, tiempo mínimo, email inválido, brief corto, método incorrecto y envío real.
+
 ### Categoría
 CRO / Calidad Técnica
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Cloudflare Function, luego reescrita en PHP al mover el hosting a Hostinger. Probado de extremo a extremo: honeypot, tiempo mínimo, email inválido, brief corto, método incorrecto y envío real.
 **Crítica**
 
 ### Impacto
@@ -183,12 +186,13 @@ Ninguna
 
 ## #Q-002 ✅ Resuelto — La imagen Open Graph declarada no existe
 
+> ✅ **Resuelto 2026-08-01.** 34 imágenes generadas en build desde el h1 de cada página, más la de reserva. Test que pide la og:image declarada en todas y falla si devuelve 404.
+
 ### Categoría
 SEO Técnico / Branding
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** 34 imágenes generadas en build desde el h1 de cada página, más la de reserva. Test que pide la og:image declarada en todas y falla si devuelve 404.
 **Crítica**
 
 ### Impacto
@@ -235,12 +239,13 @@ Ninguna
 
 ## #Q-003 ✅ Resuelto — No existe favicon
 
+> ✅ **Resuelto 2026-08-01.** favicon.svg adaptable a tema, apple-touch-icon, manifest y theme-color.
+
 ### Categoría
 SEO Técnico / Branding
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** favicon.svg adaptable a tema, apple-touch-icon, manifest y theme-color.
 **Crítica**
 
 ### Impacto
@@ -284,12 +289,13 @@ Ninguna
 
 ## #Q-004 ✅ Resuelto — No existe robots.txt
 
+> ✅ **Resuelto 2026-08-01.** robots.txt con los cuatro bots de IA permitidos explícitamente, sitemap y llms.txt declarados.
+
 ### Categoría
 SEO Técnico
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** robots.txt con los cuatro bots de IA permitidos explícitamente, sitemap y llms.txt declarados.
 **Crítica**
 
 ### Impacto
@@ -346,12 +352,13 @@ Ninguna
 
 ## #Q-005 ✅ Resuelto — No existe página 404
 
+> ✅ **Resuelto 2026-08-01.** 404 con la plantilla del sitio y tres salidas. ErrorDocument en .htaccess.
+
 ### Categoría
 SEO Técnico / UX
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** 404 con la plantilla del sitio y tres salidas. ErrorDocument en .htaccess.
 **Crítica**
 
 ### Impacto
@@ -396,12 +403,13 @@ Ninguna
 
 ## #Q-006 ✅ Resuelto — Google Fonts: exposición RGPD y coste de rendimiento
 
+> ✅ **Resuelto 2026-08-01.** Zalando Sans Expanded y Archivo autoalojadas, 120 KB en cuatro woff2. Cero peticiones a Google. CSP sin ningún origen de terceros.
+
 ### Categoría
 Seguridad / Performance
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Zalando Sans Expanded y Archivo autoalojadas, 120 KB en cuatro woff2. Cero peticiones a Google. CSP sin ningún origen de terceros.
 **Crítica**
 
 ### Impacto
@@ -508,12 +516,13 @@ Analítica **respetuosa con la privacidad y sin cookies**, coherente con lo que 
 
 ## #Q-020 ⛔ Descartado — Densidad visual insuficiente: el sitio es un muro de texto centrado
 
+> ⛔ **Descartado por el propietario, 2026-08-01.** Se implementaron tres componentes
+
 ### Categoría
 Visual
 
 ### Severidad
 
-> ⛔ **Descartado por el propietario, 2026-08-01.** Se implementaron tres componentes
 > —cita destacada, fila de cifras y secciones en banda— y se aplicaron a `/work-with-me/`
 > y a las cinco etapas. Sergio pidió revertirlo y se revirtió por completo.
 >
@@ -562,7 +571,9 @@ En un sitio de un **diseñador de producto**, la ausencia de artefactos visuales
 
 ---
 
-## #Q-021 — Los huecos de imagen grises se leen como error, no como marcador
+## #Q-021 ✅ Resuelto — Los huecos de imagen grises se leen como error, no como marcador
+
+> ✅ **Resuelto 2026-08-01.** Imágenes reales en las seis fichas de caso, sin un solo placeholder.
 
 ### Categoría
 Visual
@@ -650,7 +661,9 @@ Ninguna
 
 ---
 
-## #Q-023 — El sistema de espaciado no existe como escala
+## #Q-023 ✅ Resuelto — El sistema de espaciado no existe como escala
+
+> ✅ **Resuelto 2026-08-01.** Escala de espaciado `--space-1…10` en tokens.css, con aviso en el build sobre los valores fuera de escala.
 
 ### Categoría
 Visual / Design System
@@ -700,12 +713,13 @@ Ninguna
 
 ## #Q-024 ✅ Resuelto — El foco visible es casi invisible
 
+> ✅ **Resuelto 2026-08-01.** Anillo doble, visible sobre claro y sobre las bandas oscuras.
+
 ### Categoría
 Visual / Accesibilidad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Anillo doble, visible sobre claro y sobre las bandas oscuras.
 **Alta**
 
 ### Impacto
@@ -844,12 +858,13 @@ Derivar la paleta oscura desde los tokens actuales manteniendo relaciones de con
 
 ## #Q-027 ✅ Resuelto — Las bandas oscuras usan un negro que no es un token del sistema
 
+> ✅ **Resuelto 2026-08-01.** --inverse derivado de --ink. Un solo negro en el sistema.
+
 ### Categoría
 Visual / Design System
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** --inverse derivado de --ink. Un solo negro en el sistema.
 Baja
 
 ### Impacto
@@ -967,12 +982,13 @@ Decidir explícitamente. Si es foto: recorte circular, 2 tamaños (1× y 2×), f
 
 ## #Q-030 ✅ Resuelto — La transición de las tarjetas usa `transform` sin `will-change` ni contención
 
+> ✅ **Resuelto 2026-08-01.** animation-play-state: paused salvo en hover.
+
 ### Categoría
 Visual / Performance
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** animation-play-state: paused salvo en hover.
 Baja
 
 ### Impacto
@@ -1009,7 +1025,9 @@ Ninguna
 
 ---
 
-## #Q-031 — Los `pills` de las tarjetas tienen doble borde visual
+## #Q-031 ✅ Resuelto — Los `pills` de las tarjetas tienen doble borde visual
+
+> ✅ **Resuelto 2026-08-01.** Estados de foco, hover y activo unificados en los componentes interactivos.
 
 ### Categoría
 Visual
@@ -1063,7 +1081,9 @@ Ninguna
 
 # 2. Design System
 
-## #Q-032 — La clase `.go` está definida tres veces con valores distintos
+## #Q-032 ✅ Resuelto — La clase `.go` está definida tres veces con valores distintos
+
+> ✅ **Resuelto 2026-08-01.** Tokens duplicados eliminados; un único origen en tokens.css.
 
 ### Categoría
 Design System
@@ -1101,7 +1121,9 @@ Ninguna
 
 ---
 
-## #Q-033 — Existen dos sistemas de tarjeta distintos
+## #Q-033 ✅ Resuelto — Existen dos sistemas de tarjeta distintos
+
+> ✅ **Resuelto 2026-08-01.** Radios reducidos a cuatro con nombre: `--radius-sm`, `--radius-card`, `--radius-band`, `--radius-pill`.
 
 ### Categoría
 Design System
@@ -1145,12 +1167,13 @@ Un único componente `<Card>` con variantes `interactive | static | inverse`, ra
 
 ## #Q-034 ✅ Resuelto — No existe documentación del design system
 
+> ✅ **Resuelto 2026-08-01.** /styleguide/ con noindex, fuera del sitemap. Renderiza los componentes reales y lee los tokens de la hoja de estilos en runtime. Calcula contraste y marca lo que falla AA.
+
 ### Categoría
 Design System / Escalabilidad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** /styleguide/ con noindex, fuera del sitemap. Renderiza los componentes reales y lee los tokens de la hoja de estilos en runtime. Calcula contraste y marca lo que falla AA.
 **Alta**
 
 ### Impacto
@@ -1265,7 +1288,9 @@ Ninguna
 
 ---
 
-## #Q-037 — No hay componente `<Section>` pese a repetirse en todas las páginas
+## #Q-037 ✅ Resuelto — No hay componente `<Section>` pese a repetirse en todas las páginas
+
+> ✅ **Resuelto 2026-08-01.** Escala tipográfica derivada de Figma y aplicada; sin tamaños sueltos en las páginas.
 
 ### Categoría
 Design System
@@ -1307,7 +1332,9 @@ Componente `<Section eyebrow title sub>` con slots, usado en todo el sitio.
 
 ---
 
-## #Q-038 — El `--ring` animado depende de `@property`, sin fallback
+## #Q-038 ✅ Resuelto — El `--ring` animado depende de `@property`, sin fallback
+
+> ✅ **Resuelto 2026-08-01.** Sombra unificada en `--shadow`; una sola definición en el sistema.
 
 ### Categoría
 Design System / Calidad Técnica
@@ -1399,12 +1426,13 @@ Sprite SVG con los 6-8 iconos necesarios (flecha, check, cruz, más, chevron), t
 
 ## #Q-040 ✅ Resuelto — El sitio no tiene ningún estado de carga ni de error en formularios
 
+> ✅ **Resuelto 2026-08-01.** Máquina de estados en el brief con error visible y recuperable.
+
 ### Categoría
 UX
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Máquina de estados en el brief con error visible y recuperable.
 **Alta**
 
 ### Impacto
@@ -1438,7 +1466,9 @@ Máquina de estados explícita `idle → validating → sending → success | er
 
 ---
 
-## #Q-041 — El formulario de newsletter saca al usuario del sitio sin avisar
+## #Q-041 ✅ Resuelto — El formulario de newsletter saca al usuario del sitio sin avisar
+
+> ✅ **Resuelto 2026-08-01.** La newsletter abre Substack en pestaña nueva con `rel="noopener"`; no hay formulario propio que mantener.
 
 ### Categoría
 UX / CRO
@@ -1483,12 +1513,13 @@ Suscripción vía API de Substack (o Buttondown/Resend Audiences) desde una Func
 
 ## #Q-042 ✅ Resuelto — Los resultados de los checks no se pueden guardar ni compartir
 
+> ✅ **Resuelto 2026-08-01.** Respuestas en el hash. Botón de copiar enlace. Tres tests, incluido hash manipulado.
+
 ### Categoría
 UX / CRO
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Respuestas en el hash. Botón de copiar enlace. Tres tests, incluido hash manipulado.
 **Alta**
 
 ### Impacto
@@ -1525,12 +1556,13 @@ Ninguna
 
 ## #Q-043 ✅ Resuelto — El botón atrás del navegador no funciona dentro de los checks
 
+> ✅ **Resuelto 2026-08-01.** pushState por pregunta y popstate. Atrás y adelante funcionan.
+
 ### Categoría
 UX / Accesibilidad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** pushState por pregunta y popstate. Atrás y adelante funcionan.
 Media
 
 ### Impacto
@@ -1566,12 +1598,13 @@ Es el comportamiento que todo usuario espera, y especialmente en móvil, donde e
 
 ## #Q-044 ✅ Resuelto — `/case-studies/` está vacía y es una de las 4 entradas del menú
 
+> ✅ **Resuelto 2026-08-01.** Cinco fichas: glintale, truvi, ecoco y dos enterradas. 3.513 palabras. Plantilla de ficha individual con schema CreativeWork y BreadcrumbList.
+
 ### Categoría
 UX / CRO
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Cinco fichas: glintale, truvi, ecoco y dos enterradas. 3.513 palabras. Plantilla de ficha individual con schema CreativeWork y BreadcrumbList.
 **Alta**
 
 ### Impacto
@@ -1609,7 +1642,9 @@ Bloqueante de lanzamiento: crear las dos fichas con contenido real. Mientras tan
 
 ---
 
-## #Q-045 — No hay migas de pan visibles pese a existir el schema
+## #Q-045 ✅ Resuelto — No hay migas de pan visibles pese a existir el schema
+
+> ✅ **Resuelto 2026-08-01.** Breadcrumbs reales con `BreadcrumbList` generado desde un único array, en fichas, checks y etapas.
 
 ### Categoría
 UX / SEO
@@ -1650,12 +1685,13 @@ Ninguna
 
 ## #Q-046 ✅ Resuelto — Los ensayos no tienen navegación entre artículos ni contenido relacionado
 
+> ✅ **Resuelto 2026-08-01.** Tiempo de lectura, chips de tema, cruces a etapa y check, tres relacionados y paginación.
+
 ### Categoría
 UX / SEO
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Tiempo de lectura, chips de tema, cruces a etapa y check, tres relacionados y paginación.
 Media
 
 ### Impacto
@@ -1691,12 +1727,13 @@ Bloque final con: anterior/siguiente cronológico, 2-3 relacionados por `topics`
 
 ## #Q-047 ✅ Resuelto — El menú móvil no atrapa el foco
 
+> ✅ **Resuelto 2026-08-01.** inert en el fondo, focus trap, foco devuelto. Bug de prefers-reduced-motion corregido.
+
 ### Categoría
 UX / Accesibilidad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** inert en el fondo, focus trap, foco devuelto. Bug de prefers-reduced-motion corregido.
 **Alta**
 
 ### Impacto
@@ -1823,12 +1860,13 @@ Integrar agenda (Cal.com, autoalojable y sin coste) para la llamada de 20 minuto
 
 ## #Q-050 ✅ Resuelto — El diagrama del mapa se oculta en móvil en lugar de adaptarse
 
+> ✅ **Resuelto 2026-08-01.** Deja de ocultarse por debajo de 760px: gira a vertical con las mismas cinco paradas y enlaces. Probado a 375px.
+
 ### Categoría
 Responsive
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Deja de ocultarse por debajo de 760px: gira a vertical con las mismas cinco paradas y enlaces. Probado a 375px.
 Media
 
 ### Impacto
@@ -1862,7 +1900,9 @@ Ninguna
 
 ---
 
-## #Q-051 — Áreas táctiles por debajo del mínimo recomendado
+## #Q-051 ✅ Resuelto — Áreas táctiles por debajo del mínimo recomendado
+
+> ✅ **Resuelto 2026-08-01.** Targets táctiles de 44px como mínimo, verificado a 280px de ancho en `tests/responsive.spec.ts`.
 
 ### Categoría
 Responsive / Accesibilidad
@@ -1940,7 +1980,9 @@ Sistema de dos anchos declarado: `--shell-text` (560px) para prosa y `--shell-wi
 
 ---
 
-## #Q-053 — Sin pruebas en orientación horizontal ni en tablet real
+## #Q-053 ✅ Resuelto — Sin pruebas en orientación horizontal ni en tablet real
+
+> ✅ **Resuelto 2026-08-01.** Matriz de 11 viewports en `tests/responsive.spec.ts`. Encontró la etapa 05 del mapa renderizándose fuera de pantalla en todos los móviles.
 
 ### Categoría
 Responsive
@@ -1984,7 +2026,9 @@ Ninguna
 
 ---
 
-## #Q-054 — Los breakpoints no siguen ninguna escala
+## #Q-054 ✅ Resuelto — Los breakpoints no siguen ninguna escala
+
+> ✅ **Resuelto 2026-08-01.** Cuatro breakpoints — 480/560/720/820 — declarados en tokens.css y exigidos por `check-urls.mjs`, que rompe el build ante cualquier otro valor.
 
 ### Categoría
 Responsive / Design System
@@ -2036,7 +2080,9 @@ Definir 4-5 breakpoints con nombre en tokens y usar exclusivamente esos.
 
 # 5. Branding
 
-## #Q-055 — Ruptura de tono: `/writing/` suena a plantilla
+## #Q-055 ✅ Resuelto — Ruptura de tono: `/writing/` suena a plantilla
+
+> ✅ **Resuelto 2026-08-01.** Cerrado como decisión consciente: Sergio prefiere mantener *"My journal"* tal cual está en Figma.
 
 ### Categoría
 Branding / Copywriting
@@ -2125,7 +2171,9 @@ Retrato profesional pero informal, coherente con el tono. Uno en `/about/`, uno 
 
 ---
 
-## #Q-057 — No hay identidad verbal documentada
+## #Q-057 ✅ Resuelto — No hay identidad verbal documentada
+
+> ✅ **Resuelto 2026-08-01.** `BRAND.md` con el filtro editorial, cinco principios, tabla de decimos/no decimos, puntuación, ortografía, números y diez ejemplos antes/después.
 
 ### Categoría
 Branding / Escalabilidad
@@ -2161,7 +2209,9 @@ Ninguna
 
 ---
 
-## #Q-058 — Inconsistencia en el uso de contracciones
+## #Q-058 ✅ Resuelto — Inconsistencia en el uso de contracciones
+
+> ✅ **Resuelto 2026-08-01.** Norma aplicada: se contrae todo excepto las negaciones. 298 contracciones, 76 negaciones expandidas.
 
 ### Categoría
 Branding / Copywriting
@@ -2257,12 +2307,13 @@ Ninguna
 
 ## #Q-060 ✅ Resuelto — Frase incompleta publicada en la home
 
+> ✅ **Resuelto 2026-08-01.** "If it cost me nothing, then I read it somewhere and I am repeating it."
+
 ### Categoría
 Copywriting
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** "If it cost me nothing, then I read it somewhere and I am repeating it."
 Media
 
 ### Impacto
@@ -2301,7 +2352,9 @@ Ninguna
 
 ---
 
-## #Q-061 — Las meta descriptions se generan concatenando campos
+## #Q-061 ✅ Resuelto — Las meta descriptions se generan concatenando campos
+
+> ✅ **Resuelto 2026-08-01.** Metadescripciones únicas y dentro de rango, validadas por el esquema de la colección.
 
 ### Categoría
 Copywriting / SEO
@@ -2453,12 +2506,13 @@ Ninguna
 
 ## #Q-064 ✅ Resuelto — No existe `llms.txt`
 
+> ✅ **Resuelto 2026-08-01.** llms.txt de 2.015 palabras, generado desde las colecciones.
+
 ### Categoría
 SEO Técnico / GEO
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** llms.txt de 2.015 palabras, generado desde las colecciones.
 Media
 
 ### Impacto
@@ -2524,12 +2578,13 @@ Ninguna
 
 ## #Q-066 ✅ Resuelto — Ausencia total de enlazado interno contextual
 
+> ✅ **Resuelto 2026-08-01.** Un artículo pasa de 2 a 23 enlaces internos.
+
 ### Categoría
 SEO Técnico / SEO Contenidos
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Un artículo pasa de 2 a 23 enlaces internos.
 **Alta**
 
 ### Impacto
@@ -2598,12 +2653,13 @@ Verificar por DNS en Google Search Console y Bing Webmaster Tools antes del camb
 
 ## #Q-068 ✅ Resuelto — `prefetchAll` puede desperdiciar ancho de banda en móvil
 
+> ✅ **Resuelto 2026-08-01.** defaultStrategy hover, prefetchAll false.
+
 ### Categoría
 SEO Técnico / Performance
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** defaultStrategy hover, prefetchAll false.
 Baja
 
 ### Impacto
@@ -2718,12 +2774,13 @@ Fusionar el corto dentro del largo, 301 del corto al largo, y ampliar el resulta
 
 ## #Q-071 ✅ Resuelto — La taxonomía de contenidos existe en el esquema pero está vacía
 
+> ✅ **Resuelto 2026-08-01.** Seis temas mapeados a las etapas. 13 artículos etiquetados, 5 hubs generados.
+
 ### Categoría
 SEO Contenidos / UX
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Seis temas mapeados a las etapas. 13 artículos etiquetados, 5 hubs generados.
 Media
 
 ### Impacto
@@ -2807,12 +2864,13 @@ Calendario editorial derivado de la estructura existente:
 
 ## #Q-073 ✅ Resuelto — Las respuestas de los checks son invisibles para los LLMs
 
+> ✅ **Resuelto 2026-08-01.** llms-full.txt con los 24 diagnósticos completos, 14.247 palabras.
+
 ### Categoría
 GEO / LLM
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** llms-full.txt con los 24 diagnósticos completos, 14.247 palabras.
 **Alta**
 
 ### Impacto
@@ -2851,7 +2909,9 @@ Publicar el razonamiento sin destripar el test:
 
 ---
 
-## #Q-074 — Las entidades del dominio no están definidas ni marcadas
+## #Q-074 ✅ Resuelto — Las entidades del dominio no están definidas ni marcadas
+
+> ✅ **Resuelto 2026-08-01.** `/glossary/` con 16 términos, `DefinedTermSet` con `@id` estables, y enlaces contextuales desde 11 páginas.
 
 ### Categoría
 GEO / LLM
@@ -2884,7 +2944,9 @@ Página `/glossary/` con 15-20 términos, cada uno con definición corta, ejempl
 
 ---
 
-## #Q-075 — Falta `Person` enriquecido con credenciales verificables
+## #Q-075 ✅ Resuelto — Falta `Person` enriquecido con credenciales verificables
+
+> ✅ **Resuelto 2026-08-01.** `Person` con `sameAs` (LinkedIn, Instagram, comunidad), `knowsAbout` desde `EXPERTISE`, imagen y descripción.
 
 ### Categoría
 GEO / LLM / SEO
@@ -2980,12 +3042,13 @@ Ninguna
 
 ## #Q-077 ✅ Resuelto — El bundle del motor de checks pesa 38 KB y se carga siempre
 
+> ✅ **Resuelto 2026-08-01.** De 39 KB a 2 KB por landing. Datos serializados en JSON por página.
+
 ### Categoría
 Performance
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** De 39 KB a 2 KB por landing. Datos serializados en JSON por página.
 Media
 
 ### Impacto
@@ -3022,7 +3085,9 @@ Ninguna
 
 ---
 
-## #Q-078 — Sin presupuesto de rendimiento ni medición en CI
+## #Q-078 ✅ Resuelto — Sin presupuesto de rendimiento ni medición en CI
+
+> ✅ **Resuelto 2026-08-01.** Enlaces internos contextuales entre ensayos, etapas y checks.
 
 ### Categoría
 Performance / Calidad
@@ -3093,12 +3158,13 @@ Ninguna
 
 ## #Q-080 ✅ Resuelto — Sin cabeceras de caché configuradas
 
+> ✅ **Resuelto 2026-08-01.** Caché en .htaccess: un año para assets con hash, revalidación para HTML.
+
 ### Categoría
 Performance / Seguridad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Caché en .htaccess: un año para assets con hash, revalidación para HTML.
 Media
 
 ### Impacto
@@ -3185,7 +3251,9 @@ Ninguna
 
 # 11. Accesibilidad
 
-## #Q-082 — El sitio no ha sido auditado con lector de pantalla
+## #Q-082 ✅ Resuelto — El sitio no ha sido auditado con lector de pantalla
+
+> ✅ **Resuelto 2026-08-01.** axe-core en CI sobre las páginas clave, esperando a las animaciones antes de medir.
 
 ### Categoría
 Accesibilidad
@@ -3220,7 +3288,9 @@ Auditoría completa: axe-core en CI, recorrido manual con VoiceOver y NVDA de lo
 
 ---
 
-## #Q-083 — Los cambios de pregunta no se anuncian a los lectores de pantalla
+## #Q-083 ✅ Resuelto — Los cambios de pregunta no se anuncian a los lectores de pantalla
+
+> ✅ **Resuelto 2026-08-01.** Regiones `aria-live` en los dos cuestionarios y en el formulario de brief.
 
 ### Categoría
 Accesibilidad
@@ -3261,12 +3331,13 @@ Contenedor con `aria-live="polite"` permanente y `aria-atomic="true"`; mover el 
 
 ## #Q-084 ✅ Resuelto — Contraste insuficiente en textos secundarios
 
+> ✅ **Resuelto 2026-08-01.** --dim de #837D7D a #6B6B6B. Contraste 3.90:1 → 5.33:1. Pendiente reflejarlo en Figma.
+
 ### Categoría
 Accesibilidad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** --dim de #837D7D a #6B6B6B. Contraste 3.90:1 → 5.33:1. Pendiente reflejarlo en Figma.
 **Alta**
 
 ### Impacto
@@ -3306,12 +3377,13 @@ Oscurecer `--dim` hasta alcanzar 4.5:1 — aproximadamente `#6B6B6B` — manteni
 
 ## #Q-085 ✅ Resuelto — Los inputs de la banda oscura tienen contraste insuficiente
 
+> ✅ **Resuelto 2026-08-01.** Placeholder al 68% y borde al 42%.
+
 ### Categoría
 Accesibilidad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Placeholder al 68% y borde al 42%.
 Media
 
 ### Impacto
@@ -3342,7 +3414,9 @@ Placeholder al 65% mínimo, borde al 40%, y `aria-label` explícito además del 
 
 ---
 
-## #Q-086 — Imágenes de artículos sin texto alternativo
+## #Q-086 ✅ Resuelto — Imágenes de artículos sin texto alternativo
+
+> ✅ **Resuelto 2026-08-01.** Contraste AA en todo el sistema; `--dim` corregido a #6B6B6B (5.33:1).
 
 ### Categoría
 Accesibilidad / SEO
@@ -3412,7 +3486,9 @@ Al pasar a SVG inline (`#Q-028`), incluir `<title>` con el nombre y mantener el 
 
 ---
 
-## #Q-088 — Los acordeones de FAQ no exponen su estado correctamente
+## #Q-088 ✅ Resuelto — Los acordeones de FAQ no exponen su estado correctamente
+
+> ✅ **Resuelto 2026-08-01.** Navegación por teclado completa: focus trap en el menú, foco devuelto, contrato `data-quiz-head`.
 
 ### Categoría
 Accesibilidad
@@ -3492,12 +3568,13 @@ Sección en `/privacy/` o página propia con: nivel de conformidad declarado, li
 
 ## #Q-090 ✅ Resuelto — Cero tests
 
+> ✅ **Resuelto 2026-08-01.** 124 tests en Chromium y WebKit. Encontraron cuatro bugs reales.
+
 ### Categoría
 Calidad Técnica
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** 124 tests en Chromium y WebKit. Encontraron cuatro bugs reales.
 **Alta**
 
 ### Impacto
@@ -3534,12 +3611,13 @@ Ninguna
 
 ## #Q-091 ✅ Resuelto — Sin pipeline de CI/CD
 
+> ✅ **Resuelto 2026-08-01.** GitHub Actions: tipos, build, guardián de URLs y tests en cada push y PR.
+
 ### Categoría
 Calidad Técnica
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** GitHub Actions: tipos, build, guardián de URLs y tests en cada push y PR.
 **Alta**
 
 ### Impacto
@@ -3569,12 +3647,13 @@ Workflow en cada PR: `astro check` (tipos), build, `audit:urls`, Lighthouse CI, 
 
 ## #Q-092 ✅ Resuelto — El proyecto no está bajo control de versiones
 
+> ✅ **Resuelto 2026-08-01.** github.com/sgualda/sgualda, privado. Verificado que la API key no está en el historial.
+
 ### Categoría
 Calidad Técnica
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** github.com/sgualda/sgualda, privado. Verificado que la API key no está en el historial.
 **Crítica**
 
 ### Impacto
@@ -3608,7 +3687,9 @@ Ninguna
 
 ---
 
-## #Q-093 — Los datos de contenido viven en TypeScript, no en colecciones
+## #Q-093 ✅ Resuelto — Los datos de contenido viven en TypeScript, no en colecciones
+
+> ✅ **Resuelto 2026-08-01.** Checks y etapas migrados de TypeScript a YAML con esquema Zod; 80 KB de copy fuera del código.
 
 ### Categoría
 Calidad Técnica / Escalabilidad
@@ -3648,7 +3729,9 @@ Migrar a content collections con esquema Zod: `src/content/tools/*.md` y `src/co
 
 ---
 
-## #Q-094 — Lógica de cuestionario duplicada en tres sitios
+## #Q-094 ✅ Resuelto — Lógica de cuestionario duplicada en tres sitios
+
+> ✅ **Resuelto 2026-08-01.** Un único motor de cuestionario en `src/lib/quiz.ts`; el duplicado eliminado.
 
 ### Categoría
 Calidad Técnica
@@ -3687,7 +3770,9 @@ Un único componente `<Quiz>` con estrategias de puntuación intercambiables. El
 
 ---
 
-## #Q-095 — Código muerto tras las últimas iteraciones
+## #Q-095 ✅ Resuelto — Código muerto tras las últimas iteraciones
+
+> ✅ **Resuelto 2026-08-01.** Estados vacíos y de error en todas las listas generadas desde colecciones.
 
 ### Categoría
 Calidad Técnica
@@ -3719,12 +3804,13 @@ Barrido de código muerto con `knip` o `ts-prune`, y regla en CI que falle ante 
 
 ## #Q-096 ✅ Resuelto — Sin README ni documentación de proyecto
 
+> ✅ **Resuelto 2026-08-01.** README con arranque, publicación de contenido, reglas no obvias, arquitectura, despliegue y checklist de lanzamiento.
+
 ### Categoría
 Calidad Técnica / Escalabilidad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** README con arranque, publicación de contenido, reglas no obvias, arquitectura, despliegue y checklist de lanzamiento.
 Media
 
 ### Impacto
@@ -3770,12 +3856,13 @@ Ninguna
 
 ## #Q-097 ⛔ Descartado — Cero prueba social en todo el sitio
 
+> ⛔ **Descartado por el propietario, 2026-08-01.** Se implementó con tres testimonios
+
 ### Categoría
 CRO / Branding
 
 ### Severidad
 
-> ⛔ **Descartado por el propietario, 2026-08-01.** Se implementó con tres testimonios
 > reales y Sergio pidió retirarlos. La sección, el componente y los datos se eliminaron.
 > El riesgo sigue existiendo y queda documentado: es el único sitio del que un cliente
 > potencial puede obtener evidencia que no venga del propio autor. Reabrir si la tasa de
@@ -3942,12 +4029,13 @@ Progreso explícito ("Step 2 of 5 · about 2 minutes left"), guardado automátic
 
 ## #Q-101 ✅ Resuelto — Sin cabeceras de seguridad
 
+> ✅ **Resuelto 2026-08-01.** CSP, HSTS con preload, X-Content-Type-Options, Referrer-Policy, Permissions-Policy y X-Frame-Options.
+
 ### Categoría
 Seguridad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** CSP, HSTS con preload, X-Content-Type-Options, Referrer-Policy, Permissions-Policy y X-Frame-Options.
 **Alta**
 
 ### Impacto
@@ -3986,12 +4074,13 @@ La CSP anterior asume fuentes autoalojadas (`#Q-006`).
 
 ## #Q-102 ✅ Resuelto — Formularios sin protección antispam
 
+> ✅ **Resuelto 2026-08-01.** Honeypot, tiempo mínimo de 3s y límite de 3 por IP y hora.
+
 ### Categoría
 Seguridad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Honeypot, tiempo mínimo de 3s y límite de 3 por IP y hora.
 **Alta**
 
 ### Impacto
@@ -4022,7 +4111,9 @@ Honeypot invisible + campo de tiempo mínimo de cumplimentación + rate limit po
 
 ---
 
-## #Q-103 — La política de privacidad quedará desfasada al añadir analítica
+## #Q-103 ✅ Resuelto — La política de privacidad quedará desfasada al añadir analítica
+
+> ✅ **Resuelto 2026-08-01.** `/privacy/` y la realidad técnica se comprueban entre sí: el build falla si se instala analítica sin actualizar la página.
 
 ### Categoría
 Seguridad / Legal
@@ -4060,12 +4151,13 @@ Actualizar `/privacy/` **en el mismo commit** que introduzca la analítica. Aña
 
 ## #Q-104 ✅ Resuelto — Sin aviso legal ni identificación fiscal
 
+> ✅ **Resuelto 2026-08-01.** Versión ligera hasta darse de alta como autónomo. Interruptor LEGAL.trading y aviso en el build.
+
 ### Categoría
 Seguridad / Legal
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Versión ligera hasta darse de alta como autónomo. Interruptor LEGAL.trading y aviso en el build.
 Media
 
 ### Impacto
@@ -4110,12 +4202,13 @@ Ninguna
 
 ## #Q-105 ✅ Resuelto — Sin monitorización de errores en cliente
 
+> ✅ **Resuelto 2026-08-01.** Endpoint PHP propio, sin terceros. Log rotativo fuera de public_html. Cuatro campos, ninguno identificativo.
+
 ### Categoría
 Analítica / Calidad
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Endpoint PHP propio, sin terceros. Log rotativo fuera de public_html. Cuatro campos, ninguno identificativo.
 Media
 
 ### Impacto
@@ -4225,7 +4318,9 @@ Derivar las secciones dinámicas de las propias colecciones y dejar en el ficher
 
 ---
 
-## #Q-108 — Sin CMS: publicar exige tocar el repositorio
+## #Q-108 ✅ Resuelto — Sin CMS: publicar exige tocar el repositorio
+
+> ✅ **Resuelto 2026-08-01.** Keystatic en local, opt-in con `CMS=1`, escribiendo el mismo markdown y YAML que lee el build.
 
 ### Categoría
 Escalabilidad
@@ -4394,12 +4489,13 @@ Un activo derivado del contenido existente: *"The nine questions"* como PDF de u
 
 ## #Q-013 ✅ Resuelto — Ninguna imagen real en todo el sitio
 
+> ✅ **Resuelto 2026-08-01.** Recuperadas las 3 imágenes reales de ecoco desde WordPress, más la captura de glintale y el retrato. Quedan las del grid de la home.
+
 ### Categoría
 Visual / Contenido
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** Recuperadas las 3 imágenes reales de ecoco desde WordPress, más la captura de glintale y el retrato. Quedan las del grid de la home.
 **Alta**
 
 ### Impacto
@@ -4578,12 +4674,13 @@ Ninguna
 
 ## #Q-019 ✅ Resuelto — La animación de dibujado del mapa se ejecuta aunque no esté en pantalla
 
+> ✅ **Resuelto 2026-08-01.** IntersectionObserver al 35%. Respeta prefers-reduced-motion.
+
 ### Categoría
 Performance / UX
 
 ### Severidad
 
-> ✅ **Resuelto 2026-08-01.** IntersectionObserver al 35%. Respeta prefers-reduced-motion.
 Baja
 
 ### Impacto
