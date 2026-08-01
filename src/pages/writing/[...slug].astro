@@ -1,5 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import portrait from '../../assets/portrait.jpg';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
@@ -105,6 +107,20 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     <div class="col prose">
       <Content />
     </div>
+
+    {/* An essay is where a stranger from Google lands, and until now nothing on
+        the page said who wrote it or why they would know. The face is the
+        cheapest trust signal available and it was already sitting in the repo. */}
+    <aside class="col byline">
+      <Image src={portrait} alt="Sergio Gualda" widths={[96, 192]} loading="lazy" />
+      <div>
+        <p class="who"><strong>Sergio Gualda</strong> — product designer in Barcelona.</p>
+        <p class="what">
+          I take vague problems to shipped first versions for small teams, and write down what
+          the decisions cost. <a href="/about/">More about me</a> · <a href="/work-with-me/">Work with me</a>
+        </p>
+      </div>
+    </aside>
   </article>
 
   {
@@ -229,6 +245,27 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     letter-spacing: 0; color: var(--dim); transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
   }
   .topics a:hover { border-color: var(--ink); color: var(--ink); }
+
+  .byline {
+    display: flex;
+    gap: var(--space-5);
+    align-items: flex-start;
+    text-align: left;
+    margin-top: var(--space-9);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--hair);
+  }
+  .byline img {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+  }
+  .byline .who { font-size: 0.9375rem; letter-spacing: 0; margin-bottom: 6px; }
+  .byline .what { font-size: 0.875rem; line-height: 1.55; letter-spacing: 0; color: var(--dim); }
+  .byline a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .byline a:hover { opacity: 0.6; }
 
   .cross, .related { list-style: none; text-align: left; margin-top: 32px; display: grid; gap: 14px; }
   .cross h3 { font-size: 1rem; margin-bottom: 8px; }

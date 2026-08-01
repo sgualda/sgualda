@@ -13,7 +13,7 @@
 
 ---
 
-> **Progreso — 67 de 107 tickets resueltos (63%), 2 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
+> **Progreso — 68 de 107 tickets resueltos (64%), 2 de ellos descartados a propósito.** Generado por `scripts/sync-quality.mjs`; no editar a mano.
 
 ## Resumen Ejecutivo
 
@@ -457,6 +457,8 @@ Ninguna
 ---
 
 ## #Q-007 — Cero analítica: imposible medir nada tras el lanzamiento
+
+> ⏸ **Aplazado por decisión de Sergio (2026-08-01):** *"la analitica va lo ultimo ultimo, cuando ya este el sitio en live"*. Deja de ser bloqueante de lanzamiento. Cuando toque, en este orden: Search Console por DNS primero (empieza a recoger datos sin tocar el sitio), y Google Analytics después, con banner de consentimiento y la reescritura de `/privacy/` en el mismo commit — `check-urls.mjs` rompe el build si se instala analítica y la página sigue diciendo que no hay.
 
 ### Categoría
 Analítica
@@ -2132,7 +2134,9 @@ Ninguna
 
 ---
 
-## #Q-056 — El sitio no muestra ninguna cara humana
+## #Q-056 ✅ Resuelto — El sitio no muestra ninguna cara humana
+
+> ✅ **Resuelto 2026-08-01.** La foto ya estaba en el repo: retrato en `/about/` y ahora también bloque de autor al final de cada ensayo, que es donde aterriza quien llega desde Google. `Person.image` deja de apuntar al logo y apunta a la foto. En la cabecera se mantiene el logo, que es lo que Sergio pidió expresamente.
 
 ### Categoría
 Branding / CRO
