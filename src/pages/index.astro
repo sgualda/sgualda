@@ -3,6 +3,9 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Newsletter from '@components/Newsletter.astro';
+import Testimonials from '@components/Testimonials.astro';
+import { Image } from 'astro:assets';
+import studio from '../assets/studio.jpg';
 import { SITE } from '@lib/site';
 
 /**
@@ -80,7 +83,12 @@ const principles = [
       </p>
     </div>
     <div class="wide">
-      <div class="slot slot--wide" aria-hidden="true"></div>
+      <Image
+        src={studio}
+        alt="The desk where most of this gets made"
+        class="wide-shot"
+        widths={[560, 1120]}
+      />
     </div>
   </section>
 
@@ -106,6 +114,8 @@ const principles = [
       }
     </ol>
   </section>
+
+  <Testimonials title="Three people<br />I have worked with." />
 
   <!-- ── what it cost ── -->
   <section class="section col">
@@ -151,7 +161,13 @@ const principles = [
     border-radius: var(--radius-card);
     aspect-ratio: 4 / 3;
   }
-  .slot--wide { aspect-ratio: 16 / 9; margin-top: 42px; }
+  .wide-shot {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--radius-card);
+    margin-top: var(--space-8);
+  }
 
   .principles {
     list-style: none;

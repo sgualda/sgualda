@@ -3,6 +3,8 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import { SITE } from '@lib/site';
+import { Image } from 'astro:assets';
+import portrait from '../../assets/portrait.jpg';
 
 /**
  * /about/ — matches the Figma frame "About".
@@ -47,8 +49,13 @@ const notFor = [
   <Header slot="nav" />
 
   <article class="shell page">
-    <!-- Portrait. Placeholder until Sergio supplies the photo. -->
-    <div class="portrait" aria-hidden="true"></div>
+    <Image
+      src={portrait}
+      alt="Sergio Gualda"
+      class="portrait"
+      widths={[128, 256]}
+      loading="eager"
+    />
 
     <h1>Hello,</h1>
 
@@ -104,11 +111,11 @@ const notFor = [
   .page { text-align: left; padding-top: clamp(40px, 7vh, 72px); }
 
   .portrait {
-    width: 96px;
+    width: 108px;
     height: 108px;
     border-radius: var(--radius-sm);
-    background: var(--surface);
-    margin-bottom: 34px;
+    object-fit: cover;
+    margin-bottom: var(--space-7);
   }
 
   h1 { margin-bottom: 26px; }

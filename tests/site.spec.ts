@@ -353,6 +353,29 @@ test('the styleguide exists but stays out of search', async ({ page }) => {
   expect(failing, 'tokens failing WCAG AA').toBe(0);
 });
 
+test('third-party proof appears where it converts', async ({ page }) => {
+  for (const url of ['/', '/work-with-me/']) {
+    await page.goto(url);
+    const quotes = page.locator('blockquote');
+    expect(await quotes.count(), `testimonials on ${url}`).toBeGreaterThanOrEqual(3);
+    // Attributed, not anonymous — an unattributed quote reads as self-written.
+    for (let i = 0; i < 3; i++) {
+      const who = await quotes.nth(i).locator('xpath=following-sibling::p[1]').textContent();
+      expect(who?.trim().length, `attribution ${i} on ${url}`).toBeGreaterThan(3);
+    }
+  }
+});
+
+test('no grey placeholder survives in production', async ({ page }) => {
+  await page.goto('/');
+  // The wide slot on the home used to be an empty div.
+  await expect(page.locator('.wide-shot')).toBeVisible();
+  await page.goto('/about/');
+  const portrait = page.locator('img.portrait');
+  await expect(portrait).toBeVisible();
+  expect(await portrait.getAttribute('alt')).toBeTruthy();
+});
+
 test('the legal notice is reachable from every page', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('footer a[href="/legal/"]')).toBeVisible();

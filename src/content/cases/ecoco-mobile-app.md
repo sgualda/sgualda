@@ -7,10 +7,10 @@ year: '2024 — now'
 status: 'alive'
 published: 2026-08-01
 summary: 'Grocery lists and supermarket price comparison, built by two people on evenings and weekends. In private beta on Android.'
-order: 2
+order: 3
 migrated: true
-cover: '../../assets/cases/ecoco1.jpg'
-coverAlt: 'The ecoco app showing a grocery list alongside supermarket price comparison'
+cover: '../../assets/cases/ecoco-cover.webp'
+coverAlt: 'The ecoco mobile app: grocery lists and supermarket price comparison'
 ---
 
 ecoco started on a road trip from Barcelona to Bordeaux. Two friends — a developer and a designer — driving through France, talking about nothing in particular, until one of us asked why grocery shopping is still such a mess.

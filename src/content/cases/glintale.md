@@ -9,8 +9,8 @@ published: 2026-08-01
 summary: 'Illustrated serialised fiction with the reading habit built in. Demand is validated. Now finding out what it is worth.'
 order: 0
 migrated: true
-cover: '../../assets/cases/glintale-home.png'
-coverAlt: 'The glintale home screen: streak counter, daily mission, continue reading shelf and leaderboard'
+cover: '../../assets/cases/glintale-cover.webp'
+coverAlt: 'The glintale reading interface with story series and progress'
 ---
 
 glintale is a platform for illustrated serialised fiction. Readers work through story series a chapter at a time, and the product is built around the habit rather than around the catalogue.

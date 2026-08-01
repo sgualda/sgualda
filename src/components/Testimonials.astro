@@ -1,0 +1,53 @@
+---
+import { TESTIMONIALS } from '@lib/testimonials';
+
+interface Props {
+  /** Shown above the quotes. Omit on pages that already have context. */
+  eyebrow?: string;
+  title?: string;
+}
+const { eyebrow = 'What other people say', title } = Astro.props;
+---
+
+<section class="section col">
+  <span class="eyebrow">{eyebrow}</span>
+  {title && <h2 set:html={title} />}
+
+  <ul class="quotes">
+    {
+      TESTIMONIALS.map((t) => (
+        <li>
+          <blockquote>{t.quote}</blockquote>
+          <p class="who">
+            {t.url ? <a href={t.url} rel="noopener">{t.name}</a> : t.name}
+            {t.role && <span>{t.role}{t.company && `, ${t.company}`}</span>}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .quotes { list-style: none; text-align: left; margin-top: var(--space-7); display: grid; gap: var(--space-6); }
+  .quotes li { padding-top: var(--space-6); border-top: 1px solid var(--hair); }
+  .quotes li:first-child { padding-top: 0; border-top: 0; }
+
+  blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.4vw, 1.22rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+  .who {
+    margin-top: var(--space-3);
+    font-size: 0.875rem;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+  .who a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .who span { display: block; }
+</style>

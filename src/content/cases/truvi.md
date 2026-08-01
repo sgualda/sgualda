@@ -9,6 +9,8 @@ published: 2026-08-01
 summary: 'Where I spend my weekdays. Dashboard work, in a real team, with all the negotiation that involves.'
 order: 1
 migrated: true
+cover: '../../assets/cases/truvi-dashboard.webp'
+coverAlt: 'The truvi dashboard: a SaaS interface with data views and filters'
 ---
 
 I am a product designer at truvi, a startup in Barcelona. Among other things I work on the dashboard.

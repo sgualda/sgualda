@@ -5,6 +5,7 @@ import Footer from '@components/Footer.astro';
 import { SITE } from '@lib/site';
 import { BLUNT_HTML, FAQ_HTML } from '@lib/work-with-me';
 import '@styles/quiz.css';
+import Testimonials from '@components/Testimonials.astro';
 
 /**
  * /work-with-me/ — matches the Figma frame "Work with me".
@@ -93,6 +94,8 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     <h2>The things<br />people ask me.</h2>
     <div class="faq" set:html={FAQ_HTML} />
   </section>
+
+  <Testimonials eyebrow="Before you write" title="What working with me<br />has been like." />
 
   <!-- ── brief ── -->
   <section class="section col" id="brief">

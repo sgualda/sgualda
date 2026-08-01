@@ -82,6 +82,7 @@ export const URL_MAP = {
     '/case-studies/',
     '/case-studies/glintale/',
     '/case-studies/truvi/',
+    '/case-studies/truvi-developer-portal/',
     '/case-studies/ecoco-mobile-app/',
     '/case-studies/weeknotes/',
     '/case-studies/rangos/',
