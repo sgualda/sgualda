@@ -18,3 +18,7 @@ test-results/
 
 # PHP config with the API key — lives outside public_html on the server
 .env-brief.php
+
+# Raw assets waiting to be processed
+incoming/*
+!incoming/README.md
