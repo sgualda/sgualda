@@ -60,6 +60,30 @@ test.describe('structured data', () => {
   }
 });
 
+test('the map is usable on a phone', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/map/');
+
+  // It used to be display:none below 760px, which removed the page's whole
+  // point from most visits.
+  const diagram = page.locator('.diagram');
+  await expect(diagram).toBeVisible();
+
+  // All five stops, each a real link, each description readable without hover.
+  await expect(page.locator('.stop')).toHaveCount(5);
+  await expect(page.locator('.stop a')).toHaveCount(5);
+  await expect(page.locator('.stop .peek').first()).toBeVisible();
+
+  // Touch targets.
+  const dot = await page.locator('.dot').first().boundingBox();
+  expect(dot!.height).toBeGreaterThanOrEqual(44);
+
+  // And nothing spills sideways.
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)
+  ).toBe(false);
+});
+
 test('no horizontal scroll at any breakpoint', async ({ page }) => {
   for (const width of [320, 375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
@@ -227,6 +251,23 @@ test('js errors are reported, and the page survives reporting', async ({ page })
   expect(body.line).toBe(7);
   // Nothing in here can identify a person.
   expect(Object.keys(body).sort()).toEqual(['line', 'message', 'page', 'source']);
+});
+
+test('the styleguide exists but stays out of search', async ({ page }) => {
+  const res = await page.goto('/styleguide/');
+  expect(res?.status()).toBe(200);
+  await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', /noindex/);
+
+  const sitemap = await (await page.request.get('/sitemap-0.xml')).text();
+  expect(sitemap).not.toContain('/styleguide/');
+
+  // It must render the real components, not copies of them.
+  await expect(page.locator('.card-link').first()).toBeVisible();
+  await expect(page.locator('.btn--dark').first()).toBeVisible();
+
+  // Contrast is computed live; nothing should be failing AA.
+  const failing = await page.locator('[data-fail="true"]').count();
+  expect(failing, 'tokens failing WCAG AA').toBe(0);
 });
 
 test('the legal notice is reachable from every page', async ({ page }) => {

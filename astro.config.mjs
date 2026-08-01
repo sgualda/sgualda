@@ -26,7 +26,8 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/draft/'),
+      // Internal pages stay out of search entirely.
+      filter: (page) => !['/draft/', '/styleguide/'].some((x) => page.includes(x)),
       serialize(item) {
         // Essays and case studies change; the tools do not.
         if (item.url === 'https://sgualda.com/') item.priority = 1.0;

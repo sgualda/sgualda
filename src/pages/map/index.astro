@@ -258,14 +258,64 @@ const routeD = smooth(STAGES);
     font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
   }
 
-  /* ── mobile ──
-     Hidden below 760px. A five-point horizontal route needs width it does not
-     have on a phone, and every attempt to fold it into a vertical timeline was
-     worse than not showing it: the "Where are you right now?" list underneath
-     already carries the same five links and the same descriptions. Nothing is
-     lost by removing it here. */
+  /* ── mobile: the route turns vertical ──
+     A five-point horizontal path cannot be read at 375px. It was hidden here
+     for a while, which meant the page's signature element simply did not
+     exist for most visitors. It changes shape instead: same five stops, same
+     order, same links, running top to bottom. */
   @media (max-width: 760px) {
-    .map-wide { display: none; }
+    .map-wide { width: var(--shell); }
+    .diagram { padding: 26px 20px; }
+
+    /* The SVG path is horizontal by construction; the line is drawn in CSS. */
+    .line { display: none; }
+    .route { aspect-ratio: auto; }
+    .route::after { display: none; }
+
+    .stops { position: static; display: block; }
+
+    .stop {
+      position: relative;
+      left: auto;
+      top: auto;
+      transform: none;
+      animation-name: rise-in;
+      animation-delay: calc(var(--i) * 0.09s);
+    }
+    /* The dashed route, redrawn vertically through the middle of each dot. */
+    .stop::before {
+      content: '';
+      position: absolute;
+      left: 25px;
+      top: 0;
+      bottom: 0;
+      border-left: 1px dashed var(--hair);
+    }
+    .stop:first-child::before { top: 50%; }
+    .stop:last-child::before { bottom: 50%; }
+    .stop::after { display: none; }
+
+    .stop a,
+    .stop.up a {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 18px;
+      max-width: none;
+      width: 100%;
+      padding: 16px 0;
+    }
+
+    .dot { position: relative; z-index: 1; width: 52px; }
+    .label { align-items: flex-start; padding-top: 6px; }
+    .name, .peek { text-align: left; }
+
+    /* No hover on a touch screen, so the description is simply shown. */
+    .peek { max-height: none; opacity: 1; }
+  }
+
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
