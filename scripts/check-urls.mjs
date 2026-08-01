@@ -57,13 +57,30 @@ if (noAlt.length) {
 // Warns rather than fails: the existing literals are being folded in as each
 // area is touched, not in one risky sweep.
 const SCALE = [4, 8, 12, 16, 20, 26, 34, 44, 56, 72];
+/**
+ * The four breakpoints declared in tokens.css. Custom properties do not work
+ * inside @media, so the only way to keep the set from drifting back to eight
+ * ad-hoc values is to check it here. This one is fatal, not a warning: an
+ * off-scale breakpoint is invisible until somebody opens the site at exactly
+ * that width, which is the definition of a bug nobody finds.
+ */
+const BREAKPOINTS = [480, 560, 720, 820];
+
 let offScale = 0;
-for (const f of readdirSync(join(root, 'src/pages'), { recursive: true })) {
-  if (typeof f !== 'string' || !f.endsWith('.astro')) continue;
-  const css = readFileSync(join(root, 'src/pages', f), 'utf8');
-  for (const m of css.matchAll(/(?:margin|padding|gap)(?:-\w+)?:\s*([^;{}]+)/g))
-    for (const px of m[1].matchAll(/\b(\d+)px\b/g))
-      if (+px[1] > 3 && !SCALE.includes(+px[1])) offScale++;
+const badBreakpoints = [];
+const sources = [];
+for (const dir of ['src/pages', 'src/components', 'src/styles'])
+  for (const f of readdirSync(join(root, dir), { recursive: true }))
+    if (typeof f === 'string' && /\.(astro|css)$/.test(f)) sources.push([dir, f]);
+
+for (const [dir, f] of sources) {
+  const css = readFileSync(join(root, dir, f), 'utf8');
+  if (dir === 'src/pages')
+    for (const m of css.matchAll(/(?:margin|padding|gap)(?:-\w+)?:\s*([^;{}]+)/g))
+      for (const px of m[1].matchAll(/\b(\d+)px\b/g))
+        if (+px[1] > 3 && !SCALE.includes(+px[1])) offScale++;
+  for (const m of css.matchAll(/@media[^{]*?\(\s*(min|max)-width:\s*(\d+)px/g))
+    if (!BREAKPOINTS.includes(+m[2])) badBreakpoints.push(`${f} → ${m[1]}-width: ${m[2]}px`);
 }
 
 const G = '\x1b[32m', R = '\x1b[31m', Y = '\x1b[33m', X = '\x1b[0m';
@@ -113,6 +130,13 @@ const analytics = readdirSync(join(root, 'src'), { recursive: true })
   .some((f) => /googletagmanager|plausible\.io|umami|gtag\(/.test(readFileSync(join(root, 'src', f), 'utf8')));
 if (analytics && /No analytics\. No cookies\./.test(privacy)) {
   console.error('\n✗ Analytics is installed but /privacy/ still claims there is none (#Q-103)');
+  process.exit(1);
+}
+
+if (badBreakpoints.length) {
+  console.error(`\n✗ ${badBreakpoints.length} breakpoint(s) off the scale ${BREAKPOINTS.join('/')} (#Q-054)`);
+  for (const b of badBreakpoints) console.error(`    ${b}`);
+  console.error('  Round up to the next value, or change the scale in tokens.css and here.\n');
   process.exit(1);
 }
 

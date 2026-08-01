@@ -93,8 +93,10 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
   /* ── burger ── */
   .burger {
     display: none;
-    width: 40px;
-    height: 40px;
+    /* 44px, not 40: it is the only way to navigate on a phone and it sits at
+       the top corner, which is the hardest place on the screen to hit. */
+    width: 44px;
+    height: 44px;
     margin-left: auto;
     border: 0;
     background: transparent;

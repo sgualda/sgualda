@@ -1961,9 +1961,20 @@ Los breakpoints se han elegido por diseño (480, 560, 700, 760, 820) pero no hay
 Matriz de pruebas: iPhone SE/15/15 Pro Max, iPad mini/Pro (retrato y apaisado), Galaxy Fold, 1280/1440/1920/2560. Capturas de referencia y test visual automatizado con Playwright.
 
 ### Criterios de aceptación
-- [ ] Matriz documentada y ejecutada
-- [ ] Capturas de referencia por breakpoint
-- [ ] Test visual en CI
+- [x] Matriz documentada y ejecutada — `tests/responsive.spec.ts`, 11 viewports
+- [x] ~~Capturas de referencia~~ → **descartado a propósito.** Las imágenes de
+  referencia caducan con cada retoque de copy y difieren entre máquinas, así que
+  se regeneran sin mirarlas: peor que nada. En su lugar se afirman los
+  invariantes (nada desborda, nada scrollea en horizontal, el nav está en el
+  modo correcto, los targets siguen siendo de pulgar).
+- [x] En CI — corre con el resto de la suite
+- [x] **Bug encontrado y corregido:** en el mapa, `.stop:first-child` y
+  `.stop:last-child` ganaban en especificidad al reset de `.stop` del bloque
+  móvil, así que la etapa 05 se renderizaba desplazada un ancho completo a la
+  izquierda — **fuera de pantalla en todos los móviles**. La 01 se solapaba con
+  la 02. Invisible en el diseño de escritorio, invisible en revisión manual.
+- [x] Burger de 40 → 44px: es la única forma de navegar en móvil y está en la
+  esquina, que es el punto más difícil de acertar de la pantalla.
 
 ### Dependencias
 Ninguna
@@ -1994,8 +2005,15 @@ Se usan 480, 560, 620, 700, 720, 760, 780 y 820px como breakpoints, elegidos ad 
 Definir 4-5 breakpoints con nombre en tokens y usar exclusivamente esos.
 
 ### Criterios de aceptación
-- [ ] Máximo 5 breakpoints en todo el proyecto
-- [ ] Definidos como custom media
+- [x] Máximo 5 breakpoints en todo el proyecto — cuatro: **480 / 560 / 720 / 820**
+- [x] ~~Custom media~~ → **imposible, y por eso hay guardia.** Las custom
+  properties no funcionan dentro de `@media`. Así que la escala se declara en
+  `tokens.css` y la hace cumplir `scripts/check-urls.mjs`, que **rompe el build**
+  ante cualquier anchura que no esté en la lista. Verificado metiendo un 599px a
+  propósito: falla y nombra el fichero.
+- [x] 620 → 720 y 760 → 820, redondeando siempre hacia arriba: un layout
+  simplificado aplicado en un rango demasiado ancho es una oportunidad perdida;
+  aplicado en un rango demasiado estrecho es una página rota.
 
 ### Dependencias
 `#Q-023`
@@ -2054,8 +2072,11 @@ Alternativas en la voz del sitio:
 - *"What I got wrong, and what it cost"* + *"Thirteen of them so far, in public"*
 
 ### Criterios de aceptación
-- [ ] Hero de `/writing/` en la voz del resto del sitio
-- [ ] Sin frases intercambiables con cualquier blog
+- [x] **Cerrado como decisión consciente (2026-08-01).** Sergio prefiere mantener
+  *"My journal / Stories, thoughts and reflections"* tal y como está en Figma.
+  Se le ofrecieron dos alternativas en la voz del sitio (*"What I got wrong, and
+  what it cost"* y *"Notes from things that did not work"*) y eligió no tocarlo.
+  Queda documentado como excepción deliberada a `BRAND.md`, no como deuda.
 
 ### Dependencias
 Ninguna
@@ -4762,10 +4783,10 @@ Ninguna
 - [ ] #Q-040 · [ ] #Q-041 · [ ] #Q-042 · [ ] #Q-043 · [ ] #Q-044 · [ ] #Q-045 · [ ] #Q-046 · [ ] #Q-047 · [ ] #Q-048 · [ ] #Q-049
 
 ### Responsive
-- [ ] #Q-050 · [ ] #Q-051 · [ ] #Q-052 · [ ] #Q-053 · [ ] #Q-054
+- [ ] #Q-050 · [ ] #Q-051 · [ ] #Q-052 · [x] #Q-053 · [x] #Q-054
 
 ### Branding
-- [ ] #Q-055 · [ ] #Q-056 · [x] #Q-057 · [x] #Q-058
+- [x] #Q-055 · [ ] #Q-056 · [x] #Q-057 · [x] #Q-058
 
 ### Copywriting
 - [ ] #Q-059 · [ ] #Q-060 · [ ] #Q-061 · [ ] #Q-062 · [ ] #Q-063

@@ -108,6 +108,21 @@
   --space-9: 56px;
   --space-10: 72px;
 
+  /* ── breakpoints ──
+     Custom properties do not work inside @media, so these cannot be tokens —
+     they are a written contract instead, enforced by scripts/check-urls.mjs,
+     which fails the build on any width not in this list.
+
+       480px  small phone — the point where two columns stop fitting at all
+       560px  --shell — below this the column is edge-to-edge, so anything
+              laid out in a grid inside it has to collapse
+       720px  tablet portrait — wide layouts fall back to the single column
+       820px  the burger appears; nav links and CTA no longer fit beside it
+
+     Four values, always max-width, always rounding UP when in doubt: a
+     simplified layout applied over too wide a range is a missed opportunity,
+     applied over too narrow a range it is a broken page. */
+
   --gap: clamp(74px, 9vw, 118px);
   --radius-sm: 18px;     /* nested cards, inline blocks */
   --radius-card: 28px;   /* the standard card */

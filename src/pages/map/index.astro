@@ -264,7 +264,7 @@ const routeD = smooth(STAGES);
      for a while, which meant the page’s signature element simply did not
      exist for most visitors. It changes shape instead: same five stops, same
      order, same links, running top to bottom. */
-  @media (max-width: 760px) {
+  @media (max-width: 820px) {
     .map-wide { width: var(--shell); }
     .diagram { padding: 26px 20px; }
 
@@ -275,7 +275,14 @@ const routeD = smooth(STAGES);
 
     .stops { position: static; display: block; }
 
-    .stop {
+    /* `:first-child` and `:last-child` beat a bare `.stop` on specificity, so
+       resetting only `.stop` left the two end stages carrying their desktop
+       transforms into the vertical list. Stage 05 was translated a full width
+       to the left and rendered off-screen on every phone. Named explicitly so
+       the cascade cannot lose again. */
+    .stop,
+    .stop:first-child,
+    .stop:last-child {
       position: relative;
       left: auto;
       top: auto;
@@ -283,6 +290,10 @@ const routeD = smooth(STAGES);
       animation-name: rise-in;
       animation-delay: calc(var(--i) * 0.09s);
     }
+    .stop:first-child a,
+    .stop:last-child a { align-items: flex-start; }
+    .stop:first-child .name, .stop:first-child .peek,
+    .stop:last-child .name, .stop:last-child .peek { text-align: left; }
     /* The dashed route, redrawn vertically through the middle of each dot. */
     .stop::before {
       content: '';
