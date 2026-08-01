@@ -14,13 +14,13 @@ lead: "You ship constantly and it does not feel like progress. Decisions come ba
 out: "Which of four things is causing it, and the smallest change that stops it."
 answers:
   - - "This is normal"
-    - "Work gets redone because you learned something. That is not waste."
+    - "Work gets redone because you learned something. That’s not waste."
   - - "Decisions are not written down"
     - "Made in conversation, remembered differently, quietly relitigated."
   - - "Somebody is left out of the room"
     - "The same objection, arriving at the most expensive moment."
   - - "Nobody can end an argument"
-    - "Decisions are not made, they are abandoned — and abandoned things come back."
+    - "Decisions are not made, they’re abandoned — and abandoned things come back."
 faqs:
   - - "Why does my team keep redoing the same work?"
     - "Usually one of four reasons: you genuinely learned something new, which is not waste;
@@ -73,7 +73,7 @@ b:
   - max: 3
     name: "This is normal. Do not fix it."
     sub: "Work gets redone because new information arrived, and decisions mostly stay decided."
-    body: "<p>Redoing work in response to something you learned is not waste — it is the entire
+    body: "<p>Redoing work in response to something you learned is not waste — it’s the entire
       point of working iteratively. The waste is redoing it because nobody remembered why it
       was decided.</p><p><strong>You do not have a process problem.</strong> Adding process
       here would slow you down and solve nothing, which is the most common way good teams
@@ -103,20 +103,20 @@ b:
       engineer who knows what is expensive, a support lead who knows what breaks — is not
       present when the decision happens, and finds out when the work is already
       done.</p><p>By then their objection costs a rebuild, so it feels like obstruction.
-      <strong>It is not obstruction. It is the same objection, arriving at the most
+      <strong>It’s not obstruction. It’s the same objection, arriving at the most
       expensive possible moment.</strong></p>"
     next:
       - "List the last three things that got redone. Write down who objected each time."
-      - "If it is the same name, they belong in the room before the decision, not after."
+      - "If it’s the same name, they belong in the room before the decision, not after."
       - "Ask them directly what they would have said. It takes five minutes and saves weeks."
   - max: 99
     name: "Nobody can end an argument."
     sub: "Decisions do not get made, they get abandoned — and anything abandoned comes back."
     body: "<p>Nothing is written down, decisions return every sprint, and no one person can
-      close a discussion. That is not a communication problem. It is <strong>an unclear
-      owner,</strong> and it will not be fixed by a better tool or a longer
-      meeting.</p><p>The uncomfortable part is that the fix is not more consensus. It is
-      naming who decides when there is no consensus — and accepting that being overruled
+      close a discussion. That’s not a communication problem. It’s <strong>an unclear
+      owner,</strong> and it’ll not be fixed by a better tool or a longer
+      meeting.</p><p>The uncomfortable part is that the fix is not more consensus. It’s
+      naming who decides when there’s no consensus — and accepting that being overruled
       sometimes is the price of moving.</p>"
     next:
       - "Name the decider for each area, in writing. Not by seniority — by who lives with

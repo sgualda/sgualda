@@ -56,7 +56,7 @@ const routeD = smooth(STAGES);
     <h1>The five stages of building a product.</h1>
     <p class="sub">
       Each stage has a different problem, and advice that saves you in one can hurt you in
-      another. Pick the one you are in.
+      another. Pick the one you’re in.
     </p>
   </section>
 
@@ -261,7 +261,7 @@ const routeD = smooth(STAGES);
 
   /* ── mobile: the route turns vertical ──
      A five-point horizontal path cannot be read at 375px. It was hidden here
-     for a while, which meant the page's signature element simply did not
+     for a while, which meant the page’s signature element simply did not
      exist for most visitors. It changes shape instead: same five stops, same
      order, same links, running top to bottom. */
   @media (max-width: 760px) {
@@ -319,7 +319,7 @@ const routeD = smooth(STAGES);
     }
     .label { align-items: flex-start; padding-top: 6px; }
     /* The horizontal diagram right-aligns the last stop so its label cannot
-       spill outside the card. Vertically there is no such risk, and that rule
+       spill outside the card. Vertically there’s no such risk, and that rule
        was left-over-riding stage 05 into a ragged right edge. */
     .name, .peek,
     .stop:first-child .name, .stop:first-child .peek,
@@ -377,7 +377,7 @@ const routeD = smooth(STAGES);
 
 <script>
   /* The route drew itself on load, so anyone who had not scrolled to it yet
-     missed the whole thing. Now it starts when it is actually on screen. */
+     missed the whole thing. Now it starts when it’s actually on screen. */
   const route = document.getElementById('route');
   if (route) {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {

@@ -11,7 +11,7 @@ topics: ['process']
 ---
 ## Introduction
 
-Have you ever felt overwhelmed by the number of tasks you need to complete? I used to feel like that almost every day. The mix of work, personal responsibilities, and small tasks piling up made me feel like I couldn’t move forward. Then, I discovered the ***Getting Things Done* (GTD) method** by [***David Allen***](https://gettingthingsdone.com/). What started as a curiosity quickly became an essential tool in both my work and personal life.
+Have you ever felt overwhelmed by the number of tasks you need to complete? I used to feel like that almost every day. The mix of work, personal responsibilities, and small tasks piling up made me feel like I could not move forward. Then, I discovered the ***Getting Things Done* (GTD) method** by [***David Allen***](https://gettingthingsdone.com/). What started as a curiosity quickly became an essential tool in both my work and personal life.
 
 ![productivity tips](../../assets/essays/productivity-tips-1024x540.png)
 
@@ -39,7 +39,7 @@ To make GTD work effectively, it’s important to understand and apply its five 
 
 ### **1. Capture**
 
-Everything starts by capturing any task, idea, or commitment that comes to mind. It doesn’t matter if it’s a small idea you had during a meeting or an important task you need to do next week. Write everything down in a trusted system, whether it’s an app or a notebook.
+Everything starts by capturing any task, idea, or commitment that comes to mind. It does not matter if it’s a small idea you had during a meeting or an important task you need to do next week. Write everything down in a trusted system, whether it’s an app or a notebook.
 
 ### **2. Clarify**
 
@@ -59,20 +59,20 @@ The last step is simply to take action. With your system organized, you can star
 
 ## What I’ve learned by applying GTD
 
-One of the most important lessons I’ve learned from applying GTD is that **organization isn’t just about being more productive**; it’s about **reducing stress**. Having everything captured and organized in an external system frees up your mind so you can focus on what you’re doing in the moment, without worrying about other pending tasks.
+One of the most important lessons I’ve learned from applying GTD is that **organization is not just about being more productive**; it’s about **reducing stress**. Having everything captured and organized in an external system frees up your mind so you can focus on what you’re doing in the moment, without worrying about other pending tasks.
 
-GTD has also taught me to **focus on what really matters**. Now, before starting any task, I ask myself if it truly aligns with my long term goals. This simple reflection has changed the way I prioritize my time, helping me avoid wasting energy on things that, in the end, aren’t that important.
+GTD has also taught me to **focus on what really matters**. Now, before starting any task, I ask myself if it truly aligns with my long term goals. This simple reflection has changed the way I prioritize my time, helping me avoid wasting energy on things that, in the end, are not that important.
 
-Another key takeaway is that GTD is a **process of self discovery**. It doesn’t just help you manage your tasks; it also helps you understand how you work and what you really want to achieve in both your work and personal life.
+Another key takeaway is that GTD is a **process of self discovery**. It does not just help you manage your tasks; it also helps you understand how you work and what you really want to achieve in both your work and personal life.
 
 ## Tips for getting started with GTD
 
 If you feel overwhelmed by the number of things you need to do or simply want to be more efficient, here are some tips to help you get started with GTD:
 
 1. **Start with the two-minute rule**: This small change can make a big difference in your daily life. Begin by applying this rule, and you’ll see how you eliminate small pending tasks that used to pile up.
-2. **Use tools you already have**: You don’t need a fancy app to get started. Use something that works for you, whether it’s a notebook, Notion, or even your phone. The important thing is to capture everything in one place that you can easily review.
+2. **Use tools you already have**: You do not need a fancy app to get started. Use something that works for you, whether it’s a notebook, Notion, or even your phone. The important thing is to capture everything in one place that you can easily review.
 3. **Do weekly reviews**: Set aside a few minutes each week to review your tasks. This will help you keep your system updated and make sure you’re progressing toward your goals.
-4. **Be flexible**: GTD isn’t a rigid system. You can adapt it to your needs and circumstances. The important thing is that it works for you.
+4. **Be flexible**: GTD is not a rigid system. You can adapt it to your needs and circumstances. The important thing is that it works for you.
 
 ## Conclusion
 

@@ -6,12 +6,12 @@ n: "Can you charge for this yet?"
 time: "40 seconds"
 count: "4 questions"
 title: "Can You Charge For Your Product Yet? — Free Check"
-meta: "Four questions on willingness to pay tell you whether you are ready to put a price on
+meta: "Four questions on willingness to pay tell you whether you’re ready to put a price on
   it, or whether charging now would teach you the wrong thing. Free, forty seconds, nothing
   saved."
-lead: "You are wondering whether to put a price on it, or whether it is too early and asking
+lead: "You’re wondering whether to put a price on it, or whether it’s too early and asking
   for money would kill the momentum you have. Four questions and you will know which."
-out: "Whether you are ready to charge, and what to fix first if you are not."
+out: "Whether you’re ready to charge, and what to fix first if you’re not."
 answers:
   - - "Charge now"
     - "People ask the price, already pay for something worse, and would notice if it
@@ -19,7 +19,7 @@ answers:
   - - "Charge, but keep it simple"
     - "Demand is real. Your explanation of the value is not ready."
   - - "Not yet"
-    - "Nobody has asked what it costs. That is the signal."
+    - "Nobody has asked what it costs. That’s the signal."
   - - "Charging now would teach you the wrong thing"
     - "A few sympathetic payments look like validation and are not."
 faqs:
@@ -29,14 +29,14 @@ faqs:
       would complain if you switched it off tomorrow, and whether you can say in one
       sentence what somebody gets for the money without having to explain it."
   - - "Should I launch free and charge later?"
-    - "Free is a reasonable place to be while you are still learning what the product is,
+    - "Free is a reasonable place to be while you’re still learning what the product is,
       but it teaches you almost nothing about what somebody will pay for. Free users
       tolerate things paying users will not, and the switch later is harder than introducing
       a price early. If people are already asking the price, waiting is costing you
       information as well as money."
   - - "How should I price a new product?"
     - "Start with one price, one sentence and one thing it does. Tiers are almost always a
-      symptom of not being sure what you are selling, and users read that uncertainty
+      symptom of not being sure what you’re selling, and users read that uncertainty
       accurately. The first number will be wrong, which is fine — a price is much easier to
       change than to introduce."
 q:
@@ -70,7 +70,7 @@ q:
         - 4
 b:
   - max: 3
-    name: "Charge now. You are probably late."
+    name: "Charge now. You’re probably late."
     sub: "People are asking the price, they already pay for something worse, and they would
       notice if it disappeared."
     body: "<p>Every signal that matters is present. What is holding you back is not evidence, it
@@ -79,10 +79,10 @@ b:
       tell your existing users first and honestly, and give the early ones something for
       having been early. Nobody resents a price they saw coming.</p>"
     next:
-      - "Pick a number today. It will be wrong, and that is fine — it is easier to change
+      - "Pick a number today. It will be wrong, and that’s fine — it’s easier to change
         than to introduce."
       - "Tell existing users before it goes public, with a reason and a date."
-      - "Watch who leaves. If nobody does, you priced it too low. That is information, not a
+      - "Watch who leaves. If nobody does, you priced it too low. That’s information, not a
         failure."
   - max: 8
     name: "Charge, but keep it simple."
@@ -91,17 +91,17 @@ b:
       the pricing page will have to explain it too — and pricing pages are the worst place
       to teach anything.</p><p>So resist the tiers. <strong>One price, one sentence, one
       thing it does.</strong> Complexity in pricing is almost always a symptom of not being
-      sure what you are selling, and users read that uncertainty accurately.</p>"
+      sure what you’re selling, and users read that uncertainty accurately.</p>"
     next:
       - "Write the one sentence: “You pay X and you get Y.” If it needs a second sentence,
-        it is not ready."
+        it’s not ready."
       - "Launch a single price. No tiers, no annual discount, nothing to compare."
       - "Ask three people to repeat the sentence back. Rewrite until they can."
   - max: 12
     name: "Not yet — but do not wait for perfect."
-    sub: "Nobody has asked the price, and that is the signal to pay attention to."
+    sub: "Nobody has asked the price, and that’s the signal to pay attention to."
     body: "<p>When something is genuinely valuable, people ask what it costs before you tell
-      them. Silence on price usually means they are treating it as a nice thing to try, not
+      them. Silence on price usually means they’re treating it as a nice thing to try, not
       a thing they need.</p><p>The mistake now would be to build more, hoping value arrives
       with features. <strong>It rarely does.</strong> The gap is normally that the product
       has not yet done one important thing all the way to the end for anybody.</p>"
@@ -115,14 +115,14 @@ b:
     sub: "Nobody pays for anything here, nobody would complain if it vanished, and you cannot
       say what somebody gets."
     body: "<p>You could probably get a few people to pay — friends, early supporters, someone
-      being kind. That is exactly the risk. <strong>A handful of sympathetic payments looks
+      being kind. That’s exactly the risk. <strong>A handful of sympathetic payments looks
       like validation and is not,</strong> and it can point a whole year in the wrong
-      direction.</p><p>The question underneath is not about pricing. It is whether anybody
-      has a problem here expensive enough to spend money on, and that is worth answering
+      direction.</p><p>The question underneath is not about pricing. It’s whether anybody
+      has a problem here expensive enough to spend money on, and that’s worth answering
       before you spend months on a payment flow.</p>"
     next:
       - "Answer the value question first — what does somebody actually get, in their words."
       - "Check whether people pay for anything at all in this area today. If nothing, that
         is the finding."
-      - "Keep it free while you find that out. Free is a fine place to be when you are still
+      - "Keep it free while you find that out. Free is a fine place to be when you’re still
         learning."

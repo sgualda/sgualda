@@ -21,7 +21,7 @@ Lists get lost. Things get forgotten. The same basket costs different money in t
 
 No business plan, no investors, no deadline. So I did the only thing that costs nothing: I went and talked to people. Families doing a weekly shop, students splitting a flat, my own parents.
 
-I went in assuming the product was a better list. **That is not what came back.**
+I went in assuming the product was a better list. **That’s not what came back.**
 
 Almost nobody described a list problem. They described two different anxieties that happened to co-occur: *forgetting something and having to go back*, and *not knowing whether they were being overcharged*. The list was the artefact, not the need.
 
@@ -51,7 +51,7 @@ We badly underestimated how long testing takes. Not the sessions — those are q
 
 In private beta on Android, under review by Google Play. You can build and manage lists, compare supermarket prices, and reuse a list week after week.
 
-It is not a company. It might never be one. It has already paid for itself in what it taught me.
+It’s not a company. It might never be one. It has already paid for itself in what it taught me.
 
 ## What I would do differently
 

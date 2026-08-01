@@ -64,7 +64,7 @@ const terms = (await getCollection('glossary'))
       {/* The panel rewrites itself on every answer. Without a live region a
           screen reader user hears nothing change and loses their place. */}
       <div id="box" role="status" aria-live="polite" aria-atomic="true"></div>
-      {/* Only this tool's data, not all six. See #Q-077. */}
+      {/* Only this tool’s data, not all six. See #Q-077. */}
       <script
         type="application/json"
         id="tool-data"

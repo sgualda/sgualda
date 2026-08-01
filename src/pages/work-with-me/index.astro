@@ -57,7 +57,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
   <!-- ── hero + qualifier ── -->
   <section class="col hero">
     <span class="eyebrow">Work with me</span>
-    <h1>Let's find out<br />if I can actually help</h1>
+    <h1>Let’s find out<br />if I can actually help</h1>
     <p class="sub">
       Four questions, half a minute, and you get a straight answer on how I would work with
       you — or that I would not, which happens about a third of the time. Nothing is booked
@@ -225,7 +225,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
         `<span class="vmeta">${o.meta}</span><div class="vwhy">${o.why}</div>` +
         `<div class="vcols"><div><h4>What you would get</h4><ul>` +
         o.get.map((g: string) => `<li>${g}</li>`).join('') +
-        `</ul></div><div class="no"><h4>What it is not</h4><ul>` +
+        `</ul></div><div class="no"><h4>What it’s not</h4><ul>` +
         o.not.map((g: string) => `<li>${g}</li>`).join('') +
         `</ul></div></div><p class="vnote">${o.note}</p>` +
         `<div class="vacts">` +
@@ -364,7 +364,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
 
       celebrate($('bBox').closest('.panel'));
       $('bBox').innerHTML =
-        `<div class="step" role="status"><p class="vname">That is everything I need.</p>` +
+        `<div class="step" role="status"><p class="vname">That’s everything I need.</p>` +
         `<p class="vnote">I read every brief myself and reply within a day — with what fits, ` +
         `what it would involve and what it costs, or that none of it fits. ` +
         `A confirmation is on its way to ${email}.</p></div>`;

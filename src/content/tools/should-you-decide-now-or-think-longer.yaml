@@ -30,12 +30,12 @@ faqs:
   - - "What is a reversible decision?"
     - "One you could undo quickly and quietly, where almost nobody outside the team would
       notice and nothing else gets built on top of it. The useful test is whether you can
-      say how you would undo it in a single sentence. If you cannot, it is not reversible —
-      you are hoping it is, and that is how reversible decisions quietly become permanent
+      say how you would undo it in a single sentence. If you cannot, it’s not reversible —
+      you are hoping it is, and that’s how reversible decisions quietly become permanent
       ones."
   - - "How do you stop a team going round the same decision?"
     - "Write down what was decided, why, what was rejected and what would change it, on the
-      day it is made. Most repeated arguments are not disagreement — they are people
+      day it’s made. Most repeated arguments are not disagreement — they’re people
       genuinely remembering it differently, and without a record the loudest or most recent
       version wins each time."
 q:
@@ -64,7 +64,7 @@ q:
         - 2
       - - "A promise we cannot break"
         - 4
-  - - "What would it cost to find out you are wrong, before committing?"
+  - - "What would it cost to find out you’re wrong, before committing?"
     - - - "A few hours"
         - 0
       - - "A few days"
@@ -78,39 +78,39 @@ b:
     name: "Decide today."
     sub: "You can undo this quickly and quietly. Another week of meetings is the more expensive
       mistake."
-    body: "<p>The cost of being wrong here is lower than the cost of the deliberation you are
-      currently spending on it. That is unusual and worth using.</p><p>Teams get this
+    body: "<p>The cost of being wrong here is lower than the cost of the deliberation you’re
+      currently spending on it. That’s unusual and worth using.</p><p>Teams get this
       backwards constantly, because a decision that feels important gets treated as if it
       were permanent. <strong>Importance and reversibility are different things,</strong>
       and only one of them should decide how long you spend.</p>"
     next:
-      - "Say the undo out loud in one sentence. If you cannot, you are in the next bucket."
-      - "Pick, and tell people it is a decision, not an experiment. Half-decisions get
+      - "Say the undo out loud in one sentence. If you cannot, you’re in the next bucket."
+      - "Pick, and tell people it’s a decision, not an experiment. Half-decisions get
         relitigated weekly."
       - "Put a date in the calendar to revisit it, then stop discussing it until then."
   - max: 8
     name: "Decide this week — and write down what would reverse it."
     sub: "This can be undone, but not for free. Somebody will notice, or something will get
       built on top."
-    body: "<p>The most common shape, and the one that goes wrong most quietly. It is genuinely
+    body: "<p>The most common shape, and the one that goes wrong most quietly. It’s genuinely
       reversible the day you make it and slightly less so every week after, and nobody ever
       announces the moment it stopped being reversible.</p><p>So the decision is only half
       the work. The other half is <strong>writing down now what would make you reverse
-      it</strong> — a number, a date, a specific complaint — before you are attached to
+      it</strong> — a number, a date, a specific complaint — before you’re attached to
       being right.</p>"
     next:
       - "Decide, and write one sentence: “We will reverse this if ___ by ___.”"
       - "Put it somewhere the team will see again, not in your notes app."
-      - "Check it on the date. Actually check it. That is the entire trick."
+      - "Check it on the date. Actually check it. That’s the entire trick."
   - max: 12
     name: "Do not decide yet."
     sub: "Undoing this costs real time and other people will feel it. Spend everything on making
       the discovery cheap."
     body: "<p>At this level the question stops being “what should we do” and becomes something
       more useful: <strong>what is the smallest thing that would change our minds?</strong>
-      That reframing is worth more than another meeting, because it is
+      That reframing is worth more than another meeting, because it’s
       answerable.</p><p>Nine conversations. A fake announcement to thirty people who match
-      your users. A version done by hand for one week where you are the software. All
+      your users. A version done by hand for one week where you’re the software. All
       unglamorous, all cheaper than being wrong at this scale.</p>"
     next:
       - "Write the two-day version of the test. If you cannot think of one, you have not
@@ -123,14 +123,14 @@ b:
     sub: "It deserves all the time you have. Pricing customers have seen, a hire, a market, a
       promise made in public."
     body: "<p>These do not get reversed. They get lived with, and everything built afterwards
-      inherits their shape, usually in ways nobody predicted.</p><p>There is no such thing
-      as over-thinking one of these, but there is such a thing as thinking about it alone.
-      <strong>The failure mode here is not haste. It is agreement.</strong></p><p>Before you
+      inherits their shape, usually in ways nobody predicted.</p><p>There’s no such thing
+      as over-thinking one of these, but there’s such a thing as thinking about it alone.
+      <strong>The failure mode here is not haste. It’s agreement.</strong></p><p>Before you
       commit, get the person who disagrees to write down why, with a date on it. Not to
-      change your mind — so that in nine months there is a record of what was foreseeable,
+      change your mind — so that in nine months there’s a record of what was foreseeable,
       instead of everyone quietly rewriting what they thought.</p>"
     next:
       - "Find the person who disagrees. If nobody does, you have not asked outside the room."
       - "Get the objection in writing, dated, before you commit."
-      - "Write your own one-page version of why. Over a page means you are still convincing
+      - "Write your own one-page version of why. Over a page means you’re still convincing
         yourself."

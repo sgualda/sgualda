@@ -8,7 +8,7 @@ count: "4 questions"
 title: "Is This Feature Worth Building? — Free 4-Question Check"
 meta: "Four questions separate a real user need from a loud request before it reaches your
   roadmap — and give you a reason you can say out loud to whoever asked. Free, no account."
-lead: "Something has been requested enough times that it is getting hard to say no. Four
+lead: "Something has been requested enough times that it’s getting hard to say no. Four
   questions separate a real need from a loud request, and give you a reason you can say out
   loud to the person who asked."
 out: "Build it, build a smaller version, wait, or say no — with the reason behind it."
@@ -27,18 +27,18 @@ faqs:
     - "Look at who asked and whether it was unprompted, what those people do about the
       problem today, and what measurably happens if you never build it. Several users who
       each built their own ugly workaround is a need. One loud voice with no workaround
-      behind it is a preference, and preferences do not belong on a roadmap."
+      behind it’s a preference, and preferences do not belong on a roadmap."
   - - "Should I build what a big customer asks for?"
     - "Only if you can find the same need in people who are not that customer. A large
-      account can fund a feature and still be the only place it is ever used, which leaves
-      you maintaining it forever. The question that settles it is what they do about the
-      problem today — if the answer is nothing, they are describing a preference with a
+      account can fund a feature and still be the only place it’s ever used, which leaves
+      you maintaining it forever. The question that settles it’s what they do about the
+      problem today — if the answer is nothing, they’re describing a preference with a
       budget attached."
   - - "How do I say no to a feature request?"
     - "Say what you would need to see to say yes, and mean it. “Nobody who asked for this
       has built a workaround for it, so we do not think the need is there yet — if that
       changes, tell me” is refusable, checkable, and does not sound like a brush-off. A
-      vague “it is not on the roadmap” invites the same request again next month."
+      vague “it’s not on the roadmap” invites the same request again next month."
 q:
   - - "Who asked for it?"
     - - - "Several users, unprompted"
@@ -91,7 +91,7 @@ b:
         not, you built the wrong part."
   - max: 8
     name: "Build the smallest version of it."
-    sub: "There is real demand under this, but not enough to justify the full thing yet."
+    sub: "There’s real demand under this, but not enough to justify the full thing yet."
     body: "<p>Something is here — the signal just is not strong enough to earn a month of work.
       The mistake at this point is treating the choice as build-or-not, when the useful
       third option is <strong>build a tenth of it and see who uses it.</strong></p><p>A
@@ -107,13 +107,13 @@ b:
     name: "Not yet. Find out what they actually do."
     sub: "The request is loud but nothing underneath it proves the need."
     body: "<p>Nobody has a workaround, or nothing measurable happens if this never exists. Those
-      are the two signs that you are looking at a preference rather than a problem — and
+      are the two signs that you’re looking at a preference rather than a problem — and
       preferences are infinite, which is why roadmaps built on them never end.</p><p>This is
-      not a no. It is a <strong>“we do not know yet”</strong>, and the difference matters
+      not a no. It’s a <strong>“we do not know yet”</strong>, and the difference matters
       when you go back to the person who asked.</p>"
     next:
       - "Ask three people who requested it what they did the last time they needed it."
-      - "If the answer is “nothing”, it is a preference. Say so kindly and move on."
+      - "If the answer is “nothing”, it’s a preference. Say so kindly and move on."
       - "If a workaround appears, come back and run this check again."
   - max: 99
     name: "This is a request, not a need."

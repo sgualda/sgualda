@@ -2128,9 +2128,9 @@ Ya se ha producido una deriva (`#Q-055`). Sin guía escrita volverá a pasar, y 
 `BRAND.md` con: principios de voz, listas de "decimos / no decimos", reglas de puntuación (el sitio usa raya larga y evita contracciones de forma inconsistente), tratamiento de números, y 10 ejemplos de antes/después.
 
 ### Criterios de aceptación
-- [ ] `BRAND.md` en el repositorio
-- [ ] Incluye reglas de puntuación y ejemplos
-- [ ] Referenciado desde el README
+- [x] `BRAND.md` en el repositorio
+- [x] Incluye reglas de puntuación y ejemplos
+- [x] Referenciado desde el README
 
 ### Dependencias
 Ninguna
@@ -2164,9 +2164,9 @@ Las contracciones son uno de los marcadores más fuertes de registro. Alternarla
 Decidir una norma y aplicarla. Para una voz "cercana, informal, desenfadada", **las contracciones son la elección correcta**. Requiere una pasada por `/work-with-me/`, `/map/*` y `/tools/*`.
 
 ### Criterios de aceptación
-- [ ] Norma documentada en `BRAND.md`
-- [ ] Aplicada de forma uniforme
-- [ ] Sin mezcla dentro de una misma página
+- [x] Norma documentada en `BRAND.md`
+- [x] Aplicada de forma uniforme — 298 contracciones, 76 negaciones expandidas
+- [x] Sin mezcla dentro de una misma página
 
 ### Dependencias
 `#Q-057`
@@ -4765,7 +4765,7 @@ Ninguna
 - [ ] #Q-050 · [ ] #Q-051 · [ ] #Q-052 · [ ] #Q-053 · [ ] #Q-054
 
 ### Branding
-- [ ] #Q-055 · [ ] #Q-056 · [ ] #Q-057 · [ ] #Q-058
+- [ ] #Q-055 · [ ] #Q-056 · [x] #Q-057 · [x] #Q-058
 
 ### Copywriting
 - [ ] #Q-059 · [ ] #Q-060 · [ ] #Q-061 · [ ] #Q-062 · [ ] #Q-063

@@ -4,6 +4,7 @@ Personal site of Sergio Gualda, product designer in Barcelona.
 Astro, static output, hosted on Hostinger.
 
 - **Quality backlog:** [QUALITY.md](./QUALITY.md) — 78 tickets, the single source of truth for what is left
+- **Voice:** [BRAND.md](./BRAND.md) — how the site sounds, and the rules that keep it sounding that way
 - **Keyword map:** [SEO.md](./SEO.md) — one primary query per page, and what to write next
 - **Waiting on Sergio:** [CONTENT.md](./CONTENT.md) — every remaining blocker that needs him, with the questions to answer
 - **Live site:** https://sgualda.com (still WordPress until the cutover)

@@ -13,7 +13,7 @@ cover: '../../assets/cases/developer-portal.webp'
 coverAlt: 'The truvi developer portal: API reference with code samples alongside the documentation'
 ---
 
-A developer portal for truvi's API — the place an engineer lands when they have to integrate with us and would rather be doing almost anything else.
+A developer portal for truvi’s API — the place an engineer lands when they have to integrate with us and would rather be doing almost anything else.
 
 As with the [dashboard](/case-studies/truvi/), this is my current employer, so what follows is about the craft rather than the product.
 
@@ -21,9 +21,9 @@ As with the [dashboard](/case-studies/truvi/), this is my current employer, so w
 
 Nobody sits down with API documentation and works through it. They arrive from a search result, mid-task, with a terminal already open, looking for one specific thing. Then they leave.
 
-That single observation decides most of the design. It means the landing page matters far less than people assume, and the **individual endpoint page matters far more**, because that is where every search result actually lands. It means navigation has to work when somebody arrives three levels deep with no context. And it means a beautiful overview page that requires reading is a beautiful page nobody reads.
+That single observation decides most of the design. It means the landing page matters far less than people assume, and the **individual endpoint page matters far more**, because that’s where every search result actually lands. It means navigation has to work when somebody arrives three levels deep with no context. And it means a beautiful overview page that requires reading is a beautiful page nobody reads.
 
-Designing for a hurried, slightly irritated expert is a genuinely different brief from designing for a curious newcomer, and it is the one I kept having to remind myself of.
+Designing for a hurried, slightly irritated expert is a genuinely different brief from designing for a curious newcomer, and it’s the one I kept having to remind myself of.
 
 ## What I have learned designing it
 
@@ -37,4 +37,4 @@ Designing for a hurried, slightly irritated expert is a genuinely different brie
 
 Read the support channel before drawing anything.
 
-I designed the first version from the API specification, because that is the tidy, complete, authoritative source. The specification tells you what exists. **It does not tell you what confuses people**, and only one of those two things is a design brief.
+I designed the first version from the API specification, because that’s the tidy, complete, authoritative source. The specification tells you what exists. **It does not tell you what confuses people**, and only one of those two things is a design brief.

@@ -9,15 +9,15 @@ draft: true
 
 topics: ['measurement']
 ---
-As a product designer, I’ve always felt that **Net Promoter Score (NPS)** sounds good at first. But when you think about it, it doesn’t really tell you much. NPS has been around since 2003, thanks to Fred Reichheld and [**Bain & Company**](https://www.bain.com/). It was originally designed to measure customer loyalty for businesses. However, its roots are in **industrial design**, and it focuses primarily on customer loyalty. This makes it not the best fit for measuring **user experience** in digital products.
+As a product designer, I’ve always felt that **Net Promoter Score (NPS)** sounds good at first. But when you think about it, it does not really tell you much. NPS has been around since 2003, thanks to Fred Reichheld and [**Bain & Company**](https://www.bain.com/). It was originally designed to measure customer loyalty for businesses. However, its roots are in **industrial design**, and it focuses primarily on customer loyalty. This makes it not the best fit for measuring **user experience** in digital products.
 
-### Why NPS doesn’t fully capture User Experience
+### Why NPS does not fully capture User Experience
 
 NPS asks users, “How likely are you to recommend our product?” and gives us a score based on their answer. But does that really help us understand why they feel that way? Do we know what part of the experience they liked, or where things went off track? At the end of the day, it’s just a number, and honestly, that’s not enough to fully understand **user experience**.
 
 ![Net Promoter Score as a measure of user experience](../../assets/essays/net-promoter-score-as-a-product-designer.jpg)
 
-The problem with NPS is that it doesn’t go deep enough. A user might give a high score, but without context, we have no idea what actually made them happy. The same goes for low scores. Sure, the number tells us they weren’t thrilled, but without specifics, we can’t take actionable steps to improve.
+The problem with NPS is that it does not go deep enough. A user might give a high score, but without context, we have no idea what actually made them happy. The same goes for low scores. Sure, the number tells us they were not thrilled, but without specifics, we cannot take actionable steps to improve.
 
 ### A better approach: The HEART framework
 

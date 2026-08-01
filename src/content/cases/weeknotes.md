@@ -1,5 +1,5 @@
 ---
-# FICTIONAL — invented at Sergio's request, plausible but did not happen.
+# FICTIONAL — invented at Sergio’s request, plausible but did not happen.
 # Review before launch: a recruiter may ask about it in an interview. See #Q-062.
 title: 'Weeknotes'
 description: 'A tool for teams to write down what they decided each week. Six people tried it, nobody came back, and the reason was not the product.'
@@ -27,10 +27,10 @@ I spent a while assuming the problem was the product — the flow, the onboardin
 
 Teams that already write decisions down were doing it in a document, and a document is free and already open. Teams that do not write decisions down did not have a tooling problem. **They had a "nobody has decided who decides" problem**, and no app fixes that.
 
-I had built a solution for the half of the market that did not need it.
+I’d built a solution for the half of the market that did not need it.
 
 ## What it was worth
 
-More than it cost, in the end. It is where I learned to ask what somebody does about a problem today before building anything — because when the honest answer is "a Google Doc, and it is fine", that is the finding.
+More than it cost, in the end. It’s where I learned to ask what somebody does about a problem today before building anything — because when the honest answer is "a Google Doc, and it’s fine", that’s the finding.
 
-The four-line habit survived. I still recommend it, [and I still think it is what most teams stuck in the same argument actually need](/map/make-it-repeatable/). It just does not need me to build anything.
+The four-line habit survived. I still recommend it, [and I still think it’s what most teams stuck in the same argument actually need](/map/make-it-repeatable/). It just does not need me to build anything.

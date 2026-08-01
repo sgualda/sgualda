@@ -30,7 +30,7 @@ faqs:
       you can name a second person who asked unprompted. Enthusiasm after a demo, with no
       workaround and no repeat use, is a no in better clothes."
   - - "Why do users say they like something and then never use it?"
-    - "Because in a demo they are reacting to your effort, not to their problem. Being
+    - "Because in a demo they’re reacting to your effort, not to their problem. Being
       encouraging is the socially correct response to somebody showing you something they
       made, and “that’s interesting” is what a considerate person says instead of “no”. It
       is indistinguishable from real interest at the moment it happens, which is what makes
@@ -85,9 +85,9 @@ b:
     sub: "About as close to evidence as you get before shipping anything."
     body: "<p>Unprompted, an ugly workaround they would have to give up, repeat behaviour
       without you watching, and a second person you can name. Any one alone is weak.
-      <strong>Together they are rare and worth moving on quickly.</strong></p><p>The waste
-      here is treating it as encouragement and going back to your roadmap. It is not
-      encouragement, it is a specification. The workaround they described is the product —
+      <strong>Together they’re rare and worth moving on quickly.</strong></p><p>The waste
+      here is treating it as encouragement and going back to your roadmap. It’s not
+      encouragement, it’s a specification. The workaround they described is the product —
       copy it in their words, including the parts that look stupid. Those parts are usually
       load-bearing.</p>"
     next:
@@ -96,7 +96,7 @@ b:
       - "Check the second person describes the same problem. If not, you have two products."
   - max: 8
     name: "Promising, but a leg is missing."
-    sub: "There is something real here. Have one more conversation before you build."
+    sub: "There’s something real here. Have one more conversation before you build."
     body: "<p>Most of the signal is there, but one piece is not — usually the second person, or
       evidence they did it again on their own. Those two separate a real pattern from one
       enthusiastic individual.</p><p>The trap is that it feels close enough to justify
@@ -107,14 +107,14 @@ b:
       - "Find one more person with the same problem, through them if possible."
       - "Ask about the last time it happened. Do not mention your solution until the end, if
         at all."
-      - "If they describe it the same way, you are clear to build the smallest version."
+      - "If they describe it the same way, you’re clear to build the smallest version."
   - max: 13
     name: "That was a polite no."
     sub: "Enthusiasm after a demo, no workaround, no repeat use, no second person. Each of those
       is the shape of somebody being kind to you."
     body: "<p>People are generous in demos. They are reacting to your effort, not to their
       problem, and “that’s interesting” is what a considerate person says instead of
-      “no”.</p><p>This one is worth catching early because it is <strong>indistinguishable
+      “no”.</p><p>This one is worth catching early because it’s <strong>indistinguishable
       from real interest at the moment it happens</strong>, and it feels great. That
       combination is how good teams spend months on something nobody was waiting
       for.</p><p>None of it means the idea is dead. It means this conversation was not the
@@ -125,19 +125,19 @@ b:
       - "Stop demoing. Ask about the last time, before you show anything."
       - "Set a rule: two people who found their own workaround, or you do not build it."
   - max: 99
-    name: "There is no signal here yet."
+    name: "There’s no signal here yet."
     sub: "Nothing in this conversation says the problem exists outside your own head."
     body: "<p>Not fatal, and not an insult — plenty of good products started as somebody’s
       private annoyance. It becomes fatal the moment you stop looking for the second person
       and start looking for encouragement, which is an easy switch to make without
-      noticing.</p><p>The honest question, and it is not rhetorical: <strong>if nobody has
+      noticing.</p><p>The honest question, and it’s not rhetorical: <strong>if nobody has
       ever built an ugly manual version of this by hand, is the pain actually
       there?</strong> People solve problems that hurt. Badly, in spreadsheets, with a lot of
       copy-pasting — but they solve them.</p>"
     next:
       - "Go looking for the ugly manual version. Forums, spreadsheets, a channel someone
         maintains by hand."
-      - "Find one and that is your product and its users. Find none after a week and believe
+      - "Find one and that’s your product and its users. Find none after a week and believe
         it."
       - "Keep the idea. Change the question from “would you use this” to “what did you do
         last time”."

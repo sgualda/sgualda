@@ -1,5 +1,5 @@
 name: "The five reasons"
-definition: "The five explanations for a flat usage graph after launch: nobody saw it, they saw it and did not understand it, they understood it and did not need it, they needed it but moving was too much work, or they tried it and it is not good enough yet."
+definition: "The five explanations for a flat usage graph after launch: nobody saw it, they saw it and did not understand it, they understood it and did not need it, they needed it but moving was too much work, or they tried it and it’s not good enough yet."
 note: "They look identical in analytics and their fixes point in opposite directions, which is why diagnosis is cheaper than effort."
 topics:
   - "launch"

@@ -7,7 +7,7 @@ migrated: true
 draft: false
 topics: ['measurement']
 ---
-Measuring **user experience (UX)** has always been a challenge. While we can track data like **retention**, **clicks**, and **task completions**, these numbers don’t always capture the full picture of what users truly experience. That’s where the [**HEART Framework by Google™**](https://www.heartframework.com/) comes in, offering a comprehensive and structured way to assess UX. In this article, I’ll explore the potential of the HEART Framework, and share how it’s shaping the way I approach design.
+Measuring **user experience (UX)** has always been a challenge. While we can track data like **retention**, **clicks**, and **task completions**, these numbers do not always capture the full picture of what users truly experience. That’s where the [**HEART Framework by Google™**](https://www.heartframework.com/) comes in, offering a comprehensive and structured way to assess UX. In this article, I’ll explore the potential of the HEART Framework, and share how it’s shaping the way I approach design.
 
 ![Measuring user experience with HEART](../../assets/essays/HEART-Framework-diagram-1024x615.webp)
 
@@ -21,7 +21,7 @@ The **happiness** dimension focuses on how users feel when interacting with your
 
 ## Task success: tracking efficiency
 
-On the other hand, **task success** measures how well users can complete key actions within the product. This is an area I’ve learned the hard way: “usable” doesn’t always mean “enjoyable.” While users might complete a task, the journey could be full of friction. The HEART Framework helps to refine these friction points by providing a clear structure to measure **task success**. It’s not enough for a task to be completed; it must be done with ease and satisfaction. By assessing how smoothly users can navigate through a product to achieve their goals, the HEART framework enables me to focus on improving usability as well as the overall enjoyment of the user experience.
+On the other hand, **task success** measures how well users can complete key actions within the product. This is an area I’ve learned the hard way: “usable” does not always mean “enjoyable.” While users might complete a task, the journey could be full of friction. The HEART Framework helps to refine these friction points by providing a clear structure to measure **task success**. It’s not enough for a task to be completed; it must be done with ease and satisfaction. By assessing how smoothly users can navigate through a product to achieve their goals, the HEART framework enables me to focus on improving usability as well as the overall enjoyment of the user experience.
 
 ## What I hope to achieve with the HEART framework
 
@@ -31,7 +31,7 @@ The insights provided by the HEART Framework will allow me to make data-driven d
 
 ## HEART framework vs NPS: a better alternative for measuring user experience?
 
-In the past, I’ve often relied on the **[Net Promoter Score (NPS)](https://www.netpromotersystem.com/)** to gauge user satisfaction. NPS simply asks users how likely they are to recommend a product, providing a snapshot of user sentiment. However, NPS has limitations—it doesn’t capture the full picture of a user’s experience. It primarily focuses on a single metric of **willingness to recommend**, which, while useful, doesn’t provide enough depth to fully understand the various aspects of user experience.
+In the past, I’ve often relied on the **[Net Promoter Score (NPS)](https://www.netpromotersystem.com/)** to gauge user satisfaction. NPS simply asks users how likely they are to recommend a product, providing a snapshot of user sentiment. However, NPS has limitations—it does not capture the full picture of a user’s experience. It primarily focuses on a single metric of **willingness to recommend**, which, while useful, does not provide enough depth to fully understand the various aspects of user experience.
 
 On the other hand, the **HEART Framework** is a more holistic tool that examines multiple dimensions of UX, such as **happiness**, **engagement**, **task success**, and **adoption**. With HEART, I can dive deeper into what users feel, how they engage with the product, and how successfully they complete tasks. This multi-dimensional approach provides actionable insights that go beyond NPS, making it a more reliable method for driving product improvements.
 

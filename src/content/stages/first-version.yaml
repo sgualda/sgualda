@@ -4,7 +4,7 @@ n: "02"
 name: "First version"
 lead: "You know what to build. Now you decide how much of it."
 meta: "Everyone agrees on building something small until somebody has to name what gets cut. How to decide what the first version has to prove."
-question: "What is the smallest version that is still worth showing?"
+question: "What is the smallest version that’s still worth showing?"
 x: 28
 y: 26
 tools:
@@ -14,31 +14,31 @@ body:
   - "Scope kills more products than competitors ever will, and it does it politely."
   - "Everyone agrees on building something small, right up to the moment somebody has to
     name the thing being cut. Then every item comes back with a reason attached, and the
-    reasons are all good. That is the trap: <strong>you never lose an argument about scope.
+    reasons are all good. That’s the trap: <strong>you never lose an argument about scope.
     You accumulate small reasonable victories until the first version takes seven
     months.</strong>"
-  - "I have been the person making those arguments. On one project I fought to keep a
+  - "I’ve been the person making those arguments. On one project I fought to keep a
     settings screen nobody had asked for, because the flow felt incomplete without it. It
     cost about two weeks. When we finally launched, I checked: eleven people had opened it.
     I had defended it with the word <em>quality</em>, which is a word I have learned to
     distrust when it comes out of my own mouth in a scoping meeting."
   - "What works for me now is deciding what this version has to <em>prove</em>, in one
     sentence, before deciding what it contains. Everything that does not serve that sentence
-    goes — not because it is bad, but because it is not this one. Most of it never comes
+    goes — not because it’s bad, but because it’s not this one. Most of it never comes
     back, which tells you what it was worth."
-  - "And the deadline is not pressure. It is the most honest scoping tool you have, and the
+  - "And the deadline is not pressure. It’s the most honest scoping tool you have, and the
     only one that does not negotiate."
 traps:
   - "Building the version you would be proud to show instead of the version that answers the
     question."
-  - "Polishing the part you enjoy. It is always the interface, and it is almost never the
-    part that is actually at risk."
+  - "Polishing the part you enjoy. It’s always the interface, and it’s almost never the
+    part that’s actually at risk."
   - "Treating “we can add it later” as free. Later is where the entire roadmap already
     lives."
 signal: "Somebody outside the team can use it without you narrating over their shoulder. Not
   admire it — use it."
 cta:
   title: "A working session on scope"
-  body: "Bring the argument you are currently having. We settle what the first version has to
+  body: "Bring the argument you’re currently having. We settle what the first version has to
     prove and what comes out of it, and you get the reasoning in writing so your team can
     push back on it."

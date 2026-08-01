@@ -56,7 +56,7 @@ export const TOPICS: Topic[] = [
   {
     slug: 'craft',
     label: 'Craft',
-    blurb: 'The actual work of designing a product, and what it is not.',
+    blurb: 'The actual work of designing a product, and what it’s not.',
   },
 ];
 

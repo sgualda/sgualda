@@ -1,6 +1,6 @@
 name: "Scope creep by agreement"
 definition: "How first versions grow: every item comes back with a good reason attached, nobody loses the argument, and small reasonable victories accumulate until the release takes months."
-note: "You never lose an argument about scope. That is the problem."
+note: "You never lose an argument about scope. That’s the problem."
 topics:
   - "scope"
 tool: "is-this-feature-worth-building"

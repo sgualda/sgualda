@@ -11,8 +11,8 @@ meta: "Answer three questions about your launch and find out which of five reaso
   nothing saved."
 lead: "You launched and the graph is flat. Five completely different reasons look identical
   from the outside, and their fixes point in opposite directions — so guessing wrong costs
-  you a quarter. Three questions and you get which one you are in."
-out: "Which of the five you are in, why the other four are not it, and the cheap test that
+  you a quarter. Three questions and you get which one you’re in."
+out: "Which of the five you’re in, why the other four are not it, and the cheap test that
   confirms it."
 answers:
   - - "Nobody saw it"
@@ -23,26 +23,26 @@ answers:
     - "The expensive one. Neither traffic nor a better product fixes it."
   - - "Moving to you was too much work"
     - "The problem is real. Switching costs them an afternoon they do not have."
-  - - "It is not good enough yet"
+  - - "It’s not good enough yet"
     - "The only one where “make it better” is genuinely the right answer."
 faqs:
   - - "Why is nobody using my product?"
     - "There are five common reasons and in analytics they look identical: nobody saw it;
       they saw it and did not understand what it was; they understood it and did not need
       it; they needed it but moving off what they use today was too much work; or they tried
-      it and it is not good enough yet. The fixes point in opposite directions, which is why
+      it and it’s not good enough yet. The fixes point in opposite directions, which is why
       the diagnosis matters more than the effort. More traffic only helps the first one and
       a better product only helps the last one."
   - - "Does more marketing fix low usage?"
     - "Only if the reason is that nobody saw it. If people arrive and leave within seconds,
-      more traffic sends more people to the same sentence that is already not working. If
+      more traffic sends more people to the same sentence that’s already not working. If
       they arrive and do not need what you built, more traffic sends more people to
       something they also do not need — at a higher cost each time."
   - - "How do I know if people actually need my product?"
     - "Ask what they do about the problem today. People who genuinely have a problem have
       already built something ugly and manual to cope with it — a spreadsheet, a group chat,
-      a recurring reminder. When nobody can describe any workaround at all, that is usually
-      the finding, and it is worth one afternoon of conversations to confirm before spending
+      a recurring reminder. When nobody can describe any workaround at all, that’s usually
+      the finding, and it’s worth one afternoon of conversations to confirm before spending
       another quarter."
 q:
   - - "What happens when somebody lands on your page?"
@@ -70,14 +70,14 @@ q:
         - 4
 b:
   - max: 2
-    name: "They came back. It is just not good enough yet."
+    name: "They came back. It’s just not good enough yet."
     sub: "The best of the five, and the only one where “make the product better” is actually the
       right answer."
     body: "<p>They found it, understood what it was, tried it, and some came back without being
       reminded. That last part is the only signal I really trust, and you have it.</p><p>It
-      is also the one people assume they are in most often, usually wrongly, because it is
+      is also the one people assume they’re in most often, usually wrongly, because it’s
       the most flattering explanation available. <strong>If nobody came back on their own,
-      you are not here.</strong></p>"
+      you’re not here.</strong></p>"
     next:
       - "Ask the people who came back what they almost gave up on. Push past their first,
         polite answer."
@@ -90,7 +90,7 @@ b:
       do not have."
     body: "<p>They have a workaround, they do not love it, and they still have not moved. That
       gap is almost never about missing features — teams keep tools they openly complain
-      about for years.</p><p>It is about the cost of moving: their data is elsewhere, their
+      about for years.</p><p>It’s about the cost of moving: their data is elsewhere, their
       colleague knows the old thing, and switching means being slower for a week to be
       faster later. <strong>Most people will not take that trade even when the maths is
       obviously in their favour.</strong></p>"
@@ -101,13 +101,13 @@ b:
       - "Make it useful before setup is finished, not after."
   - max: 8
     name: "They saw it and did not understand it."
-    sub: "People arrive and leave within seconds. That is what you are saying, not how many
-      people you are reaching."
+    sub: "People arrive and leave within seconds. That’s what you’re saying, not how many
+      people you’re reaching."
     body: "<p>This gets misdiagnosed as a traffic problem more than any other, and answered with
-      a bigger ad budget — which sends more people to the same sentence that is already not
+      a bigger ad budget — which sends more people to the same sentence that’s already not
       working.</p><p>Cheapest test I know, and it takes an afternoon: <strong>show your
       homepage to five people for eight seconds, hide it, and ask what the product
-      does.</strong> If two are wrong, you are here. Not partly wrong — wrong.</p>"
+      does.</strong> If two are wrong, you’re here. Not partly wrong — wrong.</p>"
     next:
       - "Run the eight-second test on five people who do not know what you do."
       - "Rewrite the first sentence in their words, not your internal ones."
@@ -117,11 +117,11 @@ b:
     name: "They did not need it."
     sub: "The expensive one, and the one everybody spends months avoiding."
     body: "<p>Nobody can describe a workaround and nobody came back. That combination has one
-      boring explanation, and it is the one nobody wants: <strong>the problem is not painful
+      boring explanation, and it’s the one nobody wants: <strong>the problem is not painful
       enough to act on.</strong></p><p>What makes it expensive is that both escape routes
       are dead ends. Distribution does not fix it — more people arrive at something they
       also do not need. A better product does not fix it either, because quality was never
-      the objection.</p><p>The good news: it is the cheapest one to <em>confirm</em>. One
+      the objection.</p><p>The good news: it’s the cheapest one to <em>confirm</em>. One
       afternoon and nine honest conversations about the last time the problem actually
       happened to them.</p>"
     next:
@@ -129,5 +129,5 @@ b:
         your product."
       - "Count how many had done something manual and annoying about it. Under three,
         believe it."
-      - "Look for the adjacent problem instead of rebuilding. It is usually one step away,
+      - "Look for the adjacent problem instead of rebuilding. It’s usually one step away,
         with the same users."
