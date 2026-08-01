@@ -71,11 +71,23 @@ fails accessibility and wastes image search.
 Same shape, in `src/content/cases/`. See the schema in
 [`src/content.config.ts`](./src/content.config.ts).
 
-### Everything else
+### Without opening the editor
 
-Tool questions and outcomes live in `src/lib/tools.ts`. Map stages live in
-`src/lib/stages.ts`. Both are TypeScript rather than markdown — see `#Q-093`
-for why that should change and why it has not yet.
+```bash
+npm run cms      # then http://localhost:4321/keystatic/
+```
+
+A visual editor for all four collections — essays, case studies, the six
+checks and the five map stages. No database and no account: it reads and
+writes the same markdown and YAML the build uses, so every change is an
+ordinary git diff you can review before pushing.
+
+**The trailing slash matters.** `/keystatic` 404s, `/keystatic/` works. The
+site is configured with `trailingSlash: 'always'` to preserve the WordPress
+URLs, and Keystatic's routes inherit it.
+
+The CMS only runs under `npm run cms`. A normal build stays fully static with
+no server routes — verified in CI.
 
 ---
 

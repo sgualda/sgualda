@@ -1,6 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import react from '@astrojs/react';
+import keystatic from '@keystatic/astro';
+
+// The CMS needs a server to run; the public site does not. Only `npm run cms`
+// turns this on, so a production build stays fully static.
+const CMS = process.env.CMS === '1';
 
 /**
  * CRITICAL — do not change these two lines without planning redirects.
@@ -18,13 +24,19 @@ export default defineConfig({
   // Static output. Every page is real HTML on disk, so crawlers that do not
   // run JavaScript — Googlebot's first pass, GPTBot, ClaudeBot, PerplexityBot —
   // see the full content. Interactive parts are islands, loaded per page.
-  output: 'static',
+  output: CMS ? 'server' : 'static',
 
   // Hover, not viewport: prefetchAll pulled a dozen pages the moment anyone
   // scrolled to the footer. Opt high-intent links in with data-astro-prefetch.
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
 
   integrations: [
+    ...(CMS
+      ? [
+          react(),
+          keystatic(),
+        ]
+      : []),
     sitemap({
       // Internal pages stay out of search entirely.
       filter: (page) => !['/draft/', '/styleguide/'].some((x) => page.includes(x)),
