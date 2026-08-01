@@ -17,6 +17,8 @@ export default defineConfig({
   use: { baseURL: 'http://localhost:4321', trace: 'on-first-retry' },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
+    // iPhone 13 means WebKit, which is the engine real iPhones use. Worth the
+    // extra browser: it is where CSS support differs most.
     { name: 'mobile', use: { ...devices['iPhone 13'] } },
   ],
   webServer: {
