@@ -53,6 +53,19 @@ if (noAlt.length) {
   process.exit(1);
 }
 
+// Spacing drift is invisible until there are forty values and no rhythm.
+// Warns rather than fails: the existing literals are being folded in as each
+// area is touched, not in one risky sweep.
+const SCALE = [4, 8, 12, 16, 20, 26, 34, 44, 56, 72];
+let offScale = 0;
+for (const f of readdirSync(join(root, 'src/pages'), { recursive: true })) {
+  if (typeof f !== 'string' || !f.endsWith('.astro')) continue;
+  const css = readFileSync(join(root, 'src/pages', f), 'utf8');
+  for (const m of css.matchAll(/(?:margin|padding|gap)(?:-\w+)?:\s*([^;{}]+)/g))
+    for (const px of m[1].matchAll(/\b(\d+)px\b/g))
+      if (+px[1] > 3 && !SCALE.includes(+px[1])) offScale++;
+}
+
 const G = '\x1b[32m', R = '\x1b[31m', Y = '\x1b[33m', X = '\x1b[0m';
 // Directory routes are dist/<path>/index.html; endpoints like /rss.xml are
 // written as literal files.
@@ -60,6 +73,7 @@ const built = (u) => existsSync(join(dist, u, 'index.html')) || existsSync(join(
 
 let missing = 0;
 console.log(`\n  ${urls.length} URLs declared\n`);
+if (offScale) console.log(`  \x1b[33m·\x1b[0m ${offScale} spacing values off the scale (see --space-* in tokens.css)\n`);
 for (const [name, list] of Object.entries(groups)) {
   if (!list.length) continue;
   console.log(`  ${name}`);

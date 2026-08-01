@@ -110,7 +110,7 @@ const routeD = smooth(STAGES);
                 <span class="h">{s.name}</span>
                 <span class="p">{s.lead}</span>
               </span>
-              <span class="go" aria-hidden="true">→</span>
+              <span class="chev" aria-hidden="true">→</span>
             </a>
           </li>
         ))
@@ -130,7 +130,6 @@ const routeD = smooth(STAGES);
 
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
-  .intro .eyebrow { margin-bottom: 16px; }
   .intro h1 { margin-bottom: 18px; }
 
   .map-wide { width: min(1040px, calc(100vw - 40px)); margin: 44px auto 0; }
@@ -362,8 +361,8 @@ const routeD = smooth(STAGES);
     font-weight: 600; letter-spacing: -0.03em; margin-bottom: 6px;
   }
   .text .p { font-size: 1rem; line-height: 1.55; letter-spacing: 0; color: var(--dim); }
-  .go { color: var(--dim); transition: transform 0.28s var(--ease), color 0.28s var(--ease); }
-  .stages a:hover .go { transform: translateX(5px); color: var(--ink); }
+  .chev { color: var(--dim); transition: transform 0.28s var(--ease), color 0.28s var(--ease); }
+  .stages a:hover .chev { transform: translateX(5px); color: var(--ink); }
   .stages a:hover .idx { color: var(--ink); }
 
   @media (max-width: 560px) {

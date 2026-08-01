@@ -181,7 +181,7 @@ const tools = s.tools.map((slug) => TOOLS.find((t) => t.slug === slug)!).filter(
 
   .tools { list-style: none; text-align: left; margin-top: 34px; display: grid; gap: 12px; }
   .tools a {
-    display: block; background: var(--surface); border-radius: 18px; padding: 22px;
+    display: block; background: var(--surface); border-radius: var(--radius-sm); padding: 22px;
     transition: background 0.2s var(--ease);
   }
   .tools a:hover { background: color-mix(in srgb, var(--surface) 60%, var(--hair)); }

@@ -86,7 +86,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
               <p class="pills"><span>Free</span><span>{t.time}</span></p>
               <h2>{t.n}</h2>
               <p class="use">{t.lead}</p>
-              <span class="go">Start the check <i aria-hidden="true">→</i></span>
+              <span class="arrow-link">Start the check <i aria-hidden="true">→</i></span>
             </a>
           </article>
         ))
@@ -106,7 +106,6 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
-  .intro .eyebrow { margin-bottom: 16px; }
   .intro h1 { margin-bottom: 18px; }
 
   .filters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 54px; }
@@ -126,11 +125,6 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   .cards { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 30px; }
   .card[hidden] { display: none; }
 
-  .go {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
-  }
-  .go i { font-style: normal; transition: transform 0.3s var(--ease); }
   .card:hover .go i { transform: translateX(5px); }
 
   .pills { display: flex; gap: 6px; margin-bottom: 16px; }

@@ -112,7 +112,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
             <a href={`/tools/${o.slug}/`}>
               <h3>{o.n}</h3>
               <p>{o.out}</p>
-              <span class="go">Start the check <i aria-hidden="true">→</i></span>
+              <span class="arrow-link">Start the check <i aria-hidden="true">→</i></span>
             </a>
           </li>
         ))
@@ -145,12 +145,6 @@ const url = `${SITE.url}/tools/${t.slug}/`;
   .more { list-style: none; text-align: left; margin-top: 34px; display: grid; gap: 14px; }
   .more h3 { font-size: 1rem; margin-bottom: 8px; }
   .more p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); margin-bottom: 18px; }
-  .go {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 0.875rem; font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
-  }
-  .go i { font-style: normal; transition: transform 0.3s var(--ease); }
-  .card-link:hover .go i { transform: translateX(5px); }
 </style>
 
 <script>

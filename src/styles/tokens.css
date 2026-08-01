@@ -92,8 +92,25 @@
      which is the 2/4 proportion Sergio asked for. */
   --shell: min(560px, calc(100vw - 40px));
   --measure: 62ch;   /* long-form reading width, used inside the shell */
+  /* ── spacing ──
+     Named steps so a future component has somewhere to reach for instead of
+     inventing a number. The site currently uses 42 distinct literal values,
+     which is noise rather than rhythm; new work uses these, and existing
+     literals get folded in as each area is touched. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 26px;
+  --space-7: 34px;
+  --space-8: 44px;
+  --space-9: 56px;
+  --space-10: 72px;
+
   --gap: clamp(74px, 9vw, 118px);
-  --radius-card: 28px;
+  --radius-sm: 18px;     /* nested cards, inline blocks */
+  --radius-card: 28px;   /* the standard card */
   --radius-band: 34px;   /* full-bleed banners like the newsletter */
   --radius-pill: 999px;
 
