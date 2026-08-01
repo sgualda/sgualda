@@ -1,4 +1,5 @@
 ---
+import '@styles/fonts.css';
 import '@styles/tokens.css';
 import '@styles/base.css';
 import { SITE } from '@lib/site';
@@ -70,15 +71,10 @@ const graph = [
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — essays`} href="/rss.xml" />
 
-    <!-- Zalando Sans Expanded (headings) + Archivo (body), per Figma.
-         TODO: self-host both before launch. Google Fonts costs a third-party
-         connection and a round trip on every single page load. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Self-hosted. No third-party connection, and the two files the first
+         screen needs are preloaded so text paints without a flash. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/zalando-sans-expanded-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/archivo-latin.woff2" crossorigin />
 
     <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
     <slot name="head" />
