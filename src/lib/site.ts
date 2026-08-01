@@ -80,6 +80,11 @@ export const URL_MAP = {
     '/about/',
     '/work-with-me/',
     '/case-studies/',
+    '/case-studies/glintale/',
+    '/case-studies/truvi/',
+    '/case-studies/ecoco-mobile-app/',
+    '/case-studies/weeknotes/',
+    '/case-studies/rangos/',
     '/writing/',
     '/map/',
     '/map/worth-building/',
@@ -101,12 +106,6 @@ export const URL_MAP = {
     '/tools/can-you-charge-for-your-product-yet/',
     '/tools/why-your-team-keeps-redoing-the-same-work/',
   ],
-  /**
-   * Promised in the navigation but not written yet. Kept separate so the
-   * build check reports them without failing CI — see #Q-044.
-   */
-  pending: ['/case-studies/truvi/', '/case-studies/ecoco-mobile-app/'],
-
   /**
    * Topic hubs. Only topics that actually have an essay get a page — an empty
    * hub is thin content and a dead end. 'launch' is defined in topics.ts and
