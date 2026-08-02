@@ -1,6 +1,6 @@
-dist/
-.astro/
-node_modules/
+dist
+.astro
+node_modules
 .DS_Store
 .env
 .env.production
@@ -14,7 +14,7 @@ node_modules/
 
 # Test output
 playwright-report/
-test-results/
+test-results
 
 # PHP config with the API key — lives outside public_html on the server
 .env-brief.php
@@ -23,6 +23,11 @@ test-results/
 incoming/*
 !incoming/README.md
 
+# Written without a trailing slash on purpose. `dist/` ignores a directory but
+# not a symlink of the same name, and these are symlinks — so the first version
+# of this file committed them, and an `rm -rf dist` then showed up as deleting
+# a tracked file.
+#
 # ── iCloud ──
 # This project lives under ~/Documents, which macOS syncs. A build writing 200
 # files while a sync is mid-flight produces conflict copies — "index 2.html",

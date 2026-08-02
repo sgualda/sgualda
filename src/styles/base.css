@@ -283,17 +283,20 @@ h2 + .sub, h1 + .sub { margin-top: var(--space-4); }
    focus so nothing is permanently hidden from anybody who wants to look
    properly. Photographs survive this comfortably; white blocks stop shouting. */
 :root[data-theme='dark'] :is(.prose, .byline, article, figure) img,
+:root[data-theme='dark'] :is(.slot, .card) img,
 :root[data-theme='dark'] :is(.prose, .byline, article, figure) picture {
   filter: brightness(0.86) contrast(1.02);
   transition: filter 0.3s var(--ease);
 }
 :root[data-theme='dark'] :is(.prose, .byline, article, figure) img:hover,
+:root[data-theme='dark'] :is(.slot, .card):hover img,
 :root[data-theme='dark'] :is(.prose, .byline, article, figure) img:focus-visible {
   filter: none;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) :is(.prose, .byline, article, figure) img,
+  :root:not([data-theme='light']) :is(.slot, .card) img,
   :root:not([data-theme='light']) :is(.prose, .byline, article, figure) picture {
     filter: brightness(0.86) contrast(1.02);
     transition: filter 0.3s var(--ease);

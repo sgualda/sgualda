@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
@@ -7,9 +8,11 @@ import Footer from '@components/Footer.astro';
 /**
  * /case-studies/ — matches the Figma frame "Work".
  *
- * The grid and the filter counts are driven by the `cases` collection, so the
- * numbers can never disagree with what is on the page. While the collection is
- * empty it renders the four placeholder cards from the comp.
+ * The grid is driven by the `cases` collection, so it can never disagree with
+ * what is on the page. Two of the six have no cover on purpose: they are the
+ * buried ones, and there is nothing to show. They get the status set in type
+ * instead of a grey rectangle, which reads as a decision rather than a
+ * missing asset.
  *
  * Note: the comp says "Burried". Fixed to "Buried".
  */
@@ -47,7 +50,18 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
         cases.length
           ? cases.map((c) => (
               <a class="card" href={`/case-studies/${c.id}/`} >
-                <div class="thumb" aria-hidden="true"></div>
+                {c.data.cover ? (
+                  <Image
+                    class="thumb"
+                    src={c.data.cover}
+                    alt={c.data.coverAlt ?? ''}
+                    widths={[320, 640, 960]}
+                    sizes="(max-width: 560px) calc(100vw - 40px), 272px"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="thumb none"><span>{c.data.status}</span></div>
+                )}
                 <h2>{c.data.title}</h2>
                 <p class="role">{c.data.role} · {c.data.year}</p>
                 <p class="summary">{c.data.summary}</p>
@@ -81,9 +95,28 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
   .thumb {
+    display: block;
+    width: 100%;
     background: var(--surface);
     border-radius: var(--radius-card);
-    aspect-ratio: 4 / 3.4;
+    /* Matches the source screenshots; see the note on the home grid. */
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    /* The covers are screenshots on light interfaces. A hairline stops them
+       dissolving into the page in light and floating in dark. */
+    border: 1px solid var(--hair);
+    transition: opacity 0.28s var(--ease);
+  }
+  /* Nothing to show, said in words. */
+  .thumb.none {
+    display: grid;
+    place-items: center;
+  }
+  .thumb.none span {
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
   }
   .card { text-align: left; display: block; }
   .card h2 { font-size: 1.0625rem; margin-top: 14px; }

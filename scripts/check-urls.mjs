@@ -139,6 +139,24 @@ if (existsSync(rPath)) {
   console.log(`  ${rules.length} redirects`);
   for (const [from, to] of bad) console.log(`    ${Y}!${X} ${from} → ${to} (target not built)`);
   if (!bad.length) console.log(`    ${G}✓${X} every target resolves`);
+
+  /**
+   * A redirect leaving a page that also exists is always a bug: two URLs serve
+   * the same content, they compete in search, and the sitemap lists both.
+   *
+   * This is here because iCloud restored a deleted essay. The old
+   * what-is-mvp-and-how-it-drives-growth.md came back into src/ on its own,
+   * untracked, and rebuilt itself at the URL it had been redirected away from.
+   * Nothing caught it — not git, not the URL contract, not the tests. Renames
+   * are also easy to half-finish by hand, and this catches those too.
+   */
+  const ghosts = rules.filter(([from]) => from?.startsWith('/') && built(from));
+  if (ghosts.length) {
+    console.error(`\n✗ ${ghosts.length} page(s) built at a URL that redirects away:`);
+    for (const [from, to] of ghosts) console.error(`    ${from} exists, but redirects to ${to}`);
+    console.error('  Two URLs serving one page. Delete the source, or drop the redirect.\n');
+    process.exit(1);
+  }
   console.log('');
 }
 

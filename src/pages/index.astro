@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
@@ -9,9 +10,23 @@ import { SITE } from '@lib/site';
 
 /**
  * Home — built to match the Figma frame "Home" section by section.
- * Empty image slots are intentional placeholders; Sergio supplies the
- * project shots later.
  */
+
+/**
+ * The four projects on the home page, in the order Sergio named them.
+ * Deliberately a hand-written list rather than the collection's `order`
+ * field: the work page shows everything, and this one shows the four he
+ * wants a stranger to see first. Two of the six are buried on purpose and
+ * belong on /case-studies/, not here.
+ */
+const FEATURED = ['truvi', 'ecoco-mobile-app', 'glintale', 'truvi-developer-portal'];
+const all = await getCollection('cases', ({ data }) => !data.draft);
+const featured = FEATURED.map((id) => all.find((c) => c.id === id)).filter((c) => c !== undefined);
+if (featured.length !== FEATURED.length) {
+  throw new Error(
+    `Home: ${FEATURED.filter((id) => !all.some((c) => c.id === id)).join(', ')} not in the cases collection`
+  );
+}
 
 const principles = [
   {
@@ -64,7 +79,26 @@ const principles = [
     </div>
 
     <div class="wide grid">
-      {[0, 1, 2, 3].map(() => <div class="slot" aria-hidden="true"></div>)}
+      {
+        featured.map((c) => (
+          <a class="slot" href={`/case-studies/${c.id}/`}>
+            <Image
+              src={c.data.cover!}
+              alt={c.data.coverAlt ?? ''}
+              widths={[320, 640, 960]}
+              sizes="(max-width: 560px) calc(100vw - 40px), 272px"
+              loading="lazy"
+            />
+            {/* Title and year, not client and role: two of these four are
+                truvi and two are my own companies, so client+role produced
+                two pairs of identical captions. */}
+            <span class="cap">
+              <b>{c.data.title}</b>
+              <em>{c.data.year}</em>
+            </span>
+          </a>
+        ))
+      }
     </div>
 
     <div class="col actions" style="margin-top:34px">
@@ -145,19 +179,43 @@ const principles = [
   .email a:hover { color: var(--accent); }
   h2 + .sub { margin-top: 16px; }
 
-  /* Project slots: 2×2, empty until the images exist. aspect-ratio holds the
-     space so nothing shifts when they land. */
+  /* Four projects, 2×2. The Figma comp has bare image slots; each one carries
+     a caption because four unlabelled screenshots tell a first-time visitor
+     nothing, and tell a screen reader less. One line, so the picture is still
+     the thing you see. */
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-top: 42px;
   }
-  .slot {
+  .slot { display: block; text-align: left; }
+  .slot img {
+    display: block;
+    width: 100%;
+    /* 16/9, matching the screenshots. The comp specifies 4/3, which crops a
+       quarter off the width of a 2304×1271 source — enough to cut the entire
+       left column off the developer portal shot. A tile that follows the comp
+       and hides the thing it is showing is not following the comp. */
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
     background: var(--surface);
+    border: 1px solid var(--hair);
     border-radius: var(--radius-card);
-    aspect-ratio: 4 / 3;
+    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
   }
+  .slot:hover img { opacity: 0.86; transform: translateY(-2px); }
+  .cap {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-top: var(--space-3);
+    padding-inline: var(--space-1);
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+  }
+  .cap b { font-weight: 600; }
+  .cap em { font-style: normal; color: var(--dim); }
   .wide-shot {
     width: 100%;
     aspect-ratio: 16 / 10;
