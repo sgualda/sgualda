@@ -37,11 +37,25 @@ const STATUS: Record<string, string> = {
   description={d.description}
   schema={[
     {
-      '@type': 'CreativeWork',
+      // Article, not CreativeWork: the page is a written account *about* a
+      // product, and CreativeWork does not tell a search engine which of the
+      // two it is looking at.
+      '@type': 'Article',
+      headline: d.title,
       name: d.title,
       description: d.description,
       author: { '@id': `${SITE.url}/#person` },
-      dateCreated: d.year,
+      publisher: { '@id': `${SITE.url}/#person` },
+      datePublished: d.published.toISOString(),
+      inLanguage: 'en',
+      // What the article is *about*. Without this the page is prose with a
+      // title; with it, the product is an entity a search engine can hold.
+      about: {
+        '@type': 'SoftwareApplication',
+        name: d.title,
+        applicationCategory: 'BusinessApplication',
+        creator: { '@id': `${SITE.url}/#person` },
+      },
     },
   ]}
 >
@@ -49,7 +63,10 @@ const STATUS: Record<string, string> = {
 
   <article>
     <header class="col head">
-      <Breadcrumbs items={[{ label: 'Work', href: '/case-studies/' }, { label: STATUS[d.status] }]} />
+      {/* The project, not its status. Three of the six are "In progress", so the
+        status made the breadcrumb identical on three pages and answered a
+        question nobody navigating had asked. */}
+      <Breadcrumbs items={[{ label: 'Work', href: '/case-studies/' }, { label: d.title }]} />
       <h1>{d.title}</h1>
       <p class="sub">{d.summary}</p>
 
@@ -63,7 +80,14 @@ const STATUS: Record<string, string> = {
     {
       d.cover && (
         <div class="col">
-          <Image src={d.cover} alt={d.coverAlt ?? ''} class="cover" widths={[560, 1120]} loading="eager" />
+          <Image
+            src={d.cover}
+            alt={d.coverAlt ?? ''}
+            class="cover"
+            widths={[560, 1120]}
+            sizes="(max-width: 560px) calc(100vw - 40px), 560px"
+            loading="eager"
+          />
         </div>
       )
     }
@@ -76,14 +100,27 @@ const STATUS: Record<string, string> = {
   <section class="section col">
     <span class="eyebrow">More</span>
     <h2>Other things<br />I’ve built.</h2>
-    <ul class="others">
+    {/* The same card as /work/: image only, square, in a rail. Two formats for
+        the same object on two pages is how a site stops looking like one site. */}
+    <ul class="others rail">
       {
         others.map((c) => (
-          <li class="card-link">
-            <a href={`/case-studies/${c.id}/`}>
-              <span class="tag">{STATUS[c.data.status]}</span>
-              <h3>{c.data.title}</h3>
-              <p>{c.data.summary}</p>
+          <li>
+            <a href={`/case-studies/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
+              {c.data.cover ? (
+                <Image
+                  class="thumb"
+                  src={c.data.cover}
+                  alt={c.data.coverAlt ?? ''}
+                  widths={[240, 480]}
+                  sizes="236px"
+                  sizes="236px"
+                  loading="lazy"
+                  style={`object-position:${c.data.coverPosition}`}
+                />
+              ) : (
+                <div class="thumb none"><span>{c.data.status}</span></div>
+              )}
             </a>
           </li>
         ))
@@ -136,15 +173,29 @@ const STATUS: Record<string, string> = {
   .prose :global(a:hover) { opacity: 0.6; }
   .prose :global(img) { width: 100%; border-radius: var(--radius-card); margin: 2.2em 0; }
 
-  .others { list-style: none; text-align: left; margin-top: 34px; display: grid; gap: 14px; }
+  .others { list-style: none; text-align: left; margin-top: 34px; padding-block: 4px; }
+  .others > li { width: 236px; }
+  .others .thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-card);
+    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+  }
+  .others a:hover .thumb { opacity: 0.86; transform: translateY(-2px); }
+  .others .thumb.none { display: grid; place-items: center; }
+  .others .thumb.none span {
+    font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim);
+  }
   .tag {
     display: inline-block; font-size: 0.625rem; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--dim);
     background: var(--paper); border-radius: var(--radius-pill);
     padding: 5px 11px; margin-bottom: 12px;
   }
-  .others h3 { font-size: 1rem; margin-bottom: 7px; }
-  .others p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
 
   .next { margin-top: var(--gap); padding-top: 44px; border-top: 1px solid var(--hair); }
   .next .actions { margin-top: 22px; }
@@ -153,3 +204,8 @@ const STATUS: Record<string, string> = {
     .facts { grid-template-columns: 1fr; gap: 14px; }
   }
 </style>
+
+<script>
+  import { rails } from '@lib/rail';
+  rails();
+</script>

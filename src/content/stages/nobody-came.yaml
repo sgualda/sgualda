@@ -4,6 +4,7 @@ n: "03"
 name: "Nobody came"
 lead: "You launched. Nothing happened. This is where I’ve lost the most."
 meta: "Five completely different reasons produce the same flat graph after launch, and their fixes point in opposite directions. How to tell which one you have."
+seoTitle: "Launched and nobody came: the five reasons"
 question: "Which of the five reasons is behind a flat graph?"
 x: 50
 y: 64
@@ -37,6 +38,13 @@ traps:
   - "Asking your existing users why other people are not using it. They are the least
     qualified people in the world to answer that."
 signal: "You can say which of the five you’re in, and say out loud why the other four are not it."
+faqs:
+  - q: "Why is nobody using my product after launch?"
+    a: "There are five reasons and they look identical from the outside: nobody saw it, they saw it and did not understand it, they did not need it, moving to you was too much work, or it is not good enough yet. Their fixes point in opposite directions, so guessing wrong costs you a quarter."
+  - q: "Does more marketing fix low usage?"
+    a: "Only if the reason is that nobody saw it, which is one of the five. In the other four, more traffic makes the problem more expensive rather than smaller — you are paying to send more people to the same exit."
+  - q: "How do I tell which of the five I am in?"
+    a: "Look at what happens after somebody arrives, not at how many arrive. How many got past the first screen, how many finished the main thing once, and how many came back on their own. Those three numbers separate the five reasons almost completely."
 cta:
   title: "A product review"
   body: "Five days on the product, your numbers, and up to nine conversations with your actual

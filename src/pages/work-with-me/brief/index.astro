@@ -1,0 +1,477 @@
+---
+import Base from '@layouts/Base.astro';
+import { SITE } from '@lib/site';
+import '@styles/quiz.css';
+
+/**
+ * /work-with-me/brief/ — the brief, on its own page.
+ *
+ * It used to sit at the bottom of /work-with-me/, under the qualifier, the
+ * "do not hire me if" list and the FAQ. Anybody who reached it had already
+ * scrolled past two decision points, and anybody who had not qualified could
+ * fill it in anyway — which is a form that wastes both people's time.
+ *
+ * Now it is only reachable from a positive verdict, and it gets a page with
+ * nothing else on it. `?kind=` carries the recommendation across so step 1
+ * arrives pre-answered.
+ *
+ * noindex: it is the end of a funnel, not a landing page. Somebody arriving
+ * here from a search result has skipped the part that decides whether any of
+ * this applies to them.
+ *
+ * No header, no footer, no nav. Three minutes of typing is the only thing that
+ * should be possible on this screen, and every link in a header is an invitation
+ * to abandon it. The way out is one control, top right, where a person already
+ * expects to find it.
+ */
+const STEPS = ['What kind of help', 'The product', 'What is blocked', 'Specifics', 'Where I reply'];
+---
+
+<Base
+  title="Send a brief"
+  description="Five short steps. I read every brief myself and reply within a day with what fits, what it would involve and what it costs — or that none of it fits."
+  noindex
+  bare
+>
+  {/* Somebody arriving from a bookmark had one way out, and it led to the
+      questionnaire rather than to the site. The logo is the way home that
+      everybody already looks for. */}
+  <a class="home" href="/" aria-label={`${SITE.name} — home`}>
+    <img src="/img/logo.png" alt="" width="96" height="96" />
+  </a>
+
+  <a class="close" href="/work-with-me/" aria-label="Close the brief and go back">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  </a>
+
+  <div class="col sheet">
+    {/* The visible label is the eyebrow; the page still needs a heading, or
+        somebody navigating by headings lands on a form with no name. */}
+    <h1 class="sr-only">Send a brief</h1>
+    <span class="eyebrow">Brief</span>
+    <ol class="stepper" id="stepper" aria-label="Progress">
+      {
+        STEPS.map((label, i) => (
+          <li data-step={i + 1}>
+            <span class="n">{i + 1}</span>
+            <span class="lab">{label}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="panel">
+      <div id="bBox"></div>
+      {/* Honeypot. Hidden from people, irresistible to bots. */}
+      <div class="hp" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+    </div>
+
+    <p class="aside">
+      Or just email me — <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  /* Vertically centred on a tall screen, top-aligned once the panel outgrows
+     it, so a five-field step never gets cut off. */
+  .sheet {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(64px, 12vh, 96px) clamp(40px, 8vh, 72px);
+  }
+  /* A flex column stretches its children, which left-aligns the rules on
+     either side of the label. */
+  .sheet > .eyebrow { align-self: center; margin-bottom: var(--space-6); }
+
+  .home {
+    position: fixed;
+    top: max(16px, env(safe-area-inset-top));
+    left: max(16px, env(safe-area-inset-left));
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    opacity: 0.75;
+    transition: opacity 0.2s var(--ease);
+  }
+  .home:hover { opacity: 1; }
+  .home img { width: 30px; height: 30px; object-fit: contain; }
+
+  .close {
+    position: fixed;
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hair);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: var(--ink);
+    transition: border-color 0.24s var(--ease);
+  }
+  .close:hover { border-color: var(--ink); }
+  .close svg {
+    width: 20px; height: 20px;
+    stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round;
+  }
+
+  /* A real stepper rather than five dots. Five dots tell you how far along you
+     are; this also tells you what is left, which is what decides whether
+     somebody finishes a form they did not plan to fill in. */
+  .stepper {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-2);
+    margin: var(--space-8) 0 var(--space-6);
+    counter-reset: step;
+  }
+  .stepper li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    padding-top: 12px;
+    border-top: 2px solid var(--hair);
+    transition: border-color 0.32s var(--ease);
+  }
+  .stepper .n {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hair);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--dim);
+    transition: background 0.32s var(--ease), color 0.32s var(--ease), border-color 0.32s var(--ease);
+  }
+  .stepper .lab {
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+    text-align: center;
+    color: var(--dim);
+    transition: color 0.32s var(--ease);
+  }
+
+  /* Done */
+  .stepper li[data-state='done'] { border-top-color: var(--ink); }
+  .stepper li[data-state='done'] .n {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  /* Current */
+  .stepper li[data-state='now'] { border-top-color: var(--ink); }
+  .stepper li[data-state='now'] .n { border-color: var(--ink); color: var(--ink); }
+  .stepper li[data-state='now'] .lab { color: var(--ink); font-weight: 500; }
+
+  /* On a phone the five labels are unreadable at any size that fits. The
+     numbers and the rules still carry the progress; the current step is named
+     in the panel itself. */
+  @media (max-width: 560px) {
+    .stepper .lab { display: none; }
+    .stepper li { padding-top: 10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stepper li, .stepper .n, .stepper .lab { transition: none; }
+    .close { transition: none; }
+  }
+</style>
+
+<script>
+  import { KIND, SPECIFIC, OUT } from '@lib/work-with-me';
+
+  const $ = (id: string) => document.getElementById(id)!;
+
+  /**
+   * The qualifier's verdict, handed over in the URL. Read once: if somebody
+   * arrives without it — from a bookmark, or by ignoring the qualifier — the
+   * form still works, it just starts on "I do not know".
+   */
+  const params = new URLSearchParams(location.search);
+  const rec = params.get('rec');
+  const recName = rec && OUT[rec] ? OUT[rec].name : null;
+  const kindOf = () => {
+    const k = rec && OUT[rec] ? OUT[rec].kind : 'unsure';
+    return SPECIFIC[k] ? k : 'unsure';
+  };
+
+  // Step 0 is the context and nothing else: what the verdict was, how long
+  // this takes, what happens afterwards. Mixed into step 1 it competed with
+  // the first question; alone it is read once and then gone.
+  let step = 0;
+
+  /**
+   * Answers survive going back a step — and now also survive closing the tab.
+   * sessionStorage rather than localStorage: it dies with the tab, so a shared
+   * or public machine does not keep somebody's half-written brief around.
+   */
+  const KEY = 'brief-draft';
+  let kept: Record<string, string> = {};
+  try {
+    kept = JSON.parse(sessionStorage.getItem(KEY) ?? '{}');
+  } catch {
+    kept = {};
+  }
+  const persist = () => {
+    try {
+      sessionStorage.setItem(KEY, JSON.stringify(kept));
+    } catch {
+      // Private mode. The draft still survives going back, just not a reload.
+    }
+  };
+
+  /** Focus rather than scroll: it moves the screen reader with it. */
+  const focusHead = () => $('bBox').querySelector<HTMLElement>('[data-quiz-head]')?.focus();
+
+  const setStepper = () =>
+    document.querySelectorAll<HTMLElement>('#stepper li').forEach((li) => {
+      const n = +li.dataset.step!;
+      li.dataset.state = step === 0 ? 'todo' : n < step ? 'done' : n === step ? 'now' : 'todo';
+      if (n === step) li.setAttribute('aria-current', 'step');
+      else li.removeAttribute('aria-current');
+    });
+
+  function paint(kind: string) {
+    const f = SPECIFIC[kind] ?? SPECIFIC.unsure;
+    const field = ([id, lab, type, hint]: string[]) => {
+      const h = hint ? `<p class="hint">${hint}</p>` : '';
+      if (type.startsWith('select|'))
+        return `<div class="f"><label for="${id}">${lab}</label><select id="${id}">${type
+          .split('|')
+          .slice(1)
+          .map((o) => `<option>${o}</option>`)
+          .join('')}</select>${h}</div>`;
+      if (type === 'input') return `<div class="f"><label for="${id}">${lab}</label><input id="${id}">${h}</div>`;
+      return `<div class="f"><label for="${id}">${lab}</label><textarea id="${id}"></textarea>${h}</div>`;
+    };
+
+    const panes: string[] = [
+      (recName ? `<p class="tag">Based on your answers: ${recName}</p>` : '') +
+        `<p class="qq" data-quiz-head tabindex="-1">What kind of help are you after?</p>` +
+        KIND.map(
+          ([k, label]) =>
+            `<label class="ck"><input type="radio" name="kind" value="${label}" data-k="${k}"${
+              k === kind ? ' checked' : ''
+            }><span>${label}</span></label>`
+        ).join(''),
+      `<p class="qq" data-quiz-head tabindex="-1">What are you building?</p>` +
+        field(['b1', 'Product name and link', 'input', 'A link is worth more than a description.']) +
+        field(['b2', 'Team size', 'select|Just me|2–5|6–15|16–40|More than 40', '']),
+      `<p class="qq" data-quiz-head tabindex="-1">What is actually blocked?</p>` +
+        field(['b4', 'In your own words', 'textarea', 'Do not polish it. The messy version is more useful.']),
+      `<p class="qq" data-quiz-head tabindex="-1">A few specifics.</p>` +
+        `<p class="intro">All optional. They make my reply more specific, and skipping them ` +
+        `costs you nothing.</p>` +
+        f.map(field).join(''),
+      `<p class="qq" data-quiz-head tabindex="-1">Where do I reply?</p>` +
+        field(['b9', 'Name', 'input', '']) +
+        field(['b10', 'Email', 'input', '']) +
+        // The single most common silent objection to a form is not knowing what
+        // happens to the address. /privacy/ answers it well and nobody filling
+        // in this form was ever going to read it.
+        `<p class="privacy">Your email is used to reply to you and nothing else. No list, no ` +
+        `sequence, no third party. <a href="/privacy/">What I do with it</a>.</p>`,
+    ];
+
+    if (step === 0) {
+      $('bBox').innerHTML =
+        `<div class="step start">` +
+        (recName ? `<p class="tag">Based on your answers: ${recName}</p>` : '') +
+        `<h2 class="qq" data-quiz-head tabindex="-1">Tell me what is going on.</h2>` +
+        `<p class="intro">Five short steps, about three minutes. I read every one myself and ` +
+        `reply within a day with what fits, what it would involve and what it costs — or that ` +
+        `none of it fits.</p>` +
+        `<p class="intro">Nothing is sent until the last step, and you can close this at any ` +
+        `point.</p>` +
+        `<div class="fnav one"><button class="btn btn--dark" type="button" data-go="1">Start</button></div>` +
+        `</div>`;
+      setStepper();
+      $('bBox')
+        .querySelectorAll<HTMLButtonElement>('[data-go]')
+        .forEach((b) => b.addEventListener('click', () => { step = 1; paint(kindOf()); focusHead(); }));
+      return;
+    }
+
+    $('bBox').innerHTML =
+      `<div class="step">${panes[step - 1]}<div class="fnav">` +
+      `<button class="btn btn--ghost" type="button" data-go="${step - 1}">Back</button>` +
+      (step < 5
+        ? `<button class="btn btn--dark" type="button" data-go="${step + 1}">Continue</button>`
+        : `<button class="btn btn--dark" type="button" id="send">Send the brief</button>`) +
+      `</div></div>`;
+
+    // Repainting a step rebuilds its markup, so anything already typed has to
+    // be put back. Without this, Back is a destructive button.
+    for (const [id, v] of Object.entries(kept)) {
+      const el = document.getElementById(id) as HTMLInputElement | null;
+      if (el && v) el.value = v;
+    }
+    if (kept.kind) {
+      const radio = document.querySelector<HTMLInputElement>(`input[name=kind][value="${CSS.escape(kept.kind)}"]`);
+      if (radio) radio.checked = true;
+    }
+
+    setStepper();
+    $('bBox')
+      .querySelectorAll<HTMLButtonElement>('[data-go]')
+      .forEach((b) =>
+        b.addEventListener('click', () => {
+          const to = +b.dataset.go!;
+          // Only going forward is gated. Back is always allowed, or a half-filled
+          // step becomes a trap.
+          if (to > step && !checkStep()) return;
+          step = to;
+          paint(kindOf());
+          focusHead();
+        })
+      );
+    document.getElementById('send')?.addEventListener('click', submit);
+  }
+
+  /**
+   * Each step is checked on the way out of it, not at the end.
+   *
+   * The old version validated everything on Send, which produced the worst
+   * possible message: standing on step 5 being told step 3 is wrong, with no
+   * way back to it except guessing. Catching it in place means the error is
+   * always about the field you are looking at.
+   */
+  function checkStep(): boolean {
+    document.getElementById('bErr')?.remove();
+    if (step === 3 && (kept.b4 ?? '').trim().length < 20) {
+      showError('This is the one I actually read. A couple of sentences is enough.');
+      $('bBox').querySelector<HTMLElement>('#b4')?.focus();
+      return false;
+    }
+    if (step === 5 && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((kept.b10 ?? '').trim())) {
+      showError('I need an email address that works, or I cannot reply.');
+      $('bBox').querySelector<HTMLElement>('#b10')?.focus();
+      return false;
+    }
+    return true;
+  }
+
+  /* ── submitting ── */
+  const opened = Date.now();
+  const val = (id: string) => (document.getElementById(id) as HTMLInputElement | null)?.value?.trim() ?? '';
+
+  const remember = () =>
+    document.querySelectorAll<HTMLInputElement>('#bBox input, #bBox textarea, #bBox select').forEach((el) => {
+      if (el.id) kept[el.id] = el.value;
+      persist();
+    });
+
+  async function submit() {
+    const btn = document.getElementById('send') as HTMLButtonElement;
+    const email = val('b10');
+    const blocked = kept.b4 ?? '';
+
+    if (!checkStep()) return;
+    // Step 3 cannot be empty by now, but a brief that arrives without it is
+    // useless to me, so it stays checked rather than assumed.
+    if (blocked.trim().length < 20) {
+      step = 3;
+      paint(kindOf());
+      focusHead();
+      showError('This is the one I actually read. A couple of sentences is enough.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    document.getElementById('bErr')?.remove();
+
+    const specifics: Record<string, string> = {};
+    for (const [id, v] of Object.entries(kept)) {
+      if (['b1', 'b2', 'b4', 'b9', 'b10', 'website'].includes(id) || !v.trim()) continue;
+      specifics[id] = v.trim();
+    }
+
+    try {
+      const res = await fetch('/api/brief.php', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          kind: kept.kind ?? document.querySelector<HTMLInputElement>('input[name=kind]:checked')?.value,
+          recommendation: recName ?? undefined,
+          product: kept.b1 ?? '',
+          team: kept.b2 ?? '',
+          blocked: blocked.trim(),
+          specifics,
+          name: kept.b9 ?? '',
+          email,
+          website: val('website'),
+          elapsed: Date.now() - opened,
+        }),
+      });
+      // The endpoint is PHP, so a server misconfiguration answers with an HTML
+      // error page. Parsing that as JSON throws "Unexpected token '<'", which
+      // is a stack trace shown to somebody who just wanted to send a message.
+      const type = res.headers.get('content-type') ?? '';
+      if (!type.includes('application/json')) {
+        throw new Error(
+          `Something is wrong at my end (${res.status}). Email hello@sgualda.com and I will pick it up there.`
+        );
+      }
+      const out = await res.json();
+      if (!res.ok || !out.ok) throw new Error(out.error || 'Something went wrong.');
+
+      // The success page owns the confetti and the reassurance. Carrying the
+      // address means it can say where the confirmation went.
+      sessionStorage.setItem('brief-sent', email);
+      sessionStorage.removeItem(KEY);
+      location.href = '/work-with-me/brief/sent/';
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Send the brief';
+      showError(
+        err instanceof Error && err.message
+          ? err.message
+          : 'Could not send — check your connection, or email hello@sgualda.com instead.'
+      );
+    }
+  }
+
+  function showError(msg: string) {
+    document.getElementById('bErr')?.remove();
+    const p = document.createElement('p');
+    p.id = 'bErr';
+    p.className = 'formErr';
+    p.setAttribute('role', 'alert');
+    p.textContent = msg;
+    document.querySelector('#bBox .fnav')?.before(p);
+  }
+
+  // Capture on the panel, so a value is kept the moment it changes rather than
+  // only when the step advances.
+  $('bBox').addEventListener('input', remember);
+  $('bBox').addEventListener('change', (e) => {
+    const t = e.target as HTMLInputElement;
+    if (t.name === 'kind') kept.kind = t.value;
+    remember();
+    persist();
+  });
+
+  paint(kindOf());
+</script>

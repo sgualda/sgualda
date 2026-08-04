@@ -71,7 +71,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   </section>
 
   <div class="col">
-    <div class="filters" role="group" aria-label="Filter by topic">
+    <div class="filters rail" role="group" aria-label="Filter by topic">
       {
         cats.map((c, i) => (
           <button class:list={['chip', { on: i === 0 }]} type="button" data-filter={c.key} aria-pressed={i === 0}>
@@ -86,10 +86,11 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
         TOOLS.map((t) => (
           <article class="card card-link" data-cat={t.cat}>
             <a href={`/tools/${t.slug}/`}>
-              <p class="pills"><span>Free</span><span>{t.time}</span></p>
+              {/* "Free" is already the first word of the h1. The cost that is not obvious
+                  is how many questions it asks. */}
+              <p class="pills"><span>{t.time}</span><span>{t.count}</span></p>
               <h2>{t.n}</h2>
               <p class="use">{t.lead}</p>
-              <span class="arrow-link">Start the check <i aria-hidden="true">→</i></span>
             </a>
           </article>
         ))
@@ -111,10 +112,15 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro h1 { margin-bottom: 18px; }
 
-  .filters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 54px; }
+  /* A rail rather than a wrapped row. Five chips wrapped onto two lines put a
+     single centred pill on its own row, which reads as an error. Scrolling
+     keeps them on one line at any width and the fade says there is more. */
+  .filters { gap: 8px; margin-top: 54px; padding-block: 4px; }
+  /* Centred while they fit, scrolled once they do not. */
+  .filters[data-start='true'][data-end='true'] { justify-content: center; }
   .chip {
     font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500; letter-spacing: -0.01em;
-    padding: 9px 18px; border-radius: var(--radius-pill);
+    padding: 12px 18px; border-radius: var(--radius-pill);
     border: 1px solid var(--hair); background: transparent; color: var(--ink); cursor: pointer;
     transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
   }
@@ -150,6 +156,9 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 </style>
 
 <script>
+  import { rails } from '@lib/rail';
+  rails();
+
   /* ── category filter ── */
   const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
   const cards = document.querySelectorAll<HTMLElement>('.card');

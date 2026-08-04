@@ -4,6 +4,7 @@ n: "02"
 name: "First version"
 lead: "You know what to build. Now you decide how much of it."
 meta: "Everyone agrees on building something small until somebody has to name what gets cut. How to decide what the first version has to prove."
+seoTitle: "What to put in a first version"
 question: "What is the smallest version that’s still worth showing?"
 x: 28
 y: 26
@@ -37,6 +38,13 @@ traps:
     lives."
 signal: "Somebody outside the team can use it without you narrating over their shoulder. Not
   admire it — use it."
+faqs:
+  - q: "What should go in a first version?"
+    a: "Whatever answers the question you built it to answer, and nothing else. If you cannot say in one sentence what the first version is testing, you are not scoping, you are guessing at a feature list."
+  - q: "How small is too small for a first version?"
+    a: "It is too small when it can no longer answer its question. That is the only limit that matters. Missing onboarding, missing settings and missing half the features are all fine if somebody can still do the one thing you need to watch them do."
+  - q: "How long should a first version take?"
+    a: "Six weeks is the number I keep arriving at, and both times I hit it I did so by cutting more than felt safe. Past about eight weeks the version you ship is answering a question you asked in a different market."
 cta:
   title: "A working session on scope"
   body: "Bring the argument you’re currently having. We settle what the first version has to

@@ -4,6 +4,7 @@ n: "01"
 name: "Worth building?"
 lead: "Before you build anything. Most of the cost is decided here."
 meta: "Most of what a product costs is decided before anybody builds anything. How to tell a real problem from an idea you like, and what to look for first."
+seoTitle: "How to know if an idea is worth building"
 question: "Is there a problem here worth anyone’s time?"
 x: 6
 y: 72
@@ -36,6 +37,13 @@ traps:
     reassurance, not information."
 signal: "You can name two people — actual people, not job titles — who already do this the
   hard way."
+faqs:
+  - q: "How do I know if an idea is worth building?"
+    a: "Find two people who already deal with the problem in some improvised way — a spreadsheet, a group chat, a recurring reminder. A workaround is the strongest evidence a problem is real, because somebody paid a cost to solve it without you. Enthusiasm in a conversation is not evidence; it is manners."
+  - q: "How long should this stage take?"
+    a: "Days, not months. Nine conversations fit in a week, and the answer they give does not get better with a tenth. If you are still here after a month you are usually not gathering evidence, you are looking for permission."
+  - q: "What is the first thing to do at this stage?"
+    a: "Ask five people what they did the last time this problem happened. Not what they would do, not whether they would use your thing — what they actually did. The answer is either a story about a workaround or a shrug, and those two mean completely different things."
 cta:
   title: "A working session on whether to build it"
   body: "Bring the idea and whatever you have heard about it so far. We work out together

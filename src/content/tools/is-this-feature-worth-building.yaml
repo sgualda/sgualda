@@ -5,7 +5,7 @@ cat: "decisions"
 n: "Is this feature worth building?"
 time: "40 seconds"
 count: "4 questions"
-title: "Is This Feature Worth Building? — Free 4-Question Check"
+title: "Is this feature worth building?"
 meta: "Four questions separate a real user need from a loud request before it reaches your
   roadmap — and give you a reason you can say out loud to whoever asked. Free, no account."
 lead: "Something has been requested enough times that it’s getting hard to say no. Four

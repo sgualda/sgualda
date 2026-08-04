@@ -28,6 +28,10 @@
      not hue. Kept as a token so there is one place to reintroduce a colour. */
   --accent: #1e1c1c;
 
+  /* The only hue in the system, and only where the meaning is the colour: a
+     form error. Grey emphasis is invisible next to grey hints. 4.6:1 on paper. */
+  --err: #b3261e;
+
   /* Animated hover border: light and dark greys chasing round the perimeter.
      Driven by @property --ang above, so it can actually be transitioned. */
   --ring: conic-gradient(
@@ -170,6 +174,8 @@
     --dim: #949090;
     --hair: #312d2c;
     --accent: #f2efee;
+    /* Lifted for a dark ground; #b3261e on #131111 is 3.1:1 and unreadable. */
+    --err: #ff8a80;
     --inverse: #f2efee;
     --on-inverse: #131111;
     /* Lighter than the page, not lighter than everything. 1.21:1 against the
@@ -197,6 +203,7 @@
   --dim: #949090;
   --hair: #312d2c;
   --accent: #f2efee;
+  --err: #ff8a80;
   --inverse: #f2efee;
   --on-inverse: #131111;
   /* Lighter than the page, not lighter than everything. 1.21:1 against the

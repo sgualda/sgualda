@@ -16,9 +16,15 @@ interface Props {
   /** Extra JSON-LD nodes to merge into the @graph. */
   schema?: Record<string, unknown>[];
   noindex?: boolean;
+  /**
+   * Drops the floating theme control. For pages that are one task and nothing
+   * else — the brief — where a control in the corner is a distraction and, on a
+   * phone, sits on top of the last answer.
+   */
+  bare?: boolean;
 }
 
-const { title, description, canonical, image, schema = [], noindex = false } = Astro.props;
+const { title, description, canonical, image, schema = [], noindex = false, bare = false } = Astro.props;
 
 // Each page gets its own card, generated at build time from its <h1>.
 // Falls back to the default if that page has no generated image yet.
@@ -29,7 +35,18 @@ const ogPath = image ?? `/og/${slug}.png`;
 
 const url = canonical ?? new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL(ogPath, SITE.url).href;
-const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
+/**
+ * The site name is a suffix, not a tax.
+ *
+ * " | Sergio Gualda" is 16 characters out of the ~60 Google shows, and eight
+ * pages were being truncated purely to carry it — losing the end of the actual
+ * title, which is the part somebody is scanning for. So it is appended only
+ * when there is room. Google renders the site name separately from the title
+ * anyway, and a truncated title costs more than a missing suffix.
+ */
+const SUFFIX = ` | ${SITE.name}`;
+const fullTitle =
+  title.includes(SITE.name) || title.length + SUFFIX.length > 60 ? title : title + SUFFIX;
 
 // Person + WebSite ship on every page; page-specific nodes get merged in.
 const graph = [
@@ -115,6 +132,6 @@ const graph = [
     <slot name="nav" />
     <main id="main"><slot /></main>
     <slot name="footer" />
-    <ThemeToggle />
+    {!bare && <ThemeToggle />}
   </body>
 </html>

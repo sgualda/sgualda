@@ -79,6 +79,42 @@ for (const f of FILES) {
   });
 }
 
+/**
+ * CTA vocabulary.
+ *
+ * Six labels had accumulated for /work-with-me/ — "Hire me", "Work with me",
+ * "See if I can help", "Book a call", "Book an intro call", "Four questions" —
+ * each one correct on the day it was written and collectively meaning the
+ * visitor never learns what the primary action is called. Repetition is the
+ * only advantage a CTA has on a small site.
+ *
+ * Two labels per destination: one for the site chrome, one for the end of a
+ * page. Inline links inside a sentence are exempt — they are prose, not
+ * controls, and they read from a `.btn` class or an `arrow-link`.
+ */
+const CTA_MAX = 2;
+const ctas = {};
+for (const f of readdirSync(join(root, 'dist'), { recursive: true })) {
+  if (typeof f !== 'string' || !f.endsWith('index.html')) continue;
+  const html = readFileSync(join(root, 'dist', f), 'utf8');
+  for (const m of html.matchAll(/<a[^>]*class="[^"]*\bbtn\b[^"]*"[^>]*href="(\/[^"#]*)"[^>]*>([\s\S]*?)<\/a>/g)) {
+    const label = m[2].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    if (label) (ctas[m[1]] ??= new Set()).add(label);
+  }
+  for (const m of html.matchAll(/<a[^>]*href="(\/[^"#]*)"[^>]*class="[^"]*\bbtn\b[^"]*"[^>]*>([\s\S]*?)<\/a>/g)) {
+    const label = m[2].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    if (label) (ctas[m[1]] ??= new Set()).add(label);
+  }
+}
+const drifted = Object.entries(ctas).filter(([, set]) => set.size > CTA_MAX);
+if (drifted.length) {
+  console.error(`\n  ${R}✗ CTA labels have drifted${X}\n`);
+  for (const [href, set] of drifted)
+    console.error(`  ${href} has ${set.size} labels: ${[...set].map((l) => `«${l}»`).join(', ')}`);
+  console.error(`\n  Two per destination. Pick one for the chrome and one for the end of a page.\n`);
+  process.exit(1);
+}
+
 if (!findings.length) {
   console.log(`\n  ${G}✓ Prose follows BRAND.md${X} — ${FILES.length} files checked\n`);
   process.exit(0);

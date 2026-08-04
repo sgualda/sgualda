@@ -62,8 +62,13 @@ const principles = [
     </p>
     <div class="actions">
       <a class="btn btn--dark" href="/case-studies/">See the work</a>
-      <a class="btn btn--ghost" href="/work-with-me/">Book a call</a>
+      <a class="btn btn--ghost" href="/work-with-me/">See if I can help</a>
     </div>
+    {/* The visitor who arrives already decided is the most valuable one, and
+        the four qualifying questions were charging them the most friction. */}
+    <p class="skip-to">
+      Already know what you need? <a href="/work-with-me/brief/">Send a brief</a>.
+    </p>
     <p class="email"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
   </section>
 
@@ -81,28 +86,22 @@ const principles = [
     <div class="wide grid">
       {
         featured.map((c) => (
-          <a class="slot" href={`/case-studies/${c.id}/`}>
+          <a class="slot" href={`/case-studies/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
             <Image
               src={c.data.cover!}
               alt={c.data.coverAlt ?? ''}
               widths={[320, 640, 960]}
               sizes="(max-width: 560px) calc(100vw - 40px), 272px"
               loading="lazy"
+              style={`object-position:${c.data.coverPosition}`}
             />
-            {/* Title and year, not client and role: two of these four are
-                truvi and two are my own companies, so client+role produced
-                two pairs of identical captions. */}
-            <span class="cap">
-              <b>{c.data.title}</b>
-              <em>{c.data.year}</em>
-            </span>
           </a>
         ))
       }
     </div>
 
     <div class="col actions" style="margin-top:34px">
-      <a class="btn btn--ghost" href="/case-studies/">All the work</a>
+      <a class="btn btn--ghost" href="/case-studies/">See the work</a>
     </div>
   </section>
 
@@ -121,6 +120,7 @@ const principles = [
         alt="The desk where most of this gets made"
         class="wide-shot"
         widths={[560, 1120]}
+        sizes="(max-width: 560px) calc(100vw - 40px), 560px"
       />
     </div>
   </section>
@@ -157,7 +157,7 @@ const principles = [
       on a team, a market and a moment you will never have.
     </p>
     <div class="actions" style="margin-top:30px">
-      <a class="btn btn--dark" href="/case-studies/">Read the post mortems</a>
+      <a class="btn btn--dark" href="/case-studies/">See the work</a>
     </div>
   </section>
 
@@ -177,12 +177,19 @@ const principles = [
   .hero .actions { margin-top: 30px; }
   .email { margin-top: 20px; font-size: 0.9375rem; color: var(--dim); }
   .email a:hover { color: var(--accent); }
+  .skip-to {
+    margin-top: var(--space-5);
+    font-size: 0.875rem;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+  .skip-to a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .skip-to a:hover { opacity: 0.6; }
   h2 + .sub { margin-top: 16px; }
 
-  /* Four projects, 2×2. The Figma comp has bare image slots; each one carries
-     a caption because four unlabelled screenshots tell a first-time visitor
-     nothing, and tell a screen reader less. One line, so the picture is still
-     the thing you see. */
+  /* Four projects, 2×2, bare images as in the comp. No caption: Sergio's
+     call. The link name comes from aria-label instead, so the four are still
+     distinguishable to anybody not looking at them. */
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -193,11 +200,10 @@ const principles = [
   .slot img {
     display: block;
     width: 100%;
-    /* 16/9, matching the screenshots. The comp specifies 4/3, which crops a
-       quarter off the width of a 2304×1271 source — enough to cut the entire
-       left column off the developer portal shot. A tile that follows the comp
-       and hides the thing it is showing is not following the comp. */
-    aspect-ratio: 16 / 9;
+    /* Square, as in the comp. A square crop of a 2304×1271 screenshot shows
+       about 55% of its width, anchored left so the navigation and the first
+       column survive and the crop lands on the empty right-hand side. */
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     background: var(--surface);
     border: 1px solid var(--hair);
@@ -205,17 +211,6 @@ const principles = [
     transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
   }
   .slot:hover img { opacity: 0.86; transform: translateY(-2px); }
-  .cap {
-    display: flex;
-    gap: 8px;
-    align-items: baseline;
-    margin-top: var(--space-3);
-    padding-inline: var(--space-1);
-    font-size: 0.8125rem;
-    letter-spacing: 0;
-  }
-  .cap b { font-weight: 600; }
-  .cap em { font-style: normal; color: var(--dim); }
   .wide-shot {
     width: 100%;
     aspect-ratio: 16 / 10;

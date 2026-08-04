@@ -47,7 +47,7 @@ The useful version of "how much process" is not a rule, it is a question: **how 
 
 ## Stop designing for the file
 
-The cult around Figma is the same mistake in a different costume. Spotless file, perfect auto-layout, endless variants, carefully named components — and then the person on the screen has no idea what to do.
+The cult around [Figma](https://www.figma.com/) is the same mistake in a different costume. Spotless file, perfect auto-layout, endless variants, carefully named components — and then the person on the screen has no idea what to do.
 
 Everything can be immaculate inside the file and still be wrong about the product, because **the file is not the product.** It is a drawing of an argument. If the argument is bad, the drawing being beautiful only means it takes longer for anybody to notice.
 

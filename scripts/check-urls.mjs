@@ -31,13 +31,13 @@ if (!existsSync(dist)) {
 const conflicts = [];
 for (const dir of ['dist', 'public', 'src', 'scripts'])
   for (const f of readdirSync(join(root, dir), { recursive: true }))
-    if (typeof f === 'string' && / \d+\.\w+$/.test(f)) conflicts.push(`${dir}/${f}`);
+    if (typeof f === 'string' && / \d+(\.\w+)?$/.test(f)) conflicts.push(`${dir}/${f}`);
 
 if (conflicts.length) {
   console.error(`\n✗ ${conflicts.length} iCloud conflict copies would ship:`);
   for (const c of conflicts.slice(0, 8)) console.error(`    ${c}`);
   if (conflicts.length > 8) console.error(`    …and ${conflicts.length - 8} more`);
-  console.error('  Remove them: find dist public src -name "* [0-9].*" -delete\n');
+  console.error('  Remove them: find dist public src -name "* [0-9]*" -delete\n');
   process.exit(1);
 }
 

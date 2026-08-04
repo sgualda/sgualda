@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import NextStep from '@components/NextStep.astro';
 import { getTools, getStages } from '@lib/content';
 import { SITE } from '@lib/site';
 
@@ -50,15 +51,28 @@ const stages = await getStages();
     </p>
   </section>
 
+  {/* Sixteen terms in one alphabetical list stopped being scannable around
+      twelve. Filtering in the browser rather than linking to anchors: the
+      answer to "is X in here" is faster than the answer to "where is X". */}
   <div class="col">
+    <div class="find" hidden>
+      <label class="sr-only" for="q">Filter terms</label>
+      <input id="q" type="search" placeholder="Filter — workaround, polite no…" autocomplete="off" />
+      <p class="count" id="count" role="status" aria-live="polite"></p>
+    </div>
+
     <dl class="terms">
       {
         terms.map((t) => {
           const tool = t.data.tool ? tools.find((x) => x.slug === t.data.tool) : undefined;
           const stage = t.data.stage ? stages.find((x) => x.slug === t.data.stage) : undefined;
           return (
-            <div class="term" id={t.id}>
-              <dt>{t.data.name}</dt>
+            <div class="term" id={t.id} data-find={`${t.data.name} ${t.data.definition} ${t.data.topics.join(' ')}`.toLowerCase()}>
+              {/* An h3 inside the dt: the definition list keeps its semantics
+                  and each term becomes a heading a search engine can lift as
+                  an answer on its own. Sixteen terms under one h2 were
+                  invisible individually. */}
+              <dt><h3>{t.data.name}</h3></dt>
               <dd>
                 <p class="def">{t.data.definition}</p>
                 <p class="note">{t.data.note}</p>
@@ -83,10 +97,12 @@ const stages = await getStages();
       The terms are shorthand for decisions. The checks are those decisions, asked as questions.
     </p>
     <div class="actions" style="margin-top:28px">
-      <a class="btn btn--dark" href="/tools/">See the free checks</a>
-      <a class="btn btn--ghost" href="/map/">Or the map</a>
+      <a class="btn btn--dark" href="/tools/">Run a free check</a>
+      <a class="btn btn--ghost" href="/map/">The map</a>
     </div>
   </section>
+
+  <NextStep line="These are the decisions I get hired to help with." />
 
   <Footer slot="footer" />
 </Base>
@@ -95,18 +111,47 @@ const stages = await getStages();
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro h1 { margin-bottom: 18px; }
 
-  .terms { text-align: left; margin-top: var(--space-8); }
+  .find { margin-top: var(--space-8); }
+  .find input {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 14px 18px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-pill);
+    outline: none;
+    transition: border-color 0.2s var(--ease);
+  }
+  .find input::placeholder { color: var(--dim); }
+  .find input:focus { border-color: var(--ink); }
+  .find input:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink) 26%, transparent);
+  }
+  .find .count {
+    margin-top: var(--space-3);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    min-height: 1em;
+  }
+
+  .terms { text-align: left; margin-top: var(--space-6); }
+  .term[hidden] { display: none; }
   .term { padding: var(--space-6) 0; }
   .term + .term { border-top: 1px solid var(--hair); }
   /* An anchored term must not land under the sticky header. */
   .term { scroll-margin-top: 80px; }
 
-  dt {
+  dt { margin-bottom: var(--space-3); }
+  dt h3 {
     font-family: var(--font-display);
     font-size: 1.125rem;
     font-weight: 600;
     letter-spacing: -0.03em;
-    margin-bottom: var(--space-3);
   }
   dd { margin: 0; }
   .def { font-size: 1rem; line-height: 1.62; letter-spacing: 0; color: var(--dim); }
@@ -129,3 +174,26 @@ const stages = await getStages();
   }
   .where a:hover { opacity: 0.6; }
 </style>
+
+<script>
+  const q = document.getElementById('q') as HTMLInputElement | null;
+  const count = document.getElementById('count');
+  const terms = [...document.querySelectorAll<HTMLElement>('.term')];
+
+  if (q && count) {
+    // The field only appears once JavaScript has run: without it, filtering is
+    // impossible and an empty box that does nothing is worse than no box.
+    q.closest('.find')!.hidden = false;
+
+    q.addEventListener('input', () => {
+      const v = q.value.trim().toLowerCase();
+      let shown = 0;
+      for (const t of terms) {
+        const hit = !v || (t.dataset.find ?? '').includes(v);
+        t.hidden = !hit;
+        if (hit) shown++;
+      }
+      count.textContent = v ? `${shown} of ${terms.length}` : '';
+    });
+  }
+</script>

@@ -63,6 +63,13 @@ const cases = defineCollection({
       draft: z.boolean().default(false),
       cover: image().optional(),
       coverAlt: z.string().optional(),
+      /**
+       * Which part of the cover survives the square crop. A square tile shows
+       * about 55% of a 16:9 screenshot, so this is the difference between
+       * seeing the product and seeing half of it: wide dashboards want their
+       * left-hand navigation, a centred phone mock wants the middle.
+       */
+      coverPosition: z.string().default('left center'),
       summary: z.string(),
       // What it cost / what went wrong. The part that makes it worth reading.
       order: z.number().default(99),
@@ -112,6 +119,13 @@ const stages = defineCollection({
     question: z.string(),
     /** Written by hand. Concatenating fields produced five near-identical ones. */
     meta: z.string().min(70).max(160),
+    /**
+     * The <title>, written towards the query rather than the position in the
+     * sequence. All five used to be "Stage 0N: {name} — building a product",
+     * which competes with itself four times over and targets a phrase — "stage
+     * 03" — that nobody has ever searched for.
+     */
+    seoTitle: z.string().max(60),
     /** Percentage position on the route diagram. */
     x: z.number().min(0).max(100),
     y: z.number().min(0).max(100),
@@ -119,6 +133,12 @@ const stages = defineCollection({
     body: z.array(z.string()).min(1),
     traps: z.array(z.string()).min(1),
     signal: z.string(),
+    /**
+     * Three questions per stage. The stage pages were the longest thing on the
+     * site without a block of directly answered questions, which is the format
+     * that feeds People Also Ask and gets quoted by a model verbatim.
+     */
+    faqs: z.array(z.object({ q: z.string(), a: z.string().min(100) })).length(3),
     cta: z.object({ title: z.string(), body: z.string() }),
   }),
 });

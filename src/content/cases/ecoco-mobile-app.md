@@ -11,6 +11,7 @@ order: 3
 migrated: true
 cover: '../../assets/cases/ecoco-cover.webp'
 coverAlt: 'The ecoco mobile app: grocery lists and supermarket price comparison'
+coverPosition: 'center'
 ---
 
 ecoco started on a road trip from Barcelona to Bordeaux. Two friends — a developer and a designer — driving through France, talking about nothing in particular, until one of us asked why grocery shopping is still such a mess.

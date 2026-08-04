@@ -6,6 +6,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
+import NextStep from '@components/NextStep.astro';
 import { SITE } from '@lib/site';
 import { TOPICS } from '@lib/topics';
 import { getStages, getTools } from '@lib/content';
@@ -29,18 +30,14 @@ export async function getStaticPaths() {
       props: {
         entry,
         related,
-        newer: essays[i - 1] ?? null,
-        older: essays[i + 1] ?? null,
       },
     };
   });
 }
 
-const { entry, related, newer, older } = Astro.props as {
+const { entry, related } = Astro.props as {
   entry: CollectionEntry<'essays'>;
   related: CollectionEntry<'essays'>[];
-  newer: CollectionEntry<'essays'> | null;
-  older: CollectionEntry<'essays'> | null;
 };
 const { Content } = await render(entry);
 const d = entry.data;
@@ -57,6 +54,12 @@ const stages = STAGES.filter((s) => topics.some((t) => t.stage === s.slug));
 const tools = TOOLS.filter((t) => topics.some((x) => x.tool === t.slug));
 
 const url = `${SITE.url}/writing/${entry.id}/`;
+
+/** External sources linked in the body — declared as `citation` in the schema. */
+const cited = [...(entry.body ?? '').matchAll(/\]\((https?:\/\/[^)\s]+)\)/g)]
+  .map((m) => m[1])
+  .filter((u) => !u.includes('sgualda.com'))
+  .filter((u, i, a) => a.indexOf(u) === i);
 
 /** Glossary terms this essay actually mentions, matched on the term name. */
 const glossary = await getCollection('glossary');
@@ -89,6 +92,10 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
       // how a model knows "repeat use" here means the same thing it means on
       // /glossary/ rather than a phrase that happens to appear twice.
       ...(terms.length && { about: terms.map((t) => ({ '@id': `${SITE.url}/glossary/#${t.id}` })) }),
+      // The external sources the essay already links, declared. A model
+      // deciding whether to trust a page weighs what it cites, and a link
+      // buried in a paragraph is far less legible than this.
+      ...(cited.length && { citation: cited }),
     },
     // Mirrors the rendered FAQ block below. Same source, so they cannot drift.
     ...(d.faqs?.length
@@ -121,15 +128,6 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
           )
         }
       </p>
-      {
-        topics.length > 0 && (
-          <ul class="topics">
-            {topics.map((t) => (
-              <li><a href={`/writing/topic/${t.slug}/`}>{t.label}</a></li>
-            ))}
-          </ul>
-        )
-      }
     </header>
 
     <div class="col prose">
@@ -157,7 +155,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
         the page said who wrote it or why they would know. The face is the
         cheapest trust signal available and it was already sitting in the repo. */}
     <aside class="col byline">
-      <Image src={portrait} alt="Sergio Gualda" widths={[96, 192]} loading="lazy" />
+      <Image src={portrait} alt="Sergio Gualda" widths={[96, 192]} sizes="56px" loading="lazy" />
       <div>
         <p class="who"><strong>Sergio Gualda</strong> — product designer in Barcelona.</p>
         <p class="what">
@@ -214,24 +212,19 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     )
   }
 
-  <section class="section col">
-    <nav class="pager" aria-label="Essays">
-      {older ? (
-        <a href={`/writing/${older.id}/`} class="prev"><em>Older</em><span>{older.data.title}</span></a>
-      ) : <span />}
-      {newer ? (
-        <a href={`/writing/${newer.id}/`} class="next-link"><em>Newer</em><span>{newer.data.title}</span></a>
-      ) : <span />}
-    </nav>
-  </section>
 
-  <section class="col next">
-    <p class="sub">Something here you disagree with? That’s the useful kind of email.</p>
-    <div class="actions">
-      <a class="btn btn--dark" href={`mailto:${SITE.email}`}>Tell me why</a>
-      <a class="btn btn--ghost" href="/writing/">More essays</a>
-    </div>
-  </section>
+  <NextStep
+    line="Recognise any of this in your own product?"
+    secondLabel="More essays"
+    secondHref="/writing/"
+  />
+
+  {/* The disagreement invitation stays, but as a line rather than a button:
+      a mailto: opens a mail client, which on a phone is one of the heaviest
+      things you can ask of somebody who is still reading. */}
+  <p class="col disagree">
+    Something here you disagree with? <a href={`mailto:${SITE.email}`}>That’s the useful kind of email</a>.
+  </p>
 
   <Footer slot="footer" />
 </Base>
@@ -283,14 +276,6 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     font-size: 0.9rem;
   }
 
-  .topics { list-style: none; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
-  .topics a {
-    display: block; padding: 6px 14px; border-radius: var(--radius-pill);
-    border: 1px solid var(--hair); font-size: 0.75rem; font-weight: 500;
-    letter-spacing: 0; color: var(--dim); transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
-  }
-  .topics a:hover { border-color: var(--ink); color: var(--ink); }
-
   /* The wrapper the rehype plugin adds. The table keeps its own semantics;
      only the box around it scrolls. */
   .prose :global(.table-scroll) { overflow-x: auto; margin: var(--space-6) 0; }
@@ -322,6 +307,15 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     text-align: center;
     margin-bottom: var(--space-6);
   }
+
+  .disagree {
+    margin-top: var(--space-7);
+    text-align: center;
+    font-size: 0.875rem;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+  .disagree a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
   .byline {
     display: flex;
@@ -356,13 +350,6 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
   }
   .related .p { font-size: 0.9375rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
 
-  .pager {
-    display: flex; justify-content: space-between; gap: 20px;
-    padding-top: 26px; border-top: 1px solid var(--hair); text-align: left;
-  }
-  .pager a { display: block; max-width: 46%; transition: opacity 0.2s var(--ease); }
-  .pager a:hover { opacity: 0.6; }
-  .pager .next-link { text-align: right; }
   .pager em {
     display: block; font-style: normal; font-size: 0.6875rem;
     letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px;

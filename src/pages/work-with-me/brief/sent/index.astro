@@ -1,0 +1,89 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+
+/**
+ * The page after a brief lands.
+ *
+ * Deliberately almost empty. Somebody who has just spent three minutes on a
+ * form wants one thing confirmed — that it arrived and that a human will read
+ * it — and every extra sentence here reads as a sales pitch aimed at a person
+ * who has already said yes.
+ *
+ * noindex, and no link to it from anywhere: it only makes sense arriving from
+ * a submission.
+ */
+---
+
+<Base
+  title="Brief received"
+  description="Your brief arrived. I read every one myself and reply within a day."
+  noindex
+>
+  <Header slot="nav" />
+
+  <section class="col done" id="done">
+    <span class="eyebrow">Received</span>
+    <h1>Got it.</h1>
+    <p class="sub">
+      I read every brief myself, and I will come back to you within a day — with what fits, what
+      it would involve and what it costs, or that none of it fits.
+    </p>
+    <p class="where" id="where" hidden></p>
+    <p class="when" id="when" hidden></p>
+
+    <div class="actions">
+      <a class="btn btn--ghost" href="/tools/">Run a free check</a>
+      <a class="btn btn--ghost" href="/writing/">More essays</a>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .done { padding-top: clamp(72px, 16vh, 150px); padding-bottom: clamp(72px, 16vh, 150px); }
+  .done h1 { margin-bottom: 18px; }
+  .when {
+    margin-top: var(--space-3);
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+  .where {
+    margin-top: var(--space-5);
+    font-size: 0.875rem;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+  .actions { margin-top: var(--space-9); }
+</style>
+
+<script>
+  import { celebrate } from '@lib/feedback';
+
+  // The address is handed over in sessionStorage rather than the URL: an email
+  // address in a query string ends up in browser history, and later in any
+  // analytics that gets installed.
+  const email = sessionStorage.getItem('brief-sent');
+  if (email) {
+    const p = document.getElementById('where')!;
+    p.textContent = `A confirmation is on its way to ${email}.`;
+    p.hidden = false;
+    sessionStorage.removeItem('brief-sent');
+  }
+
+  /* "Within a day" is elastic; a date is not. Computed in the browser so it is
+     in the reader’s own locale and time zone, and paired with what to do if
+     nothing turns up — the one thing a confirmation page normally omits. */
+  const by = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const when = document.getElementById('when')!;
+  when.textContent =
+    `That means by ${by.toLocaleDateString(undefined, { weekday: 'long' })}, ` +
+    `${by.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}. ` +
+    'If nothing arrives, check your spam folder and then reply to the confirmation email.';
+  when.hidden = false;
+
+  celebrate(document.getElementById('done'));
+</script>

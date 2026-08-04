@@ -73,8 +73,14 @@ const year = new Date().getFullYear();
     margin-bottom: 14px;
   }
   .group ul { list-style: none; }
-  .group li + li { margin-top: 8px; }
+  .group li + li { margin-top: 2px; }
+  /* 15px of text in a 24px box. WCAG 2.5.8 asks for 24×24 on anything that is
+     not a link inside a sentence, and ten navigation links at 16px tall were
+     the least comfortable thing on the site on a phone. The padding replaces
+     the old margin, so the footer is the same height. */
   .group a {
+    display: block;
+    padding-block: 5px;
     font-size: 0.9375rem;
     line-height: 1.45;
     letter-spacing: -0.01em;
@@ -99,8 +105,12 @@ const year = new Date().getFullYear();
   .who a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
   /* One row, not a stacked column — it read as a second menu before. */
-  .elsewhere { list-style: none; display: flex; gap: 20px; }
-  .elsewhere a { font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--ink); }
+  .elsewhere { list-style: none; display: flex; gap: 14px; }
+  .elsewhere a {
+    display: block;
+    padding: 5px 6px;
+    font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--ink);
+  }
   .elsewhere a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
   .legal {

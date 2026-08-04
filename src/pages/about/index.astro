@@ -2,6 +2,7 @@
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import NextStep from '@components/NextStep.astro';
 import { SITE } from '@lib/site';
 import { Image } from 'astro:assets';
 import portrait from '../../assets/portrait.jpg';
@@ -15,24 +16,43 @@ import portrait from '../../assets/portrait.jpg';
 
 const goodAt = [
   {
-    title: '0-1 product',
-    body: 'Taking a vague problem to a shipped first version with a small team. This is where I’m most useful and where most of the work on this site comes from.',
+    title: 'Making the hard thing look easy',
+    body: 'The best compliment a product gets is that nobody notices it. That takes throwing away most of what you drew, and it is the part I am actually good at — not adding, removing.',
   },
   {
-    title: 'Scoping under a real deadline',
-    body: 'Finding the version that can exist in the time available and still be worth showing. Six weeks to a working demo, twice.',
+    title: 'Taking a vague problem to a shipped first version',
+    body: 'Somebody describes a mess in a meeting, and six weeks later there is something real in front of a user. Small team, no ceremony. Most of the work on this site comes from here.',
   },
   {
-    title: 'Design systems that survive year two',
-    body: 'Twelve components across four teams instead of the forty that were planned, with a named owner and a written path for exceptions.',
+    title: 'Scoping when the deadline is not negotiable',
+    body: 'Finding the version that can exist in the time available and still be worth showing. Twice now, six weeks to a working demo — both times by cutting more than felt safe.',
+  },
+  {
+    title: 'Saying the thing nobody in the room wants to say',
+    body: 'Usually a version of “we have not checked whether anybody wants this”. It makes meetings longer and quarters shorter, and it is most of what you are actually paying for.',
   },
 ];
 
 const notFor = [
-  { title: 'Pricing', body: 'If pricing is your main problem I’m not your best option.' },
-  { title: 'Brand and marketing design', body: 'I’ll point you at someone better.' },
-  { title: 'Illustration and motion', body: 'Same.' },
+  {
+    title: 'Brand, illustration, motion',
+    body: 'I would be competent and somebody else would be good. Paying me for it is paying a premium for competent.',
+  },
+  {
+    title: 'Making a decision you have already made look validated',
+    body: 'I will agree with the parts that are right and say the rest out loud, in front of whoever is in the room. If that is inconvenient, hire somebody cheaper — it is a much cheaper way to get the same nothing.',
+  },
+  {
+    title: 'Pushing pixels on a roadmap somebody else wrote',
+    body: 'I am genuinely worse at this than the person you can hire full-time, who will be faster, cheaper and closer to the product. This is not modesty. It is a warning about your money.',
+  },
+  {
+    title: 'Being the reason the project is late',
+    body: 'I am one person with one client at a time, and I will tell you before we start if the dates do not work. What I will not do is take the project anyway and manage your expectations afterwards.',
+  },
 ];
+
+
 ---
 
 <Base
@@ -40,8 +60,12 @@ const notFor = [
   description="I’m a product designer based in Barcelona, originally from Almeria. I help founders and companies turn messy ideas into clear, usable products."
   schema={[
     {
-      '@type': 'AboutPage',
+      // ProfilePage rather than AboutPage: this is the author page every
+      // BlogPosting on the site points at, and ProfilePage is the type Google
+      // documents for exactly that. AboutPage describes an organisation.
+      '@type': 'ProfilePage',
       name: 'About Sergio Gualda',
+      dateModified: new Date().toISOString(),
       mainEntity: { '@id': `${SITE.url}/#person` },
     },
   ]}
@@ -54,6 +78,7 @@ const notFor = [
       alt="Sergio Gualda"
       class="portrait"
       widths={[128, 256]}
+      sizes="108px"
       loading="eager"
     />
 
@@ -86,8 +111,19 @@ const notFor = [
         see feedback as a way to get better, not as something personal. Bonus points if you can
         make me laugh in the process.
       </p>
-      <p>Let’s build things that matter and enjoy the ride while we’re at it.</p>
     </div>
+
+    {/* The questions people actually type about a person — where, for whom,
+        how long — answered in one place. Every figure here is already stated
+        somewhere else on the site; none of it is new, it was just never
+        gathered where a search engine or a model would look for it. */}
+    <dl class="facts">
+      <dt>Where</dt><dd>Barcelona, CET. Remote across Europe.</dd>
+      <dt>How long</dt><dd>Ten years in product, mostly SaaS and mobile apps.</dd>
+      <dt>Who with</dt><dd>Teams of roughly two to forty people. Founders, and the person who can change the plan.</dd>
+      <dt>What kind of work</dt><dd>Zero-to-one product, scoping under a deadline, and saying the thing nobody in the room wants to say.</dd>
+      <dt>Languages</dt><dd>Spanish and English.</dd>
+    </dl>
 
     <section class="block">
       <h2>What I’m good at.</h2>
@@ -102,7 +138,10 @@ const notFor = [
         {notFor.map((x) => (<><dt>{x.title}</dt><dd>{x.body}</dd></>))}
       </dl>
     </section>
+
   </article>
+
+  <NextStep line="Think we would work well together?" />
 
   <Footer slot="footer" />
 </Base>
@@ -129,7 +168,32 @@ const notFor = [
   .bio p + p { margin-top: 1.15em; }
 
   .block { margin-top: clamp(58px, 8vw, 86px); }
+  .facts {
+    display: grid;
+    grid-template-columns: minmax(0, 34%) 1fr;
+    gap: var(--space-3) var(--space-5);
+    margin: var(--space-9) 0;
+    padding: var(--space-7) 0;
+    border-block: 1px solid var(--hair);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    letter-spacing: 0;
+  }
+  .facts dt { color: var(--dim); }
+  .facts dd { margin: 0; }
+  @media (max-width: 560px) {
+    .facts { grid-template-columns: 1fr; gap: var(--space-1); }
+    .facts dd { margin-bottom: var(--space-4); }
+  }
+
   .block h2 { margin-bottom: 26px; }
+  .block .lead {
+    margin: -14px 0 26px;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
 
   dl dt {
     font-family: var(--font-display);

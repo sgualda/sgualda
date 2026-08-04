@@ -24,7 +24,7 @@ I am not writing that as advice. I am writing it because I am bad at it, and the
 
 ## The three weekends
 
-A few years ago I spent three weekends building a tool for organising my own notes. Data model, interface, the lot. It worked.
+A few years ago I spent three weekends building [a tool for organising my own notes](/case-studies/weeknotes/). Data model, interface, the lot. It worked.
 
 I never showed it to anybody.
 
@@ -46,7 +46,7 @@ It is not sentimentality. It is arithmetic that your brain does badly.
 
 None of these are about the idea. They are all about your own behaviour, which is the part you can actually observe.
 
-**1 · You are polishing what was never at risk.** This is the strongest one. If the core assumption is untested and you are refining the interface, you are avoiding, and the craft is a costume. I have done exactly this and called it attention to detail.
+**1 · You are polishing what was never at risk.** This is the strongest one. If the core assumption is untested and you are refining the interface, you are avoiding, and the craft is a costume. I did exactly this on [a pricing calculator I never launched](/case-studies/rangos/), and called it attention to detail.
 
 **2 · You have not shown it to anyone who could say no.** Showing it to people who will be encouraging is not showing it. The test is whether the last person you demoed it to was in a position to tell you it was pointless, and whether you gave them room to.
 
@@ -68,6 +68,6 @@ I still do this. The failure mode has just moved.
 
 I no longer over-build things that nobody wants. What I do now is call something a prototype so I feel allowed to start it, and then not throw it away when it has answered its question. Same attachment, better vocabulary.
 
-The best I have managed is making the decision earlier and in writing, when it is still cheap and I am still honest. Alberto Savoia puts the underlying idea better than I can: **make sure you are building the right thing before you worry about building the thing right.** That is easy to agree with and hard to do, and the gap between those two is where most of the wasted years in this job live.
+The best I have managed is making the decision earlier and in writing, when it is still cheap and I am still honest. [Alberto Savoia](https://www.pretotyping.org/), who spent years at Google watching products fail for exactly this reason, puts the underlying idea better than I can: **make sure you are building the right thing before you worry about building the thing right.** That is easy to agree with and hard to do, and the gap between those two is where most of the wasted years in this job live.
 
 If you are in the middle of one of these right now, [the check on whether a feature is worth building](/tools/is-this-feature-worth-building/) is three questions and takes under a minute. It will not make the decision for you. It will make you say out loud what you already suspect, which in my experience is most of the work.

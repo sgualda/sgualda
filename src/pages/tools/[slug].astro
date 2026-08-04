@@ -1,9 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
+import NextStep from '@components/NextStep.astro';
 import { getTools, CATS, type Tool } from '@lib/content';
 import { SITE } from '@lib/site';
 import '@styles/quiz.css';
@@ -21,9 +21,6 @@ const url = `${SITE.url}/tools/${t.slug}/`;
  * FAQs are server-rendered, which is what a crawler that does not run
  * JavaScript actually sees on these pages.
  */
-const terms = (await getCollection('glossary'))
-  .filter((g) => g.data.tool === t.slug)
-  .sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 
 <Base
@@ -32,6 +29,13 @@ const terms = (await getCollection('glossary'))
   schema={[
     {
       '@type': 'WebApplication',
+      // The fields that turn a type into a rich result. `offers` at zero is
+      // how "free" becomes machine-readable rather than a word in the copy.
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any',
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      author: { '@id': `${SITE.url}/#person` },
       name: t.n,
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web browser',
@@ -103,39 +107,30 @@ const terms = (await getCollection('glossary'))
   <section class="section col">
     <span class="eyebrow">More</span>
     <h2>Other checks.</h2>
-    <ul class="more">
+    <ul class="more rail">
       {
-        tools.filter((o) => o.slug !== t.slug).slice(0, 3).map((o) => (
+        tools.filter((o) => o.slug !== t.slug).map((o) => (
           <li class="card-link">
             <a href={`/tools/${o.slug}/`}>
+              <span class="meta">{o.time} · {o.count}</span>
               <h3>{o.n}</h3>
               <p>{o.out}</p>
-              <span class="arrow-link">Start the check <i aria-hidden="true">→</i></span>
             </a>
           </li>
         ))
       }
     </ul>
     <div class="actions" style="margin-top:30px">
-      <a class="btn btn--ghost" href="/tools/">See all checks</a>
+      <a class="btn btn--ghost" href="/tools/">All checks</a>
     </div>
   </section>
 
 
-  {terms.length > 0 && (
-    <section class="section col">
-      <span class="eyebrow">Vocabulary</span>
-      <h2>Words this check uses.</h2>
-      <dl class="terms-inline">
-        {terms.map((g) => (
-          <div>
-            <dt><a href={`/glossary/#${g.id}`}>{g.data.name}</a></dt>
-            <dd>{g.data.definition}</dd>
-          </div>
-        ))}
-      </dl>
-    </section>
-  )}
+  <NextStep
+    line="Want somebody to look at the actual product?"
+    secondLabel="All checks"
+    secondHref="/tools/"
+  />
 
   <Footer slot="footer" />
 </Base>
@@ -151,14 +146,36 @@ const terms = (await getCollection('glossary'))
   .aside { margin-top: 14px; font-size: 0.8125rem; color: var(--dim); letter-spacing: 0; }
 
 
-  .more { list-style: none; text-align: left; margin-top: 34px; display: grid; gap: 14px; }
+  /* A rail rather than a stack. Five other checks read as a wall vertically
+     and as a menu horizontally, and the point of this block is "there are
+     more of these", not "read all of them now". */
+  .more { list-style: none; text-align: left; margin-top: 34px; padding-block: 4px; }
+  /* 236 rather than 260 so two fit and a third is clearly clipped. At 260 the
+     third card peeked by 24px, which the fade then swallowed — the row looked
+     like it ended in a blur rather than continuing. */
+  /* Layout only. The surface, the radius and the hover come from .card-link
+     in base.css — the same component the tools index uses. It had grown its
+     own border-and-lift on top of the shared animated ring, so the same card
+     answered a hover two different ways depending on which page it was on. */
+  .more > li { width: 236px; }
+  .more > li > a { display: flex; flex-direction: column; height: 100%; }
+  .more .meta {
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: var(--space-3);
+  }
   .more h3 { font-size: 1rem; margin-bottom: 8px; }
-  .more p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); margin-bottom: 18px; }
+  .more p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); margin: 0; }
 </style>
 
 <script>
   import { createQuiz, type Question } from '@lib/quiz';
   import { celebrate, settle } from '@lib/feedback';
+  import { rails } from '@lib/rail';
+
+  rails();
 
   type Bucket = { max: number; name: string; sub: string; body: string; next: string[] };
   type Data = { q: [string, [string, number][]][]; b: Bucket[] };
@@ -185,10 +202,13 @@ const terms = (await getCollection('glossary'))
 
     renderQuestion: (q, i, total) =>
       `<div class="step">` +
-      (i > 0 ? `<button class="back" type="button" data-quiz-back>← Back</button>` : '') +
       `<span class="eyebrow">Question ${i + 1} of ${total}</span>` +
       `<h2 class="qq" data-quiz-head tabindex="-1">${q.text}</h2>` +
       q.options.map((o, n) => `<button class="opt" type="button" data-quiz-opt="${n}">${o.label}</button>`).join('') +
+      // After the options, not before them. Sharing a line with "Question 3 of
+      // 4" it read as part of the label; here it is what it is — the way out,
+      // offered once you have seen what you are choosing between.
+      (i > 0 ? `<button class="back" type="button" data-quiz-back>← Back</button>` : '') +
       `</div>`,
 
     renderVerdict: (r) =>
@@ -203,9 +223,9 @@ const terms = (await getCollection('glossary'))
       `<p class="vnote">${questions.length} questions cannot know your product. Treat this as a ` +
       `strong opinion from somebody who has made the same call.</p>` +
       `<div class="vacts">` +
-      `<a class="btn btn--dark" href="/work-with-me/">See if I can help</a>` +
-      `<button class="btn btn--ghost" type="button" id="share">Copy link to this answer</button>` +
-      `</div><button class="again" type="button" data-quiz-restart>Run it again</button></div>`,
+      `<a class="btn btn--dark" href="/work-with-me/">Have me look at it properly</a>` +
+      `<button class="again" type="button" data-quiz-restart>Run it again</button>` +
+      `</div></div>`,
 
     onRender({ verdict }) {
       if (!verdict) return;
@@ -214,38 +234,7 @@ const terms = (await getCollection('glossary'))
       if (verdict === t.b[0]) celebrate(panel);
       else if (verdict === t.b[t.b.length - 1]) settle(panel);
 
-      document.getElementById('share')?.addEventListener('click', async () => {
-        const btn = $('share');
-        try {
-          await navigator.clipboard.writeText(location.href);
-          btn.textContent = 'Copied';
-        } catch {
-          btn.textContent = location.href;
-        }
-        setTimeout(() => (btn.textContent = 'Copy link to this answer'), 2200);
-      });
     },
   });
 </script>
 
-<style>
-  .terms-inline { text-align: left; margin-top: var(--space-6); }
-  .terms-inline > div { padding: var(--space-5) 0; }
-  .terms-inline > div + div { border-top: 1px solid var(--hair); }
-  .terms-inline dt {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    margin-bottom: var(--space-2);
-  }
-  .terms-inline dt a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-  .terms-inline dt a:hover { opacity: 0.6; }
-  .terms-inline dd {
-    margin: 0;
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    letter-spacing: 0;
-    color: var(--dim);
-  }
-</style>

@@ -5,7 +5,7 @@ cat: "decisions"
 n: "Should you decide this now, or think longer?"
 time: "40 seconds"
 count: "4 questions"
-title: "Should You Decide Now or Think Longer? — Free Check"
+title: "Decide now, or think longer?"
 meta: "Four questions tell you how much of your time a decision actually deserves, based on
   how hard it would be to undo rather than how important it feels. Free, forty seconds."
 lead: "You have been going round the same decision for two weeks. Most people agonise over

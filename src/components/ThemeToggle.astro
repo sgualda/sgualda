@@ -62,6 +62,21 @@
   }
   .theme-toggle:active { transform: translateY(0); }
 
+  /* Out of the way while reading down, back on the way up. A fixed control in
+     a corner has no collision logic, so on a phone it sat on top of the last
+     card of every grid and the last line of every page. Scroll direction is
+     the cheapest signal for "are you consuming or navigating". */
+  .theme-toggle[data-away='true'] {
+    opacity: 0;
+    transform: translateY(120%);
+    pointer-events: none;
+  }
+  .theme-toggle[data-away='true']:focus-visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
   .theme-toggle svg {
     width: 18px;
     height: 18px;
@@ -133,5 +148,23 @@
     });
 
     label();
+
+    /* Only on the small screens where the collision actually happens; on a
+       desktop the corner is empty and a disappearing control is just noise. */
+    if (matchMedia('(max-width: 820px)').matches) {
+      let last = scrollY;
+      addEventListener(
+        'scroll',
+        () => {
+          const y = scrollY;
+          // 6px of slack, or the control flickers on momentum scroll.
+          if (Math.abs(y - last) > 6) {
+            btn.dataset.away = String(y > last && y > 200);
+            last = y;
+          }
+        },
+        { passive: true }
+      );
+    }
   }
 </script>

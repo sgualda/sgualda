@@ -4,6 +4,7 @@ n: "04"
 name: "Make it repeatable"
 lead: "It works. Now do it again, with other people."
 meta: "Doing it once is a story; doing it again with different people is a business. Why settled decisions keep coming back, and the ten-minute habit that stops it."
+seoTitle: "How to make product decisions stick"
 question: "Why does the same work keep coming back?"
 x: 72
 y: 24
@@ -36,6 +37,13 @@ traps:
   - "Assuming what worked at five people works at fifteen. In my experience it starts
     creaking at about eight."
 signal: "Something shipped well while you were not paying attention to it."
+faqs:
+  - q: "Why does my team keep redoing the same work?"
+    a: "Almost always because decisions live in somebody’s head instead of in writing. Nobody is being difficult: they are genuinely remembering the same meeting differently, and without a record the loudest or most recent version wins."
+  - q: "What is the cheapest way to stop it?"
+    a: "A decision log. Ten minutes a week, one line per decision: what we decided, why, and what would make us revisit it. It ends the category of argument where everybody remembers the meeting differently, which is most of them."
+  - q: "Do we need a design system at this stage?"
+    a: "Only if the same decision has already been made twice, differently, and it caused a problem. A system is an answer to repetition. If the repetition has not happened, you are maintaining an answer to a question nobody asked."
 cta:
   title: "Time inside the team"
   body: "A few months in your tools, your standups and your arguments — deciding with you

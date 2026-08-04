@@ -38,3 +38,13 @@
 
 # The chooser is now a section of /tools/ rather than its own page.
 /tools/which-check-do-you-need/  /tools/  301
+
+# Topic hubs, removed 2026-08-03. Topic was tried as a navigation axis three
+# times — filters on the index, chips on each essay — and rejected each time.
+# An index nobody can reach is the cost without the benefit, so the five pages
+# go and the essays they listed stay exactly where they were.
+/writing/topic/craft/        /writing/    301
+/writing/topic/discovery/    /writing/    301
+/writing/topic/measurement/  /writing/    301
+/writing/topic/process/      /writing/    301
+/writing/topic/scope/        /writing/    301

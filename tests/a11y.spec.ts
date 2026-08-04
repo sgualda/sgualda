@@ -7,7 +7,7 @@ const section = (n: string) => {
   const m = src.match(new RegExp(`${n}:\\s*\\[([^\\]]*)\\]`));
   return m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]) : [];
 };
-const URLS = [...section('pages'), ...section('tools'), ...section('topics'), ...section('writing')];
+const URLS = [...section('pages'), ...section('tools'), ...section('writing')];
 
 for (const url of URLS) {
   test(`${url} has no accessibility violations`, async ({ page }) => {
@@ -51,13 +51,19 @@ test('a check announces each question and moves focus to it', async ({ page }) =
       tag: document.activeElement?.tagName,
     }));
 
+  // Polled rather than asserted once: the panel repaints and then moves focus,
+  // so a single read can land in the gap between the two. The test was flaky
+  // roughly one run in four for exactly this reason.
+  const expectFocusOnHeading = async () =>
+    await expect.poll(focused, { timeout: 3000 }).toEqual({ head: true, tag: 'H2' });
+
   await page.locator('.opt').first().click();
-  expect(await focused()).toEqual({ head: true, tag: 'H2' });
+  await expectFocusOnHeading();
 
   // And onto the verdict at the end.
   await page.locator('.opt').first().click();
   await page.locator('.opt').first().click();
-  expect(await focused()).toEqual({ head: true, tag: 'H2' });
+  await expectFocusOnHeading();
 });
 
 test('the qualifier does the same', async ({ page }) => {

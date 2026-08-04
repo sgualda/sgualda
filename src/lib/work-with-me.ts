@@ -173,4 +173,15 @@ export const FAQ_HTML = `<details><summary>How does this actually work?<span cla
       <p>Within a day, including to the people I turn down. If something is genuinely urgent, say so in the first line and I’ll reply the same day when I can.</p></div></details>
     <details><summary>Where are you, and how do we work together?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>Barcelona, CET. Almost everything is remote and works across Europe without friction.</p>
-      <p>I use whatever your team already uses — I’m not going to make five people learn a new tool for a five-day engagement. For ongoing work I need access to the channels where decisions actually get made, not a new one created for me.</p></div></details>`;
+      <p>I use whatever your team already uses — I’m not going to make five people learn a new tool for a five-day engagement. For ongoing work I need access to the channels where decisions actually get made, not a new one created for me.</p></div></details>
+<details><summary>What happens after I send a brief?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
+      <p>You get a confirmation email straight away with a copy of what you wrote. Then I read it — every one, myself — and reply within a day with which kind of engagement fits, what it would involve and what it would cost. Or that none of it fits, which happens about a third of the time.</p>
+      <p>That reply is an email. There is no call to book, no calendar link and no sequence behind it. If you never reply, nothing else happens.</p></div></details>
+
+<details><summary>Am I committing to anything by sending one?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
+      <p>No. A brief is a question, not a request for a quote you then have to turn down. Scope and price are agreed in writing before any work starts, so there is no point in the process where you are accidentally further in than you meant to be.</p>
+      <p>The most common outcome after a first reply is that we both decide it is not the right moment. That is a fine outcome and it costs you three minutes.</p></div></details>
+
+<details><summary>What if I am not ready to hire anyone yet?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
+      <p>Send one anyway if you want a second opinion on where you are. I will tell you what I would do next, and if the honest answer is “nothing yet, come back when X breaks”, I will say that instead of selling you a smaller version of something you do not need.</p>
+      <p>If you would rather not speak to anybody at all, the <a href="/tools/">free checks</a> answer a narrower version of the same question and ask nothing of you.</p></div></details>`;

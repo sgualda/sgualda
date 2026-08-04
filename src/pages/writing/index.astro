@@ -105,9 +105,16 @@ const PAGE = 6;
     font-family: var(--font-display); font-size: 1.125rem; font-weight: 600;
     letter-spacing: -0.03em; line-height: 1.2;
   }
+  /* Body face at medium rather than the display face at semibold. A list of
+     fifteen titles set in Zalando Sans Expanded 600 reads as fifteen headlines
+     competing with each other; the index is for scanning, and the headline
+     belongs on the essay itself. */
   .what {
-    font-family: var(--font-display);
-    font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.03em; line-height: 1.32;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.45;
   }
   /* Rows below the fold are skipped by layout and paint until revealed. */
   .row.hidden { content-visibility: hidden; }

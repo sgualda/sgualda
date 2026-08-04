@@ -7,7 +7,7 @@ const section = (name: string) => {
   const m = src.match(new RegExp(`${name}:\\s*\\[([^\\]]*)\\]`));
   return m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]) : [];
 };
-const URLS = [...section('pages'), ...section('tools'), ...section('topics'), ...section('writing')];
+const URLS = [...section('pages'), ...section('tools'), ...section('writing')];
 
 test('the URL contract is not empty', () => {
   expect(URLS.length).toBeGreaterThan(20);
@@ -41,8 +41,19 @@ test.describe('every page', () => {
 
       // Chrome and footer are present. This is the check that would have
       // caught the newsletter band disappearing from /map/.
-      await expect(page.locator('header.site-header')).toBeVisible();
-      await expect(page.locator('footer.site-footer')).toBeVisible();
+      //
+      // The brief is the one page without either, on purpose: it is a
+      // full-screen form, and every link in a header is an invitation to
+      // abandon it. It gets a close control instead, which is checked here so
+      // "no chrome" cannot quietly become "no way out".
+      if (url === '/work-with-me/brief/') {
+        await expect(page.locator('header.site-header')).toHaveCount(0);
+        await expect(page.locator('footer.site-footer')).toHaveCount(0);
+        await expect(page.locator('a.close[href="/work-with-me/"]')).toBeVisible();
+      } else {
+        await expect(page.locator('header.site-header')).toBeVisible();
+        await expect(page.locator('footer.site-footer')).toBeVisible();
+      }
 
       expect(errors, 'console errors').toEqual([]);
     });
@@ -214,12 +225,59 @@ test('the qualifier reaches a recommendation', async ({ page }) => {
 });
 
 test('the brief refuses to submit without an email', async ({ page }) => {
-  await page.goto('/work-with-me/#brief');
-  for (let i = 2; i <= 5; i++) {
-    await page.getByRole('button', { name: 'Continue' }).click();
-  }
+  // Its own page now: it is only reachable from a positive verdict, so nobody
+  // fills in three minutes of form before finding out none of it applies.
+  await page.goto('/work-with-me/brief/');
+  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+
+  // Step 3 is now gated on the way out of it, so you cannot reach step 5 and
+  // then be told about step 3 with no way back.
+  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '3');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.locator('.formErr')).toContainText('I actually read');
+  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '3');
+
+  await page.locator('#b4').fill('The launch went quiet and nobody can agree on why.');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+
+  // And the email is caught where the email is.
   await page.getByRole('button', { name: 'Send the brief' }).click();
-  await expect(page.locator('.formErr')).toBeVisible();
+  await expect(page.locator('.formErr')).toContainText('email address that works');
+  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '5');
+});
+
+test('the brief carries the verdict across, and the stepper tracks it', async ({ page }) => {
+  await page.goto('/work-with-me/brief/?rec=review');
+
+  // Step 0 is context only: the verdict, the time it takes, what happens next.
+  // Nothing is asked yet, so no step is marked current.
+  await expect(page.getByText('Based on your answers: A product review')).toBeVisible();
+  await expect(page.locator('#stepper li[data-state=now]')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Start' }).click();
+
+  await expect(page.locator('input[name=kind][data-k=review]')).toBeChecked();
+  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '1');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '2');
+  await expect(page.locator('#stepper li[data-step="1"]')).toHaveAttribute('data-state', 'done');
+
+  // Going back must not lose what was typed.
+  await page.locator('#b1').fill('example.com');
+  await page.getByRole('button', { name: 'Back' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.locator('#b1')).toHaveValue('example.com');
+});
+
+test('a positive verdict is the only route to the brief', async ({ page }) => {
+  await page.goto('/work-with-me/');
+  // The old page carried the whole form below the fold, so anybody could fill
+  // it in without ever being told none of it applied to them.
+  await expect(page.locator('#bBox')).toHaveCount(0);
+  for (let i = 0; i < 4; i++) await page.locator('.opt').first().click();
+  await expect(page.locator('.vacts a[href^="/work-with-me/brief/"]')).toBeVisible();
 });
 
 test.describe('the journal', () => {
@@ -415,4 +473,213 @@ test('every redirect target resolves', async ({ page }) => {
     const res = await page.goto(to);
     expect(res?.status(), `redirect target ${to}`).toBe(200);
   }
+});
+
+test('the brief has no theme toggle, and one way out', async ({ page }) => {
+  // A focused screen with a floating control in the corner is not focused, and
+  // on a phone it landed on top of the last option.
+  await page.goto('/work-with-me/brief/');
+  await expect(page.locator('.theme-toggle')).toBeHidden();
+  await expect(page.locator('a.close')).toBeVisible();
+});
+
+test('a failing brief endpoint says something a person can act on', async ({ page }) => {
+  // The endpoint is PHP. When it is misconfigured it answers with an HTML error
+  // page, and parsing that as JSON used to surface "Unexpected token '<'" to
+  // somebody who just wanted to send a message.
+  await page.route('**/api/brief.php', (route) =>
+    route.fulfill({ status: 500, contentType: 'text/html', body: '<!DOCTYPE html><h1>500</h1>' })
+  );
+  await page.goto('/work-with-me/brief/');
+  await page.getByRole('button', { name: 'Start' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  // Step 3 is the one that is actually validated, so it has to be filled in
+  // before the network error is the thing under test.
+  await page.locator('#b4').fill('The launch went quiet and nobody can agree on why.');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+
+  await page.locator('#b10').fill('someone@example.com');
+  await page.getByRole('button', { name: 'Send the brief' }).click();
+
+  const err = page.locator('.formErr');
+  await expect(err).toBeVisible();
+  await expect(err).toContainText('hello@sgualda.com');
+  await expect(err).not.toContainText('JSON');
+});
+
+test('the removed topic hubs redirect rather than 404', async ({ page }) => {
+  // Five pages deleted, not hidden. The rule is only in .htaccess, which the
+  // static preview server does not read — so this checks the contract itself:
+  // every old URL has a rule, and it points somewhere that exists.
+  const rules = readFileSync(new URL('../public/_redirects', import.meta.url), 'utf8');
+  for (const slug of ['craft', 'discovery', 'measurement', 'process', 'scope']) {
+    expect(rules).toContain(`/writing/topic/${slug}/`);
+  }
+  const res = await page.goto('/writing/');
+  expect(res?.status()).toBe(200);
+});
+
+test('the glossary filter narrows the list, and only exists with JavaScript', async ({ page }) => {
+  await page.goto('/glossary/');
+  await expect(page.locator('.find')).toBeVisible();
+  const total = await page.locator('.term').count();
+
+  await page.fill('#q', 'polite');
+  await expect(page.locator('.term:visible')).not.toHaveCount(total);
+  await expect(page.locator('#count')).toContainText(`of ${total}`);
+
+  await page.fill('#q', '');
+  await expect(page.locator('.term:visible')).toHaveCount(total);
+});
+
+test('no page title is truncated by Google', async ({ page }) => {
+  // The site name is appended only when it fits. Eight pages were losing the
+  // end of the real title purely to carry a 16-character suffix.
+  for (const url of ['/', '/work-with-me/', '/community/', '/map/worth-building/', '/tools/why-is-nobody-using-your-product/']) {
+    await page.goto(url);
+    expect((await page.title()).length, `title length on ${url}`).toBeLessThanOrEqual(60);
+  }
+});
+
+test('the brief offers a way home, not only a way back', async ({ page }) => {
+  await page.goto('/work-with-me/brief/');
+  await expect(page.locator('a.home[href="/"]')).toBeVisible();
+  await expect(page.locator('a.close[href="/work-with-me/"]')).toBeVisible();
+});
+
+test.describe('the funnel', () => {
+  // Five of the seven page types used to end without offering anything, and
+  // they are the ones a stranger lands on. This is the check that stops that
+  // happening again silently.
+  const ENTRY_POINTS = [
+    '/about/',
+    '/glossary/',
+    '/community/',
+    '/writing/mvp-vs-prototype/',
+    '/tools/why-is-nobody-using-your-product/',
+    '/case-studies/truvi/',
+    '/map/nobody-came/',
+  ];
+
+  for (const url of ENTRY_POINTS) {
+    test(`${url} offers a route to the brief`, async ({ page }) => {
+      await page.goto(url);
+      await expect(page.locator('main a[href="/work-with-me/"]').first()).toBeVisible();
+    });
+  }
+
+  test('nothing on the site asks for a call', async ({ page }) => {
+    // The model is contactless: a brief, then an email. "First call is 20
+    // minutes" survived on /case-studies/ for days after the button above it
+    // had already been changed.
+    for (const url of ['/', '/work-with-me/', '/case-studies/', '/work-with-me/brief/']) {
+      await page.goto(url);
+      const text = (await page.locator('main').innerText()).toLowerCase();
+      expect(text, `${url} promises a call`).not.toMatch(/book a call|first call is|schedule a call/);
+    }
+  });
+
+  test('the brief says where the email goes, and survives a reload', async ({ page }) => {
+    await page.goto('/work-with-me/brief/');
+    await page.getByRole('button', { name: 'Start' }).click();
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await page.locator('#b1').fill('example.com');
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await page.locator('#b4').fill('The launch went quiet and nobody agrees why.');
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await page.getByRole('button', { name: 'Continue' }).click();
+
+    // The commonest silent objection to a form is not knowing what happens to
+    // the address, answered where the address is asked for.
+    await expect(page.locator('.privacy a[href="/privacy/"]')).toBeVisible();
+
+    // Closing the tab used to lose everything. Going back already survived.
+    await page.reload();
+    await page.getByRole('button', { name: 'Start' }).click();
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await expect(page.locator('#b1')).toHaveValue('example.com');
+  });
+
+  test('the success page commits to a date, not to "soon"', async ({ page }) => {
+    await page.goto('/work-with-me/brief/sent/');
+    await expect(page.locator('#when')).toBeVisible();
+    await expect(page.locator('#when')).toContainText('spam');
+  });
+});
+
+test.describe('the sitemap', () => {
+  const xml = () => readFileSync(new URL('../dist/sitemap-0.xml', import.meta.url), 'utf8');
+
+  test('never announces a page that tells crawlers not to index it', async () => {
+    // /work-with-me/brief/ was in the sitemap and carried noindex at the same
+    // time. Two opposite instructions for one URL is a reason to trust the
+    // whole file less, not just that entry.
+    expect(xml()).not.toContain('/work-with-me/brief/');
+  });
+
+  test('every URL carries a lastmod, and none carries priority', async () => {
+    const locs = xml().match(/<loc>/g)?.length ?? 0;
+    const mods = xml().match(/<lastmod>/g)?.length ?? 0;
+    expect(locs).toBeGreaterThan(30);
+    expect(mods).toBe(locs);
+    // Google has ignored priority for years, and it was set on 15 of 38.
+    expect(xml()).not.toContain('<priority>');
+  });
+
+  test('content dates are the real ones, not the build date', async () => {
+    // An essay revised in March must say March. If everything says today, the
+    // signal is worthless — it claims the whole site changed every build.
+    const today = new Date().toISOString().slice(0, 10);
+    const dates = [...xml().matchAll(/<lastmod>(\d{4}-\d{2}-\d{2})/g)].map((m) => m[1]);
+    expect(new Set(dates).size).toBeGreaterThan(1);
+    expect(dates.filter((d) => d !== today).length).toBeGreaterThan(5);
+  });
+});
+
+test('every map stage answers three questions directly', async ({ page }) => {
+  // The stage pages were the longest thing on the site with no block of
+  // answered questions — the format that feeds People Also Ask.
+  for (const slug of ['worth-building', 'first-version', 'nobody-came', 'make-it-repeatable', 'charging-for-it']) {
+    await page.goto(`/map/${slug}/`);
+    await expect(page.locator('.faq details')).toHaveCount(3);
+    const ld = await page.locator('script[type="application/ld+json"]').first().textContent();
+    expect(ld, `${slug} FAQPage`).toContain('FAQPage');
+  }
+});
+
+test('no two pages chase the same query in their title', async ({ page }) => {
+  // The five map stages all read "Stage 0N: {name} — building a product",
+  // which competes with itself four times and targets a phrase — "stage 03" —
+  // that nobody searches. Rewriting them created one new collision with the
+  // checks, so this compares the two families against each other.
+  const titles = new Map<string, string>();
+  for (const url of [
+    '/map/worth-building/', '/map/first-version/', '/map/nobody-came/',
+    '/map/make-it-repeatable/', '/map/charging-for-it/',
+    '/tools/is-this-feature-worth-building/', '/tools/why-is-nobody-using-your-product/',
+    '/tools/why-your-team-keeps-redoing-the-same-work/', '/tools/can-you-charge-for-your-product-yet/',
+  ]) {
+    await page.goto(url);
+    titles.set(url, (await page.title()).replace(/ \| Sergio Gualda$/, '').toLowerCase());
+  }
+  const seen = [...titles.values()];
+  expect(new Set(seen).size, 'duplicate titles').toBe(seen.length);
+
+  // And no title is a substring of another, which is how two pages end up on
+  // the same result and split the clicks.
+  for (const a of seen)
+    for (const b of seen)
+      if (a !== b) expect(b.includes(a), `"${b}" contains "${a}"`).toBe(false);
+});
+
+test('/about/ is a proper author page', async ({ page }) => {
+  await page.goto('/about/');
+  const ld = await page.locator('script[type="application/ld+json"]').first().textContent();
+  // ProfilePage is what Google documents for an author page; AboutPage
+  // describes an organisation, which this is not.
+  expect(ld).toContain('ProfilePage');
+  // The questions people type about a person, answered in one place.
+  await expect(page.locator('.facts dt')).toHaveCount(5);
 });

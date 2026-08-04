@@ -75,7 +75,7 @@ export const NAV = [
 ] as const;
 
 /** The dark pill in the header. */
-export const CTA = { label: 'Start here', href: '/work-with-me/' } as const;
+export const CTA = { label: 'Hire me', href: '/work-with-me/' } as const;
 
 /**
  * The URL structure, decided for what the site is becoming rather than what
@@ -101,6 +101,7 @@ export const URL_MAP = {
     '/',
     '/about/',
     '/work-with-me/',
+    '/work-with-me/brief/',
     '/case-studies/',
     '/case-studies/glintale/',
     '/case-studies/truvi/',
@@ -130,18 +131,6 @@ export const URL_MAP = {
     '/tools/can-you-charge-for-your-product-yet/',
     '/tools/why-your-team-keeps-redoing-the-same-work/',
   ],
-  /**
-   * Topic hubs. Only topics that actually have an essay get a page — an empty
-   * hub is thin content and a dead end. 'launch' is defined in topics.ts and
-   * deliberately absent here until something is written for it.
-   */
-  topics: [
-    '/writing/topic/craft/',
-    '/writing/topic/discovery/',
-    '/writing/topic/measurement/',
-    '/writing/topic/process/',
-    '/writing/topic/scope/',
-  ],
 
   /** Essays. Generated from the collection. */
   writing: [
@@ -160,7 +149,7 @@ export const URL_MAP = {
 /** Pages that belong in the footer sitemap, beyond the main nav. */
 export const MORE = [
   { label: 'Work with me', href: '/work-with-me/' },
-  { label: 'Case studies', href: '/case-studies/' },
+  { label: 'Work', href: '/case-studies/' },
   { label: 'Now', href: '/now/' },
   { label: 'Community', href: '/community/' },
 ] as const;

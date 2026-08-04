@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import { SITE } from '@lib/site';
 
 /**
  * /case-studies/ — matches the Figma frame "Work".
@@ -30,6 +31,16 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
       '@type': 'CollectionPage',
       name: 'Work',
       description: 'Products designed or built by Sergio Gualda, with post-mortems.',
+      /* The cards are images now, so the titles and summaries that used to sit
+         under them are gone from the page. They stay here, where a crawler
+         still reads what this page is a list of. */
+      hasPart: cases.map((c) => ({
+        '@type': 'CreativeWork',
+        name: c.data.title,
+        abstract: c.data.summary,
+        url: `${SITE.url}/case-studies/${c.id}/`,
+        dateCreated: c.data.year,
+      })),
     },
   ]}
 >
@@ -42,14 +53,29 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
       Products I designed or built, alive and dead. The dead ones have post-mortems, which is
       the part most portfolios leave out.
     </p>
+    {/* The grid is images only — Sergio’s call, and it reads better. But a
+        portfolio page with 96 indexable words is a portfolio page a search
+        engine cannot place. One line per project, in prose, restores the text
+        without putting the captions back on the cards. */}
+    <p class="sub roll">
+      Six of them: {cases.map((c, i) => (
+        <>
+          {i > 0 && ', '}
+          <a href={`/case-studies/${c.id}/`}>{c.data.title}</a>
+          {' '}<span>({c.data.summary.split('.')[0].toLowerCase()})</span>
+        </>
+      ))}.
+    </p>
   </section>
 
   <div class="col">
     <div class="grid" id="grid">
       {
         cases.length
-          ? cases.map((c) => (
-              <a class="card" href={`/case-studies/${c.id}/`} >
+          ? /* Image only. With no visible text the link needs a name of its
+               own, or a screen reader announces six links called "image". */
+            cases.map((c) => (
+              <a class="card" href={`/case-studies/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
                 {c.data.cover ? (
                   <Image
                     class="thumb"
@@ -58,13 +84,16 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
                     widths={[320, 640, 960]}
                     sizes="(max-width: 560px) calc(100vw - 40px), 272px"
                     loading="lazy"
+                    style={`object-position:${c.data.coverPosition}`}
                   />
                 ) : (
                   <div class="thumb none"><span>{c.data.status}</span></div>
                 )}
-                <h2>{c.data.title}</h2>
-                <p class="role">{c.data.role} · {c.data.year}</p>
-                <p class="summary">{c.data.summary}</p>
+                {/* Visible on a phone only. On desktop the grid is scannable and
+                    a hover reveals the link target; on a phone there is no hover
+                    and no tooltip, so six unlabelled squares tell a visitor
+                    nothing at all about a portfolio. */}
+                <span class="name">{c.data.title}</span>
               </a>
             ))
           : [0, 1, 2, 3].map(() => <div class="thumb placeholder" aria-hidden="true" />)
@@ -80,8 +109,8 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
     <div class="band">
       <h2>Want to build<br />something together?</h2>
       <p>Tell me where you are and where you want to go.</p>
-      <a class="btn book" href="/work-with-me/">Book an intro call →</a>
-      <p class="fine">First call is 20 minutes</p>
+      <a class="btn btn--on-band" href="/work-with-me/">See if I can help</a>
+      <p class="fine">A written reply within a day. No call.</p>
     </div>
   </section>
 
@@ -93,14 +122,25 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
   .intro h1 { margin-bottom: 18px; }
 
 
+  .roll {
+    margin-top: var(--space-6);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    letter-spacing: 0;
+  }
+  .roll a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .roll span { color: var(--dim); }
+
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
   .thumb {
     display: block;
     width: 100%;
     background: var(--surface);
     border-radius: var(--radius-card);
-    /* Matches the source screenshots; see the note on the home grid. */
-    aspect-ratio: 16 / 9;
+    /* Square, as in the comp. A square crop of a 2304×1271 screenshot shows
+       about 55% of its width, anchored left so the navigation and the first
+       column survive and the crop falls on the empty right-hand side. */
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     /* The covers are screenshots on light interfaces. A hairline stops them
        dissolving into the page in light and floating in dark. */
@@ -119,15 +159,20 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
     color: var(--dim);
   }
   .card { text-align: left; display: block; }
-  .card h2 { font-size: 1.0625rem; margin-top: 14px; }
-  .card .role {
-    font-size: 0.8125rem;
-    color: var(--dim);
-    letter-spacing: 0;
-    margin-top: 4px;
-  }
-  .card .summary { font-size: 0.9375rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); margin-top: 8px; }
   .card:hover .thumb { opacity: 0.82; }
+
+  .name { display: none; }
+  @media (max-width: 560px) {
+    .name {
+      display: block;
+      margin-top: var(--space-3);
+      font-family: var(--font-display);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+  }
   .card[hidden] { display: none; }
 
   .empty { margin-top: 26px; font-size: 0.9375rem; color: var(--dim); }
@@ -146,13 +191,6 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
     font-size: 1rem;
     color: color-mix(in srgb, var(--on-band) 70%, transparent);
   }
-  .book {
-    margin-top: 26px;
-    background: var(--paper);
-    color: var(--ink);
-    border-color: var(--paper);
-  }
-  .book:hover { background: color-mix(in srgb, var(--paper) 84%, transparent); }
   .fine {
     margin-top: 16px;
     font-size: 0.75rem;

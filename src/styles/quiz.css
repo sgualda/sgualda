@@ -28,9 +28,12 @@
   .ck input { accent-color: var(--ink); }
 
   .back {
+    display: block;
+    margin: 24px auto 0;
     font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.1em;
     text-transform: uppercase; color: var(--dim); background: none; border: 0;
-    cursor: pointer; padding: 0; margin-top: 20px;
+    cursor: pointer; padding: 8px 12px;
+    transition: color 0.2s var(--ease);
   }
   .back:hover { color: var(--ink); }
 
@@ -53,6 +56,27 @@
   .vacts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 26px; }
   .tag { font-size: 0.75rem; letter-spacing: 0.06em; color: var(--dim); margin-top: 10px; }
 
+  /* The one-off line under the first question. Deliberately not a .sub: it is
+     read once and never again, so it sits below the question rather than above
+     it competing for the same attention. */
+  .step .intro {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    letter-spacing: 0;
+    color: var(--dim);
+    margin: -6px 0 22px;
+  }
+
+  .step .privacy {
+    margin-top: var(--space-5);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: 0;
+    color: var(--dim);
+    text-align: left;
+  }
+  .step .privacy a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
   .f { text-align: left; margin-bottom: 16px; }
   .f label { display: block; font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; }
   .f input, .f textarea, .f select {
@@ -62,26 +86,75 @@
   }
   .f textarea { min-height: 104px; resize: vertical; line-height: 1.55; }
   .f input:focus, .f textarea:focus, .f select:focus { border-color: var(--ink); }
+  /* The global focus ring is a 2px halo plus a 4px shadow, which is right on a
+     pill button sitting on a dark band and far too heavy wrapped around a
+     104px textarea. A field already signals focus with its own border, so it
+     only needs a thin ring to stay visible for keyboard users. */
+  .f input:focus-visible, .f textarea:focus-visible, .f select:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink) 26%, transparent);
+    border-color: var(--ink);
+  }
   .f .hint { font-size: 0.75rem; color: var(--dim); margin-top: 6px; letter-spacing: 0; }
   .fnav { display: flex; justify-content: space-between; gap: 10px; margin-top: 24px; align-items: center; }
+  /* Step 0 has nothing to go back to. */
+  .fnav.one { justify-content: center; }
+  .step.start .intro { margin-top: 14px; margin-bottom: 0; }
 
   @media (max-width: 560px) { .vcols { grid-template-columns: 1fr; } }
 
-/* Form-level error. Sits above the buttons so it is impossible to miss. */
+/* Form-level error. Sits above the buttons so it is impossible to miss, and
+   says so in red rather than in weight — the old version was a grey panel with
+   a rounded bar down one side, which read as a quotation. */
 .formErr {
   margin-top: 18px;
-  padding: 13px 16px;
-  border-radius: 13px;
-  background: var(--surface);
-  border-left: 3px solid var(--ink);
-  font-size: 0.9375rem;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--err);
+  font-size: 0.875rem;
   line-height: 1.5;
   letter-spacing: 0;
+  color: var(--err);
   text-align: left;
-  color: var(--ink);
 }
 
 /* Focus is moved here programmatically after each answer, so the ring would
    appear without the person having pressed anything. :focus-visible already
    handles keyboard users. */
 .qq:focus, .vname:focus { outline: none; }
+
+
+/* The restart control. It was an unstyled <button>, which on macOS renders as
+   a native grey rectangle in the middle of an otherwise typographic page. It
+   is a quiet action — you have just been given an answer — so it reads as a
+   link rather than competing with the CTA beside it. */
+.vacts .again {
+  background: none;
+  border: 0;
+  padding: 10px 4px;
+  font: inherit;
+  font-size: 0.875rem;
+  letter-spacing: 0;
+  color: var(--dim);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.2s var(--ease);
+}
+.vacts .again:hover { color: var(--ink); }
+
+
+/* The line of small print under a panel — "or just email me", "everything runs
+   in your browser". Was declared separately on three pages; the fourth one
+   inherited nothing and rendered at body size. */
+.aside { margin-top: 16px; font-size: 0.875rem; color: var(--dim); letter-spacing: 0; }
+.aside a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Honeypot. Off-canvas rather than display:none, because a bot that reads CSS
+   skips hidden fields and a bot that does not fills this one in. */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

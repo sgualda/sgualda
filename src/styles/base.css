@@ -71,7 +71,7 @@ img, picture, svg, video { max-width: 100%; height: auto; display: block; }
   z-index: 99;
   background: var(--inverse);
   color: var(--on-inverse);
-  padding: 10px 20px;
+  padding: 13px 22px;
   border-radius: var(--radius-pill);
   font-size: 0.875rem;
 }
@@ -138,6 +138,20 @@ input, textarea, select { text-align: left; font-family: inherit; }
 /* Recedes toward the page rather than toward white, so it dims on a dark
    ground instead of glaring. Identical result in light, where paper is white. */
 .btn--dark:hover { background: color-mix(in srgb, var(--ink) 78%, var(--paper)); border-color: color-mix(in srgb, var(--ink) 78%, var(--paper)); }
+
+/* A button sitting on a full-bleed band. It cannot use --ink/--paper: on the
+   band those are the page's colours, not the band's, so the button either
+   vanishes into it or glares. Declared once here instead of being redrawn as a
+   one-off on each band. */
+.btn--on-band {
+  background: var(--on-band);
+  color: var(--band);
+  border-color: var(--on-band);
+}
+.btn--on-band:hover {
+  background: color-mix(in srgb, var(--on-band) 84%, transparent);
+  border-color: color-mix(in srgb, var(--on-band) 84%, transparent);
+}
 
 .btn--ghost { background: transparent; color: var(--ink); }
 .btn--ghost:hover { background: var(--surface); }
@@ -288,8 +302,12 @@ h2 + .sub, h1 + .sub { margin-top: var(--space-4); }
   filter: brightness(0.86) contrast(1.02);
   transition: filter 0.3s var(--ease);
 }
+/* :active as well as :hover — a touch screen has no hover, so on a phone the
+   dimming had no way back and the original image was simply unreachable. */
 :root[data-theme='dark'] :is(.prose, .byline, article, figure) img:hover,
+:root[data-theme='dark'] :is(.prose, .byline, article, figure) img:active,
 :root[data-theme='dark'] :is(.slot, .card):hover img,
+:root[data-theme='dark'] :is(.slot, .card):active img,
 :root[data-theme='dark'] :is(.prose, .byline, article, figure) img:focus-visible {
   filter: none;
 }
@@ -304,4 +322,61 @@ h2 + .sub, h1 + .sub { margin-top: var(--space-4); }
   :root:not([data-theme='light']) :is(.prose, .byline, article, figure) img:hover {
     filter: none;
   }
+}
+
+/* ── the rail ──
+   Horizontal scroller used by the check cards and the category filters.
+
+   The fade at both ends is the whole point: a row that simply clips at the
+   viewport edge reads as a row that ends there, and people do not swipe things
+   they believe have ended. The mask is driven by two data attributes the
+   script sets, so the fade disappears once you reach either end rather than
+   permanently suggesting there is more.
+
+   `scroll-snap` on the children, never on the container, or a keyboard user
+   tabbing through gets thrown around mid-focus. */
+.rail {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  /* Stays inside the shell. It used to bleed to the viewport edge, which meant
+     cards ran under the page margin and out past the content column — the row
+     read as broken rather than scrollable. Clipping at the same width as
+     everything else is what makes it read as a deliberate row. */
+  -webkit-overflow-scrolling: touch;
+}
+.rail::-webkit-scrollbar { display: none; }
+.rail > * { scroll-snap-align: start; flex: none; }
+
+.rail[data-start='false'][data-end='false'] {
+  mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 96%, transparent 100%);
+}
+.rail[data-start='true'][data-end='false'] {
+  mask-image: linear-gradient(to right, #000 0, #000 96%, transparent 100%);
+}
+.rail[data-start='false'][data-end='true'] {
+  mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 100%);
+}
+
+/* Everything fits: no scrolling, so no fade and no snap. */
+.rail[data-start='true'][data-end='true'] { mask-image: none; scroll-snap-type: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rail { scroll-behavior: auto; }
+}
+
+
+/* Visible to a screen reader, absent from the page. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }

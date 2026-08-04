@@ -40,7 +40,7 @@ None of it was wasted in an obvious way — the code all worked. But every chang
 
 ## The signal I use now
 
-I stopped trying to predict and started watching for one thing: **has this decision now been made twice, differently, and did it cause a problem?**
+I stopped trying to predict and started watching for one thing — the same shift I ended up making with [measurement](/writing/heart-framework-vs-nps-user-experience/): **has this decision now been made twice, differently, and did it cause a problem?**
 
 That is it. That is the whole test.
 

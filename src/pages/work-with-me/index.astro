@@ -15,7 +15,7 @@ import '@styles/quiz.css';
 
 // Build the FAQPage schema from the rendered markup, so the structured data
 // can never drift from what a visitor actually reads.
-const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?<div class="ans">([\s\S]*?)<\/div>/g)].map(
+const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm"[^>]*>[\s\S]*?<div class="ans">([\s\S]*?)<\/div>/g)].map(
   (m) => ({
     q: m[1].replace(/<[^>]+>/g, '').trim(),
     a: m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
@@ -70,9 +70,12 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
       <div class="dots" id="qfDots" role="presentation"><i class="on"></i><i></i><i></i><i></i></div>
       <div id="qfBox" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
+    {/* The most qualified visitor is the one who arrives already decided, and
+        the four questions were charging them the most friction. */}
     <p class="aside">
-      Rather just write? <a href="#brief">Skip to the brief</a> or email
-      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      Already know what you need? <a href="/work-with-me/brief/">Skip to the brief</a>. Or just
+      email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> — the four questions are for your
+      benefit, not mine.
     </p>
   </div>
 
@@ -94,28 +97,6 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     <div class="faq" set:html={FAQ_HTML} />
   </section>
 
-  <!-- ── brief ── -->
-  <section class="section col" id="brief">
-    <span class="eyebrow">No call required</span>
-    <h2>Send a brief.</h2>
-    <p class="sub">
-      Five short steps, about three minutes. I read every one myself and reply within a day
-      with what fits, what it would involve and what it costs — or that none of it fits.
-    </p>
-    <div class="panel" style="margin-top:34px">
-      <div class="dots" id="bDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
-      <div id="bBox"></div>
-      <!-- Honeypot. Hidden from people, irresistible to bots. -->
-      <div class="hp" aria-hidden="true">
-        <label for="website">Website</label>
-        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-      </div>
-    </div>
-    <p class="aside">
-      Or just email me — <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. The form only exists
-      so you do not have to work out what to tell me.
-    </p>
-  </section>
 
   <Footer slot="footer" />
 </Base>
@@ -167,20 +148,11 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
     border-radius: var(--radius-card);
     padding: clamp(26px, 5vw, 38px) clamp(20px, 4vw, 30px);
   }
-  .hp {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-  }
-  .aside { margin-top: 16px; font-size: 0.875rem; color: var(--dim); letter-spacing: 0; }
-  .aside a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 </style>
 
 <script>
-  import { Q, OUT, decide, KIND, SPECIFIC } from '@lib/work-with-me';
-  import { celebrate, settle } from '@lib/feedback';
+  import { Q, OUT, decide } from '@lib/work-with-me';
+  import { settle, celebrate } from '@lib/feedback';
   import { createQuiz } from '@lib/quiz';
 
   const $ = (id: string) => document.getElementById(id)!;
@@ -206,7 +178,6 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
 
     renderQuestion: (q, i, total) =>
       `<div class="step">` +
-      (i > 0 ? `<button class="back" type="button" data-quiz-back>← Back</button>` : '') +
       `<span class="eyebrow">Question ${i + 1} of ${total}</span>` +
       `<h2 class="qq" data-quiz-head tabindex="-1">${q.text}</h2>` +
       q.options
@@ -214,6 +185,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
           `<button class="opt" type="button" data-quiz-opt="${n}">${o.label}` +
           (o.note ? `<em>${o.note}</em>` : '') + `</button>`)
         .join('') +
+      (i > 0 ? `<button class="back" type="button" data-quiz-back>← Back</button>` : '') +
       `</div>`,
 
     renderVerdict(key) {
@@ -232,7 +204,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
         (key === 'notyet'
           ? `<a class="btn btn--dark" href="/tools/">Try a free check</a>` +
             `<a class="btn btn--ghost" href="/writing/">Read something instead</a>`
-          : `<a class="btn btn--dark" href="#brief" id="toBrief">Send a tailored brief</a>` +
+          : `<a class="btn btn--dark" href="/work-with-me/brief/?rec=${key}">Send a brief</a>` +
             `<a class="btn btn--ghost" href="mailto:hello@sgualda.com">Just email me</a>`) +
         `</div><button class="back" type="button" data-quiz-restart>Start over</button></div>`
       );
@@ -247,147 +219,7 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\s\S]*?
       if (verdict === 'nope' || verdict === 'notyet') settle(panel);
       else celebrate(panel);
 
-      document.getElementById('toBrief')?.addEventListener('click', () => paint(kindOf()));
     },
   });
 
-  /* ── brief ── */
-  // The quiz engine tracks its own dots; the brief is a form, not a quiz, so
-  // it keeps its own.
-  const setDots = (el: HTMLElement, i: number) =>
-    el.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k <= i));
-
-  const kindOf = () => (rec && SPECIFIC[OUT[rec].kind] ? OUT[rec].kind : 'unsure');
-  let step = 1;
-
-  function paint(kind: string) {
-    const f = SPECIFIC[kind] ?? SPECIFIC.unsure;
-    const field = ([id, lab, type, hint]: string[]) => {
-      const h = hint ? `<p class="hint">${hint}</p>` : '';
-      if (type.startsWith('select|'))
-        return `<div class="f"><label for="${id}">${lab}</label><select id="${id}">${type
-          .split('|')
-          .slice(1)
-          .map((o) => `<option>${o}</option>`)
-          .join('')}</select>${h}</div>`;
-      if (type === 'input') return `<div class="f"><label for="${id}">${lab}</label><input id="${id}">${h}</div>`;
-      return `<div class="f"><label for="${id}">${lab}</label><textarea id="${id}"></textarea>${h}</div>`;
-    };
-
-    const panes: string[] = [
-      `<span class="eyebrow">Step 1 of 5</span>` +
-        (rec ? `<p class="tag">Based on your answers: ${OUT[rec].name}</p>` : '') +
-        `<p class="qq">What kind of help are you after?</p>` +
-        KIND.map(([k, label]) => `<label class="ck"><input type="radio" name="kind" value="${label}" data-k="${k}"${k === kind ? ' checked' : ''}><span>${label}</span></label>`).join(''),
-      `<span class="eyebrow">Step 2 of 5</span><p class="qq">What are you building?</p>` +
-        field(['b1', 'Product name and link', 'input', 'A link is worth more than a description.']) +
-        field(['b2', 'Team size', 'select|Just me|2–5|6–15|16–40|More than 40', '']),
-      `<span class="eyebrow">Step 3 of 5</span><p class="qq">What is actually blocked?</p>` +
-        field(['b4', 'In your own words', 'textarea', 'Do not polish it. The messy version is more useful.']),
-      `<span class="eyebrow">Step 4 of 5</span><p class="qq">A few specifics.</p>` + f.map(field).join(''),
-      `<span class="eyebrow">Step 5 of 5</span><p class="qq">Where do I reply?</p>` +
-        field(['b9', 'Name', 'input', '']) +
-        field(['b10', 'Email', 'input', '']),
-    ];
-
-    $('bBox').innerHTML =
-      `<div class="step">${panes[step - 1]}<div class="fnav">` +
-      (step > 1 ? `<button class="btn btn--ghost" type="button" data-go="${step - 1}">Back</button>` : `<span></span>`) +
-      (step < 5
-        ? `<button class="btn btn--dark" type="button" data-go="${step + 1}">Continue</button>`
-        : `<button class="btn btn--dark" type="button" id="send">Send the brief</button>`) +
-      `</div></div>`;
-
-    setDots($('bDots'), step - 1);
-    $('bBox').querySelectorAll<HTMLButtonElement>('[data-go]').forEach((b) =>
-      b.addEventListener('click', () => {
-        step = +b.dataset.go!;
-        paint(kindOf());
-        $('brief').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      })
-    );
-    document.getElementById('send')?.addEventListener('click', submit);
-  }
-
-  /* ── submitting ── */
-  const opened = Date.now();
-  const val = (id: string) => (document.getElementById(id) as HTMLInputElement | null)?.value?.trim() ?? '';
-
-  async function submit() {
-    const btn = document.getElementById('send') as HTMLButtonElement;
-    const email = val('b10');
-    const blocked = val('b4');
-
-    // Validate before touching the network, and say which field is wrong.
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-      showError('I need an email address that works, or I cannot reply.');
-      return;
-    }
-    if (blocked.length < 20) {
-      showError('Step 3 is the one I actually read. A couple of sentences is enough.');
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
-    document.getElementById('bErr')?.remove();
-
-    const kindEl = document.querySelector<HTMLInputElement>('input[name=kind]:checked');
-    const specifics: Record<string, string> = {};
-    document.querySelectorAll<HTMLElement>('#bBox .f').forEach((f) => {
-      const field = f.querySelector<HTMLInputElement>('input,textarea,select');
-      const label = f.querySelector('label')?.textContent ?? '';
-      if (field && field.value.trim() && !['b1', 'b2', 'b4', 'b9', 'b10'].includes(field.id)) {
-        specifics[label] = field.value.trim();
-      }
-    });
-
-    try {
-      const res = await fetch('/api/brief.php', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          kind: kindEl?.value,
-          recommendation: rec ? OUT[rec].name : undefined,
-          product: val('b1'),
-          team: val('b2'),
-          blocked,
-          specifics,
-          name: val('b9'),
-          email,
-          website: val('website'),
-          elapsed: Date.now() - opened,
-        }),
-      });
-      const out = await res.json();
-      if (!res.ok || !out.ok) throw new Error(out.error || 'Something went wrong.');
-
-      celebrate($('bBox').closest('.panel'));
-      $('bBox').innerHTML =
-        `<div class="step" role="status"><p class="vname">That’s everything I need.</p>` +
-        `<p class="vnote">I read every brief myself and reply within a day — with what fits, ` +
-        `what it would involve and what it costs, or that none of it fits. ` +
-        `A confirmation is on its way to ${email}.</p></div>`;
-      $('bDots').style.display = 'none';
-    } catch (err) {
-      btn.disabled = false;
-      btn.textContent = 'Send the brief';
-      showError(
-        err instanceof Error ? err.message : 'Could not send. Email hello@sgualda.com instead.'
-      );
-    }
-  }
-
-  function showError(msg: string) {
-    document.getElementById('bErr')?.remove();
-    const p = document.createElement('p');
-    p.id = 'bErr';
-    p.className = 'formErr';
-    p.setAttribute('role', 'alert');
-    p.textContent = msg;
-    document.querySelector('#bBox .fnav')?.before(p);
-  }
-
-  // The qualifier starts itself; the brief needs its first step painted.
-  paint('unsure');
 </script>

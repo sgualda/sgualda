@@ -2,50 +2,185 @@
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import NextStep from '@components/NextStep.astro';
 import { SITE, SOCIAL } from '@lib/site';
 
 /**
  * /community/ was live on the old WordPress site. Kept as a real page rather
  * than a bare 301 to Substack: a redirect hands the URL's value to a domain
  * that is not ours, and gives the visitor no idea what they are joining.
+ *
+ * The wall of questions is the whole pitch. A community page that describes
+ * itself in adjectives — supportive, high-signal, curated — is describing every
+ * community ever made. Showing the actual questions lets somebody decide in
+ * three seconds whether these are their people, and it puts twenty real
+ * phrasings of product problems into the HTML, which is what anybody looking
+ * for a room like this is actually typing into a search box.
  */
+
+/** Two rows, opposite directions. Real shapes of question, not slogans. */
+const WALL = [
+  [
+    'Is this feature worth building or am I just bored?',
+    'Nobody used it in week two. Now what?',
+    'How do you say no to a founder without losing the client?',
+    'Figma file or working prototype for the investor demo?',
+    'We shipped and the graph is flat',
+    'When do you start charging?',
+    'Is my onboarding the problem, or is it the product?',
+    'How many users is enough to decide?',
+    'Design system now, or in six months?',
+    'They said they loved it. They have not opened it since.',
+  ],
+  [
+    'What do you charge for a two-week product review?',
+    'Solo founder, no designer — where do I start?',
+    'How do you run an interview without leading them?',
+    'Our roadmap is a wishlist. How do we cut it?',
+    'Is research worth it at ten users?',
+    'The CEO redesigned it over the weekend',
+    'Do I need a co-founder who can build?',
+    'How do you tell a real signal from a polite one?',
+    'We have product-market fit. Do we?',
+    'Pricing page or waiting list first?',
+  ],
+];
+
+const TOPICS = [
+  {
+    h: 'Product design and UX',
+    p: 'Flows that lose people, onboarding that does not land, research at the scale you can actually afford. The practical end of it, not the theory.',
+  },
+  {
+    h: 'UI and craft',
+    p: 'When polish is the work and when it is procrastination wearing a lanyard. Design systems, components, and whether you need one yet.',
+  },
+  {
+    h: 'Startups and early product',
+    p: 'First versions, launches that went quiet, deciding what not to build. Most of the room is two to ten people with less time than the plan needed.',
+  },
+  {
+    h: 'Going out on your own',
+    p: 'Rates, scope, saying no, the first client, and the client you should have said no to. Freelancers, consultants and founders in the same thread.',
+  },
+];
+
+const FAQS = [
+  {
+    q: 'Who is the community for?',
+    a: 'Product designers, founders and people building software alone or in small teams, working through the decisions that do not have a right answer. You bring the thing you are stuck on, and other people tell you what they tried and what it cost them.',
+  },
+  {
+    q: 'Is it free?',
+    a: 'Yes. It runs on Substack chat, so joining takes one click if you already have an account and about thirty seconds if you do not. There is no paid tier, no cohort, and nothing to upgrade to.',
+  },
+  {
+    q: 'What gets discussed?',
+    a: 'Product design, UX and UI, early-stage startups, discovery and user research, scoping, pricing, freelancing, and the awkward parts of working with founders. Anything with a decision in it. Launch announcements and job posts are the two things that do not belong.',
+  },
+  {
+    q: 'How active is it?',
+    a: 'Deliberately quiet. A handful of real conversations a week rather than a firehose you mute in four days. If you want a channel that scrolls faster than you can read it, this is not that.',
+  },
+  {
+    q: 'Do you answer questions there yourself?',
+    a: 'Often, but as one more person in the room rather than the resident expert. The useful answer usually comes from whoever last had the same problem, and that is rarely me.',
+  },
+];
 ---
 
 <Base
-  title="The community — product people who ship"
-  description="A small Substack chat for people building products: what you’re stuck on, what you got wrong, and what it cost. No promotion, no growth hacks, no lurking gurus."
+  title="A community for product, design and startup people"
+  description="A small, quiet chat for product designers, founders and people building software: UX, UI, early-stage decisions, freelancing. Free, on Substack, no launch posts."
+  schema={[
+    {
+      '@type': 'FAQPage',
+      '@id': `${SITE.url}/community/#faq`,
+      mainEntity: FAQS.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ]}
 >
   <Header slot="nav" />
 
   <section class="col intro">
     <span class="eyebrow">Community</span>
-    <h1>Somewhere to say<br />what is not working.</h1>
+    <h1>Say what is<br />not working.</h1>
     <p class="sub">
-      A small chat on Substack for people building products. You bring the thing you’re stuck
-      on, other people tell you what they tried. That’s the whole format.
+      A small chat for product designers, founders and people building software. You bring the
+      thing you are stuck on, other people tell you what they tried. That is the whole format.
     </p>
     <div class="actions">
       <a class="btn btn--dark" href={SOCIAL.community} rel="noopener">Join the chat</a>
-      <a class="btn btn--ghost" href="/writing/">Read something first</a>
+      <a class="btn btn--ghost" href="/writing/">More essays</a>
     </div>
   </section>
 
+  {/* Full-bleed on purpose: it is the one element on this page allowed out of
+      the shell, because a wall has to look like a wall. */}
+  <p class="col wall-lab">The kind of thing people ask in there</p>
+  <div class="wall" aria-label="The kind of thing people ask in there">
+    {
+      WALL.map((row, i) => (
+        <div class="track" data-dir={i % 2 ? 'right' : 'left'}>
+          {/* Doubled so the loop has no seam. The copy is aria-hidden, or a
+              screen reader reads all twenty questions twice. */}
+          <ul class="row">{row.map((q) => <li>{q}</li>)}</ul>
+          <ul class="row" aria-hidden="true">{row.map((q) => <li>{q}</li>)}</ul>
+        </div>
+      ))
+    }
+  </div>
+
   <section class="section col">
-    <h2>What it’s not.</h2>
+    <span class="eyebrow">What gets talked about</span>
+    <h2>Four things,<br />and their awkward parts.</h2>
+    <dl class="topics">
+      {TOPICS.map((t) => (<><dt>{t.h}</dt><dd>{t.p}</dd></>))}
+    </dl>
+  </section>
+
+  <section class="section col">
+    <h2>What it is not.</h2>
     <ul class="nots">
       <li>Not a Slack you will mute in four days.</li>
       <li>Not a place to post your launch.</li>
       <li>Not a course, a cohort, or a funnel with a nice name.</li>
-      <li>Not free advice from me on demand — I’m in there as one more person.</li>
+      <li>Not free advice from me on demand — I am in there as one more person.</li>
     </ul>
     <p class="sub small">
-      It’s on Substack because it’s one login you already have, and because if it ever stops
+      It is on Substack because it is one login you already have, and because if it ever stops
       being useful you can leave in one click. Both of those matter more than they sound.
     </p>
     <div class="actions">
       <a class="btn btn--dark" href={SOCIAL.community} rel="noopener">Join the chat</a>
     </div>
   </section>
+
+  <section class="section col">
+    <span class="eyebrow">Questions</span>
+    <h2>Before you join.</h2>
+    <div class="faq">
+      {
+        FAQS.map((f) => (
+          <details>
+            <summary>{f.q}<span class="pm" aria-hidden="true">+</span></summary>
+            <div class="ans"><p>{f.a}</p></div>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <NextStep
+    line="Some questions are too specific for a group chat."
+    secondLabel="More essays"
+    secondHref="/writing/"
+    community={false}
+  />
 
   <Footer slot="footer" />
 </Base>
@@ -54,6 +189,81 @@ import { SITE, SOCIAL } from '@lib/site';
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro h1 { margin-bottom: 18px; }
   .intro .actions { margin-top: 30px; }
+
+  /* ── the wall ── */
+  /* Said out loud rather than only in an aria-label: without it the rows read
+     as a live feed of the community, which sets the wrong expectation for what
+     you find on the other side of the link. */
+  .wall-lab {
+    margin-top: clamp(52px, 8vw, 84px);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .wall {
+    margin: var(--space-6) 0 clamp(52px, 8vw, 84px);
+    display: grid;
+    gap: 14px;
+    /* Fades into the page at both edges rather than stopping at them, so the
+       rows read as a slice of something larger than the screen. */
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    overflow: hidden;
+  }
+  .track { display: flex; width: max-content; gap: 14px; }
+  .track[data-dir='left'] { animation: slide-l 64s linear infinite; }
+  .track[data-dir='right'] { animation: slide-r 78s linear infinite; }
+  /* Stops so you can actually read one. */
+  .wall:hover .track,
+  .wall:focus-within .track { animation-play-state: paused; }
+
+  .row { display: flex; gap: 14px; list-style: none; }
+  .row li {
+    flex: none;
+    padding: 13px 20px;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    font-size: 0.9375rem;
+    letter-spacing: -0.01em;
+    color: var(--dim);
+    white-space: nowrap;
+    transition: color 0.24s var(--ease), border-color 0.24s var(--ease);
+  }
+  .row li:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* Exactly half the doubled track, plus half a gap, so the loop lands on the
+     seam and never jumps. */
+  @keyframes slide-l {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 7px)); }
+  }
+  @keyframes slide-r {
+    from { transform: translateX(calc(-50% - 7px)); }
+    to { transform: translateX(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none; }
+    /* Still shows what it is. It just stops moving. */
+    .wall { mask-image: linear-gradient(to right, #000 86%, transparent); }
+  }
+
+  .topics { text-align: left; margin-top: var(--space-8); }
+  .topics dt {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-2);
+  }
+  .topics dd {
+    margin: 0 0 var(--space-6);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
 
   .nots { list-style: none; text-align: left; margin: 34px 0 30px; }
   .nots li {
@@ -64,5 +274,5 @@ import { SITE, SOCIAL } from '@lib/site';
   }
   .nots li + li { border-top: 1px solid var(--hair); }
   .small { font-size: 1rem; }
-  .actions { margin-top: 28px; }
+  .section .actions { margin-top: 28px; }
 </style>

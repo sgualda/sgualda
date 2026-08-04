@@ -52,7 +52,7 @@ I have noticed in myself, and in teams I work with, that the muscle for thinking
 
 Now the first reaction is to open a new conversation.
 
-Not because the AI is bad. Because **the speed comes at the cost of a slower process where, often, the better ideas live.** Traditional design thinking has intentional friction in it. A Google Design Sprint is not badly designed — the pace it forces is a deliberate trade, and what you give up is idea maturity. Claude accelerates that further, which is useful for a startup in survival mode and dangerous for a product that needs depth.
+Not because the AI is bad. Because **the speed comes at the cost of a slower process where, often, the better ideas live.** Traditional design thinking has intentional friction in it. A [Google Design Sprint](https://www.thesprintbook.com/) is not badly designed — the pace it forces is a deliberate trade, and what you give up is idea maturity. Claude accelerates that further, which is useful for a startup in survival mode and dangerous for a product that needs depth.
 
 I do not have a clean solution. What I do now is crude: for anything that looks like a [one-way door](/glossary/#one-way-door), I make myself write my own answer first, badly, before opening a conversation. It is slower, and I skip it more often than I should.
 

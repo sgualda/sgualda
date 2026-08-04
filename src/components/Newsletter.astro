@@ -27,7 +27,7 @@ const {
   >
     <label class="sr-only" for="nl-email">Email address</label>
     <input id="nl-email" name="email" type="email" required placeholder="name@email.com" />
-    <button class="btn" type="submit">Subscribe</button>
+    <button class="btn btn--on-band" type="submit">Subscribe</button>
     <p class="fine">Opens Substack in a new tab.</p>
   </form>
 </div>
@@ -63,12 +63,7 @@ const {
   }
   .signup input::placeholder { color: color-mix(in srgb, var(--on-band) 68%, transparent); }
   .signup input:focus { border-color: var(--on-band); }
-    /* The band's own contrast, not the page's. --paper here meant a white
-     button in light and a near-black one in dark, which vanished into the
-     grey band it was sitting on. */
-  .signup .btn { background: var(--on-band); color: var(--band); border-color: var(--on-band); }
-  .signup .btn:hover { background: color-mix(in srgb, var(--on-band) 84%, transparent); }
-
+  
   .fine {
     flex-basis: 100%;
     margin-top: var(--space-3);

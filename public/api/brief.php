@@ -135,9 +135,25 @@ if (!send($cfg, $cfg['MAIL_TO'], "Brief — $name", $body, $email)) {
 
 // Confirmation is best-effort. The brief already arrived, so a failure here
 // must not tell the sender their message was lost.
+/**
+ * A copy of what they wrote, sent back to them.
+ *
+ * It is the only record the sender has of their own brief, it gives them
+ * something to reply to, and returning somebody's own words is the cheapest
+ * trust available after a form submission. Built from the same escaped values
+ * as the brief that comes to me, so the two can never disagree.
+ */
+$copy = '<hr><p style="color:#6b6b6b;font-size:14px">What you sent:</p>'
+    . '<p><strong>Looking for</strong><br>' . $esc((string)($data['kind'] ?? '—')) . '</p>'
+    . '<p><strong>Product</strong><br>' . $esc((string)($data['product'] ?? '—')) . '</p>'
+    . '<p><strong>What is blocked</strong><br>' . $esc($blocked) . '</p>'
+    . $specifics;
+
 send($cfg, $email, 'Got your brief',
     '<p>Thanks — your brief arrived and I read every one myself.</p>'
     . '<p>You will hear back within a day, with what fits, what it would involve and what it '
-    . 'costs, or that none of it fits.</p><p>— Sergio</p>');
+    . 'costs, or that none of it fits. That reply is an email: there is no call to book and '
+    . 'nothing to schedule.</p><p>— Sergio</p>'
+    . $copy);
 
 reply(['ok' => true]);

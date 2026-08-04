@@ -197,9 +197,24 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 
   @media (max-width: 820px) {
     .bar { justify-content: space-between; gap: 10px; }
-    .links,
-    .cta { display: none; }
+    .links { display: none; }
     .burger { display: block; }
+
+    /* The CTA stays. Hiding it put the only conversion path on the site behind
+       a menu, on the device most of the traffic arrives on — two taps and
+       knowing it was there. Shrunk rather than dropped. */
+    .cta {
+      margin-left: auto;
+      display: grid;
+      place-items: center;
+      min-height: 44px;
+      padding: 0 16px;
+      font-size: 0.8125rem;
+    }
+  }
+  /* Below this the logo, the CTA and the burger stop fitting on one line. */
+  @media (max-width: 480px) {
+    .cta { padding: 0 13px; font-size: 0.75rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {

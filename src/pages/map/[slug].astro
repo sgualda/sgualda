@@ -4,6 +4,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
+import { SITE } from '@lib/site';
 import { getStages, getTools, type Stage } from '@lib/content';
 
 export async function getStaticPaths() {
@@ -32,9 +33,18 @@ const terms = (await getCollection('glossary'))
 ---
 
 <Base
-  title={`Stage ${s.n}: ${s.name} — building a product`}
+  title={s.seoTitle}
   description={s.meta}
   schema={[
+    {
+      '@type': 'FAQPage',
+      '@id': `${SITE.url}/map/${s.slug}/#faq`,
+      mainEntity: s.faqs.map(({ q, a }) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    },
   ]}
 >
   <Header slot="nav" />
@@ -70,16 +80,28 @@ const terms = (await getCollection('glossary'))
 
   <section class="section col">
     <span class="eyebrow">Start here</span>
-    <h2>The checks that<br />apply at this stage.</h2>
-    <p class="sub">Free, under a minute each, and written for this exact moment.</p>
+    <h2>What to check<br />before you commit.</h2>
+    {/* The stage question, reused rather than restated. Everything on this
+        page exists to answer it, and naming it here is what turns a list of
+        links into a reason to click one. */}
+    <p class="sub">
+      Everything at this stage comes back to one question — <em>{s.question}</em> Each of these
+      takes a different run at it, and gives you a verdict rather than a score.
+    </p>
+    <p class="why">
+      They are free and they take under a minute. That is the point: the cheapest thing you can
+      do at this stage is find out you were about to be wrong, and the most expensive is finding
+      out a quarter later.
+    </p>
     <ul class="tools">
       {
         tools.map((t) => (
           <li>
             <a href={`/tools/${t.slug}/`}>
-              <span class="pill">{t.time}</span>
+              <span class="pill">{t.time} · {t.count}</span>
               <span class="h">{t.n}</span>
               <span class="p">{t.out}</span>
+              <span class="gets">You get: {t.answers.map(([n]) => n).join(' · ')}</span>
             </a>
           </li>
         ))
@@ -97,7 +119,7 @@ const terms = (await getCollection('glossary'))
         <h3>{s.cta.title}</h3>
         <p>{s.cta.body}</p>
       </div>
-      <a class="btn btn--dark" href="/work-with-me/">See how it works</a>
+      <a class="btn btn--dark" href="/work-with-me/">See if I can help</a>
     </div>
     <p class="fine">
       Four questions on that page tell you whether this is worth it for you — including when it’s not.
@@ -124,10 +146,6 @@ const terms = (await getCollection('glossary'))
       }
     </nav>
 
-    <div class="actions" style="margin-top:38px">
-      <a class="btn btn--dark" href="/work-with-me/">See if I can help</a>
-      <a class="btn btn--ghost" href="/map/">Back to the map</a>
-    </div>
   </section>
 
 
@@ -145,6 +163,21 @@ const terms = (await getCollection('glossary'))
       </dl>
     </section>
   )}
+
+  <section class="section col">
+    <span class="eyebrow">Questions</span>
+    <h2>About this stage.</h2>
+    <div class="faq">
+      {
+        s.faqs.map(({ q, a }) => (
+          <details>
+            <summary>{q}<span class="pm" aria-hidden="true">+</span></summary>
+            <div class="ans"><p>{a}</p></div>
+          </details>
+        ))
+      }
+    </div>
+  </section>
 
   <Footer slot="footer" />
 </Base>
@@ -215,6 +248,27 @@ const terms = (await getCollection('glossary'))
     font-weight: 600; letter-spacing: -0.03em; margin-bottom: 6px;
   }
   .tools .p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
+  /* The possible verdicts, named. "A verdict rather than a score" is a claim;
+     listing the four verdicts is the evidence, and it is what tells somebody
+     whether the answer would be useful before they spend the minute. */
+  .tools .gets {
+    display: block;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--hair);
+    font-size: 0.75rem;
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
+
+  .why {
+    margin-top: var(--space-5);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    letter-spacing: 0;
+    color: var(--dim);
+  }
 
   .offer {
     margin-top: 32px;

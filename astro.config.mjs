@@ -41,13 +41,30 @@ export default defineConfig({
         ]
       : []),
     sitemap({
-      // Internal pages stay out of search entirely.
-      filter: (page) => !['/draft/', '/styleguide/'].some((x) => page.includes(x)),
+      /**
+       * Out of the sitemap: internal pages, and anything carrying `noindex`.
+       *
+       * /work-with-me/brief/ was in both — announced in the sitemap and told
+       * not to index itself in the same breath. Two opposite instructions for
+       * one URL is not just a wasted crawl of that page; it is a reason to
+       * trust the rest of the file less.
+       */
+      filter: (page) =>
+        !['/draft/', '/styleguide/', '/work-with-me/brief/'].some((x) => page.includes(x)),
       serialize(item) {
-        // Essays and case studies change; the tools do not.
-        if (item.url === 'https://sgualda.com/') item.priority = 1.0;
-        else if (item.url.includes('/case-studies/')) item.priority = 0.9;
-        else if (item.url.includes('/tools/')) item.priority = 0.7;
+        /**
+         * lastmod, and no priority.
+         *
+         * Google has ignored `priority` for years, and it was set on 15 of 38
+         * URLs — which reads as a half-finished file rather than a decision.
+         * `lastmod` is the opposite: one of the few signals that tells a
+         * crawler what has actually changed since it last came. The real dates
+         * come from the content collections and are injected by a build step;
+         * everything else gets the build date, which is true for a static site.
+         */
+        delete item.priority;
+        delete item.changefreq;
+        item.lastmod = item.lastmod ?? new Date().toISOString();
         return item;
       },
     }),
