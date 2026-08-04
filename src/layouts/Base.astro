@@ -58,6 +58,29 @@ const SUFFIX = ` | ${SITE.name}`;
 const fullTitle =
   title.includes(SITE.name) || title.length + SUFFIX.length > 60 ? title : title + SUFFIX;
 
+/**
+ * Articles get the page's own social card as their schema image.
+ *
+ * Without it, `BlogPosting` and `Article` are ineligible for a result with a
+ * thumbnail and — the part that costs more — ineligible for Google Discover,
+ * which for first-person writing about decisions is plausibly the largest
+ * single source of traffic this site can earn. Every page already generates a
+ * card at build time; they were simply never declared to the article node.
+ *
+ * Done here rather than in the three page templates because this is the only
+ * place that already knows a page's card path. Adding a fourth article type
+ * later gets it without anyone remembering to.
+ *
+ * `ImageObject` with dimensions rather than a bare URL: Google's article
+ * guidance asks for images at least 1200px wide, and stating the size saves it
+ * from fetching the file to find out.
+ */
+const ARTICLE_TYPES = new Set(['Article', 'BlogPosting', 'NewsArticle', 'TechArticle']);
+const withImage = (node: Record<string, unknown>) =>
+  ARTICLE_TYPES.has(node['@type'] as string) && !node.image
+    ? { ...node, image: { '@type': 'ImageObject', url: ogImage, width: 1200, height: 630 } }
+    : node;
+
 // Person + WebSite ship on every page; page-specific nodes get merged in.
 const graph = [
   {
@@ -82,7 +105,7 @@ const graph = [
     inLanguage: SITE.locale,
     publisher: { '@id': `${SITE.url}/#person` },
   },
-  ...schema,
+  ...schema.map(withImage),
 ];
 ---
 
