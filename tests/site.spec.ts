@@ -224,24 +224,37 @@ test('the qualifier reaches a recommendation', async ({ page }) => {
   await expect(page.getByText('What you would get')).toBeVisible();
 });
 
+
+/**
+ * Advance the brief one step, and wait for the step to actually be there.
+ *
+ * Each Continue repaints the panel and rebinds its handlers, so under parallel
+ * load a click could land on a button that had just been replaced and do
+ * nothing — the test then failed one run in twenty, and only on mobile WebKit.
+ * Asserting the stepper moved is both the wait and the assertion.
+ */
+async function nextStep(page: import('@playwright/test').Page, to: number) {
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', String(to));
+}
+
 test('the brief refuses to submit without an email', async ({ page }) => {
   // Its own page now: it is only reachable from a positive verdict, so nobody
   // fills in three minutes of form before finding out none of it applies.
   await page.goto('/work-with-me/brief/');
   await page.getByRole('button', { name: 'Start' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await nextStep(page, 2);
 
   // Step 3 is now gated on the way out of it, so you cannot reach step 5 and
   // then be told about step 3 with no way back.
-  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '3');
+  await nextStep(page, 3);
   await page.getByRole('button', { name: 'Continue' }).click();
   await expect(page.locator('.formErr')).toContainText('I actually read');
   await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '3');
 
   await page.locator('#b4').fill('The launch went quiet and nobody can agree on why.');
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await nextStep(page, 4);
+  await nextStep(page, 5);
 
   // And the email is caught where the email is.
   await page.getByRole('button', { name: 'Send the brief' }).click();
@@ -260,14 +273,14 @@ test('the brief carries the verdict across, and the stepper tracks it', async ({
 
   await expect(page.locator('input[name=kind][data-k=review]')).toBeChecked();
   await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '1');
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '2');
+  await nextStep(page, 2);
   await expect(page.locator('#stepper li[data-step="1"]')).toHaveAttribute('data-state', 'done');
 
   // Going back must not lose what was typed.
   await page.locator('#b1').fill('example.com');
   await page.getByRole('button', { name: 'Back' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '1');
+  await nextStep(page, 2);
   await expect(page.locator('#b1')).toHaveValue('example.com');
 });
 
@@ -492,13 +505,13 @@ test('a failing brief endpoint says something a person can act on', async ({ pag
   );
   await page.goto('/work-with-me/brief/');
   await page.getByRole('button', { name: 'Start' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await nextStep(page, 2);
+  await nextStep(page, 3);
   // Step 3 is the one that is actually validated, so it has to be filled in
   // before the network error is the thing under test.
   await page.locator('#b4').fill('The launch went quiet and nobody can agree on why.');
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
+  await nextStep(page, 4);
+  await nextStep(page, 5);
 
   await page.locator('#b10').fill('someone@example.com');
   await page.getByRole('button', { name: 'Send the brief' }).click();
@@ -584,12 +597,12 @@ test.describe('the funnel', () => {
   test('the brief says where the email goes, and survives a reload', async ({ page }) => {
     await page.goto('/work-with-me/brief/');
     await page.getByRole('button', { name: 'Start' }).click();
-    await page.getByRole('button', { name: 'Continue' }).click();
+    await nextStep(page, 2);
     await page.locator('#b1').fill('example.com');
-    await page.getByRole('button', { name: 'Continue' }).click();
+    await nextStep(page, 3);
     await page.locator('#b4').fill('The launch went quiet and nobody agrees why.');
-    await page.getByRole('button', { name: 'Continue' }).click();
-    await page.getByRole('button', { name: 'Continue' }).click();
+    await nextStep(page, 4);
+    await nextStep(page, 5);
 
     // The commonest silent objection to a form is not knowing what happens to
     // the address, answered where the address is asked for.
@@ -598,7 +611,7 @@ test.describe('the funnel', () => {
     // Closing the tab used to lose everything. Going back already survived.
     await page.reload();
     await page.getByRole('button', { name: 'Start' }).click();
-    await page.getByRole('button', { name: 'Continue' }).click();
+    await nextStep(page, 2);
     await expect(page.locator('#b1')).toHaveValue('example.com');
   });
 
