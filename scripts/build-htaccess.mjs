@@ -113,6 +113,15 @@ RewriteCond %{HTTPS} !=on [OR]
 RewriteCond %{HTTP_HOST} ^www\\. [NC]
 RewriteRule ^(.*)$ https://sgualda.com/$1 [R=301,L]
 
+# ── directory index ──
+# Apache's default is "index.php index.html", in that order. On the WordPress
+# host that meant a leftover index.php kept answering / even after the whole
+# static site had been uploaded alongside it — the new files were there and
+# nothing served them. Naming index.html explicitly, and only index.html,
+# makes a stray PHP file in any directory unable to take over the URL.
+# /api/*.php is unaffected: this governs directory requests, not file ones.
+DirectoryIndex index.html
+
 # ── trailing slash ──
 # Astro writes about/index.html, so /about/ works natively. This sends
 # /about to /about/ so the two never both resolve and split the ranking.
@@ -160,7 +169,15 @@ ErrorDocument 404 /404.html
 
 # Leftovers from the WordPress that used to live here. If any survive the
 # cleanup they are unreachable rather than exploitable.
-<FilesMatch "^(wp-config\\.php|xmlrpc\\.php|readme\\.html|license\\.txt)$">
+#
+# Matched by pattern, not by name. The first version of this rule listed four
+# files, and on the live host seven others were still executing: wp-cron.php
+# and wp-load.php answered 200, wp-activate.php answered 302, which means the
+# file ran, bootstrapped WordPress and reached the database. A deny list of
+# filenames is only as good as the memory of whoever wrote it, and this is a
+# codebase nobody here maintains. Anything named wp-*.php is denied, whether or
+# not it was thought of.
+<FilesMatch "^(wp-.*\\.php|xmlrpc\\.php|default\\.php.*|readme\\.html|license\\.txt)$">
   Require all denied
 </FilesMatch>
 RedirectMatch 404 ^/(wp-admin|wp-includes|wp-content)(/|$)
