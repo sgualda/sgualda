@@ -74,14 +74,21 @@ import Footer from '@components/Footer.astro';
     sessionStorage.removeItem('brief-sent');
   }
 
-  /* "Within a day" is elastic; a date is not. Computed in the browser so it is
-     in the reader’s own locale and time zone, and paired with what to do if
-     nothing turns up — the one thing a confirmation page normally omits. */
+  /* "Within a day" is elastic; a date is not. Computed in the browser so it
+     lands in the reader’s own time zone, and paired with what to do if nothing
+     turns up — the one thing a confirmation page normally omits.
+
+     The time zone is theirs; the language is the page’s. Passing undefined took
+     the locale from the browser, which on a Spanish machine rendered "That
+     means by miércoles, 17:47" — a Spanish weekday inside an English sentence,
+     and German or Japanese for the next reader. Every other date on the site is
+     already pinned to en-GB; this one escaped because it is the only one built
+     at runtime. */
   const by = new Date(Date.now() + 24 * 60 * 60 * 1000);
   const when = document.getElementById('when')!;
   when.textContent =
-    `That means by ${by.toLocaleDateString(undefined, { weekday: 'long' })}, ` +
-    `${by.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}. ` +
+    `That means by ${by.toLocaleDateString('en-GB', { weekday: 'long' })}, ` +
+    `${by.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' })}. ` +
     'If nothing arrives, check your spam folder and then reply to the confirmation email.';
   when.hidden = false;
 

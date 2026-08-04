@@ -8,7 +8,7 @@ script tiene que ser detenerse, nunca borrar de mas.
   python3 purge-wp.py          -> simulacro, no borra nada
   python3 purge-wp.py --apply  -> borra
 """
-import os, ssl, sys
+import os, ssl, sys, time
 from ftplib import FTP_TLS, all_errors
 
 ROOT = '/domains/sgualda.com/public_html'
@@ -106,21 +106,47 @@ if not APPLY:
     print('\n  SIMULACRO. Nada borrado. Anade --apply para ejecutar.')
     ftp.quit(); sys.exit(0)
 
+total = len(files) + len(loose)
 done = err = 0
+missing = []
+
+# El bucle reconecta, igual que el de exploracion.
+#
+# En la primera pasada no lo hacia: la sesion se cayo a mitad del arbol y las
+# 1.797 llamadas siguientes fallaron todas contra un socket muerto, contadas
+# como errores individuales cuando en realidad eran un unico fallo repetido.
+# Un borrado de 11.000 ficheros dura lo suficiente como para que la conexion se
+# caiga al menos una vez; darlo por supuesto es mas barato que descubrirlo.
 for p in files + loose:
     guard(p)
-    try:
-        ftp.delete(p); done += 1
-    except all_errors as e:
-        err += 1
-        if err <= 10: print(f'\n  x {p}: {str(e)[:60]}')
-    if done % 100 == 0:
-        print(f'\r  borrados {done}/{len(files)+len(loose)}', end='', flush=True)
+    for attempt in (1, 2, 3):
+        try:
+            ftp.delete(p); done += 1
+            break
+        except all_errors as e:
+            msg = str(e)
+            # 550 es "no existe": ya se borro en una pasada anterior. No es un
+            # fallo, y reintentarlo solo gasta tiempo.
+            if msg.startswith('550'):
+                missing.append(p); break
+            if attempt == 3:
+                err += 1
+                if err <= 10: print(f'\n  x {p}: {msg[:60]}')
+                break
+            time.sleep(2 * attempt)
+            try: ftp.quit()
+            except all_errors: pass
+            try: ftp = connect()
+            except all_errors: time.sleep(5); ftp = connect()
+    if (done + len(missing)) % 200 == 0:
+        print(f'\r  borrados {done}/{total}', end='', flush=True)
 
 for p in sorted(dirs, key=lambda s: -s.count('/')):
     guard(p)
     try: ftp.rmd(p)
     except all_errors: pass
 
-print(f'\r  borrados {done} ficheros, {err} errores' + ' ' * 20)
-ftp.quit()
+print(f'\r  borrados {done}, ya ausentes {len(missing)}, errores {err}, total {total}' + ' ' * 20)
+try: ftp.quit()
+except all_errors: pass
+sys.exit(1 if err else 0)

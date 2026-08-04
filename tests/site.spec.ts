@@ -620,6 +620,19 @@ test.describe('the funnel', () => {
     await expect(page.locator('#when')).toBeVisible();
     await expect(page.locator('#when')).toContainText('spam');
   });
+
+  test('that date is in English whatever language the browser is set to', async ({ browser }) => {
+    // Shipped as "That means by miércoles, 17:47" — a Spanish weekday inside an
+    // English sentence, because the formatter was passed undefined and took the
+    // locale from the machine. Invisible on an English laptop, wrong for
+    // everybody else, and it is the last thing somebody reads after sending.
+    const ctx = await browser.newContext({ locale: 'es-ES' });
+    const page = await ctx.newPage();
+    await page.goto('/work-with-me/brief/sent/');
+    const text = (await page.locator('#when').textContent()) ?? '';
+    expect(text).toMatch(/by (Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),/);
+    await ctx.close();
+  });
 });
 
 test.describe('the sitemap', () => {
