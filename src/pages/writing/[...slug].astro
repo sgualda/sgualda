@@ -303,6 +303,18 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
   .prose :global(th) { font-weight: 600; white-space: nowrap; }
   .prose :global(td:first-child) { color: var(--dim); }
 
+  /* Row labels are <th scope="row"> so a screen reader can say which row a cell
+     belongs to. That was a semantics fix, and it must not turn into a design
+     change: as <td> they were quiet, light and wrapping, and they stay that
+     way. nowrap belongs to the three short column headers — on a phone,
+     applied to a label like "Question it answers" it widens the table for
+     nothing. */
+  .prose :global(th[scope='row']) {
+    font-weight: 400;
+    color: var(--dim);
+    white-space: normal;
+  }
+
   .essay-faq { margin-top: var(--space-9); text-align: left; }
   .essay-faq h2 {
     font-size: 1.25rem;
