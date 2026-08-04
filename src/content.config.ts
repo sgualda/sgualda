@@ -161,4 +161,36 @@ const glossary = defineCollection({
   }),
 });
 
-export const collections = { essays, cases, tools, stages, glossary };
+/**
+ * Testimonials.
+ *
+ * Every field except `order` is required, and that is the point of the schema
+ * rather than an oversight: an unattributed quote is worth nothing. "Great
+ * designer — Marketing Manager" is something anybody can type, and everybody
+ * knows it. A name, a role, a company and a link to the person's real profile
+ * is a claim a reader can check in one click, and a claim that can be checked
+ * is the only kind that moves the Authority half of E-E-A-T.
+ *
+ * `linkedin` is mandatory for the same reason. If the recommendation is already
+ * published on a third-party platform, this page stops being Sergio's word
+ * about what a client said and becomes a pointer to the client saying it.
+ *
+ * The build fails rather than rendering a quote with a missing attribution.
+ */
+const testimonials = defineCollection({
+  loader: glob({ pattern: '**/*.yaml', base: './src/content/testimonials' }),
+  schema: z.object({
+    /** Their words, verbatim. Never paraphrased, never tightened. */
+    quote: z.string().min(40),
+    name: z.string(),
+    role: z.string(),
+    company: z.string(),
+    /** Their profile, so the claim is checkable. */
+    linkedin: z.string().url(),
+    /** What we worked on, if it maps to a case study. */
+    project: z.string().optional(),
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { essays, cases, tools, stages, glossary, testimonials };

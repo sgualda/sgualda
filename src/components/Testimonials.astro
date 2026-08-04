@@ -1,0 +1,284 @@
+---
+import { getTestimonials } from '@lib/testimonials';
+
+/**
+ * What other people say, with a way to check that they said it.
+ *
+ * The site had no social proof of any kind: no quotes, no names, no logos, no
+ * Review markup. In the E-E-A-T frame that put Authority near zero while
+ * Experience sat near the top — the writing is full of first-hand experience,
+ * and none of it was corroborated by anybody else. It matters more here than on
+ * most sites because the conversion model is a five-step form and a wait, asked
+ * of a stranger who had been shown no evidence anyone had hired him before.
+ *
+ * Each quote links to the person's profile. That is the whole mechanism: it
+ * turns "he says a client praised him" into "a client praised him, publicly,
+ * where you can go and look".
+ *
+ * Renders nothing at all when the collection is empty, so the section cannot
+ * ship as an empty promise while the quotes are still being gathered. The
+ * Review schema is built by the page from the same call — see lib/testimonials.
+ */
+const items = await getTestimonials();
+---
+
+{
+  items.length > 0 && (
+    <section class="section">
+      <div class="col">
+        <span class="eyebrow">In their words</span>
+        <h2>People who<br />worked with me.</h2>
+        <p class="sub">
+          Every one of these is on LinkedIn under their own name. The links go to them, not
+          to me.
+        </p>
+      </div>
+
+      <div class="wide voices">
+        {/*
+          A carousel that moves on its own, built so it cannot trap anybody.
+
+          WCAG 2.2.2 requires a way to stop content that moves automatically for
+          more than five seconds, and an auto-advancing quote is exactly that.
+          So: a pause control, pausing on hover and on keyboard focus, and no
+          movement at all when the visitor has asked for reduced motion — in
+          that case it becomes a plain scrollable row, which is what the
+          underlying markup already is.
+
+          Scroll-snap rather than transforms, so the whole thing keeps working
+          with JavaScript off and can be swiped by hand on a phone.
+        */}
+        {/*
+          The region wrapper is a div, not the list.
+
+          role="region" on the <ul> replaced its implicit list role, which left
+          every <li> inside it as a list item with no list — a real failure that
+          axe caught and that a screen reader would announce as loose text
+          instead of "list, 3 items". The scrollable region and the list are two
+          different things and now they are two different elements.
+        */}
+        <div class="rail" id="voices" tabindex="0" role="region" aria-label="Testimonials, auto-advancing">
+          <ul class="track">
+          {items.map((t) => (
+            <li class="voice">
+              <blockquote>
+                <p>{t.data.quote}</p>
+              </blockquote>
+              <a class="who" href={t.data.linkedin} target="_blank" rel="noopener">
+                <span class="nm">{t.data.name}</span>
+                <span class="rl">
+                  {t.data.role} · {t.data.company}
+                </span>
+              </a>
+            </li>
+          ))}
+          </ul>
+        </div>
+
+        {items.length > 1 && (
+          <div class="ctrl">
+            <button type="button" id="voices-pause" aria-pressed="false" aria-controls="voices">
+              <span class="lbl">Pause</span>
+            </button>
+            <div class="dots" id="voices-dots" aria-hidden="true">
+              {items.map(() => (
+                <span class="dot" />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .voices { margin-top: 48px; position: relative; }
+
+  .rail {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding-bottom: 6px;
+    /* The scrollbar is the browser's, and on a quote row it reads as damage.
+       The dots below say the same thing on purpose. */
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 6px;
+    border-radius: var(--radius-card);
+  }
+  .track {
+    list-style: none;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(520px, 82%);
+    gap: 20px;
+  }
+
+  .voice {
+    scroll-snap-align: center;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-card);
+    padding: var(--space-7);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+
+  .voice blockquote p {
+    font-size: 1.0625rem;
+    line-height: var(--lh-read);
+    letter-spacing: var(--ls-read);
+    color: var(--ink);
+  }
+
+  .who { display: block; }
+  .nm {
+    display: block;
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+    /* Underlined because it goes somewhere. A name that is a link and does not
+       look like one is a link nobody clicks, and the click is the proof. */
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--hair);
+    transition: text-decoration-color 0.2s var(--ease);
+  }
+  .who:hover .nm { text-decoration-color: var(--ink); }
+  .rl {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8125rem;
+    color: var(--dim);
+  }
+
+  .ctrl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+  }
+  .ctrl button {
+    font-size: 0.6875rem;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 10px 14px;
+    min-height: 44px;
+    border-radius: 999px;
+    border: 1px solid var(--hair);
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+  .ctrl button:hover { color: var(--ink); border-color: var(--ink); }
+
+  .dots { display: flex; gap: 7px; }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--hair);
+    transition: background 0.25s var(--ease);
+  }
+  .dot[data-on='true'] { background: var(--ink); }
+
+  @media (max-width: 560px) {
+    .track { grid-auto-columns: 88%; }
+    .voice { padding: var(--space-6); }
+  }
+
+  /* Asked for less motion: no auto-advance, no smooth scroll. The row stays
+     swipeable, so nothing is lost except the movement they turned off. */
+  @media (prefers-reduced-motion: reduce) {
+    .rail { scroll-behavior: auto; }
+  }
+</style>
+
+{
+  items.length > 1 && (
+    <script>
+      const track = document.getElementById('voices');
+      const pause = document.getElementById('voices-pause');
+      const dots = [...(document.getElementById('voices-dots')?.children ?? [])];
+
+      if (track && pause) {
+        const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let timer: ReturnType<typeof setInterval> | null = null;
+        let held = false; // hover or focus
+        let off = still.matches; // paused by the person, or by their OS setting
+
+        const cards = () => [...(track.querySelector('.track')?.children ?? [])] as HTMLElement[];
+
+        const current = () => {
+          // Nearest card to the centre, which is where scroll-snap parks it.
+          const mid = track.scrollLeft + track.clientWidth / 2;
+          let best = 0;
+          let dist = Infinity;
+          cards().forEach((c, i) => {
+            const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+            if (d < dist) { dist = d; best = i; }
+          });
+          return best;
+        };
+
+        const mark = () => {
+          const i = current();
+          dots.forEach((d, n) => d.setAttribute('data-on', String(n === i)));
+        };
+
+        const advance = () => {
+          if (held || off) return;
+          const next = (current() + 1) % cards().length;
+          const c = cards()[next];
+          track.scrollTo({ left: c.offsetLeft - (track.clientWidth - c.offsetWidth) / 2 });
+        };
+
+        const start = () => {
+          if (timer || off) return;
+          // Seven seconds: long enough to read a quote of this length without
+          // it moving away mid-sentence, which is the failure mode that makes
+          // people hate carousels.
+          timer = setInterval(advance, 7000);
+        };
+        const stop = () => {
+          if (timer) clearInterval(timer);
+          timer = null;
+        };
+
+        pause.addEventListener('click', () => {
+          off = !off;
+          pause.setAttribute('aria-pressed', String(off));
+          pause.querySelector('.lbl')!.textContent = off ? 'Play' : 'Pause';
+          off ? stop() : start();
+        });
+
+        // Held while somebody is reading or tabbing through, resumed after.
+        for (const [on, v] of [['pointerenter', true], ['pointerleave', false], ['focusin', true], ['focusout', false]] as const) {
+          track.addEventListener(on, () => { held = v; });
+        }
+
+        track.addEventListener('scroll', mark, { passive: true });
+        still.addEventListener('change', (e) => {
+          off = e.matches;
+          pause.setAttribute('aria-pressed', String(off));
+          pause.querySelector('.lbl')!.textContent = off ? 'Play' : 'Pause';
+          off ? stop() : start();
+        });
+
+        mark();
+        if (still.matches) {
+          pause.setAttribute('aria-pressed', 'true');
+          pause.querySelector('.lbl')!.textContent = 'Play';
+        } else {
+          start();
+        }
+      }
+    </script>
+  )
+}

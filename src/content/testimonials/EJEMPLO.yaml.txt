@@ -1,0 +1,13 @@
+# Plantilla. Copia este fichero como <nombre>.yaml dentro de esta carpeta,
+# uno por persona, y borra este .txt.
+#
+# Las frases van VERBATIM: tal y como las escribieron. Ni recortadas para que
+# suenen mejor, ni retocadas. Si hay que acortar, se corta por el final y se
+# marca con […], nunca se reescribe por dentro.
+
+quote: "La frase, literal, tal y como esta en LinkedIn."
+name: "Louise Apellido"
+role: "Su cargo"
+company: "Su empresa"
+linkedin: "https://www.linkedin.com/in/su-perfil/"
+order: 1
