@@ -40,5 +40,8 @@ incoming/*
 # outside a literal node_modules/ path, which breaks axe-core.
 *.nosync
 
-# Deploy credentials. Never committed.
-.deploy/
+# The FTP password, and nothing else. The deploy scripts themselves live in
+# scripts/ and are versioned — they are how the site ships, so losing them
+# to a gitignore on the directory that happened to hold the secret is not a
+# trade worth making.
+.deploy/credentials
