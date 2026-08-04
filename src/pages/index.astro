@@ -28,6 +28,25 @@ if (featured.length !== FEATURED.length) {
   );
 }
 
+/**
+ * Three essays on the home page.
+ *
+ * The section above this one ends with "the only part worth writing down" and
+ * then linked to nothing, which is a sentence setting up a door and no door.
+ *
+ * It also fixes the worst number in the internal link graph. The home body
+ * linked to three destinations, all of them the commercial funnel, so every
+ * essay sat at depth 5 and /about/ at depth 6 — the anchor of the author
+ * entity, six hops from the front page. With this section the essays move to
+ * depth 2, /writing/ to 1 and /about/ to 1.
+ *
+ * Newest three rather than a hand-picked list: a chosen list goes stale the
+ * moment something better is published, and nobody remembers to come back.
+ */
+const essays = (await getCollection('essays', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.updated ?? b.data.published).valueOf() - (a.data.updated ?? a.data.published).valueOf())
+  .slice(0, 3);
+
 const principles = [
   {
     n: '01',
@@ -55,7 +74,12 @@ const principles = [
 
   <!-- ── hero ── -->
   <section class="col hero">
-    <h1>Building<br />experiences<br />through design</h1>
+    {/* "Building experiences through design" said nothing a hundred thousand
+        other portfolios do not also say: no entity, no specialism, nothing to
+        rank for and nothing to remember. The <title> already carried "product
+        designer" and the h1 contradicted it. Same cadence, same three lines,
+        but the noun is now the thing being sold. */}
+    <h1>Building<br />products,<br />not just experiences</h1>
     <p class="sub">
       I’ve built products from zero, failed, iterated, and figured out what actually matters in
       the early stages of a business. Now I help others skip the expensive mistakes.
@@ -113,7 +137,8 @@ const principles = [
       <h2>Making things is<br />no longer the hard part.</h2>
       <p class="sub">
         Anyone can produce a screen. Almost nobody can say why that one and not another.
-        That’s the part I work on, and the only part worth writing down.
+        That’s the part I work on, and the only part worth writing down. Most of it happens
+        <a href="/about/">here in Barcelona</a>, and <a href="/now/">this is what I’m on now</a>.
       </p>
     </div>
     <div class="wide">
@@ -124,6 +149,36 @@ const principles = [
         widths={[560, 1120]}
         sizes="(max-width: 560px) calc(100vw - 40px), 560px"
       />
+    </div>
+  </section>
+
+  <!-- ── writing ── -->
+  <section class="section">
+    <div class="col">
+      <span class="eyebrow">Written down</span>
+      <h2>The three most<br />recent things I got wrong.</h2>
+      <p class="sub">Every other week, one decision and what it cost. No roundups, no five tips.</p>
+    </div>
+
+    {/* `wide` is what constrains the column and centres it, the same wrapper the
+        project grid uses. Without it the list ran the full width of the viewport
+        and the text sat against the left edge of the screen. */}
+    <ul class="wide reads">
+      {
+        essays.map((e) => (
+          <li>
+            <a href={`/writing/${e.id}/`}>
+              <h3>{e.data.title}</h3>
+              <p>{e.data.hook ?? e.data.description}</p>
+              <span class="more" aria-hidden="true">Read it →</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="col actions" style="margin-top:34px">
+      <a class="btn btn--ghost" href="/writing/">All writing</a>
     </div>
   </section>
 
@@ -240,8 +295,54 @@ const principles = [
   .principles h3 { margin-bottom: 10px; }
   .principles p { color: var(--dim); font-size: 1.0625rem; line-height: var(--lh-ui); }
 
+  /* Three essays, in the same rhythm as .principles rather than as cards.
+     The page already has one grid of image tiles; a second grid of boxes
+     directly below would read as a template. These are text on the page. */
+  .reads {
+    list-style: none;
+    text-align: left;
+    margin-top: 48px;
+    display: grid;
+    gap: 2px;
+  }
+  .reads a {
+    display: block;
+    padding: 24px 0;
+    border-top: 1px solid var(--hair);
+  }
+  .reads li:last-child a { border-bottom: 1px solid var(--hair); }
+  .reads h3 {
+    font-size: 1.25rem;
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-tight);
+    margin-bottom: 8px;
+    transition: opacity 0.2s var(--ease);
+  }
+  .reads p {
+    color: var(--dim);
+    font-size: 1.0625rem;
+    line-height: var(--lh-ui);
+    max-width: 62ch;
+  }
+  .reads .more {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.75rem;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    transition: color 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .reads a:hover h3 { opacity: 0.7; }
+  .reads a:hover .more { color: var(--ink); transform: translateX(3px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reads .more { transition: none; }
+  }
+
   @media (max-width: 720px) {
     .grid { grid-template-columns: 1fr; }
     .principles li { grid-template-columns: 1fr; gap: 4px; }
+    .reads a { padding: 20px 0; }
   }
 </style>
