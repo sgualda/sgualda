@@ -131,7 +131,7 @@ const STATUS: Record<string, string> = {
   <section class="col next">
     <p class="sub">Recognise any of this in your own product?</p>
     <div class="actions">
-      <a class="btn btn--dark" href="/work-with-me/">See if I can help</a>
+      <a class="btn btn--dark" href="/work-with-me/">Hire me</a>
       <a class="btn btn--ghost" href="/tools/">Run a free check</a>
     </div>
   </section>
@@ -186,9 +186,28 @@ const STATUS: Record<string, string> = {
     transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
   }
   .others a:hover .thumb { opacity: 0.86; transform: translateY(-2px); }
-  .others .thumb.none { display: grid; place-items: center; }
+  /* The two buried projects have no screenshot, because there is nothing to
+     show, which is the whole point of them. A flat grey rectangle read as a
+     missing asset; a soft gradient with the status set into a pill reads as a
+     decision. Built from --ink, so it follows the theme. */
+  .others .thumb.none {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--ink) 13%, transparent), transparent 60%),
+      radial-gradient(110% 80% at 85% 95%, color-mix(in srgb, var(--ink) 20%, transparent), transparent 55%),
+      var(--surface);
+  }
   .others .thumb.none span {
-    font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim);
+    font-size: 0.6875rem;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 7px 14px;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--paper) 72%, transparent);
+    backdrop-filter: blur(6px);
   }
   .tag {
     display: inline-block; font-size: 0.625rem; letter-spacing: 0.12em;

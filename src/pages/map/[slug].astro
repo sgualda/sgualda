@@ -101,7 +101,6 @@ const terms = (await getCollection('glossary'))
               <span class="pill">{t.time} · {t.count}</span>
               <span class="h">{t.n}</span>
               <span class="p">{t.out}</span>
-              <span class="gets">You get: {t.answers.map(([n]) => n).join(' · ')}</span>
             </a>
           </li>
         ))
@@ -119,7 +118,7 @@ const terms = (await getCollection('glossary'))
         <h3>{s.cta.title}</h3>
         <p>{s.cta.body}</p>
       </div>
-      <a class="btn btn--dark" href="/work-with-me/">See if I can help</a>
+      <a class="btn btn--dark" href="/work-with-me/">Hire me</a>
     </div>
     <p class="fine">
       Four questions on that page tell you whether this is worth it for you — including when it’s not.
@@ -237,7 +236,6 @@ const terms = (await getCollection('glossary'))
     transition: border-color 0.24s var(--ease), transform 0.24s var(--ease);
   }
   .tools a:hover { border-color: var(--ink); transform: translateY(-2px); }
-  .tools .gets { margin-top: auto; }
   .pill {
     display: inline-block; font-size: 0.625rem; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--dim);
@@ -249,19 +247,6 @@ const terms = (await getCollection('glossary'))
     font-weight: 600; letter-spacing: var(--ls-heading); margin-bottom: 6px;
   }
   .tools .p { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
-  /* The possible verdicts, named. "A verdict rather than a score" is a claim;
-     listing the four verdicts is the evidence, and it is what tells somebody
-     whether the answer would be useful before they spend the minute. */
-  .tools .gets {
-    display: block;
-    margin-top: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--hair);
-    font-size: 0.75rem;
-    line-height: var(--lh-ui);
-    letter-spacing: 0;
-    color: var(--dim);
-  }
 
   .why {
     margin-top: var(--space-5);

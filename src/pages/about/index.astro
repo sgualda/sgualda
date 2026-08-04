@@ -118,11 +118,11 @@ const notFor = [
         somewhere else on the site; none of it is new, it was just never
         gathered where a search engine or a model would look for it. */}
     <dl class="facts">
-      <dt>Where</dt><dd>Barcelona, CET. Remote across Europe.</dd>
-      <dt>How long</dt><dd>7+ years in product, mostly SaaS and mobile apps.</dd>
-      <dt>Who with</dt><dd>Teams of roughly two to forty people. Founders, and the person who can change the plan.</dd>
-      <dt>What kind of work</dt><dd>Zero-to-one product, scoping under a deadline, and saying the thing nobody in the room wants to say.</dd>
-      <dt>Languages</dt><dd>Spanish and English.</dd>
+      <div><dt>Where</dt><dd>Barcelona, CET. Remote across Europe.</dd></div>
+      <div><dt>How long</dt><dd>7+ years in product, mostly SaaS and mobile apps.</dd></div>
+      <div><dt>Who with</dt><dd>Teams of roughly two to forty people. Founders, and the person who can change the plan.</dd></div>
+      <div><dt>What kind of work</dt><dd>Zero-to-one product, scoping under a deadline, and saying the thing nobody in the room wants to say.</dd></div>
+      <div><dt>Languages</dt><dd>Spanish and English.</dd></div>
     </dl>
 
     <section class="block">
@@ -168,23 +168,30 @@ const notFor = [
   .bio p + p { margin-top: 1.15em; }
 
   .block { margin-top: clamp(58px, 8vw, 86px); }
+  /* Rows, not one two-column grid.
+     A `dl` laid out as a single grid puts every dt and dd in its own cell, so
+     the row height is set by whichever is taller and the label ends up
+     floating against a two-line answer. Each pair gets its own row, and the
+     two baselines are matched inside it. */
   .facts {
-    display: grid;
-    grid-template-columns: minmax(0, 34%) 1fr;
-    gap: var(--space-3) var(--space-5);
-    align-items: start;
     margin: var(--space-9) 0;
     padding: var(--space-7) 0;
     border-block: 1px solid var(--hair);
     font-size: 0.9375rem;
-    line-height: var(--lh-ui);
-    letter-spacing: 0;
+    line-height: var(--lh-read);
+    letter-spacing: var(--ls-read);
   }
+  .facts > div {
+    display: grid;
+    grid-template-columns: minmax(0, 34%) 1fr;
+    gap: var(--space-5);
+    align-items: baseline;
+  }
+  .facts > div + div { margin-top: var(--space-5); }
   .facts dt { color: var(--dim); }
   .facts dd { margin: 0; }
   @media (max-width: 560px) {
-    .facts { grid-template-columns: 1fr; gap: var(--space-1); }
-    .facts dd { margin-bottom: var(--space-4); }
+    .facts > div { grid-template-columns: 1fr; gap: var(--space-1); }
   }
 
   .block h2 { margin-bottom: 26px; }

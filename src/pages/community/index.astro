@@ -83,6 +83,18 @@ const FAQS = [
     a: 'Deliberately quiet. A handful of real conversations a week rather than a firehose you mute in four days. If you want a channel that scrolls faster than you can read it, this is not that.',
   },
   {
+    q: 'Where can I find a community for product designers?',
+    a: 'There are three shapes worth knowing. Large open Slacks are good for meeting people and bad for getting a specific answer, because volume buries threads. Paid cohorts buy you structure and deadlines and end on a fixed date. Small chats like this one are for one decision you are stuck on, and are useless for networking. Pick by what you actually need this month rather than by size.',
+  },
+  {
+    q: 'Why Substack chat instead of Slack or Discord?',
+    a: 'Because it is one login most people already have, it does not add another icon to a dock, and leaving takes one click. Slack and Discord are built to be checked constantly, which is right for a workplace and wrong for a place you visit when you are stuck. The format shapes the behaviour more than the rules do.',
+  },
+  {
+    q: 'How do I get a useful answer instead of sympathy?',
+    a: 'Say what you already tried, give one number, say what you would do if nobody replied, and say what kind of answer you want. Most questions in product communities get sympathy because they describe a feeling rather than a decision, and nobody can help with a feeling.',
+  },
+  {
     q: 'Do you answer questions there yourself?',
     a: 'Often, but as one more person in the room rather than the resident expert. The useful answer usually comes from whoever last had the same problem, and that is rarely me.',
   },
@@ -141,6 +153,69 @@ const FAQS = [
     <dl class="topics">
       {TOPICS.map((t) => (<><dt>{t.h}</dt><dd>{t.p}</dd></>))}
     </dl>
+  </section>
+
+
+  <section class="section col">
+    <span class="eyebrow">The only rule</span>
+    <h2>How to ask so you<br />get a useful answer.</h2>
+    <p class="sub">
+      Most questions in product communities get sympathy instead of answers, and it is almost
+      always the fault of how they were asked. Four things fix it.
+    </p>
+    <ol class="how">
+      <li>
+        <h3>Say what you already tried</h3>
+        <p>
+          Without it, the first six replies are things you have already ruled out. One line
+          about what you tried and why it did not work skips all of them.
+        </p>
+      </li>
+      <li>
+        <h3>Give one number</h3>
+        <p>
+          «Nobody is using it» could be four people or four thousand. «Sixty signed up, eleven
+          came back» is a completely different problem, and it is answerable.
+        </p>
+      </li>
+      <li>
+        <h3>Say what you would do if nobody replied</h3>
+        <p>
+          It forces you to name your own default, which is usually where the actual
+          disagreement is. Half the time you answer your own question writing this line.
+        </p>
+      </li>
+      <li>
+        <h3>Say what kind of answer you want</h3>
+        <p>
+          A gut reaction, a sanity check, or somebody to argue with you. They are three
+          different favours and people give the wrong one when you do not say.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section col">
+    <span class="eyebrow">Where it sits</span>
+    <h2>Compared with<br />the other options.</h2>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Table, scrollable">
+      <table>
+        <thead>
+          <tr><th></th><th>This chat</th><th>A big Slack</th><th>A paid cohort</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cost</td><td>Free</td><td>Free</td><td>Hundreds to thousands</td></tr>
+          <tr><td>Volume</td><td>A few threads a week</td><td>More than anybody reads</td><td>Fixed, then it ends</td></tr>
+          <tr><td>Who answers</td><td>Whoever last had the problem</td><td>Whoever is online</td><td>The person paid to</td></tr>
+          <tr><td>Best for</td><td>One decision you are stuck on</td><td>Finding people</td><td>Structure and deadlines</td></tr>
+          <tr><td>Worst for</td><td>Networking</td><td>Getting a specific answer</td><td>Anything urgent</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sub small">
+      None of these is better than the others. They answer different questions, and the mistake
+      is joining the wrong one and concluding that communities do not work.
+    </p>
   </section>
 
   <section class="section col">
@@ -265,12 +340,51 @@ const FAQS = [
     color: var(--dim);
   }
 
+  .how { list-style: none; text-align: left; margin-top: var(--space-8); counter-reset: n; }
+  .how li { padding: var(--space-6) 0; border-top: 1px solid var(--hair); counter-increment: n; }
+  .how li:last-child { border-bottom: 1px solid var(--hair); }
+  .how h3 {
+    font-size: 1.0625rem;
+    margin-bottom: var(--space-2);
+  }
+  .how h3::before {
+    content: counter(n, decimal-leading-zero);
+    display: inline-block;
+    min-width: 32px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: var(--ls-caps);
+    color: var(--dim);
+    vertical-align: 2px;
+  }
+  .how p {
+    font-size: 0.9375rem;
+    line-height: var(--lh-read);
+    letter-spacing: var(--ls-read);
+    color: var(--dim);
+    padding-left: 32px;
+  }
+
   .nots { list-style: none; text-align: left; margin: 34px 0 30px; }
   .nots li {
-    padding: 16px 0;
+    position: relative;
+    padding: 14px 0 14px 34px;
     font-size: 1.0625rem;
     line-height: var(--lh-ui);
     color: var(--dim);
+  }
+  .nots li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 21px;
+    width: 12px;
+    height: 12px;
+    background:
+      linear-gradient(var(--err), var(--err)) center / 100% 2px no-repeat,
+      linear-gradient(var(--err), var(--err)) center / 2px 100% no-repeat;
+    rotate: 45deg;
   }
   .nots li + li { border-top: 1px solid var(--hair); }
   .small { font-size: 1rem; }

@@ -96,7 +96,7 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
     <div class="band">
       <h2>Want to build<br />something together?</h2>
       <p>Tell me where you are and where you want to go.</p>
-      <a class="btn btn--on-band" href="/work-with-me/">See if I can help</a>
+      <a class="btn btn--on-band" href="/work-with-me/">Hire me</a>
       <p class="fine">A written reply within a day. No call.</p>
     </div>
   </section>
@@ -126,16 +126,28 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
     border: 1px solid var(--hair);
     transition: opacity 0.28s var(--ease);
   }
-  /* Nothing to show, said in words. */
+  /* The two buried projects have no screenshot, because there is nothing to
+     show, which is the whole point of them. A flat grey rectangle read as a
+     missing asset; a soft gradient with the status set into a pill reads as a
+     decision. Built from --ink, so it follows the theme. */
   .thumb.none {
     display: grid;
     place-items: center;
+    background:
+      radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--ink) 13%, transparent), transparent 60%),
+      radial-gradient(110% 80% at 85% 95%, color-mix(in srgb, var(--ink) 20%, transparent), transparent 55%),
+      var(--surface);
   }
   .thumb.none span {
     font-size: 0.6875rem;
-    letter-spacing: 0.18em;
+    letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
+    padding: 7px 14px;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--paper) 72%, transparent);
+    backdrop-filter: blur(6px);
   }
   .card { text-align: left; display: block; }
   .card:hover .thumb { opacity: 0.82; }

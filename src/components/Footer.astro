@@ -30,14 +30,19 @@ const year = new Date().getFullYear();
       {/* The mark rather than the name set in bold. The header already
           establishes it, and repeating a name in type where a logo exists is
           the sort of thing that makes a site feel unfinished. */}
-      <a class="mark" href="/" aria-label={`${SITE.name} — home`}>
-        <img src="/img/logo.png" alt="" width="96" height="96" />
-      </a>
-      <p class="who">
-        <span>{SITE.role}</span><br />
-        {SITE.location}<br />
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-      </p>
+      {/* The mark and the role are one identity block, stacked. As siblings of
+          a flex row they sat side by side, which read as a logo with a caption
+          rather than as a signature. */}
+      <div class="ident">
+        <a class="mark" href="/" aria-label={`${SITE.name} — home`}>
+          <img src="/img/logo.png" alt="" width="96" height="96" />
+        </a>
+        <p class="who">
+          <span>{SITE.role}</span><br />
+          {SITE.location}<br />
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </p>
+      </div>
 
       <ul class="elsewhere">
         {SOCIAL.linkedin && <li><a href={SOCIAL.linkedin} rel="me noopener">LinkedIn</a></li>}
@@ -105,7 +110,7 @@ const year = new Date().getFullYear();
     gap: 20px 32px;
     flex-wrap: wrap;
   }
-  .mark { display: block; width: 34px; height: 34px; margin-bottom: var(--space-4); }
+  .mark { display: block; width: 34px; height: 34px; margin-bottom: var(--space-5); }
   .mark img { width: 100%; height: 100%; object-fit: contain; }
   .who { font-size: 0.9375rem; line-height: 1.75; letter-spacing: var(--ls-read); color: var(--dim); }
   .who strong { color: var(--ink); font-weight: 600; }

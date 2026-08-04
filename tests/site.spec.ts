@@ -683,3 +683,17 @@ test('/about/ is a proper author page', async ({ page }) => {
   // The questions people type about a person, answered in one place.
   await expect(page.locator('.facts dt')).toHaveCount(5);
 });
+
+test('one label for the primary action, everywhere', async ({ page }) => {
+  // Six labels had accumulated for /work-with-me/, then two, now one. The
+  // guard in check-prose.mjs allows up to two; this pins it at one, because
+  // recognition is the only advantage a CTA has on a site this size.
+  const labels = new Set<string>();
+  for (const url of ['/', '/about/', '/glossary/', '/community/', '/case-studies/', '/map/nobody-came/', '/writing/mvp-vs-prototype/']) {
+    await page.goto(url);
+    for (const t of await page.locator('main a.btn[href="/work-with-me/"]').allInnerTexts()) {
+      labels.add(t.trim());
+    }
+  }
+  expect([...labels]).toEqual(['Hire me']);
+});
