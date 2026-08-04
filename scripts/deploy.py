@@ -72,31 +72,55 @@ for local, rel in files:
                 except all_errors: time.sleep(5); ftp = connect(); made.clear()
 print()
 
-# Assets huerfanos de despliegues anteriores.
+# Ficheros que sobran en el servidor.
 #
-# Los nombres en _astro llevan hash del contenido, asi que cada cambio en el CSS
-# deja el fichero viejo en el servidor para siempre: subir nunca borra. Nadie los
-# referencia, pero se acumulan indefinidamente y hacen imposible mirar la carpeta
-# y saber que sirve el sitio.
+# Subir nunca borra, asi que el servidor solo crece. Los nombres en _astro
+# llevan hash del contenido: cada cambio en el CSS deja el fichero viejo ahi
+# para siempre. Pero el caso que de verdad importa es otro — borrar un articulo
+# deja su pagina publicada y indexada indefinidamente, diciendo algo que ya
+# decidiste no decir.
 #
-# Solo _astro, y solo ficheros que el build acaba de generar y por tanto conoce.
-# Fuera de ahi no se borra nada desde aqui.
+# Asi que el servidor refleja el build, con dos frenos:
+#
+#  KEEP  .well-known guarda la validacion del certificado SSL y no lo genera
+#        ningun build. Borrarlo rompe la renovacion, en silencio, semanas
+#        despues. Tambien se conserva cualquier cosa que empiece por punto.
+#
+#  El limite de abajo: si el build salio a medias, esta funcion tendria
+#        permiso para vaciar el sitio entero. Un build sano trae ~175 ficheros;
+#        por debajo de 100 algo ha ido mal y no se borra nada.
+KEEP_TOP = {'.well-known'}
+
 pruned = 0
-try:
-    have = set(os.listdir(os.path.join(DIST, '_astro')))
-    for name, facts in ftp.mlsd(f'{ROOT}/_astro'):
-        if facts.get('type') != 'file' or name in have:
-            continue
-        ftp.delete(f'{ROOT}/_astro/{name}')
-        pruned += 1
-        print(f'  huerfano borrado  {name}')
-except all_errors as e:
-    print(f'  ! no se pudo limpiar _astro: {str(e)[:60]}')
+if len(files) < 100:
+    print(f'  ! solo {len(files)} ficheros en el build: no se limpia nada por precaucion')
+else:
+    have = {rel.replace(os.sep, '/') for _, rel in files}
+    stale = []
+
+    def scan(path, rel=''):
+        for name, facts in ftp.mlsd(path):
+            if name in ('.', '..') or name in KEEP_TOP or name.startswith('.'):
+                continue
+            r = f'{rel}{name}'
+            if facts.get('type') == 'dir':
+                scan(f'{path}/{name}', f'{r}/')
+            elif r not in have:
+                stale.append(r)
+
+    try:
+        scan(ROOT)
+        for r in stale:
+            ftp.delete(f'{ROOT}/{r}')
+            pruned += 1
+            print(f'  sobrante borrado  {r}')
+    except all_errors as e:
+        print(f'  ! no se pudo limpiar: {str(e)[:60]}')
 
 try: ftp.quit()
 except all_errors: pass
 
-print(f'\n  ok={ok}  fallos={fail}  total={len(files)}  huerfanos borrados={pruned}')
+print(f'\n  ok={ok}  fallos={fail}  total={len(files)}  sobrantes borrados={pruned}')
 for rel, e in bad:
     print(f'    {rel}  <-  {e}')
 sys.exit(1 if fail else 0)

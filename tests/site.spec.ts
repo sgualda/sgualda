@@ -362,7 +362,6 @@ test('required public files exist', () => {
     'dist/.htaccess',
     'dist/api/brief.php',
     'dist/api/log.php',
-    'dist/_redirects',
     'dist/favicon.svg',
     'dist/site.webmanifest',
     'dist/rss.xml',
@@ -475,7 +474,10 @@ test('llms.txt describes the site as it currently is', async ({ page }) => {
 });
 
 test('every redirect target resolves', async ({ page }) => {
-  const rules = readFileSync('dist/_redirects', 'utf8')
+  // public/, not dist/. The file is a build input, and the build deletes it
+  // from the output on the way out — reading it from dist would be asserting
+  // against something that is deliberately not shipped.
+  const rules = readFileSync(new URL('../public/_redirects', import.meta.url), 'utf8')
     .split('\n')
     .map((l) => l.trim())
     .filter((l) => l && !l.startsWith('#'))

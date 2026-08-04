@@ -11,8 +11,16 @@ import Analytics from '@components/Analytics.astro';
 interface Props {
   title: string;
   description: string;
-  /** Override the canonical. Defaults to the current page URL. */
-  canonical?: string;
+  /**
+   * Override the canonical. Defaults to the current page URL.
+   *
+   * `false` drops it entirely, which only the 404 page wants: it is served at
+   * every URL that does not exist, so no single address is its canonical one.
+   * It was declaring /404/ — an address that itself answers 404, a page
+   * pointing at its own absence. Pages that are merely noindex keep theirs;
+   * those have a real URL, and a self-reference there is correct.
+   */
+  canonical?: string | false;
   /** Social share image, absolute or site-relative. */
   image?: string;
   /** Extra JSON-LD nodes to merge into the @graph. */
@@ -35,7 +43,7 @@ const slug = Astro.url.pathname === '/'
   : Astro.url.pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-');
 const ogPath = image ?? `/og/${slug}.png`;
 
-const url = canonical ?? new URL(Astro.url.pathname, SITE.url).href;
+const url = typeof canonical === 'string' ? canonical : new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL(ogPath, SITE.url).href;
 /**
  * The site name is a suffix, not a tax.
@@ -85,7 +93,7 @@ const graph = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={url} />
+    {canonical !== false && <link rel="canonical" href={url} />}
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content="website" />

@@ -173,6 +173,51 @@ if (analytics && /No analytics\. No cookies\./.test(privacy)) {
   process.exit(1);
 }
 
+/**
+ * Every internal link in the built HTML has to resolve to something on disk.
+ *
+ * One did not. An FAQ answer on /tools/ carried href="tools/why-is-nobody-
+ * using-your-product.html" — no leading slash — so the browser resolved it
+ * against the current directory and asked for /tools/tools/…, which is a 404.
+ * It was written that way in the prototype, where the pages were flat files
+ * sitting next to each other, and it survived every build because nothing here
+ * ever followed a link.
+ *
+ * Two shapes are wrong and both are checked: a target that does not exist, and
+ * any relative href at all. The second is the stricter rule and the useful one
+ * — a relative link that happens to resolve today breaks the moment the page
+ * moves, and every link on this site is written from the root anyway.
+ */
+const linkErrors = [];
+const pagesOnDisk = readdirSync(dist, { recursive: true }).filter(
+  (f) => typeof f === 'string' && f.endsWith('.html')
+);
+for (const page of pagesOnDisk) {
+  const html = readFileSync(join(dist, page), 'utf8');
+  for (const m of html.matchAll(/\shref="([^"]+)"/g)) {
+    const href = m[1];
+    // Off-site, in-page, and non-http schemes are somebody else's problem.
+    if (/^(https?:|mailto:|tel:|#|data:|javascript:)/.test(href)) continue;
+
+    if (!href.startsWith('/')) {
+      linkErrors.push(`${page}  →  ${href}  (relative)`);
+      continue;
+    }
+    const clean = href.split(/[?#]/)[0];
+    if (clean === '/') continue;
+    const target = clean.replace(/\/$/, '');
+    if (!existsSync(join(dist, target)) && !existsSync(join(dist, target, 'index.html'))) {
+      linkErrors.push(`${page}  →  ${href}  (nothing there)`);
+    }
+  }
+}
+if (linkErrors.length) {
+  console.error(`\n✗ ${linkErrors.length} internal link(s) do not resolve:`);
+  for (const e of [...new Set(linkErrors)].slice(0, 12)) console.error(`    ${e}`);
+  console.error('  Write internal links from the root, with a trailing slash.\n');
+  process.exit(1);
+}
+
 if (badBreakpoints.length) {
   console.error(`\n✗ ${badBreakpoints.length} breakpoint(s) off the scale ${BREAKPOINTS.join('/')} (#Q-054)`);
   for (const b of badBreakpoints) console.error(`    ${b}`);
