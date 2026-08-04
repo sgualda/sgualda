@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/build-og.mjs && node scripts/build-sitemap-dates.mjs && node scripts/build-htaccess.mjs",
+    "build": "npm run setup:nosync --silent && astro build && node scripts/build-og.mjs && node scripts/build-sitemap-dates.mjs && node scripts/build-htaccess.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "audit:urls": "node scripts/check-urls.mjs",
