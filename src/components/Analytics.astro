@@ -40,13 +40,19 @@ const id = typeof LEGAL.analytics === 'string' ? LEGAL.analytics : '';
           window.gtag = function () { window.dataLayer.push(arguments); };
           window.gtag('js', new Date());
           window.gtag('config', id, {
-            anonymize_ip: true,
             // Lax, not Strict. Strict withholds the cookie on navigations
             // that arrive from another site, which is exactly how somebody
             // lands here from a search result — the one journey worth
             // measuring. Lax still blocks cross-site subrequests.
             cookie_flags: 'SameSite=Lax;Secure',
           });
+          // No anonymize_ip here. It was a Universal Analytics setting, and
+          // GA4 truncates IPs for everybody with no way to turn it off — so
+          // passing it does not switch anything on. Worse, gtag does not
+          // recognise it as config, so it was being forwarded as a custom
+          // event parameter (ep.anonymize_ip=true) on every single hit:
+          // a field that means nothing, attached to all the data. Confirmed
+          // by reading the collect request the live site actually sends.
         }
 
         // Returning visitor who already said yes.
