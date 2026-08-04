@@ -84,8 +84,18 @@ const active = typeof LEGAL.analytics === 'string' && LEGAL.analytics.length > 0
   }
   .acts { display: flex; gap: 8px; margin-top: var(--space-5); }
   /* Same size, same shape. Only the fill differs, and only because one of them
-     has to be the default. */
-  .acts .btn { flex: 1; padding: 11px 14px; font-size: 0.8125rem; }
+     has to be the default.
+
+     min-height, not more padding: at 0.8125rem the padding alone left these
+     37px tall on a 320px screen, under the 44px thumb target — and a consent
+     control that is hard to hit is a dark pattern by accident. The floor holds
+     whatever the font size does next. */
+  .acts .btn {
+    flex: 1;
+    min-height: 44px;
+    padding: 11px 14px;
+    font-size: 0.8125rem;
+  }
   .more {
     display: inline-block;
     margin-top: var(--space-4);

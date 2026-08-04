@@ -155,9 +155,22 @@ ErrorDocument 404 /404.html
   </FilesMatch>
 </IfModule>
 
+# ── media types the host does not know ──
+# The server sent site.webmanifest as text/plain, and X-Content-Type-Options
+# is nosniff, so the browser is being told both "this is prose" and "do not
+# guess otherwise" — which is how a manifest gets ignored and the site quietly
+# stops being installable. Same reasoning for the rest: declared, not inferred.
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType image/svg+xml            .svg
+  AddType font/woff2               .woff2
+  AddType text/plain               .txt
+  AddType application/xml          .xml
+</IfModule>
+
 # ── compression ──
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json image/svg+xml
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/xml application/manifest+json image/svg+xml
 </IfModule>
 
 # ── never serve anything that carries secrets ──
