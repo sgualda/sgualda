@@ -29,7 +29,7 @@ import { LEGAL } from '@lib/site';
  *  · It sits bottom-left, opposite the theme toggle, and never covers content:
  *    the page gets bottom padding while it is open.
  */
-const active = LEGAL.analytics === true;
+const active = typeof LEGAL.analytics === 'string' && LEGAL.analytics.length > 0;
 ---
 
 {
@@ -56,11 +56,13 @@ const active = LEGAL.analytics === true;
     z-index: 60;
     width: min(340px, calc(100vw - 40px));
 
-    /* The same recipe as the header and the theme toggle, so it reads as part
-       of the site rather than a widget from a vendor. */
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    /* Opaque, unlike the header and the toggle.
+       Those float over a known background; this floats over whatever page it
+       lands on, including dark bands and full-bleed images. At 88% opacity axe
+       measured its text against what was behind it and found three real
+       contrast failures — a translucent panel is only readable if you control
+       what it sits on, and here nothing does. */
+    background: var(--paper);
     border: 1px solid var(--hair);
     border-radius: var(--radius-card);
     box-shadow: var(--shadow);
@@ -95,6 +97,16 @@ const active = LEGAL.analytics === true;
   }
   .more:hover { color: var(--ink); }
 
+  /* Full width on a phone. A 340px card floating in a 390px viewport is a
+     card that has not noticed where it is. */
+  @media (max-width: 560px) {
+    .cookie {
+      left: max(16px, env(safe-area-inset-left));
+      right: max(16px, env(safe-area-inset-right));
+      width: auto;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cookie { transition: none; }
   }
@@ -108,6 +120,19 @@ const active = LEGAL.analytics === true;
 
       if (el && !localStorage.getItem(KEY)) {
         el.hidden = false;
+        // Everything else fixed to a bottom corner needs to know, or it ends
+        // up underneath: on a phone this banner is full width, so the corner it
+        // used to share stops existing.
+        //
+        // The height is measured rather than guessed. It changes with the copy
+        // and with the font, and a hardcoded offset is a collision waiting for
+        // the next edit.
+        const root = document.documentElement;
+        root.dataset.consent = 'asking';
+        const measure = () =>
+          root.style.setProperty('--consent-h', `${Math.ceil(el.getBoundingClientRect().height)}px`);
+        measure();
+        new ResizeObserver(measure).observe(el);
         // Two frames: one to drop `hidden`, one for the transition to have a
         // starting value to move from.
         requestAnimationFrame(() => requestAnimationFrame(() => (el.dataset.in = 'true')));
@@ -116,6 +141,8 @@ const active = LEGAL.analytics === true;
       el?.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((b) =>
         b.addEventListener('click', () => {
           localStorage.setItem(KEY, b.dataset.consent!);
+          delete document.documentElement.dataset.consent;
+          document.documentElement.style.removeProperty('--consent-h');
           el.dataset.in = 'false';
           setTimeout(() => (el.hidden = true), 400);
           if (b.dataset.consent === 'yes') document.dispatchEvent(new CustomEvent('consent:granted'));

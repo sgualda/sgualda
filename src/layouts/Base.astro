@@ -6,6 +6,7 @@ import { SITE, SOCIAL, EXPERTISE } from '@lib/site';
 import ErrorLog from '@components/ErrorLog.astro';
 import ThemeToggle from '@components/ThemeToggle.astro';
 import CookieBanner from '@components/CookieBanner.astro';
+import Analytics from '@components/Analytics.astro';
 
 interface Props {
   title: string;
@@ -127,6 +128,7 @@ const graph = [
     <link rel="preload" as="font" type="font/woff2" href="/fonts/archivo-latin.woff2" crossorigin />
 
     <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
+    <Analytics />
     <slot name="head" />
     <ErrorLog />
   </head>

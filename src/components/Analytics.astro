@@ -1,0 +1,65 @@
+---
+import { LEGAL } from '@lib/site';
+
+/**
+ * Google Analytics 4, loaded only after somebody says yes.
+ *
+ * The usual pattern is to ship gtag.js on every page and then ask permission,
+ * which means the request, the DNS lookup and often the cookie have already
+ * happened by the time the banner renders. Under GDPR that is consent theatre,
+ * and it is also the thing that makes cookie banners feel dishonest.
+ *
+ * Here nothing about analytics exists until consent is stored: no script tag,
+ * no preconnect, no third-party request of any kind. The tag is injected by
+ * the consent handler, and on later visits by this component reading the
+ * stored answer. Saying no leaves the site exactly as it is without analytics.
+ *
+ * `anonymize_ip` and the cookie flags are set in the config call rather than
+ * left to defaults, so the behaviour is visible in the source instead of in a
+ * dashboard somewhere.
+ */
+const id = typeof LEGAL.analytics === 'string' ? LEGAL.analytics : '';
+---
+
+{
+  id && (
+    <script is:inline define:vars={{ id }}>
+      (() => {
+        const KEY = 'consent';
+
+        function load() {
+          if (window.__ga) return;
+          window.__ga = true;
+
+          const s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+          document.head.appendChild(s);
+
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('js', new Date());
+          window.gtag('config', id, {
+            anonymize_ip: true,
+            // Lax, not Strict. Strict withholds the cookie on navigations
+            // that arrive from another site, which is exactly how somebody
+            // lands here from a search result — the one journey worth
+            // measuring. Lax still blocks cross-site subrequests.
+            cookie_flags: 'SameSite=Lax;Secure',
+          });
+        }
+
+        // Returning visitor who already said yes.
+        try {
+          if (localStorage.getItem(KEY) === 'yes') load();
+        } catch {
+          // Private mode. No storage means no consent record, so no analytics.
+        }
+
+        // First visit: the banner dispatches this the moment Allow is pressed,
+        // so the session that granted consent is measured rather than lost.
+        document.addEventListener('consent:granted', load);
+      })();
+    </script>
+  )
+}

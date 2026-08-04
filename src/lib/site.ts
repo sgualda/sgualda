@@ -40,15 +40,14 @@ export const LEGAL = {
   address: '',    // Registered office. Never the home address.
   city: 'Barcelona, Spain',
   /**
-   * Switches the consent banner on. False today because the site sets no
-   * cookies and runs no analytics, and a banner asking permission for nothing
-   * trains people to dismiss a control that matters elsewhere.
+   * The GA4 measurement ID, and the single switch for everything that follows:
+   * the consent banner, the analytics script, and the extra origins in the CSP.
    *
-   * Turn on in the same commit as the analytics snippet and the /privacy/
-   * rewrite. check-urls.mjs already fails the build if analytics appears while
-   * the privacy page still claims there is none.
+   * Set it to false and the site goes back to shipping no cookies at all, with
+   * no banner and no third-party request. Nothing about analytics is loaded
+   * before consent is given — not the script, not a cookie, not a DNS lookup.
    */
-  analytics: false,
+  analytics: 'G-JQL9QJ5RTC',
 } as const;
 
 export const SOCIAL = {

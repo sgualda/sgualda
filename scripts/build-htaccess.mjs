@@ -53,6 +53,25 @@ if (swept) console.log(`  · swept ${swept} iCloud conflict copies from dist/`);
  * the point of having a CSP at all. Each hash covers exactly the bytes between
  * the tags, so a changed script fails closed rather than silently running.
  */
+/**
+ * Analytics origins, added only when analytics is actually configured.
+ *
+ * `script-src 'self'` blocks gtag.js outright, and `connect-src 'self'` blocks
+ * the beacons it sends. Both fail silently in the browser console — the site
+ * looks fine and no data ever arrives — which is the same class of bug that
+ * blocked the inline scripts, so it gets the same treatment: derived from the
+ * config rather than pasted in, and removed automatically if analytics is
+ * switched off.
+ */
+const siteTs = readFileSync(join(root, 'src/lib/site.ts'), 'utf8');
+const gaOn = /analytics:\s*'G-[\w]+'/.test(siteTs);
+const gaScript = gaOn ? ' https://www.googletagmanager.com' : '';
+const gaConnect = gaOn
+  ? ' https://www.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://*.google-analytics.com'
+  : '';
+const gaImg = gaOn ? ' https://www.google-analytics.com https://*.google-analytics.com' : '';
+console.log(`  · analytics origins in CSP: ${gaOn ? 'yes' : 'no'}`);
+
 const inlineHashes = new Set();
 const walk = (dir) => {
   for (const f of readdirSync(dir, { recursive: true })) {
@@ -108,7 +127,7 @@ ErrorDocument 404 /404.html
 # ── security headers ──
 <IfModule mod_headers.c>
   # No third-party origins at all: fonts are served from this domain.
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' ${[...inlineHashes].join(' ')}; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self' https://sgualda.substack.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'${gaScript} ${[...inlineHashes].join(' ')}; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:${gaImg}; connect-src 'self'${gaConnect}; form-action 'self' https://sgualda.substack.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
   Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"

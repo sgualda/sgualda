@@ -19,6 +19,18 @@ for (const url of URLS) {
       document.getAnimations().every((a) => a.playState !== 'running' || a.effect?.getTiming().iterations === Infinity)
     );
 
+    // The consent banner fades in on a CSS transition, which getAnimations()
+    // does not always report as running. It reached full opacity around 400ms
+    // and axe was reading its text at partial opacity before that — three
+    // contrast failures that vanished on a longer wait, on whichever pages
+    // happened to be scanned first.
+    const banner = page.locator('#cookie');
+    if (await banner.count()) {
+      await expect
+        .poll(() => banner.evaluate((el) => getComputedStyle(el).opacity), { timeout: 3000 })
+        .toBe('1');
+    }
+
     const { violations } = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();

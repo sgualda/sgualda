@@ -2,6 +2,17 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 /**
+ * Answer the consent banner before touching anything else, which is what a
+ * real visitor does. Left open it is a dialog sitting over the bottom of every
+ * page, and these tests are about the theme, not about the banner.
+ */
+test.beforeEach(async ({ context }) => {
+  await context.addInitScript(() => {
+    try { localStorage.setItem('consent', 'no'); } catch {}
+  });
+});
+
+/**
  * Dark mode (#Q-026).
  *
  * A second theme doubles the number of colour pairs on the site, and every

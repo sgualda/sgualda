@@ -100,6 +100,14 @@
     .theme-toggle { opacity: 0.72; }
     .theme-toggle:focus-visible,
     .theme-toggle:active { opacity: 1; }
+
+    /* Above the consent banner while it is asking. Only here: on a phone the
+       banner is full width, so the corner they used to share stops existing.
+       The offset comes from the measured banner height, because a hardcoded
+       number is a collision waiting for the next copy edit. */
+    :global(:root[data-consent='asking']) .theme-toggle {
+      bottom: calc(max(20px, env(safe-area-inset-bottom)) + var(--consent-h, 0px) + 12px);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

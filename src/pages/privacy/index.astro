@@ -34,8 +34,37 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
     <div class="doc">
       <h2>The short version</h2>
       <p>
-        No analytics. No cookies. No tracking pixels. No advertising. I do not know how many
-        people read this page, and I have decided I can live with that.
+        One analytics cookie, and only if you said yes. No advertising, no profiles, no data
+        sold or shared with anybody. If you said no, or never answered, this site sets nothing
+        at all and works exactly the same.
+      </p>
+
+      <h2>Analytics</h2>
+      <p>
+        I use Google Analytics to see which pages people read and which ones they leave. That
+        is the whole reason: I write here regularly, and without it I am guessing about what is
+        worth writing.
+      </p>
+      <p>
+        Nothing loads until you allow it. Not the script, not a cookie, not even a request to
+        Google — the banner appears before any of it exists. That is deliberate: asking
+        permission after the fact is theatre, and it is why most cookie banners feel dishonest.
+      </p>
+      <p>
+        When you do allow it, your IP address is anonymised before it reaches Google, and the
+        cookie is limited to this site. I see counts and pages. I do not see who you are, and
+        there is no advertising integration of any kind.
+      </p>
+      <p>
+        <strong>Changing your mind:</strong> your answer is stored in your browser, not in a
+        cookie, so refusing costs you nothing. You can change it whenever you like using the
+        button below, and it takes effect immediately.
+      </p>
+      <p>
+        <button class="btn btn--ghost consent-reset" type="button" id="consentReset">
+          Change my cookie choice
+        </button>
+        <span class="consent-now" id="consentNow"></span>
       </p>
 
       <h2>The free tools</h2>
@@ -104,9 +133,9 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
 
       <h2>Changes</h2>
       <p>
-        If this site ever starts collecting something, analytics, a form that stores data, a
-        cookie of any kind, this page changes at the same time, and the date at the top changes
-        with it. It’s not a page I intend to quietly update.
+        If this site ever starts collecting something else, this page changes in the same
+        commit, and the date at the top changes with it. That is enforced rather than promised:
+        the build fails if analytics is present and this page has not been updated to say so.
       </p>
     </div>
   </section>
@@ -123,6 +152,14 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
   }
 
   /* Left-aligned: it is a document, and nobody reads a centred one. */
+  .consent-reset { font-size: 0.8125rem; padding: 9px 16px; }
+  .consent-now {
+    margin-left: var(--space-4);
+    font-size: 0.8125rem;
+    letter-spacing: var(--ls-read);
+    color: var(--dim);
+  }
+
   .doc { text-align: left; }
   .doc h2 {
     font-size: 1.125rem;
@@ -138,3 +175,28 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
   .doc a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
   .doc a:hover { opacity: 0.6; }
 </style>
+
+<script>
+  /* The control that makes consent real: an answer you cannot revisit is not
+     a choice, it is a click you were funnelled into. Clearing the stored answer
+     brings the banner back on the next page load. */
+  const KEY = 'consent';
+  const btn = document.getElementById('consentReset');
+  const now = document.getElementById('consentNow');
+
+  const label = () => {
+    const v = localStorage.getItem(KEY);
+    if (now) {
+      now.textContent =
+        v === 'yes' ? 'Currently: allowed.' : v === 'no' ? 'Currently: refused.' : 'Not answered yet.';
+    }
+  };
+
+  btn?.addEventListener('click', () => {
+    localStorage.removeItem(KEY);
+    label();
+    if (now) now.textContent = 'Cleared. The banner will ask again on the next page.';
+  });
+
+  label();
+</script>
