@@ -52,6 +52,26 @@ if ($docRoot !== false && str_starts_with($configPath, $docRoot . DIRECTORY_SEPA
 
 $cfg = require $configPath;
 
+/**
+ * The config is placed by hand over FTP, which is where typos happen, and a
+ * missing key would otherwise surface as a PHP warning followed by a 401 from
+ * Resend — a 502 to the sender, and nothing in the log that says which of the
+ * three values was wrong. Checked here instead, by name, before any work.
+ *
+ * MAIL_BCC is deliberately not on this list: it is optional, and the form has
+ * to keep working for somebody who has not set one.
+ */
+if (!is_array($cfg)) {
+    error_log('brief: .env-brief.php did not return an array');
+    reply(['ok' => false, 'error' => 'Something broke on my end. Email hello@sgualda.com directly.'], 500);
+}
+foreach (['RESEND_API_KEY', 'MAIL_FROM', 'MAIL_TO'] as $key) {
+    if (empty($cfg[$key])) {
+        error_log("brief: .env-brief.php is missing $key");
+        reply(['ok' => false, 'error' => 'Something broke on my end. Email hello@sgualda.com directly.'], 500);
+    }
+}
+
 $data = json_decode(file_get_contents('php://input') ?: '', true);
 if (!is_array($data)) {
     reply(['ok' => false, 'error' => 'Malformed request.'], 400);
@@ -114,8 +134,17 @@ $body = '<h2>' . $esc($name) . ' sent a brief</h2>'
     . $specifics
     . '<hr><p style="color:#888;font-size:12px">IP ' . $esc($ip) . ' · ' . gmdate('c') . '</p>';
 
-/** Returns true on success. */
-function send(array $cfg, string $to, string $subject, string $html, ?string $replyTo = null): bool {
+/**
+ * Returns true on success.
+ *
+ * $bcc is opt-in per call rather than applied to every send. The brief that
+ * comes to me gets a blind copy to a second address, so a mailbox problem on
+ * one of them cannot lose an enquiry. The confirmation that goes back to the
+ * sender must never carry it: that would copy a stranger's own words to an
+ * address they never wrote to, and a bcc is invisible to exactly the person
+ * who would want to know.
+ */
+function send(array $cfg, string $to, string $subject, string $html, ?string $replyTo = null, bool $bcc = false): bool {
     $payload = [
         'from'    => 'Sergio Gualda <' . $cfg['MAIL_FROM'] . '>',
         'to'      => [$to],
@@ -124,6 +153,9 @@ function send(array $cfg, string $to, string $subject, string $html, ?string $re
     ];
     if ($replyTo !== null) {
         $payload['reply_to'] = $replyTo;
+    }
+    if ($bcc && !empty($cfg['MAIL_BCC'])) {
+        $payload['bcc'] = [$cfg['MAIL_BCC']];
     }
 
     $ch = curl_init('https://api.resend.com/emails');
@@ -149,7 +181,7 @@ function send(array $cfg, string $to, string $subject, string $html, ?string $re
 }
 
 // If the brief itself cannot be delivered, the sender must know.
-if (!send($cfg, $cfg['MAIL_TO'], "Brief — $name", $body, $email)) {
+if (!send($cfg, $cfg['MAIL_TO'], "Brief — $name", $body, $email, true)) {
     reply(['ok' => false, 'error' => 'Something broke on my end. Email hello@sgualda.com directly.'], 502);
 }
 
