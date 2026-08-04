@@ -22,7 +22,11 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['iPhone 13'] } },
   ],
   webServer: {
-    command: 'npx http-server dist -p 4321 --silent',
+    // Not a plain static server: this one attaches the same headers the real
+    // server will, read out of the generated .htaccess. Without it the CSP is
+    // absent in tests and present in production, which is where the four
+    // blocked inline scripts hid.
+    command: 'node scripts/serve-dist.mjs',
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

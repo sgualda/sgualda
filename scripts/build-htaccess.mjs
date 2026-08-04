@@ -6,6 +6,7 @@
  * syntaxes, is how they drift apart.
  */
 import { readFileSync, writeFileSync, readdirSync, unlinkSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -38,6 +39,33 @@ const sweep = (dir) => {
 };
 sweep(dist);
 if (swept) console.log(`  · swept ${swept} iCloud conflict copies from dist/`);
+
+/**
+ * SHA-256 hashes for every inline script the build emits.
+ *
+ * The CSP says `script-src 'self'`, which blocks inline scripts outright. That
+ * is invisible in development, where no CSP header is sent, and total in
+ * production: the mobile menu never opens, the theme is never restored from
+ * storage, and the error logger never loads. It was only found by serving the
+ * built site with the real header attached.
+ *
+ * Hashes rather than 'unsafe-inline': allowing any inline script would defeat
+ * the point of having a CSP at all. Each hash covers exactly the bytes between
+ * the tags, so a changed script fails closed rather than silently running.
+ */
+const inlineHashes = new Set();
+const walk = (dir) => {
+  for (const f of readdirSync(dir, { recursive: true })) {
+    if (typeof f !== 'string' || !f.endsWith('.html')) continue;
+    const html = readFileSync(join(dir, f), 'utf8');
+    for (const m of html.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g)) {
+      if (/type=["']application\/ld\+json["']/.test(m[1])) continue; // data, not code
+      inlineHashes.add(`'sha256-${createHash('sha256').update(m[2], 'utf8').digest('base64')}'`);
+    }
+  }
+};
+walk(dist);
+console.log(`  · ${inlineHashes.size} inline scripts hashed into the CSP`);
 
 const rules = readFileSync(join(root, 'public/_redirects'), 'utf8')
   .split('\n')
@@ -72,7 +100,7 @@ ErrorDocument 404 /404.html
 # ── security headers ──
 <IfModule mod_headers.c>
   # No third-party origins at all: fonts are served from this domain.
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self' https://sgualda.substack.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' ${[...inlineHashes].join(' ')}; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self' https://sgualda.substack.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
   Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"

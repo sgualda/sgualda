@@ -27,8 +27,12 @@
 # one means restoring its line above.
 /product-discovery-make-or-break-idea/  /writing/  301
 /intuitive-design-new-standard/  /writing/  301
-/ux-certification-worth-it/  /writing/  301
-/learning-to-let-go-an-idea/  /writing/  301
+# These two were pointed at the index while they were still drafts. They are
+# published now, and sending a URL that ranked for "is a UX certification worth
+# it" to a generic list instead of the essay on exactly that question throws
+# away the only thing the old URL was worth.
+/ux-certification-worth-it/  /writing/ux-certification-worth-it/  301
+/learning-to-let-go-an-idea/  /writing/learning-to-let-go-an-idea/  301
 /product-design-challenges/  /writing/  301
 /nps-outdated-user-experience/  /writing/  301
 /getting-things-done-transformed-my-life/  /writing/  301
@@ -48,3 +52,7 @@
 /writing/topic/measurement/  /writing/    301
 /writing/topic/process/      /writing/    301
 /writing/topic/scope/        /writing/    301
+
+# WordPress's default category archive. Empty, indexed, and Spanish on an
+# English site. Nothing to preserve, but it must not 404 on cutover.
+/category/sin-categoria/  /writing/  301

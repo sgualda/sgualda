@@ -710,3 +710,28 @@ test('one label for the primary action, everywhere', async ({ page }) => {
   }
   expect([...labels]).toEqual(['Hire me']);
 });
+
+test('no page violates its own Content Security Policy', async ({ page }) => {
+  // The server under test sends the real CSP, so a blocked inline script shows
+  // up as a console error here rather than on production. Four of them did:
+  // the theme restore, the error logger, the mobile menu and the theme toggle.
+  const violations: string[] = [];
+  page.on('console', (m) => {
+    if (m.type() === 'error' && /Content Security Policy/i.test(m.text())) violations.push(m.text());
+  });
+  for (const url of ['/', '/tools/', '/work-with-me/', '/work-with-me/brief/', '/glossary/', '/community/']) {
+    await page.goto(url, { waitUntil: 'networkidle' });
+  }
+  expect(violations).toEqual([]);
+});
+
+test('the mobile menu opens under the production CSP', async ({ page }) => {
+  // The single most user-visible consequence of the blocked scripts: on a
+  // phone, with no CSP in tests and a CSP in production, navigation simply
+  // did not work and nothing said so.
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto('/');
+  await page.click('.burger');
+  await expect(page.locator('.sheet')).toBeVisible();
+  await expect(page.locator('.sheet-links a').first()).toBeVisible();
+});
