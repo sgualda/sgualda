@@ -39,3 +39,6 @@ incoming/*
 # node_modules deliberately NOT done this way: Playwright transpiles anything
 # outside a literal node_modules/ path, which breaks axe-core.
 *.nosync
+
+# Deploy credentials. Never committed.
+.deploy/

@@ -25,11 +25,31 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     reply(['ok' => false, 'error' => 'Method not allowed.'], 405);
 }
 
-$configPath = __DIR__ . '/../../.env-brief.php';
-if (!is_file($configPath)) {
-    error_log('brief: missing .env-brief.php');
+/**
+ * The config, and proof that it is where it is supposed to be.
+ *
+ * `../../` from public_html/api/ lands one level above the web root, which is
+ * the whole point: the Resend key must never be fetchable over HTTP. But that
+ * is only true if the file was actually put there. Copy it into public_html by
+ * mistake — the single easiest deployment error to make — and the key is one
+ * GET away, silently, with the form still working perfectly.
+ *
+ * So the location is verified rather than assumed. If the config resolves to
+ * anywhere inside the document root, this refuses to run and says why in the
+ * log. A loud failure beats a working form leaking an API key.
+ */
+$configPath = realpath(__DIR__ . '/../../.env-brief.php');
+if ($configPath === false) {
+    error_log('brief: .env-brief.php not found — it belongs one level ABOVE public_html');
     reply(['ok' => false, 'error' => 'Something broke on my end. Email hello@sgualda.com directly.'], 500);
 }
+
+$docRoot = realpath($_SERVER['DOCUMENT_ROOT'] ?? '');
+if ($docRoot !== false && str_starts_with($configPath, $docRoot . DIRECTORY_SEPARATOR)) {
+    error_log("brief: REFUSING TO RUN — .env-brief.php is inside the web root at $configPath");
+    reply(['ok' => false, 'error' => 'Something broke on my end. Email hello@sgualda.com directly.'], 500);
+}
+
 $cfg = require $configPath;
 
 $data = json_decode(file_get_contents('php://input') ?: '', true);
