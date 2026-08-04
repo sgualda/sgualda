@@ -14,6 +14,7 @@
  * Runs after `astro build`.
  */
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -48,16 +49,96 @@ const now = readFileSync(join(root, 'src/pages/now/index.astro'), 'utf8')
   .match(/UPDATED = new Date\('(\d{4}-\d{2}-\d{2})'\)/)?.[1];
 if (now) dates.set('/now/', new Date(`${now}T00:00:00Z`).toISOString());
 
+/**
+ * For every other page: the date of the last commit that touched its source.
+ *
+ * The 22 URLs without frontmatter — the hubs, /about/, /tools/*, /map/* — kept
+ * whatever the sitemap integration wrote, which is the build instant with
+ * milliseconds. Two builds three seconds apart produced two different sitemaps,
+ * and every one of those URLs claimed to have changed both times.
+ *
+ * That is worse than it sounds. Google's documented behaviour is to stop
+ * trusting `lastmod` across the whole site once it finds the value unreliable,
+ * so 22 lying URLs were devaluing the 14 honest ones. Git already knows when
+ * each page really changed, and it is the same answer a human would give.
+ */
+const gitDate = (rel) => {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', rel], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return out ? new Date(out).toISOString() : null;
+  } catch {
+    return null; // Sin git, o fichero sin historial.
+  }
+};
+
+/** `/tools/x/` → the page or content file that produces it. */
+const sourceFor = (path) => {
+  const clean = path.replace(/^\/|\/$/g, '');
+  return [
+    `src/pages/${clean || 'index'}/index.astro`,
+    `src/pages/${clean || 'index'}.astro`,
+    `src/content/tools/${clean.replace('tools/', '')}.yaml`,
+    // /map/ is served from the "stages" collection, not a "map" one. Naming
+    // the wrong folder here is silent: the file simply is not found and the
+    // URL loses its date, which is how the five stage pages ended up without
+    // one on the first run.
+    `src/content/stages/${clean.replace('map/', '')}.yaml`,
+    `src/content/stages/${clean.replace('map/', '')}.md`,
+  ].find((p) => existsSync(join(root, p)));
+};
+
 let xml = readFileSync(file, 'utf8');
 let patched = 0;
+let fromGit = 0;
+let dropped = 0;
 xml = xml.replace(/<url>([\s\S]*?)<\/url>/g, (block) => {
   const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1] ?? '';
   const path = loc.replace(/^https?:\/\/[^/]+/, '');
-  const d = dates.get(path);
-  if (!d) return block;
-  patched++;
+
+  let d = dates.get(path);
+  if (d) {
+    patched++;
+  } else {
+    const src = sourceFor(path);
+    d = src ? gitDate(src) : null;
+    if (d) fromGit++;
+  }
+
+  // No date we can stand behind: drop the element rather than invent one.
+  // An absent lastmod costs nothing; a wrong one costs the whole file's
+  // credibility.
+  if (!d) {
+    dropped++;
+    return block.replace(/\s*<lastmod>[^<]*<\/lastmod>/, '');
+  }
   return block.replace(/<lastmod>[^<]*<\/lastmod>/, `<lastmod>${d}</lastmod>`);
 });
 
 writeFileSync(file, xml);
-console.log(`  ✓ sitemap: ${patched} real content dates, ${dates.size} known`);
+
+/**
+ * sitemap-index.xml carries its own build-time lastmod, with the same problem.
+ * It becomes the newest date in the sitemap it points at, which is what the
+ * field is supposed to mean.
+ */
+const indexFile = join(root, 'dist', 'sitemap-index.xml');
+if (existsSync(indexFile)) {
+  const newest = [...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)]
+    .map((m) => m[1])
+    .sort()
+    .pop();
+  if (newest) {
+    writeFileSync(
+      indexFile,
+      readFileSync(indexFile, 'utf8').replace(/<lastmod>[^<]*<\/lastmod>/, `<lastmod>${newest}</lastmod>`)
+    );
+  }
+}
+
+console.log(
+  `  ✓ sitemap: ${patched} from frontmatter, ${fromGit} from git history, ${dropped} without a date`
+);

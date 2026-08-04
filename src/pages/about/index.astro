@@ -8,6 +8,20 @@ import { Image } from 'astro:assets';
 import portrait from '../../assets/portrait.jpg';
 
 /**
+ * When this page last actually changed. Bump it when you edit the copy.
+ *
+ * It used to be `new Date()`, which meant the ProfilePage schema carried the
+ * build timestamp to the millisecond: every build told Google the author page
+ * had just been modified, whether or not a word had changed. That is the exact
+ * pattern search engines treat as date manipulation, and it also made the build
+ * non-deterministic — two builds of identical source produced different bytes,
+ * so there was no way to look at a deploy and know what had really changed.
+ *
+ * Same constant pattern as /privacy/, /legal/ and /now/.
+ */
+const UPDATED = new Date('2026-08-04');
+
+/**
  * /about/ — matches the Figma frame "About".
  *
  * Note this page is LEFT-aligned, unlike the Home. That is deliberate in the
@@ -65,7 +79,7 @@ const notFor = [
       // documents for exactly that. AboutPage describes an organisation.
       '@type': 'ProfilePage',
       name: 'About Sergio Gualda',
-      dateModified: new Date().toISOString(),
+      dateModified: UPDATED.toISOString(),
       mainEntity: { '@id': `${SITE.url}/#person` },
     },
   ]}

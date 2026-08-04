@@ -1,126 +1,111 @@
 #!/usr/bin/env python3
-"""Sube dist/ a la raiz web sobre una unica sesion FTPS. No borra nada."""
-import os, ssl, sys, time
-from ftplib import FTP_TLS, all_errors
+"""Publica dist/ en sgualda.com por SSH.
 
+    python3 scripts/deploy.py            # despliega
+    python3 scripts/deploy.py --dry-run  # solo dice que haria
+
+No hay contraseña en ninguna parte. La conexion usa el alias `sgualda-deploy`
+de ~/.ssh/config, que apunta a una clave privada que no sale de este ordenador.
+Sustituye a una version anterior que abria FTPS con la contraseña guardada en
+texto plano en .deploy/credentials.
+
+Y solo viaja lo que ha cambiado. La version FTP subia los 175 ficheros en cada
+despliegue, tardaba 3:20 y no borraba nunca nada; rsync compara antes de enviar.
+"""
+import os
+import subprocess
+import sys
+import time
+
+HOST = 'sgualda-deploy'
+
+# Ruta absoluta de verdad. Por FTP era /domains/sgualda.com/public_html porque
+# el servidor encerraba la sesion dentro de la carpeta del usuario; por SSH se
+# ve el sistema de ficheros entero y esa ruta no existe. Importa que sea exacta:
+# la cuenta aloja otros cuatro dominios (ecoco.es, glintale.com, uxerfy.com,
+# uxerhub.com) y este script borra.
+ROOT = 'domains/sgualda.com/public_html'
 HERE = os.path.dirname(os.path.abspath(__file__))
-cred = {}
-for line in open(os.path.join(HERE, '..', '.deploy', 'credentials')):
-    line = line.strip()
-    if '=' in line and not line.startswith('#'):
-        k, v = line.split('=', 1)
-        cred[k.strip()] = v.strip().strip('"\'')
-
-HOST = cred['HOST'].replace('ftp://', '')
-ROOT = '/domains/sgualda.com/public_html'
 DIST = os.path.join(HERE, '..', 'dist')
 
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
+# .well-known guarda la validacion del certificado SSL y no lo genera ningun
+# build, asi que para rsync es un fichero que sobra. Sin esta exclusion,
+# --delete lo borraria y la renovacion del certificado fallaria en silencio
+# semanas despues, cuando ya nadie relacione una cosa con la otra.
+KEEP = ['.well-known']
 
-def connect():
-    f = FTP_TLS(context=ctx, timeout=60)
-    f.connect(HOST, int(cred.get('PORT', 21)))
-    f.login(cred['USER'], cred['PASS'])
-    f.prot_p()          # cifra tambien el canal de datos
-    f.set_pasv(True)
-    return f
+DRY = '--dry-run' in sys.argv
 
-files = []
-for dirpath, _, names in os.walk(DIST, followlinks=True):
-    for n in names:
-        p = os.path.join(dirpath, n)
-        files.append((p, os.path.relpath(p, DIST)))
-files.sort(key=lambda t: t[1])
-# El .htaccess va el ultimo: es el interruptor entre WordPress y el sitio nuevo.
-files.sort(key=lambda t: t[1] == '.htaccess')
 
-made = set()
-def ensure(ftp, d):
-    if d in ('', '.') or d in made:
-        return
-    ensure(ftp, os.path.dirname(d))
-    try:
-        ftp.mkd(f'{ROOT}/{d}')
-    except all_errors:
-        pass                        # ya existe
-    made.add(d)
+def run(cmd, **kw):
+    return subprocess.run(cmd, capture_output=True, text=True, **kw)
 
-ftp = connect()
-ok = fail = 0
-bad = []
-for local, rel in files:
-    remote = f'{ROOT}/{rel}'
-    for attempt in (1, 2, 3):
-        try:
-            ensure(ftp, os.path.dirname(rel))
-            with open(local, 'rb') as fh:
-                ftp.storbinary(f'STOR {remote}', fh, blocksize=65536)
-            ok += 1
-            print(f'\r  subidos {ok}/{len(files)}  {rel[:58]:<58}', end='', flush=True)
-            break
-        except all_errors as e:
-            if attempt == 3:
-                fail += 1; bad.append((rel, str(e)[:70]))
-                print(f'\n  x {rel}: {str(e)[:70]}')
-            else:
-                time.sleep(2 * attempt)
-                try: ftp.quit()
-                except all_errors: pass
-                try: ftp = connect(); made.clear()
-                except all_errors: time.sleep(5); ftp = connect(); made.clear()
-print()
 
-# Ficheros que sobran en el servidor.
+if not os.path.isdir(DIST):
+    sys.exit('  No hay dist/. Ejecuta antes: npm run build')
+
+local = set()
+for r, _, fs in os.walk(DIST, followlinks=True):
+    for n in fs:
+        local.add(os.path.relpath(os.path.join(r, n), DIST))
+
+# Freno de mano. Sin esto, un build a medias le daria permiso a --delete para
+# vaciar el sitio en produccion. Un build sano trae ~175 ficheros.
+if len(local) < 100:
+    sys.exit(f'  Solo {len(local)} ficheros en dist/. Un build sano trae ~175.\n'
+             '  Abortado antes de tocar nada: --delete vaciaria el sitio.')
+
+print(f'  build: {len(local)} ficheros')
+
+# La lista de borrados se calcula aqui en lugar de leerla de rsync.
 #
-# Subir nunca borra, asi que el servidor solo crece. Los nombres en _astro
-# llevan hash del contenido: cada cambio en el CSS deja el fichero viejo ahi
-# para siempre. Pero el caso que de verdad importa es otro — borrar un articulo
-# deja su pagina publicada y indexada indefinidamente, diciendo algo que ya
-# decidiste no decir.
-#
-# Asi que el servidor refleja el build, con dos frenos:
-#
-#  KEEP  .well-known guarda la validacion del certificado SSL y no lo genera
-#        ningun build. Borrarlo rompe la renovacion, en silencio, semanas
-#        despues. Tambien se conserva cualquier cosa que empiece por punto.
-#
-#  El limite de abajo: si el build salio a medias, esta funcion tendria
-#        permiso para vaciar el sitio entero. Un build sano trae ~175 ficheros;
-#        por debajo de 100 algo ha ido mal y no se borra nada.
-KEEP_TOP = {'.well-known'}
+# El rsync de macOS es openrsync, y su --dry-run no imprime absolutamente nada
+# sobre lo que va a borrar: comprobado en un directorio de prueba, donde borro
+# lo que sobraba sin haberlo anunciado en la simulacion. El borrado en si es
+# correcto y respeta --exclude. Lo que no se puede es revisarlo antes, que es
+# justo lo que uno quiere de una simulacion, asi que se pregunta al servidor.
+find = ' -o '.join(f"-name {k!r} -prune" for k in KEEP)
+res = run(['ssh', '-o', 'BatchMode=yes', HOST,
+           f"cd {ROOT} && find . \\( {find} \\) -o -type f -print"])
+if res.returncode != 0:
+    sys.exit(f'  No se pudo listar el servidor:\n{res.stderr.strip()}')
 
-pruned = 0
-if len(files) < 100:
-    print(f'  ! solo {len(files)} ficheros en el build: no se limpia nada por precaucion')
+remote = {l[2:] for l in res.stdout.split('\n') if l.startswith('./')}
+stale = sorted(remote - local)
+
+print(f'  servidor: {len(remote)} ficheros')
+if stale:
+    print(f'  se borraran {len(stale)}:')
+    for s in stale:
+        print(f'      {s}')
 else:
-    have = {rel.replace(os.sep, '/') for _, rel in files}
-    stale = []
+    print('  nada que borrar')
+print(f'  se conserva sin tocar: {", ".join(KEEP)}')
 
-    def scan(path, rel=''):
-        for name, facts in ftp.mlsd(path):
-            if name in ('.', '..') or name in KEEP_TOP or name.startswith('.'):
-                continue
-            r = f'{rel}{name}'
-            if facts.get('type') == 'dir':
-                scan(f'{path}/{name}', f'{r}/')
-            elif r not in have:
-                stale.append(r)
+if DRY:
+    print('\n  SIMULACRO. No se ha enviado nada.')
+    sys.exit(0)
 
-    try:
-        scan(ROOT)
-        for r in stale:
-            ftp.delete(f'{ROOT}/{r}')
-            pruned += 1
-            print(f'  sobrante borrado  {r}')
-    except all_errors as e:
-        print(f'  ! no se pudo limpiar: {str(e)[:60]}')
+t0 = time.time()
+# -c compara por contenido, no por fecha y tamaño.
+#
+# Astro reescribe los 175 ficheros en cada build, asi que todos cambian de fecha
+# aunque su contenido sea identico: con la comparacion por defecto, cada
+# despliegue reenviaba el sitio entero y "solo viaja lo que ha cambiado" era
+# falso. Con -c, un rebuild completo sin cambios reales envia 4 ficheros.
+# Calcular los hashes de 5 MB cuesta menos que subirlos.
+cmd = [
+    'rsync', '-azc', '--delete', '--stats',
+    *[f'--exclude={k}' for k in KEEP],
+    '-e', 'ssh -o BatchMode=yes',
+    DIST.rstrip('/') + '/', f'{HOST}:{ROOT}/',
+]
+res = run(cmd)
+if res.returncode != 0:
+    print(res.stdout)
+    sys.exit(f'  rsync fallo ({res.returncode}):\n{res.stderr.strip()}')
 
-try: ftp.quit()
-except all_errors: pass
-
-print(f'\n  ok={ok}  fallos={fail}  total={len(files)}  sobrantes borrados={pruned}')
-for rel, e in bad:
-    print(f'    {rel}  <-  {e}')
-sys.exit(1 if fail else 0)
+sent = [l for l in res.stdout.split('\n') if 'sent' in l or 'Number of' in l]
+for l in sent:
+    print(f'  {l.strip()}')
+print(f'\n  desplegado en {time.time() - t0:.1f}s')

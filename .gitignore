@@ -40,8 +40,7 @@ incoming/*
 # outside a literal node_modules/ path, which breaks axe-core.
 *.nosync
 
-# The FTP password, and nothing else. The deploy scripts themselves live in
-# scripts/ and are versioned — they are how the site ships, so losing them
-# to a gitignore on the directory that happened to hold the secret is not a
-# trade worth making.
-.deploy/credentials
+# Deploying needs no secret in the repository any more. It authenticates with
+# an SSH key in ~/.ssh, via the `sgualda-deploy` alias in ~/.ssh/config, and
+# the key never leaves this machine. The old .deploy/credentials held the FTP
+# password in plain text; it is gone.
