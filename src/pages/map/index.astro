@@ -7,7 +7,7 @@ import { getStages } from '@lib/content';
 
 const STAGES = await getStages();
 
-/** /map/ — the Figma frame "Map", with the route made interactive. */
+/** /map/, the Figma frame "Map", with the route made interactive. */
 
 /**
  * A smooth path through the five stages, not five straight segments.
@@ -232,13 +232,13 @@ const routeD = smooth(STAGES);
   .label { display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .name {
     font-family: var(--font-display);
-    font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.03em;
-    line-height: 1.25; text-align: center;
+    font-size: 0.9375rem; font-weight: 600; letter-spacing: var(--ls-heading);
+    line-height: var(--lh-tight); text-align: center;
     transition: color 0.3s var(--ease);
   }
   /* The description is hidden until you reach for the node. */
   .peek {
-    font-size: 0.75rem; line-height: 1.4; letter-spacing: 0; color: var(--dim);
+    font-size: 0.75rem; line-height: var(--lh-tight); letter-spacing: 0; color: var(--dim);
     text-align: center;
     max-height: 0; opacity: 0; overflow: hidden;
     transition: max-height 0.42s var(--ease), opacity 0.32s var(--ease);
@@ -363,7 +363,7 @@ const routeD = smooth(STAGES);
   }
   .idx {
     font-family: var(--font-display); font-size: 1.375rem; font-weight: 600;
-    letter-spacing: -0.04em; color: var(--dim); line-height: 1.1;
+    letter-spacing: 0em; color: var(--dim); line-height: var(--lh-display);
   }
   .idx em {
     display: block; font-family: var(--font-body); font-style: normal;
@@ -371,9 +371,9 @@ const routeD = smooth(STAGES);
   }
   .text .h {
     display: block; font-family: var(--font-display); font-size: 1.0625rem;
-    font-weight: 600; letter-spacing: -0.03em; margin-bottom: 6px;
+    font-weight: 600; letter-spacing: var(--ls-heading); margin-bottom: 6px;
   }
-  .text .p { font-size: 1rem; line-height: 1.55; letter-spacing: 0; color: var(--dim); }
+  .text .p { font-size: 1rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
   .chev { color: var(--dim); transition: transform 0.28s var(--ease), color 0.28s var(--ease); }
   .stages a:hover .chev { transform: translateX(5px); color: var(--ink); }
   .stages a:hover .idx { color: var(--ink); }

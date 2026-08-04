@@ -4,12 +4,12 @@ import { SITE } from '@lib/site';
 import '@styles/quiz.css';
 
 /**
- * /work-with-me/brief/ — the brief, on its own page.
+ * /work-with-me/brief/, the brief, on its own page.
  *
  * It used to sit at the bottom of /work-with-me/, under the qualifier, the
  * "do not hire me if" list and the FAQ. Anybody who reached it had already
  * scrolled past two decision points, and anybody who had not qualified could
- * fill it in anyway — which is a form that wastes both people's time.
+ * fill it in anyway, which is a form that wastes both people's time.
  *
  * Now it is only reachable from a positive verdict, and it gets a page with
  * nothing else on it. `?kind=` carries the recommendation across so step 1
@@ -29,7 +29,7 @@ const STEPS = ['What kind of help', 'The product', 'What is blocked', 'Specifics
 
 <Base
   title="Send a brief"
-  description="Five short steps. I read every brief myself and reply within a day with what fits, what it would involve and what it costs — or that none of it fits."
+  description="Five short steps. I read every brief myself and reply within a day with what fits, what it would involve and what it costs, or that none of it fits."
   noindex
   bare
 >
@@ -166,7 +166,7 @@ const STEPS = ['What kind of help', 'The product', 'What is blocked', 'Specifics
   .stepper .lab {
     font-size: 0.6875rem;
     letter-spacing: 0.02em;
-    line-height: 1.25;
+    line-height: var(--lh-tight);
     text-align: center;
     color: var(--dim);
     transition: color 0.32s var(--ease);
@@ -205,7 +205,7 @@ const STEPS = ['What kind of help', 'The product', 'What is blocked', 'Specifics
 
   /**
    * The qualifier's verdict, handed over in the URL. Read once: if somebody
-   * arrives without it — from a bookmark, or by ignoring the qualifier — the
+   * arrives without it, from a bookmark, or by ignoring the qualifier, the
    * form still works, it just starts on "I do not know".
    */
   const params = new URLSearchParams(location.search);
@@ -222,7 +222,7 @@ const STEPS = ['What kind of help', 'The product', 'What is blocked', 'Specifics
   let step = 0;
 
   /**
-   * Answers survive going back a step — and now also survive closing the tab.
+   * Answers survive going back a step, and now also survive closing the tab.
    * sessionStorage rather than localStorage: it dies with the tab, so a shared
    * or public machine does not keep somebody's half-written brief around.
    */
@@ -300,7 +300,7 @@ const STEPS = ['What kind of help', 'The product', 'What is blocked', 'Specifics
         (recName ? `<p class="tag">Based on your answers: ${recName}</p>` : '') +
         `<h2 class="qq" data-quiz-head tabindex="-1">Tell me what is going on.</h2>` +
         `<p class="intro">Five short steps, about three minutes. I read every one myself and ` +
-        `reply within a day with what fits, what it would involve and what it costs — or that ` +
+        `reply within a day with what fits, what it would involve and what it costs, or that ` +
         `none of it fits.</p>` +
         `<p class="intro">Nothing is sent until the last step, and you can close this at any ` +
         `point.</p>` +
@@ -448,7 +448,7 @@ const STEPS = ['What kind of help', 'The product', 'What is blocked', 'Specifics
       showError(
         err instanceof Error && err.message
           ? err.message
-          : 'Could not send — check your connection, or email hello@sgualda.com instead.'
+          : 'Could not send, check your connection, or email hello@sgualda.com instead.'
       );
     }
   }

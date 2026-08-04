@@ -35,23 +35,23 @@ export const Q: Question[] = [{k:'sit',q:'Where are you right now?',o:[
 
 /** The seven possible outcomes. */
 export const OUT: Record<string, any> = {session:{lab:'My recommendation',name:'A working session',meta:'Ninety minutes · usually within a week',kind:'session',
- why:'<p>You have a specific fork, and what you need is not more analysis. It’s somebody to think it through properly with you and then <strong>commit to an answer</strong> — which is the part groups find hardest, because committing means somebody has to be wrong later.</p>'+
+ why:'<p>You have a specific fork, and what you need is not more analysis. It’s somebody to think it through properly with you and then <strong>commit to an answer</strong>, which is the part groups find hardest, because committing means somebody has to be wrong later.</p>'+
      '<p>Ninety minutes, no preparation from you. I read whatever context you send beforehand so we do not spend the first twenty minutes on background.</p>',
- get:['A decision, committed to — not a list of considerations','A written record of every option ruled out and why, within 48 hours','The reasoning in a form your team can argue with','Usually more useful internally than the decision itself'],
+ get:['A decision, committed to, not a list of considerations','A written record of every option ruled out and why, within 48 hours','The reasoning in a form your team can argue with','Usually more useful internally than the decision itself'],
  not:['A design deliverable','A research project'],
  note:'This is the smallest thing I do, and the one I would suggest first if you have never worked with me.'},
 
 review:{lab:'My recommendation',name:'A product review',meta:'Five days · two per quarter',kind:'review',
- why:'<p>Something is wrong, three people have three theories, and none of them has evidence. That’s exactly the situation this exists for — and the reason it takes five days rather than an afternoon is that <strong>the diagnosis is the expensive part</strong>, not the fix.</p>'+
+ why:'<p>Something is wrong, three people have three theories, and none of them has evidence. That’s exactly the situation this exists for, and the reason it takes five days rather than an afternoon is that <strong>the diagnosis is the expensive part</strong>, not the fix.</p>'+
      '<p>The reasons a product goes quiet look identical from the inside, and most of the fixes make the others worse. I have picked wrong twice, at a cost of two months and then a whole quarter.</p>',
- get:['Product, flows, existing research and numbers reviewed together','Up to nine conversations with your actual users','A ranked document — five things, in order, with the reasoning','A session where your team pulls it apart','Two follow-up calls, at two weeks and six weeks'],
+ get:['Product, flows, existing research and numbers reviewed together','Up to nine conversations with your actual users','A ranked document, five things, in order, with the reasoning','A session where your team pulls it apart','Two follow-up calls, at two weeks and six weeks'],
  not:['A list of sixty improvements','A redesign'],
  note:'The nine user conversations are not optional. Without them this is a well-argued guess.'},
 
 critique:{lab:'My recommendation',name:'A written critique',meta:'Three to five days · fully async',kind:'critique',
  why:'<p>You have made something and you want an honest read before your users give you one for free. This is the least disruptive thing I do — no meetings required and no access to your team.</p>'+
      '<p>I go through it the way a new user would, then the way somebody who has shipped this kind of thing would, and write down where those two disagree. <strong>That gap is where most of the problems live.</strong></p>',
- get:['A written critique of the flows, states and copy — not just the visuals','What breaks at the edges: empty, error, slow, and the account with 4,000 rows','What I would cut, and what I would not touch','A prioritised list, because thirty problems with no order is not useful','An optional call to argue with it'],
+ get:['A written critique of the flows, states and copy, not just the visuals','What breaks at the edges: empty, error, slow, and the account with 4,000 rows','What I would cut, and what I would not touch','A prioritised list, because thirty problems with no order is not useful','An optional call to argue with it'],
  not:['A redesign','A rubber stamp'],
  note:'The fastest way to find out whether the way I think is useful to you.'},
 
@@ -69,16 +69,16 @@ capacity:{lab:'Straight answer',name:'You may need a hire, not me',meta:'But the
  not:['Ongoing design capacity','A recruiter'],
  note:'Send the brief anyway. I would rather point you at the right thing than sell you the wrong one.'},
 
-nope:{lab:'Straight answer',name:'Not me — and I would be a worse choice',meta:'Genuinely',kind:'nope',
+nope:{lab:'Straight answer',name:'Not me, and I would be a worse choice',meta:'Genuinely',kind:'nope',
  why:'<p>The thinking is done and you need it built. That work is better done by a designer you hire directly: cheaper than me, faster than me, and much closer to the product than I can be from outside.</p>'+
-     '<p>I’m not being modest. Paying an outside product designer to execute an agreed plan is paying a premium for friction, because I’ll keep asking why — and you have already answered that.</p>',
+     '<p>I’m not being modest. Paying an outside product designer to execute an agreed plan is paying a premium for friction, because I’ll keep asking why, and you have already answered that.</p>',
  get:['A recommendation, if you want one. I know good people','Nothing else, honestly'],
  not:['A billable engagement'],
  note:'Write anyway if you want a name. It costs you nothing and it’s the useful thing I can do here.'},
 
 notyet:{lab:'Honestly',name:'Not yet',meta:'Come back when something breaks',kind:'unsure',
  why:'<p>No mandate, no date, or nothing urgent. Paying me now would be a poor use of your money and of a slot somebody else needs more.</p>'+
-     '<p>You will get most of the value from what is already free here — and if you come back in a month still stuck, <strong>you will know exactly what to brief me on</strong>, which makes the engagement half the length and twice as useful.</p>',
+     '<p>You will get most of the value from what is already free here, and if you come back in a month still stuck, <strong>you will know exactly what to brief me on</strong>, which makes the engagement half the length and twice as useful.</p>',
  get:['The guided conversation — it asks what is going wrong and tells you what I would look at','The writing, which is mostly what I got wrong and what it cost','A reply if you write anyway, because I answer everyone'],
  not:['A sales follow-up','A newsletter you did not ask for'],
  note:'This is roughly a third of what lands in my inbox, and all of it gets this same answer.'}
@@ -104,7 +104,7 @@ export const KIND: [string, string][] = [['session','A working session on one de
 export const SPECIFIC: Record<string, string[][]> = {session:[['s1','What is the decision?','textarea','State it as a question with two or more answers. “Do we build X or Y before the launch?”'],
           ['s2','What are the options on the table?','textarea','Including the ones you have ruled out, and why.'],
           ['s3','Is there a date this has to be settled by?','input','A conference, a board meeting, a sprint.']],
- review:[['s1','What are you seeing in the numbers?','textarea','Even roughly. Signups, activation, retention — and if you track nothing, say that.'],
+ review:[['s1','What are you seeing in the numbers?','textarea','Even roughly. Signups, activation, retention, and if you track nothing, say that.'],
          ['s2','What are the competing theories in your team?','textarea','List them. The disagreement is genuinely useful information.'],
          ['s3','Can I speak to up to nine of your users within a week?','select|Yes|Yes, but it needs arranging|No|We have no users yet','This one matters most.']],
  critique:[['s1','What should I look at?','textarea','Links, a staging URL, a Figma file, a TestFlight build. Whatever exists.'],
@@ -124,7 +124,7 @@ export const SPECIFIC: Record<string, string[][]> = {session:[['s1','What is the
 /** "Do not hire me if…" markup. */
 export const BLUNT_HTML = `<div class="b"><span class="x"><svg><use href="#xm"/></svg></span><div>
         <h3>You have already decided and you want it validated</h3>
-        <p>Then you do not want a product designer, you want an alibi — and a cheaper one exists. I’ll read your plan, agree with the parts that are right, and say the rest out loud in front of whoever is in the room. If that sounds unpleasant, it’ll be.</p></div></div>
+        <p>Then you do not want a product designer, you want an alibi, and a cheaper one exists. I’ll read your plan, agree with the parts that are right, and say the rest out loud in front of whoever is in the room. If that sounds unpleasant, it’ll be.</p></div></div>
       <div class="b"><span class="x"><svg><use href="#xm"/></svg></span><div>
         <h3>Nobody is allowed to talk to your users</h3>
         <p>Then you’re paying me to guess with a straight face. I’m very good at sounding certain, which is exactly why it would be the most expensive thing I could sell you. I’ll not do it.</p></div></div>
@@ -142,7 +142,7 @@ export const BLUNT_HTML = `<div class="b"><span class="x"><svg><use href="#xm"/>
         <p>Hourly billing pays me to be slow, and then we spend the whole thing quietly suspicious of each other. Fixed scope means we both want the same outcome: for this to be over, and correct.</p></div></div>
       <div class="b"><span class="x"><svg><use href="#xm"/></svg></span><div>
         <h3>You need it by Friday and today is Wednesday</h3>
-        <p>Whatever I produced in two days would be confident, tidy and probably wrong — and you would act on it, because it would look like an answer. That’s worse for you than having nothing.</p></div></div>`;
+        <p>Whatever I produced in two days would be confident, tidy and probably wrong, and you would act on it, because it would look like an answer. That’s worse for you than having nothing.</p></div></div>`;
 
 /** FAQ markup, mirrored by the FAQPage JSON-LD. */
 export const FAQ_HTML = `<details><summary>How does this actually work?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
@@ -150,7 +150,7 @@ export const FAQ_HTML = `<details><summary>How does this actually work?<span cla
       <p>You describe what is stuck. I read it and reply within a day with which kind of engagement fits, what it would involve and what it would cost. If none of them fit, I say that instead and point you somewhere more useful.</p></div></details>
     <details><summary>What is a product review, and what do I get at the end?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>Five days on the product, the flows, whatever research already exists and the numbers, plus up to nine conversations with your actual users.</p>
-      <p>What lands is a short ranked document: the five things that matter, in the order to do them, with the reasoning attached so your team can argue with it. Then a ninety-minute session where they do exactly that, and two follow-up calls at two and six weeks — because plans need adjusting once they meet reality, and handing over a PDF and disappearing is not a service.</p></div></details>
+      <p>What lands is a short ranked document: the five things that matter, in the order to do them, with the reasoning attached so your team can argue with it. Then a ninety-minute session where they do exactly that, and two follow-up calls at two and six weeks, because plans need adjusting once they meet reality, and handing over a PDF and disappearing is not a service.</p></div></details>
     <details><summary>How much does it cost?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>I’m not publishing prices at the moment. Send a brief and you will have a specific figure within a day, along with exactly what is included.</p>
       <p>What I can tell you now: scope and price are fixed before anything starts. No hourly billing, no open-ended engagements, and the number does not move depending on how well funded you look.</p></div></details>
@@ -161,7 +161,7 @@ export const FAQ_HTML = `<details><summary>How does this actually work?<span cla
       <p>Teams of roughly two to forty people building SaaS, mobile apps or internal tools.</p>
       <p>Above about a hundred people, or in enterprise and heavily regulated contexts, the bottleneck is almost always organisational rather than a design problem. I’ll tell you that in the first reply rather than take the money and find out together.</p></div></details>
     <details><summary>Can you just do the design work?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
-      <p>No, and not out of principle. Execution-only work is better done by somebody you hire full-time — cheaper, faster, and much closer to the product than I can be from outside.</p>
+      <p>No, and not out of principle. Execution-only work is better done by somebody you hire full-time, cheaper, faster, and much closer to the product than I can be from outside.</p>
       <p>What an outside product designer is useful for is deciding what to build and being able to say why. That only works if the plan can still change.</p></div></details>
     <details><summary>What if we do not know what we need?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>That’s the most common starting point and it’s a good one. Describe what is happening rather than what you think the solution is.</p>
@@ -175,7 +175,7 @@ export const FAQ_HTML = `<details><summary>How does this actually work?<span cla
       <p>Barcelona, CET. Almost everything is remote and works across Europe without friction.</p>
       <p>I use whatever your team already uses — I’m not going to make five people learn a new tool for a five-day engagement. For ongoing work I need access to the channels where decisions actually get made, not a new one created for me.</p></div></details>
 <details><summary>What happens after I send a brief?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
-      <p>You get a confirmation email straight away with a copy of what you wrote. Then I read it — every one, myself — and reply within a day with which kind of engagement fits, what it would involve and what it would cost. Or that none of it fits, which happens about a third of the time.</p>
+      <p>You get a confirmation email straight away with a copy of what you wrote. Then I read it, every one, myself, and reply within a day with which kind of engagement fits, what it would involve and what it would cost. Or that none of it fits, which happens about a third of the time.</p>
       <p>That reply is an email. There is no call to book, no calendar link and no sequence behind it. If you never reply, nothing else happens.</p></div></details>
 
 <details><summary>Am I committing to anything by sending one?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">

@@ -1,7 +1,7 @@
 ---
 title: 'glintale'
-description: 'A reading platform I had the idea for and designed. Organic traffic, people signing up and coming back — and one question still open: will any of them pay.'
-client: 'glintale — my own company'
+description: 'A reading platform I had the idea for and designed. Organic traffic, people signing up and coming back, and one question still open: will any of them pay.'
+client: 'glintale'
 role: 'Co-founder and product designer'
 year: '2026 — now'
 status: 'in-progress'
@@ -43,7 +43,7 @@ So the product is not organised around discovery. It’s organised around **resu
 
 What actually moved the numbers was slower and far less interesting: better chapter pacing, better covers, and cutting sign-up down to almost nothing. The gamification only started working **after** the reading was worth doing. It amplifies a habit. It cannot manufacture one.
 
-I also spent too long on the catalogue view — the screen I most enjoyed designing, and one of the least visited in the product. That’s not a coincidence, and I have started treating "this is the bit I want to work on" as a mild warning sign.
+I also spent too long on the catalogue view, the screen I most enjoyed designing, and one of the least visited in the product. That’s not a coincidence, and I have started treating "this is the bit I want to work on" as a mild warning sign.
 
 ## Where it is now
 

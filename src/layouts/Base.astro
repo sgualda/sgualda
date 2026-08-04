@@ -5,6 +5,7 @@ import '@styles/base.css';
 import { SITE, SOCIAL, EXPERTISE } from '@lib/site';
 import ErrorLog from '@components/ErrorLog.astro';
 import ThemeToggle from '@components/ThemeToggle.astro';
+import CookieBanner from '@components/CookieBanner.astro';
 
 interface Props {
   title: string;
@@ -97,7 +98,10 @@ const graph = [
     <meta property="og:locale" content="en_GB" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    {/* SVG first for browsers that take it, .ico as the fallback every RSS
+        reader, crawler and older client still asks for at /favicon.ico. */}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#ffffff" />
@@ -133,5 +137,6 @@ const graph = [
     <main id="main"><slot /></main>
     <slot name="footer" />
     {!bare && <ThemeToggle />}
+    {!bare && <CookieBanner />}
   </body>
 </html>

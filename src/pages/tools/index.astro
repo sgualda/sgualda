@@ -66,7 +66,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
     <h1>Free checks<br />on your product</h1>
     <p class="sub">
       Pick the one that matches what you’re stuck on. Each asks you a few multiple-choice
-      questions and gives you a straight answer — not a score, not a report you have to interpret.
+      questions and gives you a straight answer, not a score, not a report you have to interpret.
     </p>
   </section>
 
@@ -80,6 +80,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
         ))
       }
     </div>
+    <p class="fcount" id="filterCount" role="status" aria-live="polite"></p>
 
     <div class="cards">
       {
@@ -119,7 +120,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   /* Centred while they fit, scrolled once they do not. */
   .filters[data-start='true'][data-end='true'] { justify-content: center; }
   .chip {
-    font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500; letter-spacing: -0.01em;
+    font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500; letter-spacing: var(--ls-read);
     padding: 12px 18px; border-radius: var(--radius-pill);
     border: 1px solid var(--hair); background: transparent; color: var(--ink); cursor: pointer;
     transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
@@ -128,6 +129,26 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   .chip:hover { border-color: var(--ink); }
   .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
   .chip.on span { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+
+  .fcount {
+    margin-top: var(--space-4);
+    font-size: 0.6875rem;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    min-height: 1em;
+  }
+
+  /* 42ms between cards: enough to read as a sequence, short enough that six of
+     them finish inside a quarter of a second. */
+  .card.in { animation: card-in 0.42s var(--ease) both; animation-delay: calc(var(--d) * 42ms); }
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.985); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card.in { animation: none; }
+  }
 
   /* Two columns, as in the comp. */
   /* One card per row. */
@@ -148,7 +169,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   .card-link:hover .pills span { background: var(--surface); }
   .card h2 { font-size: 1.0625rem; margin-bottom: 10px; }
   .card .use {
-    font-size: 0.875rem; line-height: 1.55; letter-spacing: 0; color: var(--dim);
+    font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim);
     margin-bottom: 22px;
   }
 
@@ -162,6 +183,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   /* ── category filter ── */
   const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
   const cards = document.querySelectorAll<HTMLElement>('.card');
+  const count = document.getElementById('filterCount');
   chips.forEach((chip) =>
     chip.addEventListener('click', () => {
       const f = chip.dataset.filter;
@@ -170,9 +192,35 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
         c.classList.toggle('on', on);
         c.setAttribute('aria-pressed', String(on));
       });
+      /**
+       * The change of state, made obvious.
+       *
+       * Toggling `hidden` was instantaneous and therefore invisible: cards
+       * vanished and the ones below jumped up, and the eye read that as the
+       * page reflowing rather than as a filter being applied. Now the survivors
+       * re-enter with a short stagger, so the change is something you watch
+       * happen and can count.
+       *
+       * The stagger is capped at six steps. Beyond that the last card arrives
+       * late enough to feel like a slow page rather than a deliberate motion.
+       */
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let shown = 0;
       cards.forEach((card) => {
-        card.hidden = f !== 'all' && card.dataset.cat !== f;
+        const keep = f === 'all' || card.dataset.cat === f;
+        card.hidden = !keep;
+        if (!keep) return;
+        if (!reduced) {
+          card.style.setProperty('--d', String(Math.min(shown, 6)));
+          // Restart the animation: removing and re-adding in the same frame is
+          // a no-op, so the reflow read forces it.
+          card.classList.remove('in');
+          void card.offsetWidth;
+          card.classList.add('in');
+        }
+        shown++;
       });
+      if (count) count.textContent = shown === cards.length ? '' : `${shown} of ${cards.length}`;
     })
   );
 </script>

@@ -10,7 +10,7 @@ topics: ['discovery', 'scope']
 hook: 'I spent three weekends building something I never showed anybody. That is the tell, and it took me years to read it.'
 faqs:
   - q: 'How do you know when to abandon a product idea?'
-    a: 'When you notice you are working on the parts that were never at risk. Polishing the interface of something whose core assumption is untested is not craft, it is avoidance — and it is the most reliable signal I know, because it shows up weeks before the evidence does.'
+    a: 'When you notice you are working on the parts that were never at risk. Polishing the interface of something whose core assumption is untested is not craft, it is avoidance, and it is the most reliable signal I know, because it shows up weeks before the evidence does.'
   - q: 'Why is it so hard to let go of your own idea?'
     a: 'Because by the time you have built something, defending the idea and defending yourself have become the same act. The effort already spent is gone either way, but it does not feel gone, and every hour added makes stopping feel more wasteful rather than less.'
   - q: 'What is the sunk cost fallacy in product design?'
@@ -60,7 +60,7 @@ Not willpower. Three practical things, in the order they work.
 
 **Keep the thing small enough to bin.** This is the real function of a prototype, and it is not speed. It is that a two-day thing can be abandoned and a two-month thing cannot, so the size of what you build determines how honest you are able to be later. The [difference between a prototype and an MVP](/writing/mvp-vs-prototype/) is entirely about this.
 
-**Separate the idea from the belief underneath it.** Usually you are not attached to the feature, you are attached to a conviction about how people behave. The feature can go and the conviction can survive to be tested some other way, much more cheaply. This is the one that has actually rescued things for me — twice, an idea I binned came back two years later in a form that worked, because the belief under it was right and the first expression of it was not.
+**Separate the idea from the belief underneath it.** Usually you are not attached to the feature, you are attached to a conviction about how people behave. The feature can go and the conviction can survive to be tested some other way, much more cheaply. This is the one that has actually rescued things for me, twice, an idea I binned came back two years later in a form that worked, because the belief under it was right and the first expression of it was not.
 
 ## The part I have not solved
 

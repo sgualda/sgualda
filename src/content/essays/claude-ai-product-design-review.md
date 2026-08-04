@@ -10,11 +10,11 @@ topics: ['craft', 'process']
 hook: 'Before, when I hit a hard design problem, I sat with it. Now my first move is to open a conversation. That worries me.'
 faqs:
   - q: 'Is Claude useful for product design work?'
-    a: 'For synthesis, structure and argument, yes — pattern-finding across interview notes, drafting and critiquing product documents, being a fast second opinion at 11pm. For deciding what to build, no, and treating it as though it can is where teams get into trouble. It is an accelerator for thinking you are already doing, not a substitute for the thinking.'
+    a: 'For synthesis, structure and argument, yes, pattern-finding across interview notes, drafting and critiquing product documents, being a fast second opinion at 11pm. For deciding what to build, no, and treating it as though it can is where teams get into trouble. It is an accelerator for thinking you are already doing, not a substitute for the thinking.'
   - q: 'Can AI replace a product designer?'
-    a: 'It replaces the parts of the job that were always the least valuable — producing screens, writing up what was decided, tidying documents. It does not replace the part that is scarce, which is being able to say why this decision and not another one, and being accountable for it. What changes is that the scarce part becomes the whole job rather than half of it.'
+    a: 'It replaces the parts of the job that were always the least valuable, producing screens, writing up what was decided, tidying documents. It does not replace the part that is scarce, which is being able to say why this decision and not another one, and being accountable for it. What changes is that the scarce part becomes the whole job rather than half of it.'
   - q: 'What are the risks of using AI in a design process?'
-    a: 'The one I have felt personally is that the muscle for sitting with an unsolved problem atrophies. Good ideas often need the slow version — a walk, a night, a second angle — and the speed removes the pause where that happens. The second risk is organisational: AI lets a team of four look like twelve, and looking like twelve to your investors is a debt rather than an asset.'
+    a: 'The one I have felt personally is that the muscle for sitting with an unsolved problem atrophies. Good ideas often need the slow version, a walk, a night, a second angle, and the speed removes the pause where that happens. The second risk is organisational: AI lets a team of four look like twelve, and looking like twelve to your investors is a debt rather than an asset.'
   - q: 'Which AI tool is best for product work?'
     a: 'I use Claude and this is a report on that, not a comparison. The honest answer is that the gap between tools is now much smaller than the gap between using one thoughtfully and using one to avoid thinking, and only the second one shows up in your product.'
 ---
@@ -38,7 +38,7 @@ I will be specific, because vague opinion pieces about AI are the single most co
 
 **Research synthesis.** I paste interview notes, qualitative findings and raw observations, and ask it to find patterns. The output is not right, but it is a first pass on affinity mapping that used to take me most of a day. Is it a substitute for thinking? No. Is it a substitute for the tedious first two hours of thinking? Almost entirely.
 
-**Product documents.** This is where I get the most out of it, and not because it writes them. It helps me structure, finds gaps in my reasoning, and plays devil’s advocate on demand. I tell it "critique this requirement" and get three angles I had not considered. A good colleague does this better — but not at 11pm, and not fifteen times in a row without getting bored of me.
+**Product documents.** This is where I get the most out of it, and not because it writes them. It helps me structure, finds gaps in my reasoning, and plays devil’s advocate on demand. I tell it "critique this requirement" and get three angles I had not considered. A good colleague does this better, but not at 11pm, and not fifteen times in a row without getting bored of me.
 
 **Unblocking.** Twenty minutes into a blank canvas, it is a way to start. I use less of what it produces than you would expect. Mostly it moves me from nothing to something-to-react-against, and reacting is far easier than starting.
 
@@ -52,7 +52,7 @@ I have noticed in myself, and in teams I work with, that the muscle for thinking
 
 Now the first reaction is to open a new conversation.
 
-Not because the AI is bad. Because **the speed comes at the cost of a slower process where, often, the better ideas live.** Traditional design thinking has intentional friction in it. A [Google Design Sprint](https://www.thesprintbook.com/) is not badly designed — the pace it forces is a deliberate trade, and what you give up is idea maturity. Claude accelerates that further, which is useful for a startup in survival mode and dangerous for a product that needs depth.
+Not because the AI is bad. Because **the speed comes at the cost of a slower process where, often, the better ideas live.** Traditional design thinking has intentional friction in it. A [Google Design Sprint](https://www.thesprintbook.com/) is not badly designed, the pace it forces is a deliberate trade, and what you give up is idea maturity. Claude accelerates that further, which is useful for a startup in survival mode and dangerous for a product that needs depth.
 
 I do not have a clean solution. What I do now is crude: for anything that looks like a [one-way door](/glossary/#one-way-door), I make myself write my own answer first, badly, before opening a conversation. It is slower, and I skip it more often than I should.
 
@@ -62,9 +62,9 @@ Three situations, three different answers.
 
 **Working solo.** A straightforward multiplier. If you bill by project, the time it saves converts directly into margin and you ship more without hiring. For this situation it is probably the best software money you can spend right now.
 
-**Early-stage startup.** It works well for fast iteration — copy, documentation, analysis, exploring options. The risk is using it to look more advanced than you are, internally and to investors. AI can make a team of four look like twelve. What it cannot replace is what team size actually buys you: friction, disagreement, and people who learned the same lesson at the same time.
+**Early-stage startup.** It works well for fast iteration, copy, documentation, analysis, exploring options. The risk is using it to look more advanced than you are, internally and to investors. AI can make a team of four look like twelve. What it cannot replace is what team size actually buys you: friction, disagreement, and people who learned the same lesson at the same time.
 
-**Larger company.** The most interesting case and the least exploited. Most organisations claiming to "implement AI" are using it to write newsletters. The real opportunity is scaling feedback analysis and supporting decisions with evidence — but that needs integration work and cultural change, and that is where it stalls.
+**Larger company.** The most interesting case and the least exploited. Most organisations claiming to "implement AI" are using it to write newsletters. The real opportunity is scaling feedback analysis and supporting decisions with evidence, but that needs integration work and cultural change, and that is where it stalls.
 
 ## What I would want from it next
 

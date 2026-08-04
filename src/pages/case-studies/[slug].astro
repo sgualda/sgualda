@@ -152,7 +152,7 @@ const STATUS: Record<string, string> = {
     font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--dim); margin-bottom: 5px;
   }
-  .facts dd { margin: 0; font-size: 0.9375rem; line-height: 1.4; letter-spacing: -0.01em; }
+  .facts dd { margin: 0; font-size: 0.9375rem; line-height: var(--lh-tight); letter-spacing: var(--ls-read); }
 
 
   .cover { width: 100%; border-radius: var(--radius-card); margin-top: var(--space-8); }
@@ -161,12 +161,12 @@ const STATUS: Record<string, string> = {
      couple of paragraphs. */
   .prose {
     margin-top: 48px; text-align: left;
-    font-size: 1.0625rem; line-height: 1.7; letter-spacing: 0; color: var(--dim);
+    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
   }
   .prose :global(p) { margin-bottom: 1.2em; }
   .prose :global(h2) {
     color: var(--ink); font-size: clamp(1.3rem, 2.8vw, 1.6rem);
-    margin: 2.2em 0 0.7em; letter-spacing: -0.03em;
+    margin: 2.2em 0 0.7em; letter-spacing: var(--ls-heading);
   }
   .prose :global(strong) { color: var(--ink); font-weight: 600; }
   .prose :global(a) { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }

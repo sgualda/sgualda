@@ -1,5 +1,5 @@
 ---
-# FICTIONAL — invented at Sergio’s request, plausible but did not happen.
+# FICTIONAL, invented at Sergio’s request, plausible but did not happen.
 # Review before launch: a recruiter may ask about it in an interview. See #Q-062.
 title: 'Weeknotes'
 description: 'A tool for teams to write down what they decided each week. Six people tried it, nobody came back, and the reason was not the product.'
@@ -21,7 +21,7 @@ I still think that habit is one of the highest-return things a team can do. I wa
 
 Six teams tried it. All six said it was a good idea. None of them opened it a second time.
 
-I spent a while assuming the problem was the product — the flow, the onboarding, the fact that it was ugly. So I improved those. It changed nothing, which should have told me sooner than it did.
+I spent a while assuming the problem was the product, the flow, the onboarding, the fact that it was ugly. So I improved those. It changed nothing, which should have told me sooner than it did.
 
 ## The actual reason
 
@@ -31,6 +31,6 @@ I’d built a solution for the half of the market that did not need it.
 
 ## What it was worth
 
-More than it cost, in the end. It’s where I learned to ask what somebody does about a problem today before building anything — because when the honest answer is "a Google Doc, and it’s fine", that’s the finding.
+More than it cost, in the end. It’s where I learned to ask what somebody does about a problem today before building anything, because when the honest answer is "a Google Doc, and it’s fine", that’s the finding.
 
 The four-line habit survived. I still recommend it, [and I still think it’s what most teams stuck in the same argument actually need](/map/make-it-repeatable/). It just does not need me to build anything.

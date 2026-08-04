@@ -10,13 +10,13 @@ topics: ['scope', 'craft']
 hook: 'I have been burned from both sides: once by a design that could not grow, once by one built to grow into a market that never arrived.'
 faqs:
   - q: 'When should you start building a design system?'
-    a: 'When the same decision has been made twice, differently, and it caused a problem. Not before. A system is an answer to repetition, so if the repetition has not happened, you are maintaining an answer to a question nobody has asked — and the maintenance is real while the benefit is hypothetical.'
+    a: 'When the same decision has been made twice, differently, and it caused a problem. Not before. A system is an answer to repetition, so if the repetition has not happened, you are maintaining an answer to a question nobody has asked, and the maintenance is real while the benefit is hypothetical.'
   - q: 'What does designing for scalability actually mean?'
     a: 'In practice it means two things: that a component can absorb a case you did not anticipate without being rebuilt, and that somebody who joins later can tell what the rules are. It does not mean anticipating every scenario. Nobody can do that, and trying produces complexity you pay for immediately against a benefit that may never arrive.'
   - q: 'How do you avoid over-engineering a design?'
     a: 'Ask what it costs to be wrong. If the design can be changed in an afternoon, guess and move. If changing it means a migration, a re-onboarding or a data change, that is a one-way door and it earns the extra thought. Most of the argument about over-engineering is really an argument about which of those two you are in.'
   - q: 'Is it better to design for scale too early or too late?'
-    a: 'Too late, usually — but only because too late is visible and too early is not. A design that breaks under growth causes an obvious, fixable mess. A design built for growth that never came causes a slow tax on every change, and nobody ever files a bug for it.'
+    a: 'Too late, usually, but only because too late is visible and too early is not. A design that breaks under growth causes an obvious, fixable mess. A design built for growth that never came causes a slow tax on every change, and nobody ever files a bug for it.'
 ---
 Every article about scalability tells you to plan for growth. Almost none of them mention that planning for growth has a price, that you pay it immediately, and that the benefit may never arrive.
 
@@ -54,7 +54,7 @@ A design system is an answer to repetition. If the repetition has not happened, 
 
 There is one class of decision where you should think ahead even without the signal, and it is not the one people usually worry about.
 
-It is not visual. It is **anything that becomes hard to change once real data exists.** How you model a user. Whether something belongs to a person or an account. What the URL structure is. Those are [one-way doors](/glossary/#one-way-door) — changing them later means a migration, and migrations are where products go to lose a quarter.
+It is not visual. It is **anything that becomes hard to change once real data exists.** How you model a user. Whether something belongs to a person or an account. What the URL structure is. Those are [one-way doors](/glossary/#one-way-door), changing them later means a migration, and migrations are where products go to lose a quarter.
 
 Colours, spacing, component variants, layout: all reversible. Guess and move.
 

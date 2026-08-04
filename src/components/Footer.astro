@@ -27,8 +27,14 @@ const year = new Date().getFullYear();
     </nav>
 
     <div class="bottom">
+      {/* The mark rather than the name set in bold. The header already
+          establishes it, and repeating a name in type where a logo exists is
+          the sort of thing that makes a site feel unfinished. */}
+      <a class="mark" href="/" aria-label={`${SITE.name} — home`}>
+        <img src="/img/logo.png" alt="" width="96" height="96" />
+      </a>
       <p class="who">
-        <strong>{SITE.name}</strong> <span>— {SITE.role}</span><br />
+        <span>{SITE.role}</span><br />
         {SITE.location}<br />
         <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
       </p>
@@ -82,8 +88,8 @@ const year = new Date().getFullYear();
     display: block;
     padding-block: 5px;
     font-size: 0.9375rem;
-    line-height: 1.45;
-    letter-spacing: -0.01em;
+    line-height: var(--lh-ui);
+    letter-spacing: var(--ls-read);
     color: var(--ink);
     transition: opacity 0.2s var(--ease);
   }
@@ -99,7 +105,9 @@ const year = new Date().getFullYear();
     gap: 20px 32px;
     flex-wrap: wrap;
   }
-  .who { font-size: 0.9375rem; line-height: 1.75; letter-spacing: -0.01em; color: var(--dim); }
+  .mark { display: block; width: 34px; height: 34px; margin-bottom: var(--space-4); }
+  .mark img { width: 100%; height: 100%; object-fit: contain; }
+  .who { font-size: 0.9375rem; line-height: 1.75; letter-spacing: var(--ls-read); color: var(--dim); }
   .who strong { color: var(--ink); font-weight: 600; }
   .who a { color: var(--ink); }
   .who a:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -109,7 +117,7 @@ const year = new Date().getFullYear();
   .elsewhere a {
     display: block;
     padding: 5px 6px;
-    font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--ink);
+    font-size: 0.9375rem; letter-spacing: var(--ls-read); color: var(--ink);
   }
   .elsewhere a:hover { text-decoration: underline; text-underline-offset: 3px; }
 

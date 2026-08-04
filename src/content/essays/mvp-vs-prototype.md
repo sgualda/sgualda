@@ -10,7 +10,7 @@ topics: ['scope', 'discovery']
 hook: 'I spent four months building a “minimum” version. The landing page would have answered the same question in nine days.'
 faqs:
   - q: 'What is the difference between an MVP and a prototype?'
-    a: 'A prototype answers a question and is then thrown away. An MVP is the smallest thing you would be willing to keep and charge for. Both are small; the difference is what happens next. Most teams say MVP, build a prototype, and then feel obliged to maintain it — which is the expensive version of both.'
+    a: 'A prototype answers a question and is then thrown away. An MVP is the smallest thing you would be willing to keep and charge for. Both are small; the difference is what happens next. Most teams say MVP, build a prototype, and then feel obliged to maintain it, which is the expensive version of both.'
   - q: 'Does an MVP have to be working software?'
     a: 'No. The point is to learn whether the problem is real and whether anybody will move for it, and software is often the slowest way to find that out. A landing page, a spreadsheet you run by hand, or nine conversations can all answer the same question in a fraction of the time.'
   - q: 'How small is too small for an MVP?'
@@ -26,11 +26,11 @@ I know because I built that thing. It took four months.
 
 ## What I got wrong
 
-My first understanding of an MVP was the obvious one: a **small but complete product**. Fewer features than the real thing, but real — sign-up, onboarding, settings, the lot. Something you could put in front of people without apologising.
+My first understanding of an MVP was the obvious one: a **small but complete product**. Fewer features than the real thing, but real, sign-up, onboarding, settings, the lot. Something you could put in front of people without apologising.
 
 So that is what we built. Four months, three people, most of a summer.
 
-It launched. About sixty people signed up. Eleven came back a second time. And the thing we learned on launch day — that the problem we had picked was real but nowhere near annoying enough for anybody to change what they were already doing — **we could have learned in week two from a landing page and nine conversations.**
+It launched. About sixty people signed up. Eleven came back a second time. And the thing we learned on launch day, that the problem we had picked was real but nowhere near annoying enough for anybody to change what they were already doing — **we could have learned in week two from a landing page and nine conversations.**
 
 The four months did not buy us a better answer. They bought us the same answer, later, plus a codebase we then felt obliged to maintain because of what it had cost.
 
@@ -48,7 +48,7 @@ Here is the version I wish somebody had given me.
 
 Both are small. **The difference is what happens next**, and that is the part that decides how much it costs you.
 
-What most teams do — what I did — is say MVP, build a prototype, and then treat it as an MVP because of the effort already in it. That is the worst of both: too rough to keep, too expensive to bin.
+What most teams do, and what I did, is say MVP, build a prototype, and then treat it as an MVP because of the effort already in it. That is the worst of both: too rough to keep, too expensive to bin.
 
 ## The order that actually works
 
@@ -58,7 +58,7 @@ Question first, then the cheapest thing that answers it.
 
 **Will anyone move for it?** A landing page describing the thing, with one clear action. You do not need the product. You need to know whether the description alone is enough to make somebody give you an email address, which is a much lower bar than paying and a much higher one than nodding in a meeting.
 
-**Does the thing work when they have it?** Now build. And now, and only now, does the word MVP apply — because now you are building something you intend to keep.
+**Does the thing work when they have it?** Now build. And now, and only now, does the word MVP apply, because now you are building something you intend to keep.
 
 Each step is cheap enough that being wrong is survivable. My four months were not.
 

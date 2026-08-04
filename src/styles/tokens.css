@@ -8,6 +8,10 @@
 
 @property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 
+/* Lets the browser interpolate a height to and from `auto`, which is what
+   makes an accordion animate at all. Ignored where unsupported. */
+:root { interpolate-size: allow-keywords; }
+
 :root {
   /* ── colour ─────────────────────────────────────────────
      Figma variables, verbatim:
@@ -28,9 +32,11 @@
      not hue. Kept as a token so there is one place to reintroduce a colour. */
   --accent: #1e1c1c;
 
-  /* The only hue in the system, and only where the meaning is the colour: a
-     form error. Grey emphasis is invisible next to grey hints. 4.6:1 on paper. */
+  /* The only two hues in the system, and only where the meaning *is* the
+     colour: a form error, and the tick/cross pair on "what you get" against
+     "what it is not". Both meet AA on paper. */
   --err: #b3261e;
+  --ok: #1c7c4a;
 
   /* Animated hover border: light and dark greys chasing round the perimeter.
      Driven by @property --ang above, so it can actually be transitioned. */
@@ -64,39 +70,59 @@
   --font-body: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
 
-  /* Title — ZSE SemiBold 64/68, tracking -3px */
+  /* ── the type scale ──
+     Four line-heights and four letter-spacings, and nothing else. The site had
+     twelve of one and thirteen of the other, which is not a system, it is a
+     history of individual decisions.
+
+     Tracking is negative only where it is optically necessary, which is large
+     display type: at 64px, zero tracking reads loose and unset. Everything
+     that is *read* — body, subtitles, cards, lists, captions — sits at zero.
+     Body copy was at -0.05em, which is the single thing most responsible for
+     the text feeling airless. */
+  --lh-display: 1.12;   /* h1, h2 */
+  --lh-tight: 1.32;     /* h3, card headings, list rows */
+  --lh-ui: 1.55;        /* buttons, meta, small print */
+  --lh-read: 1.68;      /* anything anybody reads a paragraph of */
+
+  --ls-display: -0.03em;  /* h1 only, and only because 64px needs it */
+  --ls-heading: -0.015em; /* h2, h3 */
+  --ls-read: 0em;         /* everything else */
+  --ls-caps: 0.16em;      /* uppercase eyebrows and labels */
+
+  /* Title — ZSE SemiBold, from Figma at 64/68 */
   --title-size: clamp(2.25rem, 5.4vw, 4rem);
-  --title-lh: 1.0625;
-  --title-ls: -0.047em;
+  --title-lh: var(--lh-display);
+  --title-ls: var(--ls-display);
   --title-weight: 600;
 
-  /* h2 — ZSE Bold 36/38, tracking -1px */
+  /* h2 — ZSE Bold */
   --h2-size: clamp(1.75rem, 3.2vw, 2.25rem);
-  --h2-lh: 1.0556;
-  --h2-ls: -0.028em;
+  --h2-lh: var(--lh-display);
+  --h2-ls: var(--ls-heading);
   --h2-weight: 700;
 
-  /* h3 — ZSE SemiBold 20/24, tracking -1px */
+  /* h3 — ZSE SemiBold */
   --h3-size: 1.25rem;
-  --h3-lh: 1.2;
-  --h3-ls: -0.05em;
+  --h3-lh: var(--lh-tight);
+  --h3-ls: var(--ls-heading);
   --h3-weight: 600;
 
-  /* Texto — Archivo Regular 20/26, tracking -1px */
+  /* Body — Archivo Regular */
   --text-size: 1.25rem;
-  --text-lh: 1.55;      /* Figma says 26/20; opened up on Sergio's note */
-  --text-ls: -0.05em;
+  --text-lh: var(--lh-read);
+  --text-ls: var(--ls-read);
 
-  /* Sub-heading — Archivo Medium 20/28, tracking -1px */
+  /* Sub-heading — Archivo */
   --sub-size: 1.25rem;
-  --sub-lh: 1.6;        /* opened up */
-  --sub-ls: 0em;
-  --sub-weight: 400;    /* Figma says Medium; lightened on Sergio's note */
+  --sub-lh: var(--lh-read);
+  --sub-ls: var(--ls-read);
+  --sub-weight: 400;
 
   /* Eyebrow: the — WHAT I DO — rules. Not a Figma text style;
      measured from the comps. */
   --eyebrow-size: 0.6875rem;
-  --eyebrow-ls: 0.18em;
+  --eyebrow-ls: var(--ls-caps);
 
   /* ── layout ── */
 /* ── the shell ──
@@ -176,6 +202,7 @@
     --accent: #f2efee;
     /* Lifted for a dark ground; #b3261e on #131111 is 3.1:1 and unreadable. */
     --err: #ff8a80;
+    --ok: #6ddba0;
     --inverse: #f2efee;
     --on-inverse: #131111;
     /* Lighter than the page, not lighter than everything. 1.21:1 against the
@@ -204,6 +231,7 @@
   --hair: #312d2c;
   --accent: #f2efee;
   --err: #ff8a80;
+  --ok: #6ddba0;
   --inverse: #f2efee;
   --on-inverse: #131111;
   /* Lighter than the page, not lighter than everything. 1.21:1 against the

@@ -12,7 +12,7 @@ tools:
   - "is-user-feedback-real-or-just-polite"
   - "is-this-feature-worth-building"
 body:
-  - "Nobody skips this stage. They just do it badly — in their head, on a walk — and call
+  - "Nobody skips this stage. They just do it badly, in their head, on a walk, and call
     the result conviction."
   - "I spent most of one summer building a tool for organising interview notes. I was sure
     about it. I had the problem myself, which felt like the strongest possible evidence, and
@@ -26,7 +26,7 @@ body:
     with a naming convention nobody agreed to. A recurring reminder to check something
     manually."
   - "That ugly thing is the proof, and it’s worth more than any amount of agreement. If
-    nobody has built the ugly version, the pain is probably not there yet — which is not a
+    nobody has built the ugly version, the pain is probably not there yet, which is not a
     verdict on the idea, only on the timing."
 traps:
   - "Asking people whether they would use it. They will say yes, because saying no to
@@ -35,11 +35,11 @@ traps:
     the one you have the most of."
   - "Researching until it feels safe. It never will. Past a certain point you’re collecting
     reassurance, not information."
-signal: "You can name two people — actual people, not job titles — who already do this the
+signal: "You can name two people, actual people, not job titles, who already do this the
   hard way."
 faqs:
   - q: "How do I know if an idea is worth building?"
-    a: "Find two people who already deal with the problem in some improvised way — a spreadsheet, a group chat, a recurring reminder. A workaround is the strongest evidence a problem is real, because somebody paid a cost to solve it without you. Enthusiasm in a conversation is not evidence; it is manners."
+    a: "Find two people who already deal with the problem in some improvised way, a spreadsheet, a group chat, a recurring reminder. A workaround is the strongest evidence a problem is real, because somebody paid a cost to solve it without you. Enthusiasm in a conversation is not evidence; it is manners."
   - q: "How long should this stage take?"
     a: "Days, not months. Nine conversations fit in a week, and the answer they give does not get better with a tenth. If you are still here after a month you are usually not gathering evidence, you are looking for permission."
   - q: "What is the first thing to do at this stage?"

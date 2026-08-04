@@ -1,7 +1,7 @@
 ---
 title: 'ecoco'
 description: 'A grocery app two friends built on the side. From a road trip conversation to private beta on Android, and the research finding that changed what we built.'
-client: 'ecoco — my own company'
+client: 'ecoco'
 role: 'Co-founder and product designer'
 year: '2024 — now'
 status: 'alive'
@@ -14,7 +14,7 @@ coverAlt: 'The ecoco mobile app: grocery lists and supermarket price comparison'
 coverPosition: 'center'
 ---
 
-ecoco started on a road trip from Barcelona to Bordeaux. Two friends — a developer and a designer — driving through France, talking about nothing in particular, until one of us asked why grocery shopping is still such a mess.
+ecoco started on a road trip from Barcelona to Bordeaux. Two friends — a developer and a designer, driving through France, talking about nothing in particular, until one of us asked why grocery shopping is still such a mess.
 
 Lists get lost. Things get forgotten. The same basket costs different money in three shops on the same street. Small problem. Universal problem. That combination is worth paying attention to.
 
@@ -32,7 +32,7 @@ That distinction decided the product. A list app competes with the Notes app on 
 
 ## The decisions that shaped it
 
-**Reuse before creation.** The first version treated every shop as a new list. Watching people use it, the weekly shop turned out to be roughly the same shop — so we inverted it. Your last list is the starting point, and you edit the differences. That single change did more for retention than anything visual I did in six months.
+**Reuse before creation.** The first version treated every shop as a new list. Watching people use it, the weekly shop turned out to be roughly the same shop, so we inverted it. Your last list is the starting point, and you edit the differences. That single change did more for retention than anything visual I did in six months.
 
 **Prices are shown as comparison, not as a claim.** We do not tell you where to go. We show what it costs in each place and let you decide, because "cheapest" depends on how far you will drive and where you were going anyway. Making that judgement for people would have been faster to build and wrong more often.
 
@@ -60,4 +60,4 @@ It’s not a company. It might never be one. It has already paid for itself in w
 
 **Ship the ugly version months sooner.** We polished a build nobody outside the two of us had used. Every week of that was a week of guessing, dressed up as progress.
 
-**And take the constraint seriously as a filter.** Two people with no money cannot build the elaborate version — which sounds like a limitation and works like an editor. Most of what we cut has never come back, and I have stopped assuming that is a coincidence.
+**And take the constraint seriously as a filter.** Two people with no money cannot build the elaborate version, which sounds like a limitation and works like an editor. Most of what we cut has never come back, and I have stopped assuming that is a coincidence.

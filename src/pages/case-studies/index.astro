@@ -53,19 +53,6 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
       Products I designed or built, alive and dead. The dead ones have post-mortems, which is
       the part most portfolios leave out.
     </p>
-    {/* The grid is images only — Sergio’s call, and it reads better. But a
-        portfolio page with 96 indexable words is a portfolio page a search
-        engine cannot place. One line per project, in prose, restores the text
-        without putting the captions back on the cards. */}
-    <p class="sub roll">
-      Six of them: {cases.map((c, i) => (
-        <>
-          {i > 0 && ', '}
-          <a href={`/case-studies/${c.id}/`}>{c.data.title}</a>
-          {' '}<span>({c.data.summary.split('.')[0].toLowerCase()})</span>
-        </>
-      ))}.
-    </p>
   </section>
 
   <div class="col">
@@ -122,14 +109,6 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
   .intro h1 { margin-bottom: 18px; }
 
 
-  .roll {
-    margin-top: var(--space-6);
-    font-size: 0.9375rem;
-    line-height: 1.7;
-    letter-spacing: 0;
-  }
-  .roll a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-  .roll span { color: var(--dim); }
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
   .thumb {
@@ -169,7 +148,7 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
       font-family: var(--font-display);
       font-size: 0.9375rem;
       font-weight: 600;
-      letter-spacing: -0.03em;
+      letter-spacing: var(--ls-heading);
       color: var(--ink);
     }
   }

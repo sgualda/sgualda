@@ -11,7 +11,7 @@ import { SITE, SOCIAL } from '@lib/site';
  * that is not ours, and gives the visitor no idea what they are joining.
  *
  * The wall of questions is the whole pitch. A community page that describes
- * itself in adjectives — supportive, high-signal, curated — is describing every
+ * itself in adjectives, supportive, high-signal, curated — is describing every
  * community ever made. Showing the actual questions lets somebody decide in
  * three seconds whether these are their people, and it puts twenty real
  * phrasings of product problems into the HTML, which is what anybody looking
@@ -114,7 +114,7 @@ const FAQS = [
       thing you are stuck on, other people tell you what they tried. That is the whole format.
     </p>
     <div class="actions">
-      <a class="btn btn--dark" href={SOCIAL.community} rel="noopener">Join the chat</a>
+      <a class="btn btn--dark" href={SOCIAL.community} target="_blank" rel="noopener">Join the chat</a>
       <a class="btn btn--ghost" href="/writing/">More essays</a>
     </div>
   </section>
@@ -156,7 +156,7 @@ const FAQS = [
       being useful you can leave in one click. Both of those matter more than they sound.
     </p>
     <div class="actions">
-      <a class="btn btn--dark" href={SOCIAL.community} rel="noopener">Join the chat</a>
+      <a class="btn btn--dark" href={SOCIAL.community} target="_blank" rel="noopener">Join the chat</a>
     </div>
   </section>
 
@@ -225,7 +225,7 @@ const FAQS = [
     border-radius: var(--radius-pill);
     background: var(--surface);
     font-size: 0.9375rem;
-    letter-spacing: -0.01em;
+    letter-spacing: var(--ls-read);
     color: var(--dim);
     white-space: nowrap;
     transition: color 0.24s var(--ease), border-color 0.24s var(--ease);
@@ -254,13 +254,13 @@ const FAQS = [
     font-family: var(--font-display);
     font-size: 1.0625rem;
     font-weight: 600;
-    letter-spacing: -0.03em;
+    letter-spacing: var(--ls-heading);
     margin-bottom: var(--space-2);
   }
   .topics dd {
     margin: 0 0 var(--space-6);
     font-size: 0.9375rem;
-    line-height: 1.6;
+    line-height: var(--lh-read);
     letter-spacing: 0;
     color: var(--dim);
   }
@@ -269,7 +269,7 @@ const FAQS = [
   .nots li {
     padding: 16px 0;
     font-size: 1.0625rem;
-    line-height: 1.5;
+    line-height: var(--lh-ui);
     color: var(--dim);
   }
   .nots li + li { border-top: 1px solid var(--hair); }

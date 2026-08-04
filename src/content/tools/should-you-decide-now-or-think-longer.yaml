@@ -89,14 +89,14 @@ b:
         relitigated weekly."
       - "Put a date in the calendar to revisit it, then stop discussing it until then."
   - max: 8
-    name: "Decide this week — and write down what would reverse it."
+    name: "Decide this week, and write down what would reverse it."
     sub: "This can be undone, but not for free. Somebody will notice, or something will get
       built on top."
     body: "<p>The most common shape, and the one that goes wrong most quietly. It’s genuinely
       reversible the day you make it and slightly less so every week after, and nobody ever
       announces the moment it stopped being reversible.</p><p>So the decision is only half
       the work. The other half is <strong>writing down now what would make you reverse
-      it</strong> — a number, a date, a specific complaint — before you’re attached to
+      it</strong>, a number, a date, a specific complaint — before you’re attached to
       being right.</p>"
     next:
       - "Decide, and write one sentence: “We will reverse this if ___ by ___.”"
@@ -127,7 +127,7 @@ b:
       as over-thinking one of these, but there’s such a thing as thinking about it alone.
       <strong>The failure mode here is not haste. It’s agreement.</strong></p><p>Before you
       commit, get the person who disagrees to write down why, with a date on it. Not to
-      change your mind — so that in nine months there’s a record of what was foreseeable,
+      change your mind, so that in nine months there’s a record of what was foreseeable,
       instead of everyone quietly rewriting what they thought.</p>"
     next:
       - "Find the person who disagrees. If nobody does, you have not asked outside the room."

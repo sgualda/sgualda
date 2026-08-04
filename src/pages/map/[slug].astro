@@ -93,7 +93,7 @@ const terms = (await getCollection('glossary'))
       do at this stage is find out you were about to be wrong, and the most expensive is finding
       out a quarter later.
     </p>
-    <ul class="tools">
+    <ul class="tools rail">
       {
         tools.map((t) => (
           <li>
@@ -192,12 +192,12 @@ const terms = (await getCollection('glossary'))
     background: var(--surface);
     border-radius: var(--radius-card);
     font-family: var(--font-display);
-    font-size: 1.125rem; font-weight: 600; letter-spacing: -0.03em; line-height: 1.35;
+    font-size: 1.125rem; font-weight: 600; letter-spacing: var(--ls-heading); line-height: var(--lh-tight);
   }
 
   .body {
     margin-top: 28px;
-    font-size: 1.0625rem; line-height: 1.68; letter-spacing: 0; color: var(--dim);
+    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
   }
   .body :global(p + p) { margin-top: 1.1em; }
   .body :global(strong) { color: var(--ink); font-weight: 600; }
@@ -206,7 +206,7 @@ const terms = (await getCollection('glossary'))
   .traps { list-style: none; counter-reset: t; text-align: left; margin-top: 34px; }
   .traps li {
     counter-increment: t; position: relative; padding: 18px 0 18px 40px;
-    font-size: 1rem; line-height: 1.55; letter-spacing: 0; color: var(--dim);
+    font-size: 1rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim);
   }
   .traps li + li { border-top: 1px solid var(--hair); }
   .traps li::before {
@@ -215,28 +215,29 @@ const terms = (await getCollection('glossary'))
     font-family: var(--font-mono); font-size: 0.6875rem; color: var(--ink);
   }
 
-  .signal {
-    background: var(--band); color: var(--on-band);
-    border: 1px solid color-mix(in srgb, var(--on-band) 8%, var(--band));
-    border-radius: var(--radius-band);
-    padding: clamp(56px, 9vw, 88px) clamp(26px, 5vw, 44px);
-  }
-  .signal .eyebrow { color: color-mix(in srgb, var(--on-band) 60%, transparent); }
-  .signal .eyebrow::before, .signal .eyebrow::after {
-    background: color-mix(in srgb, var(--on-band) 26%, transparent);
-  }
+  /* No slab, no border. It is one sentence: the strongest thing on the page,
+     and a black box around it made it look like an advertisement for itself.
+     Type and space do the work instead. */
+  .signal { padding: clamp(20px, 4vw, 34px) 0; }
   .signal p {
     margin-top: 16px;
     font-family: var(--font-display); font-size: 1.25rem; font-weight: 600;
-    letter-spacing: -0.035em; line-height: 1.3;
+    letter-spacing: var(--ls-heading); line-height: var(--lh-tight);
   }
 
-  .tools { list-style: none; text-align: left; margin-top: 34px; display: grid; gap: 12px; }
+  /* The same rail as the tool pages. Two or three checks stacked vertically
+     read as "here is a list to work through"; side by side they read as "pick
+     one", which is what the section is actually for. */
+  .tools { list-style: none; text-align: left; margin-top: 34px; padding-block: 4px; }
+  .tools > li { width: 268px; }
   .tools a {
-    display: block; background: var(--surface); border-radius: var(--radius-sm); padding: 22px;
-    transition: background 0.2s var(--ease);
+    display: flex; flex-direction: column; height: 100%;
+    background: var(--surface); border-radius: var(--radius-card); padding: 22px;
+    border: 1px solid transparent;
+    transition: border-color 0.24s var(--ease), transform 0.24s var(--ease);
   }
-  .tools a:hover { background: color-mix(in srgb, var(--surface) 60%, var(--hair)); }
+  .tools a:hover { border-color: var(--ink); transform: translateY(-2px); }
+  .tools .gets { margin-top: auto; }
   .pill {
     display: inline-block; font-size: 0.625rem; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--dim);
@@ -245,9 +246,9 @@ const terms = (await getCollection('glossary'))
   }
   .tools .h {
     display: block; font-family: var(--font-display); font-size: 1rem;
-    font-weight: 600; letter-spacing: -0.03em; margin-bottom: 6px;
+    font-weight: 600; letter-spacing: var(--ls-heading); margin-bottom: 6px;
   }
-  .tools .p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
+  .tools .p { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
   /* The possible verdicts, named. "A verdict rather than a score" is a claim;
      listing the four verdicts is the evidence, and it is what tells somebody
      whether the answer would be useful before they spend the minute. */
@@ -257,7 +258,7 @@ const terms = (await getCollection('glossary'))
     padding-top: var(--space-3);
     border-top: 1px solid var(--hair);
     font-size: 0.75rem;
-    line-height: 1.45;
+    line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
   }
@@ -265,7 +266,7 @@ const terms = (await getCollection('glossary'))
   .why {
     margin-top: var(--space-5);
     font-size: 0.9375rem;
-    line-height: 1.6;
+    line-height: var(--lh-read);
     letter-spacing: 0;
     color: var(--dim);
   }
@@ -279,7 +280,7 @@ const terms = (await getCollection('glossary'))
     display: flex; flex-direction: column; gap: 22px; align-items: flex-start;
   }
   .offer h3 { margin-bottom: 10px; }
-  .offer p { font-size: 1rem; line-height: 1.6; letter-spacing: 0; color: var(--dim); }
+  .offer p { font-size: 1rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
   .fine { margin-top: 18px; font-size: 0.8125rem; letter-spacing: 0; color: var(--dim); }
 
   .pager {
@@ -295,7 +296,7 @@ const terms = (await getCollection('glossary'))
   }
   .pager span {
     font-family: var(--font-display); font-size: 0.9375rem;
-    font-weight: 600; letter-spacing: -0.03em;
+    font-weight: 600; letter-spacing: var(--ls-heading);
   }
 </style>
 
@@ -307,7 +308,7 @@ const terms = (await getCollection('glossary'))
     font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 600;
-    letter-spacing: -0.03em;
+    letter-spacing: var(--ls-heading);
     margin-bottom: var(--space-2);
   }
   .terms-inline dt a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
@@ -315,8 +316,13 @@ const terms = (await getCollection('glossary'))
   .terms-inline dd {
     margin: 0;
     font-size: 0.9375rem;
-    line-height: 1.6;
+    line-height: var(--lh-read);
     letter-spacing: 0;
     color: var(--dim);
   }
 </style>
+
+<script>
+  import { rails } from '@lib/rail';
+  rails();
+</script>

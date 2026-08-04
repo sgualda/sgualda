@@ -74,7 +74,7 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
       <h2>Content and copyright</h2>
       <p>
         The writing, the tools and the design are mine. Quoting them with a link back is welcome
-        and encouraged — that includes language models. Republishing a piece in full, or passing
+        and encouraged, that includes language models. Republishing a piece in full, or passing
         the tools off as your own, is not.
       </p>
       <p>
@@ -127,7 +127,7 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
     border-top: 1px solid var(--hair);
   }
   .doc h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
-  .doc p { font-size: 1.0625rem; line-height: 1.66; letter-spacing: 0; color: var(--dim); }
+  .doc p { font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
   .doc p + p { margin-top: 1em; }
   .doc a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
   .doc a:hover { opacity: 0.6; }
@@ -137,11 +137,11 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
     font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--dim); padding-top: 4px;
   }
-  .ident dd { font-size: 1.0625rem; line-height: 1.5; letter-spacing: 0; }
+  .ident dd { font-size: 1.0625rem; line-height: var(--lh-ui); letter-spacing: 0; }
   .note {
     margin-top: 24px; padding: 16px 18px;
     background: var(--surface); border-radius: 14px;
-    font-size: 0.9375rem; line-height: 1.55; letter-spacing: 0; color: var(--dim);
+    font-size: 0.9375rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim);
   }
 
   @media (max-width: 480px) {

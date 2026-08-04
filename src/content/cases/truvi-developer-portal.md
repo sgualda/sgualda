@@ -1,7 +1,7 @@
 ---
 title: 'Developer portal'
 description: 'Designing the documentation site for an API, where the user is an engineer in a hurry and every extra click is a support ticket somebody else has to answer.'
-client: 'truvi — where I work now'
+client: 'truvi'
 role: 'Product designer'
 year: 'Current'
 status: 'in-progress'

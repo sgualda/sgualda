@@ -1,7 +1,7 @@
 ---
 title: 'truvi'
 description: 'Product designer at a Barcelona startup, working on the dashboard with engineers, PMs and stakeholders. What a team taught me that side projects could not.'
-client: 'truvi — where I work now'
+client: 'truvi'
 role: 'Product designer'
 year: 'Current'
 status: 'in-progress'
@@ -49,7 +49,7 @@ Early in my career I took notes on the work as notes on me. Everybody says not t
 
 What helped was a small reframe rather than a large one: **the people giving me notes have lived with this product longer than I have.** When somebody pushes back, they usually know something I do not. My job in that moment is to find out what it is, not to defend what I made.
 
-The corollary took longer to learn — that this cuts both ways. Sometimes I do know something they do not, and quietly folding is not humility, it’s avoidance. Disagreeing well, in the room, with reasoning attached, is part of the job too.
+The corollary took longer to learn, that this cuts both ways. Sometimes I do know something they do not, and quietly folding is not humility, it’s avoidance. Disagreeing well, in the room, with reasoning attached, is part of the job too.
 
 ## Still learning
 
@@ -57,4 +57,4 @@ Everything above reads like the writing of somebody who has it figured out. I do
 
 I still over-polish. I still get attached to solutions past the point where the evidence supports them. I still occasionally build the elaborate version when the simple one would have done, and I usually notice about a day later than I would like.
 
-The difference between now and five years ago is not that I make fewer mistakes. It’s that I notice them sooner and say them out loud faster — which, as far as I can tell, is most of what getting better actually looks like.
+The difference between now and five years ago is not that I make fewer mistakes. It’s that I notice them sooner and say them out loud faster, which, as far as I can tell, is most of what getting better actually looks like.

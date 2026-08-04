@@ -74,7 +74,7 @@ b:
     sub: "People are asking the price, they already pay for something worse, and they would
       notice if it disappeared."
     body: "<p>Every signal that matters is present. What is holding you back is not evidence, it
-      is nerves — and waiting has a cost people underestimate, because <strong>free users
+      is nerves, and waiting has a cost people underestimate, because <strong>free users
       teach you almost nothing about what somebody will pay for.</strong></p><p>Price it,
       tell your existing users first and honestly, and give the early ones something for
       having been early. Nobody resents a price they saw coming.</p>"
@@ -88,7 +88,7 @@ b:
     name: "Charge, but keep it simple."
     sub: "The demand is real enough. What is not ready is your explanation of the value."
     body: "<p>You have enough to justify a price, but if you have to explain what someone gets,
-      the pricing page will have to explain it too — and pricing pages are the worst place
+      the pricing page will have to explain it too, and pricing pages are the worst place
       to teach anything.</p><p>So resist the tiers. <strong>One price, one sentence, one
       thing it does.</strong> Complexity in pricing is almost always a symptom of not being
       sure what you’re selling, and users read that uncertainty accurately.</p>"
@@ -98,7 +98,7 @@ b:
       - "Launch a single price. No tiers, no annual discount, nothing to compare."
       - "Ask three people to repeat the sentence back. Rewrite until they can."
   - max: 12
-    name: "Not yet — but do not wait for perfect."
+    name: "Not yet, but do not wait for perfect."
     sub: "Nobody has asked the price, and that’s the signal to pay attention to."
     body: "<p>When something is genuinely valuable, people ask what it costs before you tell
       them. Silence on price usually means they’re treating it as a nice thing to try, not
@@ -114,14 +114,14 @@ b:
     name: "Charging now would teach you the wrong thing."
     sub: "Nobody pays for anything here, nobody would complain if it vanished, and you cannot
       say what somebody gets."
-    body: "<p>You could probably get a few people to pay — friends, early supporters, someone
+    body: "<p>You could probably get a few people to pay, friends, early supporters, someone
       being kind. That’s exactly the risk. <strong>A handful of sympathetic payments looks
       like validation and is not,</strong> and it can point a whole year in the wrong
       direction.</p><p>The question underneath is not about pricing. It’s whether anybody
       has a problem here expensive enough to spend money on, and that’s worth answering
       before you spend months on a payment flow.</p>"
     next:
-      - "Answer the value question first — what does somebody actually get, in their words."
+      - "Answer the value question first, what does somebody actually get, in their words."
       - "Check whether people pay for anything at all in this area today. If nothing, that
         is the finding."
       - "Keep it free while you find that out. Free is a fine place to be when you’re still

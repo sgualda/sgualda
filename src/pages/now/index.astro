@@ -44,7 +44,7 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
 
   <section class="section col">
     <dl class="blocks">
-      <dt>Building</dt>
+      <dt><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 12-8.5 8.5a2.12 2.12 0 1 1-3-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></svg>Building</dt>
       <dd>
         <strong>Glintale.</strong>
         {/* TODO(sergio): one or two sentences on what Glintale is and what
@@ -52,13 +52,13 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
         Early. I’ll write about it here as it goes, including the parts that do not work.
       </dd>
 
-      <dt>Writing</dt>
+      <dt><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>Writing</dt>
       <dd>
         One thing I got wrong, every other week, and what it cost.
         <a href="/writing/">The essays are here</a>.
       </dd>
 
-      <dt>Work</dt>
+      <dt><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>Work</dt>
       <dd>
         Open to a small number of projects.
         <a href="/work-with-me/">Four questions</a> will tell you whether I’m the right person
@@ -73,6 +73,45 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro h1 { margin-bottom: 18px; }
+  /* A grid rather than a stacked dl: the icon, the label and the text line up
+     on one axis, so the three blocks scan as a list of states rather than
+     three paragraphs with bold words in front. */
+  .blocks {
+    text-align: left;
+    display: grid;
+    grid-template-columns: minmax(0, 132px) 1fr;
+    gap: var(--space-6) var(--space-6);
+    align-items: start;
+  }
+  .blocks dt {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 0.6875rem;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    padding-top: 3px;
+  }
+  .blocks dt svg {
+    width: 15px; height: 15px; flex: none;
+    stroke: currentColor; stroke-width: 1.7; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .blocks dd {
+    margin: 0;
+    font-size: 1rem;
+    line-height: var(--lh-read);
+    letter-spacing: var(--ls-read);
+    color: var(--dim);
+  }
+  .blocks dd strong { color: var(--ink); }
+  .blocks dd a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 560px) {
+    .blocks { grid-template-columns: 1fr; gap: var(--space-2) 0; }
+    .blocks dd { margin-bottom: var(--space-6); }
+  }
+
   .stamp {
     margin-top: 22px;
     font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
@@ -86,7 +125,7 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
     padding-top: 26px; border-top: 1px solid var(--hair); margin-bottom: 10px;
   }
   .blocks dd {
-    font-size: 1.0625rem; line-height: 1.62; letter-spacing: 0; color: var(--dim);
+    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
     padding-bottom: 26px;
   }
   .blocks strong { color: var(--ink); font-weight: 600; }

@@ -5,7 +5,7 @@ import Footer from '@components/Footer.astro';
 import { TOPICS } from '@lib/topics';
 
 /**
- * /styleguide/ — every token and component in one place, noindex.
+ * /styleguide/, every token and component in one place, noindex.
  *
  * Without it, each new page reinvents what already exists. That has already
  * happened twice: `.go` ended up defined three times with different sizes,
@@ -210,12 +210,12 @@ const type = [
 
   .cards { list-style: none; display: grid; gap: 14px; }
   .cards h3 { font-size: 1rem; margin-bottom: 8px; }
-  .cards p { font-size: 0.875rem; line-height: 1.5; letter-spacing: 0; color: var(--dim); }
+  .cards p { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
 
   .chips { list-style: none; display: flex; gap: 8px; flex-wrap: wrap; }
   .chips a {
     display: block; padding: 9px 18px; border-radius: var(--radius-pill);
-    border: 1px solid var(--hair); font-size: 0.8125rem; font-weight: 500; letter-spacing: -0.01em;
+    border: 1px solid var(--hair); font-size: 0.8125rem; font-weight: 500; letter-spacing: var(--ls-read);
   }
   .chips a:hover { border-color: var(--ink); }
 

@@ -1,0 +1,126 @@
+---
+import { LEGAL } from '@lib/site';
+
+/**
+ * Consent banner, built, and deliberately not switched on.
+ *
+ * The site sets no cookies and runs no analytics. /privacy/ says so in those
+ * words, and scripts/check-urls.mjs fails the build if that stops being true
+ * without the page being rewritten in the same commit.
+ *
+ * So a banner today would ask permission for nothing. That is not a neutral
+ * act: it trains people to dismiss a control that means something elsewhere,
+ * it contradicts a page that promises the opposite, and under GDPR consent is
+ * only required for what is not strictly necessary — of which there is none
+ * here. Shipping one now would make the site look like every other site,
+ * which is the opposite of what it is for.
+ *
+ * It exists ready, so that the day Google Analytics goes in the banner, the
+ * privacy page and the guard all move in one commit rather than three.
+ *
+ * To switch on: set LEGAL.analytics to true in src/lib/site.ts.
+ *
+ * Behaviour when live:
+ *  · Nothing loads until a choice is made. Rejecting is one click, in the same
+ *    visual weight as accepting — a grey "reject" beside a black "accept" is
+ *    a dark pattern with better manners.
+ *  · The choice is stored in localStorage, not a cookie, so refusing consent
+ *    does not itself require consent.
+ *  · It sits bottom-left, opposite the theme toggle, and never covers content:
+ *    the page gets bottom padding while it is open.
+ */
+const active = LEGAL.analytics === true;
+---
+
+{
+  active && (
+    <div class="cookie" id="cookie" role="dialog" aria-label="Analytics consent" hidden>
+      <p>
+        I would like to know which pages people read. That needs one analytics cookie and
+        nothing else. No advertising, no profiles, no third parties beyond the tool itself.
+      </p>
+      <div class="acts">
+        <button class="btn btn--dark" type="button" data-consent="yes">Allow</button>
+        <button class="btn btn--ghost" type="button" data-consent="no">No thanks</button>
+      </div>
+      <a class="more" href="/privacy/">What I collect and why</a>
+    </div>
+  )
+}
+
+<style>
+  .cookie {
+    position: fixed;
+    left: max(20px, env(safe-area-inset-left));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 60;
+    width: min(340px, calc(100vw - 40px));
+
+    /* The same recipe as the header and the theme toggle, so it reads as part
+       of the site rather than a widget from a vendor. */
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    padding: var(--space-6);
+    text-align: left;
+
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  }
+  .cookie[data-in='true'] { opacity: 1; transform: none; }
+  .cookie[hidden] { display: none; }
+
+  .cookie p {
+    font-size: 0.875rem;
+    line-height: var(--lh-read);
+    letter-spacing: var(--ls-read);
+    color: var(--dim);
+  }
+  .acts { display: flex; gap: 8px; margin-top: var(--space-5); }
+  /* Same size, same shape. Only the fill differs, and only because one of them
+     has to be the default. */
+  .acts .btn { flex: 1; padding: 11px 14px; font-size: 0.8125rem; }
+  .more {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-size: 0.75rem;
+    letter-spacing: var(--ls-read);
+    color: var(--dim);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .more:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cookie { transition: none; }
+  }
+</style>
+
+{
+  active && (
+    <script>
+      const el = document.getElementById('cookie');
+      const KEY = 'consent';
+
+      if (el && !localStorage.getItem(KEY)) {
+        el.hidden = false;
+        // Two frames: one to drop `hidden`, one for the transition to have a
+        // starting value to move from.
+        requestAnimationFrame(() => requestAnimationFrame(() => (el.dataset.in = 'true')));
+      }
+
+      el?.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((b) =>
+        b.addEventListener('click', () => {
+          localStorage.setItem(KEY, b.dataset.consent!);
+          el.dataset.in = 'false';
+          setTimeout(() => (el.hidden = true), 400);
+          if (b.dataset.consent === 'yes') document.dispatchEvent(new CustomEvent('consent:granted'));
+        })
+      );
+    </script>
+  )
+}

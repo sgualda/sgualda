@@ -7,10 +7,10 @@ time: "40 seconds"
 count: "3 questions"
 title: "Why is nobody using your product?"
 meta: "Answer three questions about your launch and find out which of five reasons is behind
-  a flat usage graph — and which fixes are a waste of time for your case. Free, no account,
+  a flat usage graph, and which fixes are a waste of time for your case. Free, no account,
   nothing saved."
 lead: "You launched and the graph is flat. Five completely different reasons look identical
-  from the outside, and their fixes point in opposite directions — so guessing wrong costs
+  from the outside, and their fixes point in opposite directions, so guessing wrong costs
   you a quarter. Three questions and you get which one you’re in."
 out: "Which of the five you’re in, why the other four are not it, and the cheap test that
   confirms it."
@@ -40,7 +40,7 @@ faqs:
       something they also do not need — at a higher cost each time."
   - - "How do I know if people actually need my product?"
     - "Ask what they do about the problem today. People who genuinely have a problem have
-      already built something ugly and manual to cope with it — a spreadsheet, a group chat,
+      already built something ugly and manual to cope with it, a spreadsheet, a group chat,
       a recurring reminder. When nobody can describe any workaround at all, that’s usually
       the finding, and it’s worth one afternoon of conversations to confirm before spending
       another quarter."
@@ -104,7 +104,7 @@ b:
     sub: "People arrive and leave within seconds. That’s what you’re saying, not how many
       people you’re reaching."
     body: "<p>This gets misdiagnosed as a traffic problem more than any other, and answered with
-      a bigger ad budget — which sends more people to the same sentence that’s already not
+      a bigger ad budget, which sends more people to the same sentence that’s already not
       working.</p><p>Cheapest test I know, and it takes an afternoon: <strong>show your
       homepage to five people for eight seconds, hide it, and ask what the product
       does.</strong> If two are wrong, you’re here. Not partly wrong — wrong.</p>"

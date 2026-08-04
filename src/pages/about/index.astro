@@ -17,7 +17,7 @@ import portrait from '../../assets/portrait.jpg';
 const goodAt = [
   {
     title: 'Making the hard thing look easy',
-    body: 'The best compliment a product gets is that nobody notices it. That takes throwing away most of what you drew, and it is the part I am actually good at — not adding, removing.',
+    body: 'The best compliment a product gets is that nobody notices it. That takes throwing away most of what you drew, and it is the part I am actually good at, not adding, removing.',
   },
   {
     title: 'Taking a vague problem to a shipped first version',
@@ -113,13 +113,13 @@ const notFor = [
       </p>
     </div>
 
-    {/* The questions people actually type about a person — where, for whom,
+    {/* The questions people actually type about a person, where, for whom,
         how long — answered in one place. Every figure here is already stated
         somewhere else on the site; none of it is new, it was just never
         gathered where a search engine or a model would look for it. */}
     <dl class="facts">
       <dt>Where</dt><dd>Barcelona, CET. Remote across Europe.</dd>
-      <dt>How long</dt><dd>Ten years in product, mostly SaaS and mobile apps.</dd>
+      <dt>How long</dt><dd>7+ years in product, mostly SaaS and mobile apps.</dd>
       <dt>Who with</dt><dd>Teams of roughly two to forty people. Founders, and the person who can change the plan.</dd>
       <dt>What kind of work</dt><dd>Zero-to-one product, scoping under a deadline, and saying the thing nobody in the room wants to say.</dd>
       <dt>Languages</dt><dd>Spanish and English.</dd>
@@ -161,7 +161,7 @@ const notFor = [
 
   .bio p {
     font-size: 1.0625rem;
-    line-height: 1.62;
+    line-height: var(--lh-read);
     letter-spacing: 0;
     color: var(--dim);
   }
@@ -172,11 +172,12 @@ const notFor = [
     display: grid;
     grid-template-columns: minmax(0, 34%) 1fr;
     gap: var(--space-3) var(--space-5);
+    align-items: start;
     margin: var(--space-9) 0;
     padding: var(--space-7) 0;
     border-block: 1px solid var(--hair);
     font-size: 0.9375rem;
-    line-height: 1.55;
+    line-height: var(--lh-ui);
     letter-spacing: 0;
   }
   .facts dt { color: var(--dim); }
@@ -190,7 +191,7 @@ const notFor = [
   .block .lead {
     margin: -14px 0 26px;
     font-size: 0.9375rem;
-    line-height: 1.55;
+    line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
   }
@@ -199,13 +200,13 @@ const notFor = [
     font-family: var(--font-display);
     font-size: 1.0625rem;
     font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1.3;
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-tight);
     margin-bottom: 8px;
   }
   dl dd {
     font-size: 1.0625rem;
-    line-height: 1.55;
+    line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
   }

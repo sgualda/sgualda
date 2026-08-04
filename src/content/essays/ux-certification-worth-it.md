@@ -16,17 +16,17 @@ faqs:
   - q: 'Is a UX certification worth it for a career changer?'
     a: 'It can be, for a reason that has little to do with the certificate. If you are coming from another field with no projects and no network, a structured course gives you deadlines, feedback and something to put in a portfolio. You are buying structure and accountability. Whether that is worth the price depends on whether you would have built the same portfolio without it.'
   - q: 'What is the alternative to a UX certification?'
-    a: 'Find a real problem with a real person attached — a small business, a charity, an open-source project, a friend’s side project — and do the whole thing end to end, including the part where you watch somebody use it and it goes wrong. One of those beats any course, because it produces the one thing a course cannot: a story about a decision that had consequences.'
+    a: 'Find a real problem with a real person attached: a small business, a charity, an open-source project, a friend’s side project. Then do the whole thing end to end, including the part where you watch somebody use it and it goes wrong. One of those beats any course, because it produces the one thing a course cannot: a story about a decision that had consequences.'
 ---
 Short answer: I looked at them, priced them, and did not do one. Nobody has ever asked.
 
-Longer answer, which is the useful one: **I am not the person this question is usually about**, and most articles answering it fail to say so. Whether a certificate is worth it depends almost entirely on what you already have — and "no, build a portfolio instead" is very easy advice to give when you already have a portfolio.
+Longer answer, which is the useful one: **I am not the person this question is usually about**, and most articles answering it fail to say so. Whether a certificate is worth it depends almost entirely on what you already have, and "no, build a portfolio instead" is very easy advice to give when you already have a portfolio.
 
 ## Why I did not
 
 When I started moving into UX I found the same list everybody finds: institute programmes, bootcamps, platform certificates, courses with a recognisable logo at the end. Some are genuinely good. The prices ran from mildly annoying to several months of rent.
 
-What stopped me was not scepticism about the content. It was that I already had the thing the certificate was meant to signal — work I had done, badly, that I could talk about. I came into this from building things with code, then visual work, and by the time I was calling myself a designer I had a handful of projects and a much larger handful of mistakes.
+What stopped me was not scepticism about the content. It was that I already had the thing the certificate was meant to signal: work I had done, badly, that I could talk about. I came into this from building things with code, then visual work, and by the time I was calling myself a designer I had a handful of projects and a much larger handful of mistakes.
 
 So the certificate would have bought me a signal I did not need, at a price I would have felt.
 
@@ -48,7 +48,7 @@ This is the part the "just build a portfolio" crowd skips, and it is where I thi
 
 **When an automated filter stands between you and a human.** Larger companies and agencies do screen on keywords, and a recognisable credential can be the difference between a CV being read and not. That is not a comment on the value of the knowledge. It is a comment on the pipeline, and pretending the pipeline does not exist helps nobody who is stuck in it.
 
-**When you are changing career and have no structure.** If you are coming from teaching, or law, or hospitality, with no projects, no colleagues in the field and no deadlines, then what a good course sells is not knowledge — it is **structure, feedback, and a reason to finish things.** Those are genuinely hard to manufacture alone. The honest test is whether you would have built the same portfolio without the course. For some people the answer is obviously yes and the money is wasted. For plenty of others it is no, and that is worth paying for.
+**When you are changing career and have no structure.** If you are coming from teaching, or law, or hospitality, with no projects, no colleagues in the field and no deadlines, then what a good course sells is not knowledge. It is **structure, feedback, and a reason to finish things.** Those are genuinely hard to manufacture alone. The honest test is whether you would have built the same portfolio without the course. For some people the answer is obviously yes and the money is wasted. For plenty of others it is no, and that is worth paying for.
 
 I would not have said this five years ago, and five years ago I was wrong. My route worked for me and I mistook that for it being *the* route.
 

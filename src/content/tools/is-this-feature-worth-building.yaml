@@ -7,7 +7,7 @@ time: "40 seconds"
 count: "4 questions"
 title: "Is this feature worth building?"
 meta: "Four questions separate a real user need from a loud request before it reaches your
-  roadmap — and give you a reason you can say out loud to whoever asked. Free, no account."
+  roadmap, and give you a reason you can say out loud to whoever asked. Free, no account."
 lead: "Something has been requested enough times that it’s getting hard to say no. Four
   questions separate a real need from a loud request, and give you a reason you can say out
   loud to the person who asked."
@@ -32,11 +32,11 @@ faqs:
     - "Only if you can find the same need in people who are not that customer. A large
       account can fund a feature and still be the only place it’s ever used, which leaves
       you maintaining it forever. The question that settles it’s what they do about the
-      problem today — if the answer is nothing, they’re describing a preference with a
+      problem today, if the answer is nothing, they’re describing a preference with a
       budget attached."
   - - "How do I say no to a feature request?"
     - "Say what you would need to see to say yes, and mean it. “Nobody who asked for this
-      has built a workaround for it, so we do not think the need is there yet — if that
+      has built a workaround for it, so we do not think the need is there yet, if that
       changes, tell me” is refusable, checkable, and does not sound like a brush-off. A
       vague “it’s not on the roadmap” invites the same request again next month."
 q:
@@ -107,7 +107,7 @@ b:
     name: "Not yet. Find out what they actually do."
     sub: "The request is loud but nothing underneath it proves the need."
     body: "<p>Nobody has a workaround, or nothing measurable happens if this never exists. Those
-      are the two signs that you’re looking at a preference rather than a problem — and
+      are the two signs that you’re looking at a preference rather than a problem, and
       preferences are infinite, which is why roadmaps built on them never end.</p><p>This is
       not a no. It’s a <strong>“we do not know yet”</strong>, and the difference matters
       when you go back to the person who asked.</p>"

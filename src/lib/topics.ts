@@ -2,7 +2,7 @@
  * Content taxonomy.
  *
  * Deliberately mapped onto the five stages of the map, so the three content
- * systems on this site — essays, stages and free checks — describe the same
+ * systems on this site, essays, stages and free checks — describe the same
  * journey instead of three unrelated ones. That mapping is what turns a pile
  * of pages into topical authority.
  */

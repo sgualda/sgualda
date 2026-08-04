@@ -5,7 +5,7 @@ import Footer from '@components/Footer.astro';
 import { SITE } from '@lib/site';
 
 /**
- * /privacy/ — describes what this site ACTUALLY does, not what a generic
+ * /privacy/, describes what this site ACTUALLY does, not what a generic
  * template says. If we ever add analytics, a form backend or a cookie, this
  * page has to change in the same commit.
  */
@@ -41,7 +41,7 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
       <h2>The free tools</h2>
       <p>
         Every check on this site runs entirely in your browser. The questions and answers are
-        part of the page itself — nothing you click is sent to a server, nothing is stored, and
+        part of the page itself, nothing you click is sent to a server, nothing is stored, and
         I never see any of it. Your answers are kept in the address bar, after the # symbol, so
         you can share a result with your team. Browsers never send that part of a URL to a
         server, so it stays between you and whoever you send it to.
@@ -77,13 +77,13 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
       <h2>Fonts</h2>
       <p>
         The typefaces are served from this domain. No third party is involved in loading a page
-        here — not for fonts, not for anything else.
+        here, not for fonts, not for anything else.
       </p>
 
       <h2>When something breaks</h2>
       <p>
         If a script on this site throws an error, the browser sends me the error message, the
-        file it happened in and the page it happened on. That’s all — no IP address, no
+        file it happened in and the page it happened on. That’s all, no IP address, no
         cookie, no identifier of any kind, and nothing that could single you out. It exists so
         that a tool quietly failing in one browser does not stay broken for months.
       </p>
@@ -104,8 +104,8 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
 
       <h2>Changes</h2>
       <p>
-        If this site ever starts collecting something — analytics, a form that stores data, a
-        cookie of any kind — this page changes at the same time, and the date at the top changes
+        If this site ever starts collecting something, analytics, a form that stores data, a
+        cookie of any kind, this page changes at the same time, and the date at the top changes
         with it. It’s not a page I intend to quietly update.
       </p>
     </div>
@@ -132,7 +132,7 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
   }
   .doc h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
   .doc p {
-    font-size: 1.0625rem; line-height: 1.66; letter-spacing: 0; color: var(--dim);
+    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
   }
   .doc p + p { margin-top: 1em; }
   .doc a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }

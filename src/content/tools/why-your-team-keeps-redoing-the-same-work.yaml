@@ -7,7 +7,7 @@ time: "40 seconds"
 count: "4 questions"
 title: "Why your team keeps redoing the same work"
 meta: "Four questions find out why settled decisions keep coming back and work gets thrown
-  away — and the smallest change that stops it. Free, forty seconds, nothing saved."
+  away, and the smallest change that stops it. Free, forty seconds, nothing saved."
 lead: "You ship constantly and it does not feel like progress. Decisions come back, work
   gets thrown away, and the same argument returns every few weeks. Four questions and you
   will know which of four causes it is."
@@ -20,7 +20,7 @@ answers:
   - - "Somebody is left out of the room"
     - "The same objection, arriving at the most expensive moment."
   - - "Nobody can end an argument"
-    - "Decisions are not made, they’re abandoned — and abandoned things come back."
+    - "Decisions are not made, they’re abandoned, and abandoned things come back."
 faqs:
   - - "Why does my team keep redoing the same work?"
     - "Usually one of four reasons: you genuinely learned something new, which is not waste;
@@ -111,12 +111,12 @@ b:
       - "Ask them directly what they would have said. It takes five minutes and saves weeks."
   - max: 99
     name: "Nobody can end an argument."
-    sub: "Decisions do not get made, they get abandoned — and anything abandoned comes back."
+    sub: "Decisions do not get made, they get abandoned, and anything abandoned comes back."
     body: "<p>Nothing is written down, decisions return every sprint, and no one person can
       close a discussion. That’s not a communication problem. It’s <strong>an unclear
       owner,</strong> and it’ll not be fixed by a better tool or a longer
       meeting.</p><p>The uncomfortable part is that the fix is not more consensus. It’s
-      naming who decides when there’s no consensus — and accepting that being overruled
+      naming who decides when there’s no consensus, and accepting that being overruled
       sometimes is the price of moving.</p>"
     next:
       - "Name the decider for each area, in writing. Not by seniority — by who lives with

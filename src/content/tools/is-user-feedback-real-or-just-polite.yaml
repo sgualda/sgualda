@@ -37,7 +37,7 @@ faqs:
       it expensive."
   - - "What questions should I ask in a user interview?"
     - "Ask about the last time the problem happened, in detail, before you describe your
-      solution — or ideally without describing it at all. What did they do, what did it cost
+      solution, or ideally without describing it at all. What did they do, what did it cost
       them, what did they try first. Past behaviour is checkable. Any question about the
       future, including “would you use this”, produces a polite guess rather than
       information."
@@ -97,7 +97,7 @@ b:
   - max: 8
     name: "Promising, but a leg is missing."
     sub: "There’s something real here. Have one more conversation before you build."
-    body: "<p>Most of the signal is there, but one piece is not — usually the second person, or
+    body: "<p>Most of the signal is there, but one piece is not, usually the second person, or
       evidence they did it again on their own. Those two separate a real pattern from one
       enthusiastic individual.</p><p>The trap is that it feels close enough to justify
       starting, and starting feels better than asking. <strong>A prototype built on four
@@ -133,7 +133,7 @@ b:
       noticing.</p><p>The honest question, and it’s not rhetorical: <strong>if nobody has
       ever built an ugly manual version of this by hand, is the pain actually
       there?</strong> People solve problems that hurt. Badly, in spreadsheets, with a lot of
-      copy-pasting — but they solve them.</p>"
+      copy-pasting, but they solve them.</p>"
     next:
       - "Go looking for the ugly manual version. Forums, spreadsheets, a channel someone
         maintains by hand."

@@ -11,11 +11,11 @@
 
   .qq {
     font-family: var(--font-display); font-size: 1.25rem; font-weight: 700;
-    letter-spacing: -0.03em; line-height: 1.25; margin: 14px 0 20px;
+    letter-spacing: var(--ls-heading); line-height: var(--lh-tight); margin: 14px 0 20px;
   }
   .opt, .ck {
     display: block; width: 100%; text-align: left; font-family: var(--font-body);
-    font-size: 0.9375rem; line-height: 1.45; letter-spacing: 0;
+    font-size: 0.9375rem; line-height: var(--lh-ui); letter-spacing: 0;
     background: var(--surface); color: var(--ink);
     border: 1px solid transparent; border-radius: 14px;
     padding: 14px 17px; cursor: pointer;
@@ -41,18 +41,48 @@
     display: inline-block; font-size: 0.6875rem; letter-spacing: 0.16em;
     text-transform: uppercase; color: var(--dim); margin-bottom: 14px;
   }
-  .vname { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: -0.035em; line-height: 1.15; }
+  .vname { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: var(--ls-heading); line-height: var(--lh-display); }
   .vmeta { display: block; font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin: 8px 0 22px; }
-  .vwhy { text-align: left; font-size: 1rem; line-height: 1.7; letter-spacing: 0; color: var(--dim); }
+  .vwhy { text-align: left; font-size: 1rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
   .vwhy p + p { margin-top: 12px; }
   .vwhy strong { color: var(--ink); font-weight: 600; }
   .vcols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; text-align: left; margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--hair); }
   .vcols h4 { font-family: var(--font-body); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); font-weight: 500; margin-bottom: 10px; }
   .vcols ul { list-style: none; }
-  .vcols li { font-size: 0.9375rem; line-height: 1.5; letter-spacing: 0; padding: 5px 0 5px 16px; position: relative; }
-  .vcols li::before { content: ''; position: absolute; left: 0; top: 13px; width: 6px; height: 1px; background: var(--ink); }
-  .vcols .no li::before { width: 6px; height: 6px; border-radius: 99px; background: none; border: 1px solid var(--dim); top: 11px; }
-  .vnote { font-size: 0.875rem; line-height: 1.6; letter-spacing: 0; color: var(--dim); text-align: left; margin-top: 22px; }
+  .vcols li { font-size: 0.9375rem; line-height: var(--lh-ui); letter-spacing: 0; padding: 5px 0 5px 16px; position: relative; }
+  /* A tick and a cross, drawn in CSS and coloured — the only place on the site
+     where hue carries meaning rather than decoration. Two lists distinguished
+     by a 6px dash and a 6px ring asked the reader to notice a detail they had
+     no reason to look for, and the whole point of this block is that the two
+     columns say opposite things. */
+  .vcols li { padding-left: 26px; }
+  .vcols li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 11px;
+    width: 11px;
+    height: 6px;
+    border-left: 2px solid var(--ok);
+    border-bottom: 2px solid var(--ok);
+    transform: rotate(-45deg);
+    background: none;
+  }
+  .vcols .no li::before {
+    top: 12px;
+    left: 3px;
+    width: 11px;
+    height: 11px;
+    border: 0;
+    transform: none;
+    background:
+      linear-gradient(var(--err), var(--err)) center / 100% 2px no-repeat,
+      linear-gradient(var(--err), var(--err)) center / 2px 100% no-repeat;
+    rotate: 45deg;
+  }
+  .vcols h4 { display: flex; align-items: center; gap: 7px; }
+  .vcols .no h4 { color: color-mix(in srgb, var(--err) 70%, var(--dim)); }
+  .vnote { font-size: 0.875rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); text-align: left; margin-top: 22px; }
   .vacts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 26px; }
   .tag { font-size: 0.75rem; letter-spacing: 0.06em; color: var(--dim); margin-top: 10px; }
 
@@ -61,7 +91,7 @@
      it competing for the same attention. */
   .step .intro {
     font-size: 0.875rem;
-    line-height: 1.55;
+    line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
     margin: -6px 0 22px;
@@ -70,7 +100,7 @@
   .step .privacy {
     margin-top: var(--space-5);
     font-size: 0.75rem;
-    line-height: 1.5;
+    line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
     text-align: left;
@@ -84,7 +114,7 @@
     padding: 12px 15px; color: var(--ink); background: var(--surface);
     border: 1px solid transparent; border-radius: 13px; outline: none;
   }
-  .f textarea { min-height: 104px; resize: vertical; line-height: 1.55; }
+  .f textarea { min-height: 104px; resize: vertical; line-height: var(--lh-ui); }
   .f input:focus, .f textarea:focus, .f select:focus { border-color: var(--ink); }
   /* The global focus ring is a 2px halo plus a 4px shadow, which is right on a
      pill button sitting on a dark band and far too heavy wrapped around a
@@ -111,7 +141,7 @@
   padding: 10px 0 0;
   border-top: 1px solid var(--err);
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: var(--lh-ui);
   letter-spacing: 0;
   color: var(--err);
   text-align: left;

@@ -1,5 +1,5 @@
 ---
-# FICTIONAL — invented at Sergio’s request, plausible but did not happen.
+# FICTIONAL, invented at Sergio’s request, plausible but did not happen.
 # Review before launch: a recruiter may ask about it in an interview. See #Q-062.
 title: 'Rangos'
 description: 'A pricing calculator for freelancers that I spent three weekends on and never showed anybody. The most useful thing it taught me is why that happened.'

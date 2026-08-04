@@ -11,7 +11,7 @@ export const SITE = {
   name: 'Sergio Gualda',
   role: 'Product Designer',
   location: 'Barcelona, Spain',
-  // Confirmed by Sergio 2026-07-31. The Figma footer shows sergio@ — that is
+  // Confirmed by Sergio 2026-07-31. The Figma footer shows sergio@, that is
   // the one that is wrong, not this.
   email: 'hello@sgualda.com',
   locale: 'en',
@@ -27,7 +27,7 @@ export const SITE = {
  * and the lighter version below is defensible.
  *
  * Flip `trading` to true on the day he registers. At that point the full NIF
- * and a fiscal address become required — and that address should be a
+ * and a fiscal address become required, and that address should be a
  * registered office, never a home address, which stays indexed forever.
  *
  * Not legal advice. Worth twenty minutes with a gestor before launch.
@@ -39,6 +39,16 @@ export const LEGAL = {
   nif: '',        // DNI with its letter. Only published when trading.
   address: '',    // Registered office. Never the home address.
   city: 'Barcelona, Spain',
+  /**
+   * Switches the consent banner on. False today because the site sets no
+   * cookies and runs no analytics, and a banner asking permission for nothing
+   * trains people to dismiss a control that matters elsewhere.
+   *
+   * Turn on in the same commit as the analytics snippet and the /privacy/
+   * rewrite. check-urls.mjs already fails the build if analytics appears while
+   * the privacy page still claims there is none.
+   */
+  analytics: false,
 } as const;
 
 export const SOCIAL = {
