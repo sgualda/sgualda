@@ -147,12 +147,12 @@ export const BLUNT_HTML = `<div class="b"><span class="x"><svg><use href="#xm"/>
 /** FAQ markup, mirrored by the FAQPage JSON-LD. */
 export const FAQ_HTML = `<details><summary>How does this actually work?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>It starts with a written brief rather than a call, because a brief takes you three minutes and a call takes us both an hour to discover something the brief would have said.</p>
-      <p>You describe what is stuck. I read it and reply within a day with which kind of engagement fits, what it would involve and what it would cost. If none of them fit, I say that instead and point you somewhere more useful.</p></div></details>
+      <p>You describe what is stuck. I read it and reply within five working days with which kind of engagement fits, what it would involve and what it would cost. If none of them fit, I say that instead and point you somewhere more useful.</p></div></details>
     <details><summary>What is a product review, and what do I get at the end?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>Five days on the product, the flows, whatever research already exists and the numbers, plus up to nine conversations with your actual users.</p>
       <p>What lands is a short ranked document: the five things that matter, in the order to do them, with the reasoning attached so your team can argue with it. Then a ninety-minute session where they do exactly that, and two follow-up calls at two and six weeks, because plans need adjusting once they meet reality, and handing over a PDF and disappearing is not a service.</p></div></details>
     <details><summary>How much does it cost?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
-      <p>I’m not publishing prices at the moment. Send a brief and you will have a specific figure within a day, along with exactly what is included.</p>
+      <p>I’m not publishing prices at the moment. Send a brief and you will have a specific figure within five working days, along with exactly what is included.</p>
       <p>What I can tell you now: scope and price are fixed before anything starts. No hourly billing, no open-ended engagements, and the number does not move depending on how well funded you look.</p></div></details>
     <details><summary>Do you really need to talk to our users?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
       <p>For a review, yes, and this is the part clients resist most. Nine conversations is usually enough.</p>
@@ -175,7 +175,7 @@ export const FAQ_HTML = `<details><summary>How does this actually work?<span cla
       <p>Barcelona, CET. Almost everything is remote and works across Europe without friction.</p>
       <p>I use whatever your team already uses — I’m not going to make five people learn a new tool for a five-day engagement. For ongoing work I need access to the channels where decisions actually get made, not a new one created for me.</p></div></details>
 <details><summary>What happens after I send a brief?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">
-      <p>You get a confirmation email straight away with a copy of what you wrote. Then I read it, every one, myself, and reply within a day with which kind of engagement fits, what it would involve and what it would cost. Or that none of it fits, which happens about a third of the time.</p>
+      <p>You get a confirmation email straight away with a copy of what you wrote. Then I read it, every one, myself, and reply within five working days with which kind of engagement fits, what it would involve and what it would cost. Or that none of it fits, which happens about a third of the time.</p>
       <p>That reply is an email. There is no call to book, no calendar link and no sequence behind it. If you never reply, nothing else happens.</p></div></details>
 
 <details><summary>Am I committing to anything by sending one?<span class="pm" aria-hidden="true">+</span></summary><div class="ans">

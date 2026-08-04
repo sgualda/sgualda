@@ -18,7 +18,7 @@ import Footer from '@components/Footer.astro';
 
 <Base
   title="Brief received"
-  description="Your brief arrived. I read every one myself and reply within a day."
+  description="Your brief arrived. I read every one myself and reply within five working days."
   noindex
 >
   <Header slot="nav" />
@@ -27,7 +27,7 @@ import Footer from '@components/Footer.astro';
     <span class="eyebrow">Received</span>
     <h1>Got it.</h1>
     <p class="sub">
-      I read every brief myself, and I will come back to you within a day, with what fits, what
+      I read every brief myself, and I will come back to you within five working days, with what fits, what
       it would involve and what it costs, or that none of it fits.
     </p>
     <p class="where" id="where" hidden></p>
@@ -74,22 +74,37 @@ import Footer from '@components/Footer.astro';
     sessionStorage.removeItem('brief-sent');
   }
 
-  /* "Within a day" is elastic; a date is not. Computed in the browser so it
-     lands in the reader’s own time zone, and paired with what to do if nothing
-     turns up — the one thing a confirmation page normally omits.
+  /* "Within five working days" is elastic; a date is not. Computed in the
+     browser so it lands in the reader’s own time zone, and paired with what to
+     do if nothing turns up — the one thing a confirmation page normally omits.
+
+     Working days, counted rather than approximated. Five calendar days from a
+     Thursday is the following Tuesday; five working days is the Thursday after
+     that. Promising the earlier one and meaning the later one is how a date
+     stops being worth putting on the page.
+
+     No time of day any more. At 24 hours "by Wednesday, 18:58" was a real
+     commitment; across five days a minute-level deadline is false precision,
+     and it reads as a countdown rather than a window.
 
      The time zone is theirs; the language is the page’s. Passing undefined took
-     the locale from the browser, which on a Spanish machine rendered "That
-     means by miércoles, 17:47" — a Spanish weekday inside an English sentence,
-     and German or Japanese for the next reader. Every other date on the site is
-     already pinned to en-GB; this one escaped because it is the only one built
-     at runtime. */
-  const by = new Date(Date.now() + 24 * 60 * 60 * 1000);
+     the locale from the browser, which on a Spanish machine rendered "by
+     miércoles" — a Spanish weekday inside an English sentence, and German or
+     Japanese for the next reader. */
+  const by = new Date();
+  let left = 5;
+  while (left > 0) {
+    by.setDate(by.getDate() + 1);
+    const d = by.getDay();
+    if (d !== 0 && d !== 6) left--;
+  }
   const when = document.getElementById('when')!;
   when.textContent =
-    `That means by ${by.toLocaleDateString('en-GB', { weekday: 'long' })}, ` +
-    `${by.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' })}. ` +
-    'If nothing arrives, check your spam folder and then reply to the confirmation email.';
+    `That means by ${by.toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    })}. If nothing arrives, check your spam folder and then reply to the confirmation email.`;
   when.hidden = false;
 
   celebrate(document.getElementById('done'));

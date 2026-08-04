@@ -362,7 +362,9 @@ test('required public files exist', () => {
     'dist/.htaccess',
     'dist/api/brief.php',
     'dist/api/log.php',
-    'dist/favicon.svg',
+    'dist/favicon.ico',
+    'dist/favicon-32.png',
+    'dist/favicon-16.png',
     'dist/site.webmanifest',
     'dist/rss.xml',
     'dist/sitemap-index.xml',
@@ -632,7 +634,11 @@ test.describe('the funnel', () => {
     const page = await ctx.newPage();
     await page.goto('/work-with-me/brief/sent/');
     const text = (await page.locator('#when').textContent()) ?? '';
-    expect(text).toMatch(/by (Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),/);
+    expect(text).toMatch(
+      /by (Monday|Tuesday|Wednesday|Thursday|Friday) \d{1,2} (January|February|March|April|May|June|July|August|September|October|November|December)\./
+    );
+    // Saturday and Sunday are absent from that list on purpose: the date is
+    // five working days out, so it can never land on a weekend.
     await ctx.close();
   });
 });

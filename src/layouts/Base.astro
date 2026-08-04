@@ -107,10 +107,22 @@ const graph = [
     <meta property="og:locale" content="en_GB" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    {/* SVG first for browsers that take it, .ico as the fallback every RSS
-        reader, crawler and older client still asks for at /favicon.ico. */}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    {/* The tab icon is the memoji, the same mark as the header and the app
+        icons — not the drawn "SG" that used to be here.
+
+        No SVG entry any more, and that is the point rather than an omission:
+        browsers prefer an SVG icon over everything else when one is offered, so
+        leaving favicon.svg listed meant the letterform kept winning no matter
+        what the .ico contained. The mark is a raster portrait, so a vector
+        version buys nothing anyway.
+
+        32px first: that is what a tab shows on any modern display, and it is
+        where the face is legible. 16px exists for older screens, .ico for
+        Windows shortcuts and the crawlers and readers that still ask for
+        /favicon.ico by name without reading the markup. */}
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#ffffff" />

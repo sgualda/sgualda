@@ -203,7 +203,7 @@ $copy = '<hr><p style="color:#6b6b6b;font-size:14px">What you sent:</p>'
 
 send($cfg, $email, 'Got your brief',
     '<p>Thanks — your brief arrived and I read every one myself.</p>'
-    . '<p>You will hear back within a day, with what fits, what it would involve and what it '
+    . '<p>You will hear back within five working days, with what fits, what it would involve and '
     . 'costs, or that none of it fits. That reply is an email: there is no call to book and '
     . 'nothing to schedule.</p><p>— Sergio</p>'
     . $copy);
