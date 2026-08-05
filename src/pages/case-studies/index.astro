@@ -21,6 +21,40 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order || b.data.published.valueOf() - a.data.published.valueOf()
 );
 
+/**
+ * Status is the interesting axis of this particular portfolio.
+ *
+ * The page's own thesis is that some of these are dead and that the dead ones
+ * are the useful part — and until now that was visible on two cards out of six,
+ * because only the buried ones lack a cover. The other four were unlabelled
+ * squares.
+ *
+ * Wording: 'shipped' and 'buried' were already in the content schema and in the
+ * copy on this page, so they are the site's own vocabulary rather than
+ * something invented for a filter. 'Finished' was the obvious translation for
+ * the fourth state and is wrong — a product is rarely finished, it is shipped.
+ * 'Paused' over 'on hold', which is what a company says.
+ *
+ * Ordered roughly by how alive each thing is, not alphabetically.
+ */
+const STATES = [
+  { key: 'all', label: 'All' },
+  { key: 'in-progress', label: 'In progress' },
+  { key: 'shipped', label: 'Shipped' },
+  { key: 'paused', label: 'Paused' },
+  { key: 'buried', label: 'Buried' },
+] as const;
+
+const filters = STATES.map((s) => ({
+  ...s,
+  n: s.key === 'all' ? cases.length : cases.filter((c) => c.data.status === s.key).length,
+}));
+
+/** Labels for the cards. Same words as the filters, or they are two vocabularies. */
+const LABEL: Record<string, string> = Object.fromEntries(
+  STATES.filter((s) => s.key !== 'all').map((s) => [s.key, s.label])
+);
+
 ---
 
 <Base
@@ -56,13 +90,34 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
   </section>
 
   <div class="col">
+    <div class="filters rail" role="group" aria-label="Filter by status">
+      {
+        filters.map((f, i) => (
+          <button
+            class:list={['chip', { on: i === 0 }]}
+            type="button"
+            data-filter={f.key}
+            aria-pressed={i === 0}
+          >
+            {f.label} <span>{f.n}</span>
+          </button>
+        ))
+      }
+    </div>
+    <p class="fcount" id="filterCount" role="status" aria-live="polite"></p>
+
     <div class="grid" id="grid">
       {
         cases.length
           ? /* Image only. With no visible text the link needs a name of its
                own, or a screen reader announces six links called "image". */
             cases.map((c) => (
-              <a class="card" href={`/case-studies/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
+              <a
+                class="card"
+                data-state={c.data.status}
+                href={`/case-studies/${c.id}/`}
+                aria-label={`${c.data.title} — ${LABEL[c.data.status]} — ${c.data.summary}`}
+              >
                 {c.data.cover ? (
                   <Image
                     class="thumb"
@@ -74,66 +129,35 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
                     style={`object-position:${c.data.coverPosition}`}
                   />
                 ) : (
-                  <div class="thumb none"><span>{c.data.status}</span></div>
+                  <div class="thumb none"><span>{LABEL[c.data.status]}</span></div>
                 )}
-                {/* Visible on a phone only. On desktop the grid is scannable and
-                    a hover reveals the link target; on a phone there is no hover
-                    and no tooltip, so six unlabelled squares tell a visitor
-                    nothing at all about a portfolio. */}
-                <span class="name">{c.data.title}</span>
+                {/* Title and status on every card, at every width.
+                    It used to be title-only and phone-only: on desktop the
+                    status was visible on the two buried ones and nowhere else,
+                    so four of the six were squares that said nothing. The
+                    status is the most interesting thing about this portfolio
+                    and it was the thing the grid hid. */}
+                <span class="name">
+                  {c.data.title}
+                  <b class="state" data-state={c.data.status}>{LABEL[c.data.status]}</b>
+                </span>
               </a>
             ))
           : [0, 1, 2, 3].map(() => <div class="thumb placeholder" aria-hidden="true" />)
       }
     </div>
 
+    {/* Shown by the filter script when a state has nothing in it. Every state
+        has at least one project today, so this is for the day one empties —
+        a filter that returns silence reads as a broken page. */}
+    <p class="none-here" id="noneHere" hidden>
+      Nothing here yet. <button type="button" class="linky" data-filter="all">Show everything</button>.
+    </p>
+
     {cases.length === 0 && (
       <p class="empty">Case studies are being written. <a href="/writing/">Read something meanwhile</a>.</p>
     )}
   </div>
-
-  {/*
-    The page was 61 words: a heading, one line and six unlabelled squares.
-
-    That fails in two directions. A stranger deciding whether to hire somebody
-    cannot tell from a grid of screenshots what kind of problems he takes on. And
-    a search engine reading the page has nothing to classify — no context, no
-    specialism, nothing that would let it answer "product designer" for anybody.
-
-    Written from what the six projects actually are rather than as positioning:
-    two employed, two co-founded, two buried. That pattern is the most useful
-    thing about this work and it was the one thing the page did not say.
-  */}
-  <section class="section col ground">
-    <h2>Two vantage points,<br />and two things that died.</h2>
-    <p>
-      <a href="/case-studies/truvi/">truvi</a> and its
-      <a href="/case-studies/truvi-developer-portal/">developer portal</a> are the day job: a SaaS
-      dashboard and an API reference, designed inside a real team, with all the negotiation that
-      involves and none of the freedom a portfolio shot implies.
-      <a href="/case-studies/ecoco-mobile-app/">ecoco</a> and
-      <a href="/case-studies/glintale/">glintale</a> are the other side of the desk — two products I
-      co-founded and built on evenings and weekends, where nobody hands you a brief and every
-      decision is also a decision about money.
-    </p>
-    <p>
-      Most of what I know came from doing both. Working inside somebody else’s roadmap teaches you
-      how decisions actually get made; funding your own teaches you what they cost. Reading one
-      without the other is how designers end up with strong opinions and no scars.
-    </p>
-    <p>
-      The work is mostly SaaS dashboards, mobile apps and tools built for developers — products with
-      a job to do rather than a homepage to admire. Small teams, two to forty people, usually with
-      less time than the plan needed.
-    </p>
-    <p>
-      <a href="/case-studies/rangos/">Rangos</a> and
-      <a href="/case-studies/weeknotes/">Weeknotes</a> are the two that died, and they are here with
-      post-mortems on purpose. A portfolio of things that worked teaches nobody anything, because
-      what worked depended on a team, a market and a moment you will never have. What failed is
-      more portable.
-    </p>
-  </section>
 
   <section class="section col">
     <div class="band">
@@ -150,27 +174,61 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
 
-  /* Prose, not a "sub". Four paragraphs at .sub size would shout; this is
-     meant to be read, so it takes the reading measure and the reading colour. */
-  .ground { text-align: left; }
-  .ground h2 { text-align: center; margin-bottom: var(--space-7); }
-  .ground p {
+  /* Same chips as /tools/, same rail behaviour: centred while they fit,
+     scrolled with faded edges once they do not. */
+  .filters { gap: 8px; margin-top: 44px; padding-block: 4px; }
+  .filters[data-start='true'][data-end='true'] { justify-content: center; }
+  .chip {
+    font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500;
+    letter-spacing: var(--ls-read);
+    padding: 12px 18px; border-radius: var(--radius-pill);
+    border: 1px solid var(--hair); background: transparent; color: var(--ink);
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .chip span { color: var(--dim); margin-left: 2px; }
+  .chip:hover { border-color: var(--ink); }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .chip.on span { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+
+  .fcount {
+    margin-top: var(--space-4);
+    font-size: 0.6875rem; letter-spacing: var(--ls-caps); text-transform: uppercase;
+    color: var(--dim); min-height: 1em;
+  }
+
+  .none-here {
+    margin-top: var(--space-8);
+    text-align: center;
     color: var(--dim);
     font-size: 1.0625rem;
-    line-height: var(--lh-read);
-    letter-spacing: var(--ls-read);
-    max-width: 68ch;
-    margin-inline: auto;
   }
-  .ground p + p { margin-top: var(--space-5); }
-  .ground a {
-    color: var(--ink);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-color: var(--hair);
-    transition: text-decoration-color 0.2s var(--ease);
+  .none-here[hidden] { display: none; }
+  .linky {
+    color: var(--ink); text-decoration: underline; text-underline-offset: 3px;
+    text-decoration-color: var(--hair); cursor: pointer; font: inherit;
   }
-  .ground a:hover { text-decoration-color: var(--ink); }
+  .linky:hover { text-decoration-color: var(--ink); }
+
+  /* The status, on every card. Quiet — it labels the work, it is not the work. */
+  .state {
+    display: block;
+    margin-top: 3px;
+    font-weight: 400;
+    font-size: 0.75rem;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .state[data-state='buried'] { color: var(--err); }
+
+  .card.in { animation: card-in 0.42s var(--ease) both; animation-delay: calc(var(--d) * 42ms); }
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.985); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .card.in { animation: none; } }
+
   .intro h1 { margin-bottom: 18px; }
 
 
@@ -217,17 +275,17 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
   .card { text-align: left; display: block; }
   .card:hover .thumb { opacity: 0.82; }
 
-  .name { display: none; }
-  @media (max-width: 560px) {
-    .name {
-      display: block;
-      margin-top: var(--space-3);
-      font-family: var(--font-display);
-      font-size: 0.9375rem;
-      font-weight: 600;
-      letter-spacing: var(--ls-heading);
-      color: var(--ink);
-    }
+  /* Visible at every width now, not just on a phone. The grid used to rely on
+     hover to reveal what a tile was, which leaves a touch screen with six
+     unlabelled squares — and hid the status, which is the point of this page. */
+  .name {
+    display: block;
+    margin-top: var(--space-3);
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+    color: var(--ink);
   }
   .card[hidden] { display: none; }
 
@@ -256,3 +314,64 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
 </style>
 
+
+<script>
+  import { rails } from '@lib/rail';
+  rails();
+
+  /* ── status filter ── */
+  const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
+  const cards = document.querySelectorAll<HTMLElement>('.card');
+  const count = document.getElementById('filterCount');
+  const none = document.getElementById('noneHere');
+
+  function apply(f: string) {
+    chips.forEach((c) => {
+      const on = c.dataset.filter === f;
+      c.classList.toggle('on', on);
+      c.setAttribute('aria-pressed', String(on));
+    });
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let shown = 0;
+    cards.forEach((card) => {
+      const keep = f === 'all' || card.dataset.state === f;
+      card.hidden = !keep;
+      if (!keep) return;
+      if (!reduced) {
+        card.style.setProperty('--d', String(Math.min(shown, 6)));
+        // Restart the animation: removing and re-adding in one frame is a
+        // no-op, so the reflow read forces it.
+        card.classList.remove('in');
+        void card.offsetWidth;
+        card.classList.add('in');
+      }
+      shown++;
+    });
+
+    /**
+     * A filter that returns nothing has to say so.
+     *
+     * Every state has at least one project today, so this is for the day one
+     * empties — Paused holds a single project, and it only takes Sergio
+     * restarting ecoco for that chip to return silence. An empty grid with no
+     * message reads as a page that broke, and the way out is a control the
+     * visitor has to work out for themselves.
+     */
+    if (none) none.hidden = shown > 0;
+
+    if (count) {
+      const label = chips2label(f);
+      count.textContent =
+        f === 'all' ? '' : shown === 1 ? `1 project — ${label}` : `${shown} projects — ${label}`;
+    }
+  }
+
+  const chips2label = (f: string) =>
+    (document.querySelector<HTMLButtonElement>(`.chip[data-filter="${f}"]`)?.firstChild
+      ?.textContent ?? '').trim().toLowerCase();
+
+  chips.forEach((chip) => chip.addEventListener('click', () => apply(chip.dataset.filter!)));
+  // The way out of an empty state, which is the only reason it is a button.
+  none?.querySelector<HTMLButtonElement>('.linky')?.addEventListener('click', () => apply('all'));
+</script>

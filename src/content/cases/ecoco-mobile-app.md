@@ -4,7 +4,7 @@ description: 'A grocery app two friends built on the side. From a road trip conv
 client: 'ecoco'
 role: 'Co-founder and product designer'
 year: '2024 — now'
-status: 'alive'
+status: 'paused'
 published: 2026-08-01
 summary: 'Grocery lists and supermarket price comparison, built by two people on evenings and weekends. In private beta on Android.'
 order: 3

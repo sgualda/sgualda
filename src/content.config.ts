@@ -56,8 +56,15 @@ const cases = defineCollection({
       client: z.string(),
       role: z.string(),
       year: z.string(),
-      // 'alive' | 'shipped' | 'buried' — honest status, not marketing status.
-      status: z.enum(['alive', 'shipped', 'buried', 'in-progress']),
+      /**
+       * Honest status, not marketing status.
+       *
+       * 'alive' is gone: it meant the same as 'in-progress' in practice, and two
+       * words for one state is how a filter ends up with a bucket nobody can
+       * explain. 'paused' is new — stopped without being dead, which is a real
+       * thing that was not expressible.
+       */
+      status: z.enum(['in-progress', 'shipped', 'paused', 'buried']),
       published: z.coerce.date(),
       migrated: z.boolean().default(false),
       draft: z.boolean().default(false),

@@ -4,7 +4,7 @@ description: 'Designing the documentation site for an API, where the user is an 
 client: 'truvi'
 role: 'Product designer'
 year: 'Current'
-status: 'in-progress'
+status: 'shipped'
 published: 2026-08-01
 summary: 'The developer portal for truvi’s API. Designing for people who read documentation the way nobody reads anything else.'
 order: 2
