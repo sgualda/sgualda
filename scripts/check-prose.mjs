@@ -67,11 +67,36 @@ for (const dir of ['src/content', 'src/pages', 'src/lib'])
 const findings = [];
 for (const f of FILES) {
   const lines = readFileSync(join(root, f), 'utf8').split('\n');
+  /**
+   * Block comments are tracked across lines, not matched per line.
+   *
+   * The skip list caught lines opening with `//`, `*` or `/*`, but Astro's
+   * comments open with `{/*` and run for paragraphs, and every line after the
+   * first starts with ordinary prose. So a comment explaining why some copy was
+   * written a certain way was itself checked as copy — the rule fired on
+   * "Sergio's wording" inside a note nobody will ever read on the page.
+   *
+   * These rules are about what a reader sees. A comment is not that.
+   */
+  let inBlock = false;
   lines.forEach((line, i) => {
     const t = line.trim();
-    // Skip code, comments, imports, URLs and quoted product copy — a quotation
-    // of somebody else's interface is not the site speaking.
-    if (/^(\/\/|\*|\/\*|import |export |const |let |#|<)/.test(t)) return;
+
+    const opens = /\{?\/\*/.test(t);
+    const closes = /\*\/\}?/.test(t);
+    if (inBlock) {
+      if (closes) inBlock = false;
+      return;
+    }
+    if (opens && !closes) {
+      inBlock = true;
+      return;
+    }
+    if (opens) return; // opened and closed on one line
+
+    // Skip code, imports, URLs and quoted product copy — a quotation of
+    // somebody else's interface is not the site speaking.
+    if (/^(\/\/|\*|import |export |const |let |#|<)/.test(t)) return;
     if (/https?:\/\//.test(line) || /\breads\b.*!/.test(line)) return;
     for (const rule of RULES)
       for (const m of line.matchAll(rule.rx))

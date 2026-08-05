@@ -92,6 +92,49 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
     )}
   </div>
 
+  {/*
+    The page was 61 words: a heading, one line and six unlabelled squares.
+
+    That fails in two directions. A stranger deciding whether to hire somebody
+    cannot tell from a grid of screenshots what kind of problems he takes on. And
+    a search engine reading the page has nothing to classify — no context, no
+    specialism, nothing that would let it answer "product designer" for anybody.
+
+    Written from what the six projects actually are rather than as positioning:
+    two employed, two co-founded, two buried. That pattern is the most useful
+    thing about this work and it was the one thing the page did not say.
+  */}
+  <section class="section col ground">
+    <h2>Two vantage points,<br />and two things that died.</h2>
+    <p>
+      <a href="/case-studies/truvi/">truvi</a> and its
+      <a href="/case-studies/truvi-developer-portal/">developer portal</a> are the day job: a SaaS
+      dashboard and an API reference, designed inside a real team, with all the negotiation that
+      involves and none of the freedom a portfolio shot implies.
+      <a href="/case-studies/ecoco-mobile-app/">ecoco</a> and
+      <a href="/case-studies/glintale/">glintale</a> are the other side of the desk — two products I
+      co-founded and built on evenings and weekends, where nobody hands you a brief and every
+      decision is also a decision about money.
+    </p>
+    <p>
+      Most of what I know came from doing both. Working inside somebody else’s roadmap teaches you
+      how decisions actually get made; funding your own teaches you what they cost. Reading one
+      without the other is how designers end up with strong opinions and no scars.
+    </p>
+    <p>
+      The work is mostly SaaS dashboards, mobile apps and tools built for developers — products with
+      a job to do rather than a homepage to admire. Small teams, two to forty people, usually with
+      less time than the plan needed.
+    </p>
+    <p>
+      <a href="/case-studies/rangos/">Rangos</a> and
+      <a href="/case-studies/weeknotes/">Weeknotes</a> are the two that died, and they are here with
+      post-mortems on purpose. A portfolio of things that worked teaches nobody anything, because
+      what worked depended on a team, a market and a moment you will never have. What failed is
+      more portable.
+    </p>
+  </section>
+
   <section class="section col">
     <div class="band">
       <h2>Want to build<br />something together?</h2>
@@ -106,6 +149,28 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
 
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
+
+  /* Prose, not a "sub". Four paragraphs at .sub size would shout; this is
+     meant to be read, so it takes the reading measure and the reading colour. */
+  .ground { text-align: left; }
+  .ground h2 { text-align: center; margin-bottom: var(--space-7); }
+  .ground p {
+    color: var(--dim);
+    font-size: 1.0625rem;
+    line-height: var(--lh-read);
+    letter-spacing: var(--ls-read);
+    max-width: 68ch;
+    margin-inline: auto;
+  }
+  .ground p + p { margin-top: var(--space-5); }
+  .ground a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--hair);
+    transition: text-decoration-color 0.2s var(--ease);
+  }
+  .ground a:hover { text-decoration-color: var(--ink); }
   .intro h1 { margin-bottom: 18px; }
 
 
