@@ -41,43 +41,21 @@ const PAGE = 6;
     <span class="eyebrow">Journal</span>
     <h1>My journal</h1>
     {/*
-      "Stories, thoughts and reflections" described the format and not the
-      subject, which is what every blog subtitle on the internet does. The page
-      was 132 words of dated links: nothing telling a reader whether this is
-      for them, and nothing telling an engine what ground it covers.
+      The subject, not the format. "Stories, thoughts and reflections" is what
+      every blog subtitle on the internet says.
 
-      Named here rather than split into topic pages. With seven essays
-      published, the largest cluster has four and the smallest has one, so a
-      page per topic would be five thin pages competing with this one for the
-      same queries and spreading a 36-URL site's authority across 41. Worth
-      revisiting at roughly five substantial pieces per cluster.
+      A block of three explanatory paragraphs sat here and was removed — it read
+      as filler on a page whose job is to get out of the way of the list. The
+      index stays a list.
+
+      No topic pages either: with seven essays published the largest cluster
+      holds four and the smallest holds one, so a page per topic would be five
+      thin pages competing with this one for the same queries. Worth revisiting
+      at roughly five substantial pieces per cluster.
     */}
     <p class="sub">
       What specific decisions cost me. Mostly three questions: what to build and what to leave
       out, how to tell whether it is working, and when the craft matters more than the tool.
-    </p>
-  </section>
-
-  <section class="col ground">
-    <p>
-      Every other week, one thing I got wrong and what it cost. Not tips, not roundups, not news —
-      the site has a filter for what goes here, and it is whether the lesson cost me something
-      specific. If it did not, I read it somewhere and I would just be repeating it.
-    </p>
-    <p>
-      The recurring ones: <a href="/writing/mvp-vs-prototype/">the difference between a prototype
-      and an MVP</a>, which cost me four months; <a href="/writing/learning-to-let-go-an-idea/">how
-      long I hold on to an idea after the evidence has stopped agreeing</a>;
-      <a href="/writing/designing-for-scalability/">when designing for scale is prudent and when it
-      is expensive guessing</a>; and <a
-      href="/writing/heart-framework-vs-nps-user-experience/">what two years of measuring the wrong
-      thing taught me about measuring the right one</a>.
-    </p>
-    <p>
-      If you would rather have the short version of any of it,
-      <a href="/tools/">the free checks</a> ask the same questions in about a minute, and
-      <a href="/glossary/">the glossary</a> defines the terms I keep using so they mean the same
-      thing every time.
     </p>
   </section>
 
@@ -127,25 +105,6 @@ const PAGE = 6;
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
 
-  /* Prose, at reading measure. Four paragraphs at .sub size would shout. */
-  .ground { text-align: left; margin-top: var(--space-7); }
-  .ground p {
-    color: var(--dim);
-    font-size: 1.0625rem;
-    line-height: var(--lh-read);
-    letter-spacing: var(--ls-read);
-    max-width: 68ch;
-    margin-inline: auto;
-  }
-  .ground p + p { margin-top: var(--space-5); }
-  .ground a {
-    color: var(--ink);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-color: var(--hair);
-    transition: text-decoration-color 0.2s var(--ease);
-  }
-  .ground a:hover { text-decoration-color: var(--ink); }
   .intro h1 { margin-bottom: 18px; }
 
   /* The h1 and the first row were 54px apart, which reads as one block.
