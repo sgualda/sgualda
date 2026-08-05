@@ -19,11 +19,15 @@ import time
 
 HOST = 'sgualda-deploy'
 
-# Ruta absoluta de verdad. Por FTP era /domains/sgualda.com/public_html porque
-# el servidor encerraba la sesion dentro de la carpeta del usuario; por SSH se
-# ve el sistema de ficheros entero y esa ruta no existe. Importa que sea exacta:
-# la cuenta aloja otros cuatro dominios (ecoco.es, glintale.com, uxerfy.com,
-# uxerhub.com) y este script borra.
+# Relativa a la carpeta personal, no absoluta.
+#
+# Antes decia /home/<usuario>/domains/..., que en un repositorio publico
+# entrega el nombre de usuario SSH de una cuenta cuya IP ya es publica via DNS
+# — host y usuario servidos, y el servidor todavia acepta contrasena ademas de
+# clave. La ruta relativa hace lo mismo y no cuenta nada.
+#
+# Importa que sea exacta por otro motivo: la cuenta aloja otros cuatro dominios
+# y este script borra.
 ROOT = 'domains/sgualda.com/public_html'
 HERE = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(HERE, '..', 'dist')
@@ -66,7 +70,7 @@ print(f'  build: {len(local)} ficheros')
 # justo lo que uno quiere de una simulacion, asi que se pregunta al servidor.
 find = ' -o '.join(f"-name {k!r} -prune" for k in KEEP)
 res = run(['ssh', '-o', 'BatchMode=yes', HOST,
-           f"cd {ROOT} && find . \\( {find} \\) -o -type f -print"])
+           f"cd ~/{ROOT} && find . \\( {find} \\) -o -type f -print"])
 if res.returncode != 0:
     sys.exit(f'  No se pudo listar el servidor:\n{res.stderr.strip()}')
 

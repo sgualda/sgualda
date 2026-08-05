@@ -44,3 +44,11 @@ incoming/*
 # an SSH key in ~/.ssh, via the `sgualda-deploy` alias in ~/.ssh/config, and
 # the key never leaves this machine. The old .deploy/credentials held the FTP
 # password in plain text; it is gone.
+
+# Auditoria de busqueda: se queda en local.
+#
+# El repositorio es publico, y a diferencia de las otras auditorias esta lleva
+# proyecciones de trafico, tasas de conversion y briefs estimados al mes. Un
+# cliente potencial que busque el nombre no tiene por que encontrar la cuenta de
+# resultados. Sigue en disco y se trabaja igual.
+SEARCH-INTELLIGENCE-AUDIT.md
