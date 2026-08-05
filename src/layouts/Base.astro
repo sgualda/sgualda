@@ -2,7 +2,7 @@
 import '@styles/fonts.css';
 import '@styles/tokens.css';
 import '@styles/base.css';
-import { SITE, SOCIAL, EXPERTISE } from '@lib/site';
+import { SITE, SOCIAL, EXPERTISE, SAME_AS } from '@lib/site';
 import ErrorLog from '@components/ErrorLog.astro';
 import ThemeToggle from '@components/ThemeToggle.astro';
 import CookieBanner from '@components/CookieBanner.astro';
@@ -95,7 +95,7 @@ const graph = [
       'Product designer in Barcelona. Takes vague problems to shipped first versions for small teams building SaaS, mobile apps and internal tools, and publishes what the decisions cost.',
     address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
     knowsAbout: [...EXPERTISE],
-    sameAs: [SOCIAL.linkedin, SOCIAL.instagram, SOCIAL.community].filter(Boolean),
+    sameAs: [...SAME_AS],
     /**
      * `hasOccupation` rather than only the `jobTitle` string above.
      *
@@ -158,7 +158,19 @@ const graph = [
     founder: { '@id': `${SITE.url}/#person` },
     employee: { '@id': `${SITE.url}/#person` },
     knowsAbout: [...EXPERTISE],
-    sameAs: [SOCIAL.linkedin, SOCIAL.instagram, SOCIAL.community].filter(Boolean),
+    /**
+     * No sameAs on the practice, on purpose.
+     *
+     * The Person's list includes uxerfy.com/about/, which is a page about
+     * Sergio. Copying it here would assert that this practice and Uxerfy are
+     * the same business, and they are not — Uxerfy is a separate thing he
+     * founded, selling a different service. The two are already connected
+     * correctly through `founder`, which says "same person" without claiming
+     * "same company".
+     *
+     * There is no third-party page identifying this practice yet. When there
+     * is one — a directory listing, a company profile — it belongs here.
+     */
   },
   ...schema.map(withImage),
 ];

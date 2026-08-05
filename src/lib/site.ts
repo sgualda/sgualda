@@ -53,8 +53,45 @@ export const LEGAL = {
 export const SOCIAL = {
   linkedin: 'https://www.linkedin.com/in/sgualda/',
   instagram: 'https://www.instagram.com/sgualda/',
+  /** Where the footer sends people. The chat tab, not the publication root. */
   community: 'https://sgualda.substack.com/chat',
 } as const;
+
+/**
+ * Pages elsewhere that identify the same person. This is `sameAs`, and it is
+ * not the same list as SOCIAL.
+ *
+ * `sameAs` means "a reference page that unambiguously indicates this item's
+ * identity" — a page *about* him. The footer link goes to the Substack chat
+ * tab, which is a place to talk rather than a page about anybody, so the
+ * publication root goes here instead. Two lists because they answer two
+ * different questions.
+ *
+ * What is deliberately absent matters as much as what is here:
+ *
+ *  · An empty Dribbble. A designer's portfolio profile with nothing in it is
+ *    worse than no profile — it is a link that answers "what has he made?"
+ *    with "nothing". Add it the day there is work on it.
+ *  · Pinterest and Threads, unless they are professional and active. Quantity
+ *    is not the goal; every entry is a page an engine may follow to decide who
+ *    this is, and a dead one is a weak answer.
+ *
+ * uxerfy.com/about/ is the strongest entry: a real page about him on a
+ * different domain, which already declares its own Person node pointing back
+ * here with rel="me". Reciprocity is what lets an engine merge the two.
+ *
+ * Worth being straight about its limit, though: both domains are his, on one
+ * hosting account. Cross-linking your own properties is a legitimate identity
+ * declaration and helps disambiguation, but it is not third-party
+ * corroboration and will not move Authority the way a client saying something
+ * would. That is still H2.
+ */
+export const SAME_AS = [
+  'https://www.linkedin.com/in/sgualda/',
+  'https://www.instagram.com/sgualda/',
+  'https://sgualda.substack.com',
+  'https://uxerfy.com/about/',
+] as const;
 
 /**
  * What the Person entity is about. `sameAs` is how a search engine reconciles
