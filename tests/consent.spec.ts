@@ -84,6 +84,19 @@ test.describe('cookie consent', () => {
     // A grey "reject" next to a black "accept" is a dark pattern with better
     // manners. Same size, same shape, same row.
     await page.goto('/');
+    // Measured after the banner has stopped moving, not during.
+    //
+    // It slides up over 400ms. The two boxes are read one after the other, so
+    // mid-transition the banner travels a fraction of a pixel between the two
+    // reads and the y comparison fails on a threshold of 2px — a test that
+    // passed alone and failed in a full run, which is the signature of timing
+    // rather than layout. Waiting on the animation is exact where a sleep is
+    // a guess.
+    const banner = page.locator('#cookie');
+    await expect(banner).toBeVisible();
+    await banner.evaluate((el) =>
+      Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished.catch(() => {})))
+    );
     const yes = await page.locator('[data-consent=yes]').boundingBox();
     const no = await page.locator('[data-consent=no]').boundingBox();
     expect(Math.abs(yes!.width - no!.width)).toBeLessThan(4);
