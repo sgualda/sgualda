@@ -100,6 +100,15 @@ export const KIND: [string, string][] = [['session','A working session on one de
           ['critique','A written critique of what we have made'],['embedded','Ongoing embedded work'],
           ['capacity','Help before hiring a designer'],['unsure','I do not know — tell me what fits']];
 
+/**
+ * The five things somebody can actually hire, for the Service schema.
+ *
+ * Derived from KIND rather than typed out again, so the list an engine reads
+ * and the list the form offers cannot drift apart. "unsure" is dropped: it is
+ * a way of answering the form, not something anybody is buying.
+ */
+export const ENGAGEMENTS = KIND.filter(([id]) => id !== 'unsure').map(([, label]) => label);
+
 /** Step 4 of the brief changes with the recommendation. */
 export const SPECIFIC: Record<string, string[][]> = {session:[['s1','What is the decision?','textarea','State it as a question with two or more answers. “Do we build X or Y before the launch?”'],
           ['s2','What are the options on the table?','textarea','Including the ones you have ruled out, and why.'],

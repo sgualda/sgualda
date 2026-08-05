@@ -3,7 +3,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import { SITE } from '@lib/site';
-import { BLUNT_HTML, FAQ_HTML } from '@lib/work-with-me';
+import { BLUNT_HTML, FAQ_HTML, ENGAGEMENTS } from '@lib/work-with-me';
 import '@styles/quiz.css';
 
 /**
@@ -27,21 +27,27 @@ const faqs = [...FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm"[^>]*>[\s
   title="Work with me — product design help for small teams"
   description="Answer four questions and get a straight recommendation on how I would help: a working session, a product review, a written critique, embedded work, or none of them."
   schema={[
-    {
-      '@type': 'ProfessionalService',
-      name: `${SITE.name} — Product Design Consulting`,
-      areaServed: 'Worldwide',
-      email: SITE.email,
-      address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
-      serviceType: [
-        'Product Design Consulting',
-        'Product Strategy',
-        'Product Discovery',
-        'Design Critique',
-        'Design Systems',
-      ],
-      provider: { '@id': `${SITE.url}/#person` },
-    },
+    /**
+     * The practice is declared once, in Base.astro, as #practice. This page
+     * adds only what is specific to it: the five things somebody can actually
+     * hire, as typed Service nodes.
+     *
+     * Redeclaring ProfessionalService here — which is what this was — created a
+     * second node for the same business, so an engine had two descriptions of
+     * one entity and no way to know they were the same. A reference by @id says
+     * they are.
+     */
+    ...ENGAGEMENTS.map((name) => ({
+      '@type': 'Service',
+      name,
+      serviceType: name,
+      provider: { '@id': `${SITE.url}/#practice` },
+      areaServed: { '@type': 'Place', name: 'Worldwide' },
+      audience: {
+        '@type': 'BusinessAudience',
+        name: 'Small product teams, two to forty people',
+      },
+    })),
     {
       '@type': 'FAQPage',
       mainEntity: faqs.map((f) => ({

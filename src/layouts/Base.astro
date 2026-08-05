@@ -96,6 +96,23 @@ const graph = [
     address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
     knowsAbout: [...EXPERTISE],
     sameAs: [SOCIAL.linkedin, SOCIAL.instagram, SOCIAL.community].filter(Boolean),
+    /**
+     * `hasOccupation` rather than only the `jobTitle` string above.
+     *
+     * jobTitle is text on a page. Occupation is a typed node with a category
+     * code, which is what lets an engine place this person in the same class as
+     * every other product designer instead of matching a phrase. The code is
+     * the O*NET-SOC entry for web and digital interface designers, the closest
+     * standard classification that exists for this work.
+     */
+    hasOccupation: {
+      '@type': 'Occupation',
+      name: SITE.role,
+      occupationalCategory: '15-1255.00',
+      occupationLocation: { '@type': 'City', name: 'Barcelona' },
+      skills: [...EXPERTISE],
+    },
+    worksFor: { '@id': `${SITE.url}/#practice` },
   },
   {
     '@type': 'WebSite',
@@ -104,6 +121,44 @@ const graph = [
     name: SITE.name,
     inLanguage: SITE.locale,
     publisher: { '@id': `${SITE.url}/#person` },
+  },
+  /**
+   * The practice as an entity in its own right.
+   *
+   * Everything hung off the Person, so there was no business to resolve — only
+   * a man with an email address. A one-person consultancy is still an
+   * organisation that is hired, invoiced and searched for, and a knowledge
+   * graph has nowhere to attach reviews, services or an address without a node
+   * to attach them to.
+   *
+   * Deliberately `@id`-linked to the Person via `founder` rather than merged
+   * into it: they are two things, and conflating them is how a knowledge panel
+   * ends up describing a company as a human being.
+   *
+   * `ProfessionalService` rather than plain `Organization`, and declared once
+   * here rather than again on /work-with-me/. That page had its own
+   * ProfessionalService node, so adding an Organization created two nodes
+   * describing the same business under two types — the precise conflation this
+   * comment warns about, introduced while writing it. One node, referenced by
+   * @id from anywhere that needs it.
+   */
+  {
+    '@type': 'ProfessionalService',
+    '@id': `${SITE.url}/#practice`,
+    name: `${SITE.name} — Product Design`,
+    url: SITE.url,
+    email: `mailto:${SITE.email}`,
+    logo: new URL('/icon-512.png', SITE.url).href,
+    image: new URL('/img/sergio-gualda.jpg', SITE.url).href,
+    description:
+      'Independent product design practice in Barcelona. Product strategy, discovery and design for small teams building SaaS, mobile apps and internal tools.',
+    address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
+    areaServed: { '@type': 'Place', name: 'Worldwide' },
+    priceRange: '$$',
+    founder: { '@id': `${SITE.url}/#person` },
+    employee: { '@id': `${SITE.url}/#person` },
+    knowsAbout: [...EXPERTISE],
+    sameAs: [SOCIAL.linkedin, SOCIAL.instagram, SOCIAL.community].filter(Boolean),
   },
   ...schema.map(withImage),
 ];

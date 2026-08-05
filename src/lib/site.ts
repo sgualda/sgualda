@@ -62,6 +62,21 @@ export const SOCIAL = {
  * text; `knowsAbout` is what a language model reads to decide what he is an
  * authority on.
  */
+/**
+ * Nine entries, all of them the generic label anybody in the field would list.
+ * They said what job he has, not what he knows — "Product design" describes a
+ * profession; "Opportunity solution trees" describes somebody who has used one.
+ *
+ * The additions are all drawn from what the site actually contains: the six
+ * checks, the five stages, the glossary and the essays. Nothing aspirational,
+ * because a `knowsAbout` claiming ground the pages do not cover is a claim a
+ * model can check and find wanting.
+ *
+ * This matters more as Google retires rich results. FAQ stopped producing them
+ * in May 2026 and HowTo in 2023, so the value of markup is shifting away from
+ * how a result looks and toward whether an engine can resolve who this is and
+ * what he is an authority on. See §15 of SEARCH-INTELLIGENCE-AUDIT.md.
+ */
 export const EXPERTISE = [
   'Product design',
   'Product strategy',
@@ -72,6 +87,23 @@ export const EXPERTISE = [
   'Mobile apps',
   'Minimum viable products',
   'Design critique',
+  // The specific ground the writing and the checks actually cover.
+  'Jobs to be done',
+  'Opportunity solution trees',
+  'Continuous discovery',
+  'Usability testing',
+  'HEART framework',
+  'Net Promoter Score',
+  'Product analytics',
+  'Feature prioritisation',
+  'Design system governance',
+  'Willingness to pay',
+  'Product-market fit',
+  'Interaction design',
+  'Information architecture',
+  'Design tokens',
+  'Figma',
+  'Prototyping',
 ] as const;
 
 /** Nav order taken from the Figma header component. */
