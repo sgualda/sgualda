@@ -87,12 +87,21 @@ const graph = [
     '@type': 'Person',
     '@id': `${SITE.url}/#person`,
     name: SITE.name,
+    /**
+     * The handle, declared as the same entity rather than a second one.
+     *
+     * Half the internet calls him sgualda — the domain, every social profile,
+     * the way he signs things. Without this, a model reading "sgualda" and a
+     * model reading "Sergio Gualda" have no stated reason to believe they are
+     * looking at one person.
+     */
+    alternateName: SITE.handle,
     jobTitle: SITE.role,
     url: SITE.url,
     email: `mailto:${SITE.email}`,
     image: new URL('/img/sergio-gualda.jpg', SITE.url).href,
     description:
-      'Product designer in Barcelona. Takes vague problems to shipped first versions for small teams building SaaS, mobile apps and internal tools, and publishes what the decisions cost.',
+      'Designer and developer in Barcelona. Designs and builds websites and digital products for small teams, takes vague problems to shipped first versions, and publishes what the decisions cost.',
     address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
     knowsAbout: [...EXPERTISE],
     sameAs: [...SAME_AS],
@@ -136,7 +145,7 @@ const graph = [
    * ends up describing a company as a human being.
    *
    * `ProfessionalService` rather than plain `Organization`, and declared once
-   * here rather than again on /work-with-me/. That page had its own
+   * here rather than again on /services/. That page had its own
    * ProfessionalService node, so adding an Organization created two nodes
    * describing the same business under two types — the precise conflation this
    * comment warns about, introduced while writing it. One node, referenced by
@@ -145,16 +154,40 @@ const graph = [
   {
     '@type': 'ProfessionalService',
     '@id': `${SITE.url}/#practice`,
-    name: `${SITE.name} — Product Design`,
+    name: `${SITE.name} — Design & Development`,
     url: SITE.url,
     email: `mailto:${SITE.email}`,
     logo: new URL('/icon-512.png', SITE.url).href,
     image: new URL('/img/sergio-gualda.jpg', SITE.url).href,
     description:
-      'Independent product design practice in Barcelona. Product strategy, discovery and design for small teams building SaaS, mobile apps and internal tools.',
+      'Independent design and development practice in Barcelona. Web design, web development and website audits for small teams building software products.',
     address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
     areaServed: { '@type': 'Place', name: 'Worldwide' },
     priceRange: '$$',
+    /**
+     * The three services, on the node that represents the business, so they
+     * are declared on every page rather than only on /services/.
+     *
+     * The catalogue lives here and the individual `Service` nodes live on
+     * their own pages, each pointing back at this @id as its provider. One
+     * fact, stated once, from both directions.
+     */
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Services',
+      itemListElement: [
+        ['Web design', 'web-design'],
+        ['Web development', 'web-development'],
+        ['Website audit', 'website-audit'],
+      ].map(([name, slug]) => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name,
+          url: `${SITE.url}/services/${slug}/`,
+        },
+      })),
+    },
     founder: { '@id': `${SITE.url}/#person` },
     employee: { '@id': `${SITE.url}/#person` },
     knowsAbout: [...EXPERTISE],

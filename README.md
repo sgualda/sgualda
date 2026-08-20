@@ -1,13 +1,18 @@
 # sgualda.com
 
-Personal site of Sergio Gualda, product designer in Barcelona.
+Personal site of Sergio Gualda — sgualda — designer and developer in Barcelona.
 Astro, static output, hosted on Hostinger.
+
+**Rearchitected 2026-08-20.** Four sections in the navigation instead of eight,
+`/case-studies/` is now `/work/`, `/work-with-me/` is now `/services/` with
+three landings and one intake, and two invented projects were deleted. Every
+old URL redirects. See `public/_redirects`.
 
 - **Quality backlog:** [QUALITY.md](./QUALITY.md) — 78 tickets, the single source of truth for what is left
 - **Voice:** [BRAND.md](./BRAND.md) — how the site sounds, and the rules that keep it sounding that way
 - **Keyword map:** [SEO.md](./SEO.md) — one primary query per page, and what to write next
 - **Waiting on Sergio:** [CONTENT.md](./CONTENT.md) — every remaining blocker that needs him, with the questions to answer
-- **Live site:** https://sgualda.com (still WordPress until the cutover)
+- **Live site:** https://sgualda.com
 
 ---
 
@@ -24,7 +29,7 @@ npm run dev          # http://localhost:4321
 | `npm run build` | Build, generate OG images, generate `.htaccess` |
 | `npm run preview` | Serve the built site |
 | `npm run audit:urls` | Check every promised URL exists |
-| `npm test` | 124 Playwright tests, Chromium and WebKit |
+| `npm test` | 219 Playwright tests, Chromium and WebKit |
 | `npx astro check` | TypeScript |
 
 Run `npm run build && npm run audit:urls && npm test` before any deploy. CI does
@@ -34,16 +39,19 @@ it on every push, but the habit costs nothing.
 
 ## Publishing content
 
-### An essay
+### A piece of writing
 
-Create `src/content/essays/your-slug.md`:
+Create `src/content/writing/your-slug.md`:
 
 ```markdown
 ---
 title: 'What I got wrong about onboarding'
 description: 'Between 70 and 160 characters. This is what shows in Google, so write it like a promise.'
 published: 2026-08-14
+type: essay          # essay · note · resource
 topics: ['launch', 'craft']
+relatedService: web-design      # optional — puts this on that service page
+relatedProject: glintale        # optional — the project it came out of
 draft: false
 ---
 
@@ -54,9 +62,9 @@ Your text. Standard markdown.
 Renaming it later breaks a live link, so choose it once.
 
 Topics come from [`src/lib/topics.ts`](./src/lib/topics.ts). They are not
-decoration: they drive the topic hubs, the related essays, and the cross-links
-to the map stage and the free check that apply. An essay with no topic is an
-orphan.
+decoration: they drive the related pieces and the cross-links to the map stage
+and the free check that apply. A piece with no topic is an orphan. There are no
+topic hub pages — that was tried three times and retired three times.
 
 Images go in `src/assets/essays/` and are referenced relatively:
 
@@ -67,10 +75,40 @@ Images go in `src/assets/essays/` and are referenced relatively:
 Astro optimises them on build. **The alt text is not optional** — an empty one
 fails accessibility and wastes image search.
 
-### A case study
+`relatedService` and `relatedProject` are the whole internal-linking system.
+Declare the relationship once and the link appears on both sides; nothing is
+ever added "for SEO", because if there is no declared relationship there is no
+link.
 
-Same shape, in `src/content/cases/`. See the schema in
-[`src/content.config.ts`](./src/content.config.ts).
+### A project
+
+Same shape, in `src/content/projects/`, rendered at `/work/{slug}/`.
+
+The field worth using is `updates` — a dated list of what happened, which is
+what stops a project being a page that was true once:
+
+```yaml
+updates:
+  - date: 2026-03-01
+    label: Idea
+    note: One or two sentences. What actually happened.
+  - date: 2026-06-14
+    label: First prototype
+```
+
+The most recent entry drives `dateModified` in the schema, so a project that is
+still moving reads as fresh without anybody touching the prose.
+
+### A service
+
+`src/content/services/*.md`. Three of them, and the bar for a fourth is high:
+`intent` must be a query none of the other three is written towards.
+
+The `intake` field is the one to notice — it defines the questions
+`/services/start/` asks when somebody arrives from that page. Service copy and
+the questions it triggers live in one file so they cannot drift.
+
+See every schema in [`src/content.config.ts`](./src/content.config.ts).
 
 ### Without opening the editor
 
@@ -78,7 +116,7 @@ Same shape, in `src/content/cases/`. See the schema in
 npm run cms      # then http://localhost:4321/keystatic/
 ```
 
-A visual editor for all four collections — essays, case studies, the six
+A visual editor for the collections — writing, projects, services, the six
 checks and the five map stages. No database and no account: it reads and
 writes the same markdown and YAML the build uses, so every change is an
 ordinary git diff you can review before pushing.
@@ -122,17 +160,22 @@ changes in the same commit. It has already been wrong twice.
 
 ```
 src/
-  content/essays/     13 markdown essays, migrated from WordPress
-  content/cases/      empty — see #Q-044
+  content/writing/    essays, notes and reference pieces → /writing/{slug}/
+  content/projects/   project stories → /work/{slug}/
+  content/services/   the three services → /services/{slug}/
+  content/tools/      the six checks
+  content/stages/     the five stages of the map
+  content/glossary/   defined vocabulary
+  content/testimonials/  empty — see CONTENT.md
   lib/site.ts         identity, nav, URL contract, legal details
-  lib/tools.ts        the six checks: questions and outcomes
-  lib/stages.ts       the five stages of the map
+  lib/intake.ts       the common intake questions; per-service ones are content
+  lib/content.ts      ordered accessors for tools and stages
   lib/topics.ts       taxonomy, mapped onto the stages
   layouts/Base.astro  head, SEO, JSON-LD, fonts
   pages/              one file per route
   styles/tokens.css   every design value
 public/
-  api/brief.php       the brief form endpoint
+  api/brief.php       the intake endpoint, and the community waitlist
   api/log.php         JavaScript error reporting
   fonts/              self-hosted woff2 — no Google request
   _redirects          source of truth for redirects → .htaccess
@@ -141,6 +184,18 @@ scripts/
   build-og.mjs        one Open Graph image per page
   build-htaccess.mjs  Apache config from _redirects
 ```
+
+### The shape of the site
+
+Four items in the navigation — Writing, Services, About, Community — and that
+is the constraint, not an accident. Tools, the map and the glossary are
+reference material about building products, so they are surfaced from the top
+of `/writing/` and kept out of the menu. `/work/` is linked from the home page,
+`/about/` and every service page, which are the three places somebody actually
+wants proof of it.
+
+Before adding a top-level page, the question is whether it needs to be one. If
+the answer is no, it belongs in Writing.
 
 ### Why Astro
 
@@ -175,7 +230,9 @@ carries the redirects, the security headers and the 404.
 
 Content, all of it blocked on Sergio:
 
-- [ ] Two case studies written — `#Q-044`
+- [ ] The two invented anecdotes cleared — see CONTENT.md
+- [ ] `updates` filled in on the four projects
+- [ ] Two project stories written — `#Q-044`
 - [ ] Real photograph — `#Q-056`
 - [ ] Three testimonials with names — `#Q-097`
 - [ ] Project images, no grey placeholders — `#Q-013`

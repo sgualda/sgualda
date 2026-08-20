@@ -15,7 +15,7 @@ coverAlt: 'The truvi developer portal: API reference with code samples alongside
 
 A developer portal for truvi’s API — the place an engineer lands when they have to integrate with us and would rather be doing almost anything else.
 
-As with the [dashboard](/case-studies/truvi/), this is my current employer, so what follows is about the craft rather than the product.
+As with the [dashboard](/work/truvi/), this is my current employer, so what follows is about the craft rather than the product.
 
 ## Documentation is not read, it is raided
 

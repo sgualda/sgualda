@@ -15,7 +15,7 @@ const STAGES = await getStages();
 const TOOLS = await getTools();
 
 export async function getStaticPaths() {
-  const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+  const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
   );
 
@@ -36,8 +36,8 @@ export async function getStaticPaths() {
 }
 
 const { entry, related } = Astro.props as {
-  entry: CollectionEntry<'essays'>;
-  related: CollectionEntry<'essays'>[];
+  entry: CollectionEntry<'writing'>;
+  related: CollectionEntry<'writing'>[];
 };
 const { Content } = await render(entry);
 const d = entry.data;
@@ -160,7 +160,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
         <p class="who"><strong>Sergio Gualda</strong> — product designer in Barcelona.</p>
         <p class="what">
           I take vague problems to shipped first versions for small teams, and write down what
-          the decisions cost. <a href="/about/">More about me</a> · <a href="/work-with-me/">Work with me</a>
+          the decisions cost. <a href="/about/">More about me</a> · <a href="/services/">Services</a>
         </p>
       </div>
     </aside>

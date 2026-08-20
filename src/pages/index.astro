@@ -19,10 +19,10 @@ import { SITE } from '@lib/site';
  * Deliberately a hand-written list rather than the collection's `order`
  * field: the work page shows everything, and this one shows the four he
  * wants a stranger to see first. Two of the six are buried on purpose and
- * belong on /case-studies/, not here.
+ * belong on /work/, not here.
  */
 const FEATURED = ['truvi', 'ecoco-mobile-app', 'glintale', 'truvi-developer-portal'];
-const all = await getCollection('cases', ({ data }) => !data.draft);
+const all = await getCollection('projects', ({ data }) => !data.draft);
 const featured = FEATURED.map((id) => all.find((c) => c.id === id)).filter((c) => c !== undefined);
 if (featured.length !== FEATURED.length) {
   throw new Error(
@@ -45,7 +45,7 @@ if (featured.length !== FEATURED.length) {
  * Newest three rather than a hand-picked list: a chosen list goes stale the
  * moment something better is published, and nobody remembers to come back.
  */
-const essays = (await getCollection('essays', ({ data }) => !data.draft))
+const essays = (await getCollection('writing', ({ data }) => !data.draft))
   .sort((a, b) => (b.data.updated ?? b.data.published).valueOf() - (a.data.updated ?? a.data.published).valueOf())
   .slice(0, 3);
 
@@ -75,37 +75,42 @@ const principles = [
 
 <Base
   title={`${SITE.role} in Barcelona — ${SITE.name}`}
-  description="I build products from zero, and I write down what the mistakes cost. Product design and strategy for small teams, from Barcelona."
+  description="I design and build things on the internet, and write down what the mistakes cost. Web design, development and audits for small teams, from Barcelona."
   schema={reviewSchema(voices)}
 >
   <Header slot="nav" />
 
   <!-- ── hero ── -->
   <section class="col hero">
-    {/* Sergio's wording, kept deliberately. It was swapped for "Building
-        products, not just experiences" to get a commercial term into the h1 and
-        swapped back on his call.
+    {/* Changed 2026-08-20, and worth flagging because the previous line —
+        "Building experiences through design" — was Sergio's own wording, and
+        he had already reverted one attempt to replace it.
 
-        The trade is real and stays open: this line carries no term anybody
-        searches for, so the <title> is doing that work alone. See H1 in
-        SEARCH-INTELLIGENCE-AUDIT.md — the finding is about the four commercial
-        pages being thin, and the h1 is one part of it, not the whole. */}
-    <h1>Building<br />experiences<br />through design</h1>
+        The reason it changes now is not SEO. It is that the site started
+        selling web development, and an h1 ending "through design" describes
+        half of what is on offer. This version says both halves in his own
+        register, first person like the rest of the site, and it is the one
+        sentence somebody has to read to know what this place is.
+
+        If it reads wrong to him, the old line goes back and the sub carries
+        the building half instead. */}
+    <h1>I design and build<br />things on<br />the internet.</h1>
     <p class="sub">
-      I’ve built products from zero, failed, iterated, and figured out what actually matters in
-      the early stages of a business. Now I help others skip the expensive mistakes.
+      Mostly for small teams, mostly from Barcelona. I’ve built products from zero, failed,
+      iterated, and written down what each mistake cost — which is the part of this site that
+      is free.
     </p>
     <div class="actions">
       {/* One primary, one secondary. Two solid buttons side by side make the
           reader choose between two equals, which is a decision nobody came
           here to make. The work is the supporting act. */}
-      <a class="btn btn--dark" href="/work-with-me/">Hire me</a>
-      <a class="btn btn--ghost" href="/case-studies/">See the work</a>
+      <a class="btn btn--dark" href="/services/start/">Tell me about your project</a>
+      <a class="btn btn--ghost" href="/work/">See the work</a>
     </div>
     {/* The visitor who arrives already decided is the most valuable one, and
         the four qualifying questions were charging them the most friction. */}
     <p class="skip-to">
-      Already know what you need? <a href="/work-with-me/brief/">Send a brief</a>.
+      Already know what you need? <a href="/services/start/">Send a brief</a>.
     </p>
   </section>
 
@@ -115,15 +120,15 @@ const principles = [
       <span class="eyebrow">What I do</span>
       <h2>I take vague problems<br />to shipped first versions.</h2>
       <p class="sub">
-        Usually with two or three other people, usually with less time than the plan needed.
-        7+ years of it, mostly SaaS and mobile apps.
+        Design and code, usually with two or three other people, usually with less time than
+        the plan needed. 7+ years of it, mostly SaaS, mobile apps and the sites around them.
       </p>
     </div>
 
     <div class="wide grid">
       {
         featured.map((c) => (
-          <a class="slot" href={`/case-studies/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
+          <a class="slot" href={`/work/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
             <Image
               src={c.data.cover!}
               alt={c.data.coverAlt ?? ''}
@@ -138,7 +143,7 @@ const principles = [
     </div>
 
     <div class="col actions" style="margin-top:34px">
-      <a class="btn btn--ghost" href="/case-studies/">See the work</a>
+      <a class="btn btn--ghost" href="/work/">See the work</a>
     </div>
   </section>
 
@@ -225,7 +230,28 @@ const principles = [
       on a team, a market and a moment you will never have.
     </p>
     <div class="actions" style="margin-top:30px">
-      <a class="btn btn--dark" href="/case-studies/">See the work</a>
+      <a class="btn btn--dark" href="/work/">See the work</a>
+    </div>
+  </section>
+
+  <!-- ── working together ── -->
+  {/* The home page had no route to the commercial half of the site except two
+      buttons in the hero. Somebody who scrolled the whole page — which is the
+      person most likely to hire anybody — reached the newsletter without ever
+      being told what could be bought.
+
+      Three lines and a link, not a pitch. The argument for each service lives
+      on its own page; this exists so the door is visible. */}
+  <section class="section col">
+    <span class="eyebrow">Working together</span>
+    <h2>Three things I do<br />for other people.</h2>
+    <ul class="services">
+      <li><a href="/services/web-design/"><b>Web design</b><span>The site around your product.</span></a></li>
+      <li><a href="/services/web-development/"><b>Web development</b><span>Built static, fast, and handed over properly.</span></a></li>
+      <li><a href="/services/website-audit/"><b>Website audit</b><span>What is wrong with the one you have.</span></a></li>
+    </ul>
+    <div class="actions" style="margin-top:30px">
+      <a class="btn btn--ghost" href="/services/">How I work</a>
     </div>
   </section>
 
@@ -246,6 +272,30 @@ const principles = [
 </Base>
 
 <style>
+  /* Three rows, not three cards. A card grid here would be the first thing on
+     the page that looks like a services company, forty pixels above a section
+     admitting projects are buried. */
+  .services { list-style: none; margin-top: 34px; text-align: left; }
+  .services li { border-top: 1px solid var(--hair); }
+  .services li:last-child { border-bottom: 1px solid var(--hair); }
+  .services a {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+    padding: 20px 0;
+    transition: opacity 0.2s var(--ease);
+  }
+  .services a:hover { opacity: 0.62; }
+  .services b {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+    min-width: 11em;
+  }
+  .services span { font-size: 0.9375rem; line-height: var(--lh-read); color: var(--dim); }
+
   .hero { padding-top: clamp(56px, 10vh, 96px); }
   .hero h1 { margin-bottom: 22px; }
   .hero .actions { margin-top: 30px; }

@@ -1,0 +1,243 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import Newsletter from '@components/Newsletter.astro';
+import { SITE } from '@lib/site';
+
+/**
+ * /services/ — the hub, and the page that replaced /services/.
+ *
+ * /services/ was a questionnaire that recommended a kind of engagement:
+ * a session, a review, a project. It worked, but it sorted people along an
+ * axis nobody arrives with. Somebody searching has a job in mind — "I need
+ * the site built" — not a preference about the shape of the contract.
+ *
+ * So the axis is the work now, and the qualifying moved into the intake,
+ * where it costs the visitor nothing to reach.
+ */
+const services = (await getCollection('services', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+/** The steps between landing here and a proposal. Named on the page because
+ *  the most common silent objection to any service page is not knowing how
+ *  much is about to be asked of you. */
+const FLOW = [
+  ['You send a brief', 'A form, five minutes, no call. It asks what you are building and what is in the way.'],
+  ['I read it', 'Myself. Within five working days you get a written reply.'],
+  ['The reply is specific', 'What fits, what it would involve, roughly what it costs — or that none of it fits, and why.'],
+  ['Then we talk, if there is a reason to', 'Not before. A call to find out whether there is anything to discuss is a call that should have been an email.'],
+];
+---
+
+<Base
+  title="Services — web design, development and audits"
+  description="Three things I do for other people: design the site, build the site, or tell you what is wrong with the one you have. Fixed scope, written replies, no discovery call."
+  schema={[
+    {
+      /**
+       * The list, not the business.
+       *
+       * The ProfessionalService node with @id #practice ships on every page
+       * from Base.astro, and it already carries the offer catalogue. Declaring
+       * it a second time here would put two nodes with one @id in the graph,
+       * which is how a clean entity turns into an ambiguous one.
+       *
+       * So this page contributes what only this page knows: that it is the
+       * index of the three, in order.
+       */
+      '@type': 'CollectionPage',
+      name: 'Services',
+      description:
+        'Web design, web development and website audits, offered by Sergio Gualda in Barcelona.',
+      about: { '@id': `${SITE.url}/#practice` },
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListOrder: 'https://schema.org/ItemListOrderAscending',
+        numberOfItems: services.length,
+        itemListElement: services.map((s, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: s.data.title,
+          description: s.data.lead,
+          url: `${SITE.url}/services/${s.id}/`,
+        })),
+      },
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Services</span>
+    <h1>Three things I do<br />for other people.</h1>
+    <p class="sub">
+      The rest of this site is what I build and what I learn doing it. This page is the part
+      you can hire.
+    </p>
+  </section>
+
+  <div class="col">
+    <ul class="list">
+      {
+        services.map((s) => (
+          <li class="row">
+            <a href={`/services/${s.id}/`}>
+              <h2>{s.data.heading}</h2>
+              <p class="lead">{s.data.lead}</p>
+              <span class="go">
+                What this involves
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <section class="section col">
+    <h2 class="h-mid">What happens after you write to me.</h2>
+    <ol class="flow">
+      {
+        FLOW.map(([name, body], i) => (
+          <li>
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{name}</h3>
+              <p>{body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section col">
+    <div class="money">
+      <h2>There are no prices on this page.</h2>
+      <p>
+        Not as a tactic. Two projects with the same title are routinely a month apart in
+        effort, and a number published before I know which one yours is would be wrong in one
+        of two directions — either I have quoted you for somebody else’s project, or you have
+        ruled me out over a figure that did not apply to you.
+      </p>
+      <p>
+        The intake asks for a budget range instead. That is there so I can tell you early if
+        we are not in the same conversation, which is cheaper for both of us than finding out
+        in week three.
+      </p>
+    </div>
+  </section>
+
+  <section class="section col cta-band">
+    <div class="band">
+      <h2>Tell me about<br />your project.</h2>
+      <p>Five minutes of typing. A written reply within five working days.</p>
+      <a class="btn btn--on-band" href="/services/start/" data-astro-prefetch>Start a project</a>
+      <p class="fine">No call to book. No sequence to unsubscribe from.</p>
+    </div>
+  </section>
+
+  <Newsletter slot="newsletter" />
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro h1 { margin-bottom: 20px; }
+
+  /* A list, not a grid of cards.
+     Three services in three tiles reads as a catalogue, which is the exact
+     impression this site is trying not to give. Full-width rules with the name
+     set large read as a table of contents — the same shape the writing index
+     uses, which is the point: these are three things he does, listed, not
+     three products on a shelf. */
+  .list { list-style: none; margin-top: 44px; text-align: left; }
+  .row { border-top: 1px solid var(--hair); }
+  .row:last-child { border-bottom: 1px solid var(--hair); }
+  .row > a {
+    display: block;
+    padding: 34px 0;
+    transition: opacity 0.24s var(--ease);
+  }
+  .row > a:hover { opacity: 0.62; }
+  .row h2 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height: var(--lh-display);
+    letter-spacing: var(--ls-heading);
+  }
+  .row .lead {
+    margin-top: 12px;
+    max-width: 34em;
+    font-size: 1.0625rem;
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+  .row .go {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .row .go svg {
+    width: 16px; height: 16px;
+    stroke: currentColor; stroke-width: 1.7; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.24s var(--ease);
+  }
+  .row > a:hover .go svg { transform: translateX(4px); }
+
+  .h-mid { margin-bottom: 34px; }
+
+  .flow { list-style: none; text-align: left; display: grid; gap: 20px; }
+  .flow li {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hair);
+  }
+  .flow .n {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: var(--ls-caps);
+    color: var(--dim);
+    padding-top: 4px;
+  }
+  .flow h3 { font-size: 1.0625rem; letter-spacing: var(--ls-heading); }
+  .flow p { margin-top: 8px; color: var(--dim); font-size: 0.9375rem; line-height: var(--lh-read); }
+
+  .money {
+    text-align: left;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-card);
+    padding: clamp(26px, 5vw, 44px);
+    background: var(--surface);
+  }
+  .money h2 { font-size: clamp(1.25rem, 3vw, 1.625rem); letter-spacing: var(--ls-heading); }
+  .money p { margin-top: 16px; color: var(--dim); line-height: var(--lh-read); max-width: 44em; }
+
+  .band {
+    background: var(--band);
+    color: var(--on-band);
+    border: 1px solid color-mix(in srgb, var(--on-band) 8%, var(--band));
+    border-radius: var(--radius-band);
+    padding: clamp(34px, 6vw, 56px) 20px;
+  }
+  .band h2 { color: var(--on-band); }
+  .band p { margin-top: 12px; font-size: 1rem; color: color-mix(in srgb, var(--on-band) 70%, transparent); }
+  .band .btn { margin-top: 20px; }
+  .fine { margin-top: 16px; font-size: 0.75rem; color: color-mix(in srgb, var(--on-band) 55%, transparent); }
+
+  @media (max-width: 560px) {
+    .flow li { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

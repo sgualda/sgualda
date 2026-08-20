@@ -16,7 +16,7 @@ import type { APIContext } from 'astro';
 export async function GET(_: APIContext) {
   const STAGES = await getStages();
   const TOOLS = await getTools();
-  const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+  const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
   );
 

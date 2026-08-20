@@ -5,7 +5,7 @@ import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Newsletter from '@components/Newsletter.astro';
 
-const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
 );
 
@@ -19,8 +19,8 @@ const PAGE = 6;
 ---
 
 <Base
-  title="My journal, product design, honestly"
-  description="Essays on product design, discovery and the decisions that cost me something. Written from ten years of building products in small teams."
+  title="Writing — what building things actually cost"
+  description="Essays, notes and reference material on designing and building digital products. Written from what specific decisions cost, including the ones that went badly."
   schema={[
     {
       '@type': 'CollectionPage',
@@ -38,8 +38,8 @@ const PAGE = 6;
   <Header slot="nav" />
 
   <section class="col intro">
-    <span class="eyebrow">Journal</span>
-    <h1>My journal</h1>
+    <span class="eyebrow">Writing</span>
+    <h1>Writing</h1>
     {/*
       The subject, not the format. "Stories, thoughts and reflections" is what
       every blog subtitle on the internet says.
@@ -58,6 +58,41 @@ const PAGE = 6;
       out, how to tell whether it is working, and when the craft matters more than the tool.
     </p>
   </section>
+
+  {/* The reference material, surfaced here because it stopped being in the
+      navigation on 2026-08-20.
+
+      Tools, the map and the glossary were three of the eight top-level
+      destinations on a site whose stated principle is that most things should
+      not exist. They are not deleted — they are 27 pieces of content and six
+      working questionnaires — they are put where they belong: this is all
+      writing about building products, and this is the page for that.
+
+      One line, above the list, before anything else competes for it. A reader
+      who wants the essays scrolls past it in a second; a reader who arrived
+      looking for the checks finds them without a menu. */}
+  <div class="col">
+    <ul class="shelf">
+      <li>
+        <a href="/tools/">
+          <b>The checks</b>
+          <span>Six free questionnaires, one per decision people get stuck on.</span>
+        </a>
+      </li>
+      <li>
+        <a href="/map/">
+          <b>The map</b>
+          <span>Five stages of building a product, and what goes wrong at each.</span>
+        </a>
+      </li>
+      <li>
+        <a href="/glossary/">
+          <b>Glossary</b>
+          <span>The words this site uses with a specific meaning.</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 
   <div class="col">
     <!-- Every essay is in the HTML from the start; the ones past the first six
@@ -104,6 +139,42 @@ const PAGE = 6;
 
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
+
+  /* Quiet on purpose. This is a shelf you can reach, not a second index
+     competing with the list underneath it — hairlines and body type, no cards,
+     no icons. */
+  .shelf {
+    list-style: none;
+    text-align: left;
+    margin-top: 44px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .shelf li { border-top: 1px solid var(--hair); }
+  .shelf a {
+    display: block;
+    padding-top: 12px;
+    transition: opacity 0.2s var(--ease);
+  }
+  .shelf a:hover { opacity: 0.6; }
+  .shelf b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+  }
+  .shelf span {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8125rem;
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+  @media (max-width: 720px) {
+    .shelf { grid-template-columns: 1fr; gap: 12px; }
+  }
 
   .intro h1 { margin-bottom: 18px; }
 

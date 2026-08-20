@@ -7,7 +7,7 @@ import Footer from '@components/Footer.astro';
 import { SITE } from '@lib/site';
 
 /**
- * /case-studies/ — matches the Figma frame "Work".
+ * /work/ — matches the Figma frame "Work".
  *
  * The grid is driven by the `cases` collection, so it can never disagree with
  * what is on the page. Two of the six have no cover on purpose: they are the
@@ -17,7 +17,7 @@ import { SITE } from '@lib/site';
  *
  * Note: the comp says "Burried". Fixed to "Buried".
  */
-const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
+const cases = (await getCollection('projects', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order || b.data.published.valueOf() - a.data.published.valueOf()
 );
 
@@ -72,7 +72,7 @@ const LABEL: Record<string, string> = Object.fromEntries(
         '@type': 'CreativeWork',
         name: c.data.title,
         abstract: c.data.summary,
-        url: `${SITE.url}/case-studies/${c.id}/`,
+        url: `${SITE.url}/work/${c.id}/`,
         dateCreated: c.data.year,
       })),
     },
@@ -115,7 +115,7 @@ const LABEL: Record<string, string> = Object.fromEntries(
               <a
                 class="card"
                 data-state={c.data.status}
-                href={`/case-studies/${c.id}/`}
+                href={`/work/${c.id}/`}
                 aria-label={`${c.data.title} — ${LABEL[c.data.status]} — ${c.data.summary}`}
               >
                 {c.data.cover ? (
@@ -163,7 +163,7 @@ const LABEL: Record<string, string> = Object.fromEntries(
     <div class="band">
       <h2>Want to build<br />something together?</h2>
       <p>Tell me where you are and where you want to go.</p>
-      <a class="btn btn--on-band" href="/work-with-me/">Hire me</a>
+      <a class="btn btn--on-band" href="/services/start/">Tell me about your project</a>
       <p class="fine">A written reply within five working days. No call.</p>
     </div>
   </section>

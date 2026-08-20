@@ -1,0 +1,393 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import { SITE } from '@lib/site';
+
+/**
+ * One template for all three services.
+ *
+ * Same skeleton every time, different content — which is the opposite of the
+ * thing the brief rules out. Near-identical *pages* are the failure mode;
+ * a shared structure is what stops each page inventing its own idea of what a
+ * service page contains and then omitting the awkward half.
+ *
+ * The awkward half is `notFor`. Every section here exists to answer a question
+ * somebody actually has, and "is this for me" is the first one.
+ */
+export async function getStaticPaths() {
+  const services = await getCollection('services', ({ data }) => !data.draft);
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  const writing = await getCollection('writing', ({ data }) => !data.draft);
+
+  return services.map((entry) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      /** Proof, collected rather than curated per page. Order follows the
+       *  service's own list, so the most relevant one is first. */
+      work: entry.data.relatedProjects
+        .map((slug) => projects.find((p) => p.id === slug))
+        .filter((p): p is CollectionEntry<'projects'> => Boolean(p)),
+      /**
+       * Anything written that declares itself evidence for this service.
+       *
+       * Nothing does yet, so the block is absent rather than padded — an
+       * empty "related reading" heading with two loosely relevant essays
+       * under it is the exact link-for-SEO move the brief rules out.
+       */
+      reading: writing
+        .filter((w) => w.data.relatedService === entry.id)
+        .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf())
+        .slice(0, 3),
+      others: services.filter((s) => s.id !== entry.id).sort((a, b) => a.data.order - b.data.order),
+    },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'services'>;
+  work: CollectionEntry<'projects'>[];
+  reading: CollectionEntry<'writing'>[];
+  others: CollectionEntry<'services'>[];
+}
+
+const { entry, work, reading, others } = Astro.props;
+const d = entry.data;
+const url = `${SITE.url}/services/${entry.id}/`;
+---
+
+<Base
+  title={d.seoTitle ?? d.title}
+  description={d.description}
+  schema={[
+    {
+      '@type': 'Service',
+      '@id': `${url}#service`,
+      name: d.title,
+      description: d.lead,
+      url,
+      serviceType: d.title,
+      /** The provider is the practice, which is in turn founded by the
+       *  Person. Two hops rather than one, because that is what is true, and
+       *  a graph that says what is true resolves. */
+      provider: { '@id': `${SITE.url}/#practice` },
+      areaServed: [
+        { '@type': 'Country', name: 'Spain' },
+        { '@type': 'AdministrativeArea', name: 'Europe' },
+      ],
+      audience: { '@type': 'Audience', audienceType: d.forWho[0] },
+      /**
+       * An Offer with no price.
+       *
+       * Declaring the offer without a figure is honest — the work is quoted
+       * per project — and it is still the property that tells an engine this
+       * page is something you can buy rather than something to read.
+       */
+      offers: {
+        '@type': 'Offer',
+        availability: 'https://schema.org/InStock',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          description: 'Quoted per project after a written brief.',
+        },
+      },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: `What ${d.title.toLowerCase()} includes`,
+        itemListElement: d.deliverables.map((x) => ({
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: x },
+        })),
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${url}#faq`,
+      mainEntity: d.faqs.map(({ q, a }) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <article>
+    <section class="col intro">
+      <Breadcrumbs items={[{ label: 'Services', href: '/services/' }, { label: d.title }]} />
+      <h1>{d.heading}</h1>
+      <p class="sub">{d.lead}</p>
+      <div class="actions">
+        <a class="btn btn--dark" href={`/services/start/?s=${entry.id}`} data-astro-prefetch>
+          Tell me about your project
+        </a>
+      </div>
+    </section>
+
+    <section class="section col">
+      <div class="two">
+        <div class="who">
+          <h2>Who this is for</h2>
+          <ul class="ticks">
+            {d.forWho.map((x) => (
+              <li>
+                <svg class="ic ok" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="m5 13 4 4L19 7" />
+                </svg>
+                <span>{x}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="who">
+          <h2>Who it is not for</h2>
+          <ul class="ticks">
+            {d.notFor.map((x) => (
+              <li>
+                <svg class="ic no" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+                <span>{x}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section col">
+      <h2 class="h-mid">How I work</h2>
+      <ol class="steps">
+        {
+          d.howIWork.map((s, i) => (
+            <li>
+              <span class="n">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{s.name}</h3>
+                <p>{s.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="section col">
+      <div class="deliver">
+        <h2>What you end up with</h2>
+        <ul>
+          {d.deliverables.map((x) => <li>{x}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    {
+      work.length > 0 && (
+        <section class="section col">
+          <h2 class="h-mid">Where I have done this</h2>
+          <ul class="work">
+            {work.map((p) => (
+              <li>
+                <a href={`/work/${p.id}/`}>
+                  {p.data.cover && (
+                    <Image
+                      class="thumb"
+                      src={p.data.cover}
+                      alt={p.data.coverAlt ?? ''}
+                      widths={[320, 640]}
+                      sizes="(max-width: 560px) calc(100vw - 40px), 320px"
+                      loading="lazy"
+                      style={`object-position:${p.data.coverPosition}`}
+                    />
+                  )}
+                  <h3>{p.data.title}</h3>
+                  <p>{p.data.summary}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      reading.length > 0 && (
+        <section class="section col">
+          <h2 class="h-mid">What I have written about this</h2>
+          <ul class="reading">
+            {reading.map((w) => (
+              <li>
+                <a href={`/writing/${w.id}/`}>
+                  <h3>{w.data.title}</h3>
+                  <p>{w.data.hook ?? w.data.description}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="section col">
+      <h2 class="h-mid">Questions</h2>
+      <div class="faq">
+        {
+          d.faqs.map(({ q, a }) => (
+            <details>
+              <summary>
+                {q}
+                <span class="pm" aria-hidden="true">+</span>
+              </summary>
+              <div class="ans"><p>{a}</p></div>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section col">
+      <div class="band">
+        <h2>Tell me about<br />your project.</h2>
+        <p>
+          What you are building and what is in the way. Five minutes of typing, and a written
+          reply within five working days.
+        </p>
+        <a class="btn btn--on-band" href={`/services/start/?s=${entry.id}`}>
+          Start a project
+        </a>
+        <p class="fine">If it is not a fit, I will say so in the reply and tell you why.</p>
+      </div>
+    </section>
+
+    <section class="section col">
+      <h2 class="h-mid">The other two</h2>
+      <ul class="others">
+        {
+          others.map((s) => (
+            <li>
+              <a href={`/services/${s.id}/`}>
+                <h3>{s.data.heading}</h3>
+                <p>{s.data.lead}</p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </article>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(44px, 7vh, 72px); }
+  .intro h1 { margin-top: 20px; }
+  .intro .sub { margin-top: 16px; }
+  .intro .actions { margin-top: 26px; }
+
+  .h-mid { margin-bottom: 26px; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; text-align: left; }
+  .who h2 { font-size: 1.125rem; letter-spacing: var(--ls-heading); margin-bottom: 16px; }
+  .ticks { list-style: none; display: grid; gap: 12px; }
+  .ticks li { display: grid; grid-template-columns: 20px 1fr; gap: 12px; align-items: start; }
+  .ticks span { font-size: 0.9375rem; line-height: var(--lh-read); color: var(--dim); }
+  .ic {
+    width: 16px; height: 16px; margin-top: 4px;
+    stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .ic.ok { stroke: var(--ok); }
+  .ic.no { stroke: var(--err); }
+
+  .steps { list-style: none; text-align: left; display: grid; gap: 20px; }
+  .steps li {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hair);
+  }
+  .steps .n {
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: var(--ls-caps); color: var(--dim); padding-top: 4px;
+  }
+  .steps h3 { font-size: 1.0625rem; letter-spacing: var(--ls-heading); }
+  .steps p { margin-top: 8px; color: var(--dim); font-size: 0.9375rem; line-height: var(--lh-read); }
+
+  .deliver {
+    text-align: left;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-card);
+    padding: clamp(26px, 5vw, 44px);
+    background: var(--surface);
+  }
+  .deliver h2 { font-size: 1.125rem; letter-spacing: var(--ls-heading); margin-bottom: 16px; }
+  .deliver ul { list-style: none; display: grid; gap: 12px; }
+  .deliver li {
+    padding-left: 20px;
+    position: relative;
+    font-size: 0.9375rem;
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+  .deliver li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 12px;
+    width: 8px; height: 1px;
+    background: var(--dim);
+  }
+
+  .work { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+  .work .thumb {
+    display: block; width: 100%; aspect-ratio: 16 / 10;
+    object-fit: cover; border-radius: var(--radius-card);
+    border: 1px solid var(--hair); background: var(--surface);
+    transition: opacity 0.28s var(--ease);
+  }
+  .work a:hover .thumb { opacity: 0.82; }
+  .work h3 { margin-top: 12px; font-size: 1rem; letter-spacing: var(--ls-heading); }
+  .work p { margin-top: 4px; font-size: 0.875rem; line-height: var(--lh-read); color: var(--dim); }
+
+  .reading, .others { list-style: none; text-align: left; display: grid; gap: 0; }
+  .reading li, .others li { border-top: 1px solid var(--hair); }
+  .reading li:last-child, .others li:last-child { border-bottom: 1px solid var(--hair); }
+  .reading a, .others a { display: block; padding: 20px 0; transition: opacity 0.2s var(--ease); }
+  .reading a:hover, .others a:hover { opacity: 0.62; }
+  .reading h3, .others h3 { font-size: 1.0625rem; letter-spacing: var(--ls-heading); }
+  .reading p, .others p {
+    margin-top: 4px; font-size: 0.9375rem;
+    line-height: var(--lh-read); color: var(--dim); max-width: 40em;
+  }
+
+  .band {
+    background: var(--band);
+    color: var(--on-band);
+    border: 1px solid color-mix(in srgb, var(--on-band) 8%, var(--band));
+    border-radius: var(--radius-band);
+    padding: clamp(34px, 6vw, 56px) 20px;
+  }
+  .band h2 { color: var(--on-band); }
+  .band p {
+    margin-top: 12px; font-size: 1rem;
+    color: color-mix(in srgb, var(--on-band) 70%, transparent);
+    max-width: 34em; margin-inline: auto;
+  }
+  .band .btn { margin-top: 20px; }
+  .fine { margin-top: 16px; font-size: 0.75rem; color: color-mix(in srgb, var(--on-band) 55%, transparent); }
+
+  @media (max-width: 720px) {
+    .two { grid-template-columns: 1fr; gap: 34px; }
+    .work { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .steps li { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

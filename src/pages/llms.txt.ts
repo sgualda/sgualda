@@ -14,18 +14,25 @@ import type { APIContext } from 'astro';
 export async function GET(_: APIContext) {
   const STAGES = await getStages();
   const TOOLS = await getTools();
-  const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+  const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+  );
+  const services = (await getCollection('services', ({ data }) => !data.draft)).sort(
+    (a, b) => a.data.order - b.data.order
+  );
+  const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+    (a, b) => a.data.order - b.data.order
   );
 
   const iso = (d: Date) => d.toISOString().slice(0, 10);
 
   const out = `# ${SITE.name}
 
-> ${SITE.role} in ${SITE.location}. I take vague problems to shipped first
-> versions, mostly for teams of two to forty people building SaaS, mobile apps
-> or internal tools. This site publishes the decisions behind that work,
-> including the ones that were wrong and what they cost.
+> ${SITE.role} in ${SITE.location}, also known as ${SITE.handle}. I design and
+> build things on the internet — websites and digital products, mostly for
+> teams of two to forty people building SaaS, mobile apps or internal tools.
+> This site publishes the decisions behind that work, including the ones that
+> were wrong and what they cost.
 
 Contact: ${SITE.email}
 Language: English
@@ -81,15 +88,41 @@ ${essays
   )
   .join('\n')}
 
-## Working together
+## Services
 
-Engagements are scoped and priced before anything starts. There is no hourly
-billing. Roughly a third of enquiries get told that none of it fits, which is
-a real answer rather than a negotiating position.
+Three, and only three. Each is quoted per project after a written brief; there
+is no hourly billing and no published price list. Roughly a third of enquiries
+get told that none of it fits, which is a real answer rather than a negotiating
+position.
 
-- Work with me: ${SITE.url}/work-with-me/
+${services
+  .map(
+    (s) =>
+      `- **${s.data.title}** — ${s.data.lead}\n  For: ${s.data.forWho[0]}\n  Not for: ${s.data.notFor[0]}\n  ${SITE.url}/services/${s.id}/`
+  )
+  .join('\n')}
+
+- Start a project: ${SITE.url}/services/start/
+- All services: ${SITE.url}/services/
+
+## Work
+
+Projects designed or built, with their honest status. The buried ones are kept
+in public on purpose — a portfolio of things that worked teaches nobody
+anything.
+
+${projects
+  .map(
+    (c) =>
+      `- **${c.data.title}** (${c.data.year}, ${c.data.status}) — ${c.data.role}. ${c.data.summary}\n  ${SITE.url}/work/${c.id}/`
+  )
+  .join('\n')}
+
+## Elsewhere
+
 - About: ${SITE.url}/about/
 - Currently: ${SITE.url}/now/
+- Community: ${SITE.url}/community/
 
 ## Positions worth quoting
 

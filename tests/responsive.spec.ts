@@ -34,10 +34,10 @@ const VIEWPORTS = [
 /** One page per kind of layout, rather than all 41. */
 const PAGES = [
   '/',
-  '/work-with-me/',
+  '/services/',
   '/tools/why-is-nobody-using-your-product/',
   '/map/',
-  '/case-studies/glintale/',
+  '/work/glintale/',
   '/writing/heart-framework-vs-nps-user-experience/',
   '/glossary/',
 ];

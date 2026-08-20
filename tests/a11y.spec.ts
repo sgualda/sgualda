@@ -78,10 +78,12 @@ test('a check announces each question and moves focus to it', async ({ page }) =
   await expectFocusOnHeading();
 });
 
-test('the qualifier does the same', async ({ page }) => {
-  await page.goto('/work-with-me/');
-  await expect(page.locator('#qfBox')).toHaveAttribute('aria-live', 'polite');
-  await page.locator('.opt').first().click();
+test('the intake moves focus to each step, not just the scroll position', async ({ page }) => {
+  // Scrolling moves the page; focus moves the screen reader with it. Repainting
+  // a step without this leaves somebody on a keyboard at the top of a form they
+  // have already filled in.
+  await page.goto('/services/start/?s=web-design');
+  await page.getByRole('button', { name: 'Start' }).click();
   expect(
     await page.evaluate(() => document.activeElement?.hasAttribute('data-quiz-head'))
   ).toBe(true);

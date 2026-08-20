@@ -8,7 +8,7 @@ import Breadcrumbs from '@components/Breadcrumbs.astro';
 import { SITE } from '@lib/site';
 
 export async function getStaticPaths() {
-  const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
+  const cases = (await getCollection('projects', ({ data }) => !data.draft)).sort(
     (a, b) => a.data.order - b.data.order
   );
   return cases.map((entry, i) => ({
@@ -18,8 +18,8 @@ export async function getStaticPaths() {
 }
 
 const { entry, others } = Astro.props as {
-  entry: CollectionEntry<'cases'>;
-  others: CollectionEntry<'cases'>[];
+  entry: CollectionEntry<'projects'>;
+  others: CollectionEntry<'projects'>[];
 };
 const { Content } = await render(entry);
 const d = entry.data;
@@ -47,6 +47,24 @@ const STATUS: Record<string, string> = {
       author: { '@id': `${SITE.url}/#person` },
       publisher: { '@id': `${SITE.url}/#person` },
       datePublished: d.published.toISOString(),
+      /**
+       * The last time something actually happened to this project, not the
+       * last time the prose was edited.
+       *
+       * A project page is the one kind of page on this site that keeps being
+       * true in instalments. Declaring the newest update as `dateModified` is
+       * what lets a crawler tell a project that is moving from one that was
+       * written once in 2024 — without anybody having to remember to touch a
+       * date field.
+       */
+      ...(d.updates.length
+        ? {
+            dateModified: d.updates
+              .map((u) => u.date)
+              .sort((a, b) => b.valueOf() - a.valueOf())[0]
+              .toISOString(),
+          }
+        : {}),
       inLanguage: 'en',
       // What the article is *about*. Without this the page is prose with a
       // title; with it, the product is an entity a search engine can hold.
@@ -66,7 +84,7 @@ const STATUS: Record<string, string> = {
       {/* The project, not its status. Three of the six are "In progress", so the
         status made the breadcrumb identical on three pages and answered a
         question nobody navigating had asked. */}
-      <Breadcrumbs items={[{ label: 'Work', href: '/case-studies/' }, { label: d.title }]} />
+      <Breadcrumbs items={[{ label: 'Work', href: '/work/' }, { label: d.title }]} />
       <h1>{d.title}</h1>
       <p class="sub">{d.summary}</p>
 
@@ -95,6 +113,41 @@ const STATUS: Record<string, string> = {
     <div class="col prose">
       <Content />
     </div>
+
+    {
+      /**
+       * What has happened since, in order.
+       *
+       * Most portfolios freeze a project at the moment it shipped, which is why
+       * they age so badly — the reader cannot tell whether they are looking at
+       * something alive or a screenshot from four years ago. Appending a line
+       * here is cheaper than rewriting the page, so it is the thing most likely
+       * to actually get done.
+       *
+       * Absent entirely when there is nothing to say. An empty timeline is
+       * worse than none: it advertises that nothing has happened.
+       */
+      d.updates.length > 0 && (
+        <section class="col log">
+          <h2>What has happened since</h2>
+          <ol>
+            {[...d.updates]
+              .sort((a, b) => a.date.valueOf() - b.date.valueOf())
+              .map((u) => (
+                <li>
+                  <time datetime={u.date.toISOString().slice(0, 10)}>
+                    {u.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
+                  </time>
+                  <div>
+                    <b>{u.label}</b>
+                    {u.note && <p>{u.note}</p>}
+                  </div>
+                </li>
+              ))}
+          </ol>
+        </section>
+      )
+    }
   </article>
 
   <section class="section col">
@@ -106,7 +159,7 @@ const STATUS: Record<string, string> = {
       {
         others.map((c) => (
           <li>
-            <a href={`/case-studies/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
+            <a href={`/work/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
               {c.data.cover ? (
                 <Image
                   class="thumb"
@@ -131,7 +184,7 @@ const STATUS: Record<string, string> = {
   <section class="col next">
     <p class="sub">Recognise any of this in your own product?</p>
     <div class="actions">
-      <a class="btn btn--dark" href="/work-with-me/">Hire me</a>
+      <a class="btn btn--dark" href="/services/start/">Tell me about your project</a>
       <a class="btn btn--ghost" href="/tools/">Run a free check</a>
     </div>
   </section>
@@ -140,6 +193,47 @@ const STATUS: Record<string, string> = {
 </Base>
 
 <style>
+  /* A log, not a feature timeline. Hairlines and a date column, the same shape
+     as the writing index, because it is the same kind of object: a list of
+     things that happened, newest at the bottom so it reads forwards. */
+  .log { margin-top: var(--gap); text-align: left; }
+  .log h2 {
+    font-size: 1.125rem;
+    letter-spacing: var(--ls-heading);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .log ol { list-style: none; }
+  .log li {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .log time {
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+    line-height: var(--lh-tight);
+    color: var(--dim);
+    font-variant-numeric: tabular-nums;
+  }
+  .log b {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+  }
+  .log p {
+    margin-top: 4px;
+    font-size: 0.9375rem;
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+  @media (max-width: 560px) {
+    .log li { grid-template-columns: 1fr; gap: 4px; }
+  }
+
   .head { padding-top: clamp(44px, 8vh, 72px); }
   .head h1 { margin-bottom: 16px; }
 

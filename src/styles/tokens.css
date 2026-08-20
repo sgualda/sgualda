@@ -52,7 +52,7 @@
   --inverse: var(--ink);
   --on-inverse: #ffffff;
 
-  /* The full-width bands — newsletter, the case-studies footer, the "you are
+  /* The full-width bands — newsletter, the work footer, the "you are
      past this stage when" panel. In light they are the inverse of the page,
      which is the Figma design. In dark they cannot be: inverting an already
      dark page produces a cream slab that is the brightest thing on screen and

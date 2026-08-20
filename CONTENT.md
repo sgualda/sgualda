@@ -8,7 +8,109 @@ Do not polish anything. The messy version is more useful than the tidy one.
 
 ---
 
-## 1 · The two case studies — `#Q-044`
+## 0 · The invented anecdotes — **urgent**
+
+The two invented projects, `rangos` and `weeknotes`, are deleted. They were
+published as if they had happened, and they had not.
+
+Deleting them uncovered two more places the same stories are still being told,
+and I cannot fix either one, because I do not know which parts are true.
+
+### 0.1 · The essay `/writing/learning-to-let-go-an-idea/`
+
+Its two central anecdotes are the two deleted projects:
+
+> "A few years ago I spent three weekends building a tool for organising my own
+> notes. Data model, interface, the lot. It worked. I never showed it to
+> anybody."
+
+> "I did exactly this on a pricing calculator I never launched, and called it
+> attention to detail."
+
+I have removed the links, so nothing points at pages that no longer exist. The
+claims are still on a live page that ranks.
+
+**Answer one of these:**
+
+- [ ] Both true, near enough — leave it, and tell me so I can stop flagging it.
+- [ ] One is true — say which, and I will rewrite the other around something real.
+- [ ] Neither — the essay comes down, or gets rewritten around an incident that
+      did happen. The argument is good; it needs true evidence under it.
+
+> 
+
+### 0.2 · The five map stages — `#Q-062`
+
+Each stage page carries a first-person story. `/map/worth-building/` opens:
+
+> "I spent most of one summer building a tool for organising interview notes. I
+> was sure about it. I had the problem myself… Six people told me it sounded
+> useful. Not one of them had ever done anything about the problem before I
+> described it to them."
+
+That is the same story as the deleted `weeknotes`, told differently. There are
+five of these, one per stage.
+
+**Read the five and mark each one:**
+
+- [ ] `/map/worth-building/` — true / not true
+- [ ] `/map/first-version/` — true / not true
+- [ ] `/map/nobody-came/` — true / not true
+- [ ] `/map/make-it-repeatable/` — true / not true
+- [ ] `/map/charging-for-it/` — true / not true
+
+Anything marked "not true" gets rewritten or cut. This matters more than
+anything else in this file: the site's entire proposition is that it only
+publishes what something cost, and a page inventing a cost is the one failure
+that discredits the rest.
+
+> 
+
+---
+
+## 0.5 · The project timeline
+
+Every project can now carry a dated history, and none of them does yet. It is
+the field that stops `/work/` being four pages that were true once.
+
+For each project, three to five lines. A date and what changed — no prose.
+
+```yaml
+updates:
+  - date: 2024-03-01
+    label: Idea
+    note: One sentence, optional.
+  - date: 2025-11-20
+    label: Private beta on Android
+```
+
+- [ ] `glintale`
+- [ ] `truvi`
+- [ ] `truvi-developer-portal`
+- [ ] `ecoco-mobile-app`
+
+> 
+
+---
+
+## 0.6 · Two things the services pages promise
+
+I wrote `/services/web-design/`, `/services/web-development/` and
+`/services/website-audit/` from what the site and this repository demonstrate.
+Two claims need you to confirm them, because they are promises to a stranger:
+
+- [ ] **"A written reply within five working days."** It appears on every
+      service page and in the intake. Is five right?
+- [ ] **The budget ranges.** Under €2,000 / €2,000–5,000 / €5,000–10,000 /
+      €10,000–25,000 / more. They are there to filter, so they only work if
+      they bracket what you would actually take on. Change them in
+      `src/lib/intake.ts`.
+
+> 
+
+---
+
+## 1 · The two project stories — `#Q-044`
 
 **Why this is first:** "Work" is one of five items in your menu and the first thing
 a recruiter opens. Today it is a page with four grey rectangles and filters that

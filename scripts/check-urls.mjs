@@ -52,8 +52,9 @@ const section = (name) => {
 
 const groups = {
   pages: section('pages'),
+  work: section('work'),
+  services: section('services'),
   tools: section('tools'),
-  topics: section('topics'),
   writing: section('writing'),
 };
 const urls = Object.values(groups).flat();
@@ -66,7 +67,7 @@ if (urls.length === 0) {
 
 // An image with no alt text is invisible to a screen reader and wasted in
 // image search. Cheap to catch here, tedious to find later.
-const essayDir = join(root, 'src/content/essays');
+const essayDir = join(root, 'src/content/writing');
 const noAlt = readdirSync(essayDir)
   .filter((f) => f.endsWith('.md'))
   .filter((f) => readFileSync(join(essayDir, f), 'utf8').includes('![]('));

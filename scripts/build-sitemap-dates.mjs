@@ -34,8 +34,8 @@ function dateOf(path) {
 
 const dates = new Map();
 for (const [dir, prefix, ext] of [
-  ['src/content/essays', '/writing/', '.md'],
-  ['src/content/cases', '/case-studies/', '.md'],
+  ['src/content/writing', '/writing/', '.md'],
+  ['src/content/projects', '/work/', '.md'],
 ]) {
   for (const f of readdirSync(join(root, dir))) {
     if (!f.endsWith(ext)) continue;

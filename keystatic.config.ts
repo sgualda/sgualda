@@ -17,17 +17,18 @@ export default config({
   ui: {
     brand: { name: 'sgualda.com' },
     navigation: {
-      Writing: ['essays'],
-      Work: ['cases'],
+      Writing: ['writing'],
+      Work: ['projects'],
+      Services: ['services'],
       'Free checks': ['tools'],
       'The map': ['stages'],
     },
   },
 
   collections: {
-    essays: collection({
-      label: 'Essays',
-      path: 'src/content/essays/*',
+    writing: collection({
+      label: 'Writing',
+      path: 'src/content/writing/*',
       slugField: 'title',
       format: { contentField: 'body' },
       entryLayout: 'content',
@@ -69,9 +70,9 @@ export default config({
       },
     }),
 
-    cases: collection({
+    projects: collection({
       label: 'Case studies',
-      path: 'src/content/cases/*',
+      path: 'src/content/projects/*',
       slugField: 'title',
       format: { contentField: 'body' },
       entryLayout: 'content',
@@ -166,6 +167,77 @@ export default config({
           }),
           { label: 'Outcomes', itemLabel: (i) => i.fields.name.value }
         ),
+        faqs: fields.array(
+          fields.object({
+            q: fields.text({ label: 'Question' }),
+            a: fields.text({ label: 'Answer', multiline: true }),
+          }),
+          { label: 'FAQs', itemLabel: (i) => i.fields.q.value }
+        ),
+      },
+    }),
+
+    /**
+     * The three services.
+     *
+     * Editable here rather than in the page template because the copy on a
+     * service page is the part most likely to need changing after the first
+     * few briefs arrive — the "not for" list in particular, which gets sharper
+     * every time the wrong project comes in.
+     *
+     * `intake` is the exception worth naming: editing it changes what the form
+     * on /services/start/ asks when somebody arrives from this page. The two
+     * are deliberately in one file so they cannot drift.
+     */
+    services: collection({
+      label: 'Services',
+      path: 'src/content/services/*',
+      slugField: 'title',
+      format: { contentField: 'body' },
+      entryLayout: 'content',
+      schema: {
+        title: fields.slug({
+          name: { label: 'Title', validation: { isRequired: true } },
+          slug: {
+            label: 'URL slug',
+            description: 'This becomes the address. Changing it breaks a live link.',
+          },
+        }),
+        heading: fields.text({ label: 'Heading (the h1)', validation: { isRequired: true } }),
+        seoTitle: fields.text({ label: 'Browser title', description: 'Under 70 characters.' }),
+        description: fields.text({
+          label: 'Meta description',
+          description: 'Between 70 and 160 characters.',
+          validation: { length: { min: 70, max: 160 }, isRequired: true },
+          multiline: true,
+        }),
+        intent: fields.text({
+          label: 'Search intent',
+          description: 'The one query this page is written towards. If two services want the same one, one of them should not exist.',
+        }),
+        lead: fields.text({ label: 'The line under the heading', multiline: true }),
+        order: fields.integer({ label: 'Order', defaultValue: 99 }),
+        draft: fields.checkbox({ label: 'Draft' }),
+        forWho: fields.array(fields.text({ label: 'Who', multiline: true }), {
+          label: 'Who this is for',
+        }),
+        notFor: fields.array(fields.text({ label: 'Who not', multiline: true }), {
+          label: 'Who it is not for',
+          description: 'The half that qualifies. Sharpen this every time a wrong brief arrives.',
+        }),
+        howIWork: fields.array(
+          fields.object({
+            name: fields.text({ label: 'Step' }),
+            body: fields.text({ label: 'What happens', multiline: true }),
+          }),
+          { label: 'How I work', itemLabel: (i) => i.fields.name.value }
+        ),
+        deliverables: fields.array(fields.text({ label: 'Deliverable', multiline: true }), {
+          label: 'What you end up with',
+        }),
+        relatedProjects: fields.array(fields.text({ label: 'Project slug' }), {
+          label: 'Work that proves it',
+        }),
         faqs: fields.array(
           fields.object({
             q: fields.text({ label: 'Question' }),

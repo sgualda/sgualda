@@ -38,7 +38,7 @@
 /getting-things-done-transformed-my-life/  /writing/  301
 
 # ── retired page ──
-/mvp-prototype-design-startups/  /work-with-me/  301
+/mvp-prototype-design-startups/  /services/  301
 
 # The chooser is now a section of /tools/ rather than its own page.
 /tools/which-check-do-you-need/  /tools/  301
@@ -56,3 +56,31 @@
 # WordPress's default category archive. Empty, indexed, and Spanish on an
 # English site. Nothing to preserve, but it must not 404 on cutover.
 /category/sin-categoria/  /writing/  301
+
+# ── the 2026-08-20 rearchitecture ──
+#
+# /case-studies/ → /work/. The section did not change, only its name: "case
+# study" is what an agency calls a deliverable, and these are meant to read as
+# stories about building something.
+/case-studies/                          /work/                          301
+/case-studies/glintale/                 /work/glintale/                 301
+/case-studies/truvi/                    /work/truvi/                    301
+/case-studies/truvi-developer-portal/   /work/truvi-developer-portal/   301
+/case-studies/ecoco-mobile-app/         /work/ecoco-mobile-app/         301
+
+# Two projects that never happened.
+#
+# rangos and weeknotes were written as plausible side projects and published as
+# if they were real. They are gone. Sent to the index rather than 404'd, because
+# somebody holding the link deserves to land on the work that does exist.
+/case-studies/rangos/     /work/  301
+/case-studies/weeknotes/  /work/  301
+
+# /work-with-me/ → /services/.
+#
+# The qualifier sorted people by the shape of the engagement — a session, a
+# review, a project — which is not what anybody arrives holding. The axis is the
+# work now, and the qualifying happens inside the intake where it is free.
+/work-with-me/             /services/            301
+/work-with-me/brief/       /services/start/      301
+/work-with-me/brief/sent/  /services/start/sent/ 301

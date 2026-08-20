@@ -50,7 +50,7 @@ export default defineConfig({
        * trust the rest of the file less.
        */
       filter: (page) =>
-        !['/draft/', '/styleguide/', '/work-with-me/brief/'].some((x) => page.includes(x)),
+        !['/draft/', '/styleguide/', '/services/start/'].some((x) => page.includes(x)),
       serialize(item) {
         /**
          * lastmod, and no priority.

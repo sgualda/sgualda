@@ -1,0 +1,195 @@
+---
+/**
+ * The waitlist for the private community, which does not exist.
+ *
+ * That is the entire point and it is said on the page in those words. The
+ * brief asked for a fake door: something that measures whether anybody wants
+ * the thing before a line of it is built — no accounts, no payments, no
+ * dashboard, no room.
+ *
+ * What it deliberately is not: a "coming soon" page that replaces the free
+ * chat. That chat is real, running, and one click away, and swapping a working
+ * thing for a placeholder to validate a future thing makes the page worse for
+ * everybody who arrives today. So both live here, plainly labelled, and the
+ * difference between them is stated rather than blurred.
+ *
+ * The address goes to the same endpoint the intake uses, with type=waitlist.
+ * No list, no provider, no cookie — it arrives as an email and that is all.
+ */
+interface Props {
+  /** Recorded with the address, so it is possible to tell later which page
+   *  actually persuaded anybody. */
+  from?: string;
+}
+const { from = '/community/' } = Astro.props;
+---
+
+<div class="wl">
+  <span class="tag">Not built yet</span>
+  <h2>A smaller, private room.</h2>
+  <p>
+    Paid, capped, and closer to a working group than a chat: designers, developers, founders
+    and people shipping things, with the conversations that do not belong in a public room —
+    what you charged, what you got wrong, the contract that went badly.
+  </p>
+  <p class="honest">
+    It does not exist. There is nothing to log into and no date. This is here to find out
+    whether enough people want it to be worth building, and if the answer is no I will say so
+    rather than quietly leaving the form up.
+  </p>
+
+  <form class="wl-form" id="wlForm" novalidate data-from={from}>
+    <label class="sr-only" for="wl-email">Email address</label>
+    <input
+      id="wl-email"
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      inputmode="email"
+      placeholder="name@email.com"
+    />
+    {/* Honeypot. Hidden from people, irresistible to bots. */}
+    <div class="hp" aria-hidden="true">
+      <label for="wl-site">Website</label>
+      <input id="wl-site" name="wl-site" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+    <button class="btn btn--dark" type="submit">Join the waitlist</button>
+  </form>
+
+  <p class="wl-msg" id="wlMsg" role="status" aria-live="polite"></p>
+  <p class="fine">
+    One email if it happens. Nothing else, ever. <a href="/privacy/">What I do with it</a>.
+  </p>
+</div>
+
+<style>
+  .wl {
+    text-align: left;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-card);
+    padding: clamp(26px, 5vw, 44px);
+    background: var(--surface);
+  }
+  .tag {
+    display: inline-block;
+    font-size: 0.6875rem;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-pill);
+    padding: 4px 12px;
+    background: var(--paper);
+  }
+  .wl h2 {
+    margin-top: 16px;
+    font-size: clamp(1.375rem, 3.4vw, 1.875rem);
+    letter-spacing: var(--ls-heading);
+  }
+  .wl p {
+    margin-top: 16px;
+    color: var(--dim);
+    line-height: var(--lh-read);
+    max-width: 44em;
+  }
+  /* The paragraph that admits the thing is not real. Set in the ink colour
+     because it is the most important sentence in the block, not a disclaimer
+     to be skimmed past. */
+  .honest { color: var(--ink) !important; }
+
+  .wl-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 26px;
+  }
+  .wl-form input[type='email'] {
+    flex: 1 1 16rem;
+    min-width: 0;
+    font: inherit;
+    font-size: 0.9375rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-pill);
+    padding: 12px 20px;
+    transition: border-color 0.2s var(--ease);
+  }
+  .wl-form input[type='email']:focus-visible {
+    outline: none;
+    border-color: var(--ink);
+  }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .wl-msg { margin-top: 16px; font-size: 0.9375rem; min-height: 1.5em; }
+  .wl-msg[data-state='ok'] { color: var(--ok) !important; }
+  .wl-msg[data-state='err'] { color: var(--err) !important; }
+  .wl-msg:empty { display: none; }
+
+  .fine { margin-top: 12px; font-size: 0.75rem; line-height: var(--lh-ui); color: var(--dim); }
+  .fine a { text-decoration: underline; text-underline-offset: 3px; }
+</style>
+
+<script>
+  const form = document.getElementById('wlForm') as HTMLFormElement | null;
+  const msg = document.getElementById('wlMsg');
+  const field = document.getElementById('wl-email') as HTMLInputElement | null;
+
+  if (form && msg && field) {
+    // Anything faster than this is not a person reading three paragraphs first.
+    const opened = Date.now();
+
+    const say = (text: string, state: 'ok' | 'err') => {
+      msg.textContent = text;
+      msg.dataset.state = state;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = field.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        say('That address does not look right.', 'err');
+        field.focus();
+        return;
+      }
+
+      const btn = form.querySelector('button')!;
+      btn.disabled = true;
+      btn.textContent = 'Adding…';
+      msg.textContent = '';
+
+      try {
+        const res = await fetch('/api/brief.php', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            type: 'waitlist',
+            email,
+            from: form.dataset.from ?? '/community/',
+            website: (document.getElementById('wl-site') as HTMLInputElement | null)?.value ?? '',
+            elapsed: Date.now() - opened,
+          }),
+        });
+        // The endpoint is PHP, so a server misconfiguration answers with an
+        // HTML error page. Parsing that as JSON throws a stack trace at
+        // somebody who just typed their address.
+        if (!(res.headers.get('content-type') ?? '').includes('application/json')) {
+          throw new Error(`Something broke at my end (${res.status}). Email hello@sgualda.com.`);
+        }
+        const out = await res.json();
+        if (!res.ok || !out.ok) throw new Error(out.error || 'Could not add that.');
+
+        form.hidden = true;
+        say('You are on the list. I will write once, if it happens.', 'ok');
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Join the waitlist';
+        say(
+          err instanceof Error && err.message ? err.message : 'Could not add that. Try again?',
+          'err'
+        );
+      }
+    });
+  }
+</script>

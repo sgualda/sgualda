@@ -22,7 +22,7 @@ test.beforeEach(async ({ context }) => {
  * actually composited.
  */
 
-const PAGES = ['/', '/tools/why-is-nobody-using-your-product/', '/writing/mvp-vs-prototype/', '/work-with-me/'];
+const PAGES = ['/', '/tools/why-is-nobody-using-your-product/', '/writing/mvp-vs-prototype/', '/services/'];
 
 test.describe('theme', () => {
   test('follows the system preference with no stored choice', async ({ page }) => {

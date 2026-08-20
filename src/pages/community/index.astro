@@ -3,6 +3,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import NextStep from '@components/NextStep.astro';
+import Waitlist from '@components/Waitlist.astro';
 import { SITE, SOCIAL } from '@lib/site';
 
 /**
@@ -211,6 +212,14 @@ const FAQS = [
     <div class="actions">
       <a class="btn btn--dark" href={SOCIAL.community} target="_blank" rel="noopener">Join the chat</a>
     </div>
+  </section>
+
+  {/* The second room, which does not exist.
+      Placed after "what it is not" and before the FAQ, so nobody reads about a
+      paid community until they have understood the free one they can join
+      today. Getting that order wrong turns a working page into a teaser. */}
+  <section class="section col">
+    <Waitlist from="/community/" />
   </section>
 
   <section class="section col">
