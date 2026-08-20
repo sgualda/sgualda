@@ -9,10 +9,17 @@ const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
 );
 
-/** The comp shows the month on one line and DD/YY under it. */
-const month = (d: Date) => d.toLocaleDateString('en-GB', { month: 'long' });
-const dayYear = (d: Date) =>
-  `${String(d.getDate()).padStart(2, '0')}/${String(d.getFullYear()).slice(-2)}`;
+/**
+ * One date, small and out of the way.
+ *
+ * It used to be two lines — the month above DD/YY, the second set in the
+ * display face at 1.125rem semibold. That made the date the loudest thing in
+ * every row, louder than the title it belonged to, and it ate a 96px column
+ * that pushed every headline into a narrow ragged strip. A date is metadata.
+ * It goes above the title, quiet, in one line.
+ */
+const stamp = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
 /** Rendered up front, revealed six at a time. */
 const PAGE = 6;
@@ -66,11 +73,14 @@ const PAGE = 6;
         essays.map((e, i) => (
           <li class:list={['row', { hidden: i >= PAGE }]}>
             <a href={`/writing/${e.id}/`}>
-              <span class="when">
-                <em>{month(e.data.published)}</em>
-                <b>{dayYear(e.data.published)}</b>
+              <time datetime={e.data.published.toISOString().slice(0, 10)}>
+                {stamp(e.data.published)}
+              </time>
+              <h2>{e.data.title}</h2>
+              <p>{e.data.hook ?? e.data.description}</p>
+              <span class="go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </span>
-              <span class="what">{e.data.title}</span>
             </a>
           </li>
         ))
@@ -105,41 +115,96 @@ const PAGE = 6;
 
   .intro h1 { margin-bottom: 18px; }
 
-  /* The h1 and the first row were 54px apart, which reads as one block.
-     A journal index is a change of register: the heading introduces, the list
-     begins. */
-  .list { list-style: none; text-align: left; margin-top: clamp(64px, 11vh, 104px); }
-  .row.hidden { display: none; }
-  .row + .row { margin-top: 34px; }
+  /* ── the index ──
+     A list of things to read, so the title leads and everything else gets out
+     of its way: date above in the small size, hook underneath in the secondary
+     one, a hairline between rows and nothing else. The arrow is the only
+     decoration and it only moves on hover.
+
+     The previous version was a two-column grid — date on the left, title on the
+     right — which is a table, and a table of seven things is a table too few.
+     It also broke below 560px, where 96px of date left the titles wrapping
+     every three words. */
+  .list {
+    /* An ordered list because the order means something — newest first — but
+       the markers do not: "1." on the most recent essay numbers nothing a
+       reader needs. Semantics kept, decoration dropped. */
+    list-style: none;
+    text-align: left;
+    margin-top: clamp(48px, 8vh, 80px);
+  }
+  .row.hidden { display: none; content-visibility: hidden; }
+  .row { border-top: 1px solid var(--hair); }
+  .row:last-of-type { border-bottom: 1px solid var(--hair); }
+
   .list a {
-    display: grid; grid-template-columns: 96px 1fr; gap: 24px; align-items: start;
-    transition: opacity 0.2s var(--ease);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'time  go' 'title go' 'hook  go';
+    align-items: start;
+    column-gap: 24px;
+    padding: clamp(24px, 3.5vw, 34px) 0;
+    transition: opacity 0.24s var(--ease);
   }
-  .list a:hover { opacity: 0.55; }
-  .when { color: var(--dim); }
-  .when em { display: block; font-style: normal; font-size: 0.8125rem; letter-spacing: 0; line-height: var(--lh-tight); }
-  .when b {
-    display: block; margin-top: 2px;
-    font-family: var(--font-display); font-size: 1.125rem; font-weight: 600;
-    letter-spacing: var(--ls-heading); line-height: var(--lh-tight);
-  }
-  /* Body face at medium rather than the display face at semibold. A list of
-     fifteen titles set in Zalando Sans Expanded 600 reads as fifteen headlines
-     competing with each other; the index is for scanning, and the headline
-     belongs on the essay itself. */
-  .what {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: var(--ls-read);
+  .list a:hover { opacity: 0.62; }
+
+  .list time {
+    grid-area: time;
+    font-size: var(--fs-fine);
     line-height: var(--lh-ui);
+    letter-spacing: var(--ls-read);
+    color: var(--dim);
   }
-  /* Rows below the fold are skipped by layout and paint until revealed. */
-  .row.hidden { content-visibility: hidden; }
-  .row.enter { animation: rise 0.45s var(--ease) both; animation-delay: calc(var(--d) * 70ms); }
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: none; }
+  /* The title is the row. Display face, and the only thing at this size. */
+  .list h2 {
+    grid-area: title;
+    margin-top: 8px;
+    font-size: clamp(1.125rem, 2.4vw, 1.375rem);
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-tight);
+    max-width: 30ch;
+  }
+  /* The hook, which the list never showed and every essay already has. It is
+     the difference between scanning seven titles and knowing which one is for
+     you. */
+  .list p {
+    grid-area: hook;
+    margin-top: 10px;
+    max-width: 52ch;
+    font-size: var(--fs-sub);
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+  .go {
+    grid-area: go;
+    align-self: center;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hair);
+    flex: none;
+  }
+  .go svg {
+    width: 15px; height: 15px;
+    stroke: var(--ink); stroke-width: 1.7; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.24s var(--ease);
+  }
+  .list a:hover .go svg { transform: translateX(3px); }
+
+  /* On a phone the arrow goes: a 34px circle beside a wrapping headline is the
+     first thing to squeeze the text, and the whole row is already the target. */
+  @media (max-width: 560px) {
+    .list a { grid-template-columns: 1fr; grid-template-areas: 'time' 'title' 'hook'; }
+    .list h2 { max-width: none; }
+    .go { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .list a, .go svg { transition: none; }
   }
 
   .more { margin-top: 52px; text-align: center; }
@@ -181,14 +246,6 @@ const PAGE = 6;
      centring a column of titles of different lengths is the one thing that
      would look worse — but now it reads as a deliberate block rather than a
      column that ran out of room. */
-  @media (max-width: 560px) {
-    .list a { grid-template-columns: 1fr; gap: 6px; }
-    .when { display: flex; align-items: baseline; gap: 6px; }
-    .when em, .when b { display: inline; }
-    .when b { font-size: 0.9375rem; }
-    .what { font-size: 1.0625rem; line-height: var(--lh-tight); }
-    .row + .row { margin-top: 26px; }
-  }
 </style>
 
 <script>

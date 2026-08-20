@@ -180,30 +180,32 @@ export const EXPERTISE = [
 ] as const;
 
 /**
- * The main navigation. Three items, down from eight destinations.
+ * The main navigation. Four items.
  *
- * The rule this encodes is the one the site kept breaking: *does this need to
- * exist as a top-level page?* Tools, Map and Work were all in here, which put
- * eight destinations in front of a reader on a site whose stated principle is
- * that most things should not exist.
+ * Tools and Map are back, and they belong here: they are the two things on
+ * this site somebody can *use* rather than read, they are 11 pages of real
+ * work, and demoting them to a line above the essay list meant nobody who did
+ * not already know about them would ever find them. A menu is for the things
+ * worth arriving for, and a diagnostic you can run in ninety seconds qualifies.
  *
- * Where the removed ones went:
+ * Community moves to the footer. It is one link to a chat on somebody else's
+ * platform plus a waitlist for a room that does not exist — real, worth having,
+ * and not one of the four things this site is about.
  *
- *  · Tools, Map and the glossary are reference material about building
- *    products. That is what Writing is, so they are surfaced from the top of
- *    /writing/ and keep their URLs. Demoting costs nothing; deleting would
- *    have thrown away 27 pieces of content and six working questionnaires.
+ * Two that stay out, and why:
+ *
  *  · Work is linked from the home page and /about/, which are the two places
- *    somebody actually wants proof of it. It stays out of here because a
- *    portfolio in the menu is what makes a personal site read as a portfolio.
+ *    somebody actually wants proof of it. A portfolio in the menu is what makes
+ *    a personal site read as a portfolio.
  *  · Services existed for one day. Three landings with intent, deliverables
  *    and a page each was a catalogue, and this is not a shop — the way to work
  *    together is one banner and one short form, which is what it was before.
  */
 export const NAV = [
   { label: 'Writing', href: '/writing/' },
+  { label: 'Tools', href: '/tools/' },
+  { label: 'Map', href: '/map/' },
   { label: 'About', href: '/about/' },
-  { label: 'Community', href: '/community/' },
 ] as const;
 
 /**
@@ -291,10 +293,9 @@ export const URL_MAP = {
  */
 export const MORE = [
   { label: 'Work', href: '/work/' },
+  { label: 'Community', href: '/community/' },
   { label: 'Let’s talk', href: '/collaborate/' },
-  { label: 'The checks', href: '/tools/' },
-  { label: 'The map', href: '/map/' },
+  { label: 'Now', href: '/now/' },
   // Glossary is not here: the footer's first column already lists it, and one
   // link twice in one footer reads as an oversight rather than emphasis.
-  { label: 'Now', href: '/now/' },
 ] as const;

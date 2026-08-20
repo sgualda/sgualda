@@ -41,7 +41,7 @@ Three things, and they describe the same journey from different angles:
 
 - **The map** — five stages of building a product, each with its own problem.
   Advice that saves you at one stage can hurt you at another.
-- **The checks** — free diagnostic questionnaires, one per common decision.
+- **Tools** — free diagnostic questionnaires, one per common decision.
   They run entirely in the browser; nothing is collected.
 - **The journal** — essays on what specific decisions cost.
 
