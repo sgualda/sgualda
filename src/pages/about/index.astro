@@ -182,7 +182,7 @@ const notFor = [
   h1 { margin-bottom: 26px; }
 
   .bio p {
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     line-height: var(--lh-read);
     letter-spacing: 0;
     color: var(--dim);
@@ -199,7 +199,7 @@ const notFor = [
     margin: var(--space-9) 0;
     padding: var(--space-7) 0;
     border-block: 1px solid var(--hair);
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     line-height: var(--lh-read);
     letter-spacing: var(--ls-read);
   }
@@ -219,7 +219,7 @@ const notFor = [
   .block h2 { margin-bottom: 26px; }
   .block .lead {
     margin: -14px 0 26px;
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
@@ -227,14 +227,14 @@ const notFor = [
 
   dl dt {
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     font-weight: 600;
     letter-spacing: var(--ls-heading);
     line-height: var(--lh-tight);
     margin-bottom: 8px;
   }
   dl dd {
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
@@ -248,7 +248,7 @@ const notFor = [
     align-items: start;
   }
   .pair h2 {
-    font-size: 1.125rem;
+    font-size: var(--fs-lead);
     letter-spacing: var(--ls-heading);
     line-height: var(--lh-tight);
     padding-bottom: 16px;
@@ -258,7 +258,7 @@ const notFor = [
   .pair dl > div { padding: 20px 0; border-bottom: 1px solid var(--hair); }
   .pair dt { margin-bottom: 8px; }
   /* One paragraph size on this page, and one colour for it. */
-  .pair dd { font-size: 0.9375rem; line-height: var(--lh-read); }
+  .pair dd { font-size: var(--fs-sub); line-height: var(--lh-read); }
 
   @media (max-width: 720px) {
     .pair { grid-template-columns: 1fr; gap: 34px; }

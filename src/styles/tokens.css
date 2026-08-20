@@ -160,6 +160,15 @@
   --shell: min(560px, calc(100vw - 40px));
   --shell-full: min(1040px, calc(100vw - 40px)); /* the map diagram. Only that. */
   --measure: 62ch;   /* long-form reading width, used inside the shell */
+
+  /* ── motion ──
+     Three durations. There were ten — 0.2, 0.24, 0.25, 0.28, 0.3, 0.36, 0.4,
+     0.42, 0.5 — which is not a system, it is nine people's guesses. Nothing on
+     this site moves for long enough that a 40ms difference between two of them
+     was ever a decision. */
+  --dur-fast: 0.2s;   /* colour, opacity, border — things that just switch */
+  --dur: 0.28s;       /* movement: a hover lift, an arrow sliding */
+  --dur-slow: 0.42s;  /* something entering the page for the first time */
   /* ── spacing ──
      Named steps so a future component has somewhere to reach for instead of
      inventing a number. The site currently uses 42 distinct literal values,
@@ -195,6 +204,7 @@
   --radius-sm: 18px;     /* nested cards, inline blocks */
   --radius-card: 28px;   /* the standard card */
   --radius-band: 34px;   /* full-bleed banners like the newsletter */
+  --radius-xs: 8px;      /* code blocks, inline chips, small insets */
   --radius-pill: 999px;
 
   /* ── motion ── */

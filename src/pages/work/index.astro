@@ -149,7 +149,7 @@ const LABEL: Record<string, string> = {
     display: block;
     margin-top: 3px;
     font-weight: 400;
-    font-size: 0.75rem;
+    font-size: var(--fs-fine);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
@@ -180,7 +180,7 @@ const LABEL: Record<string, string> = {
     /* The covers are screenshots on light interfaces. A hairline stops them
        dissolving into the page in light and floating in dark. */
     border: 1px solid var(--hair);
-    transition: opacity 0.28s var(--ease);
+    transition: opacity var(--dur) var(--ease);
   }
   /* The two buried projects have no screenshot, because there is nothing to
      show, which is the whole point of them. A flat grey rectangle read as a
@@ -195,7 +195,7 @@ const LABEL: Record<string, string> = {
       var(--surface);
   }
   .thumb.none span {
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
@@ -215,14 +215,14 @@ const LABEL: Record<string, string> = {
     display: block;
     margin-top: var(--space-3);
     font-family: var(--font-display);
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     font-weight: 600;
     letter-spacing: var(--ls-heading);
     color: var(--ink);
   }
   .card[hidden] { display: none; }
 
-  .empty { margin-top: 26px; font-size: 0.9375rem; color: var(--dim); }
+  .empty { margin-top: 26px; font-size: var(--fs-sub); color: var(--dim); }
   .empty a { text-decoration: underline; text-underline-offset: 3px; }
 
 

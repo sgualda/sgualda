@@ -224,6 +224,47 @@ for (const page of pagesOnDisk) {
  * A missing canonical or a second h1 is the same class of problem: invisible
  * on the page, wrong in the part machines read.
  */
+/**
+ * Design tokens, enforced.
+ *
+ * tokens.css is the only file allowed to name a size, a radius or a duration.
+ * Everywhere else picks a role. This is here because the site had ten font
+ * sizes for six roles, ten transition durations, and nine ad-hoc radii — and
+ * every one of them arrived the same way: somebody needed a value, typed one,
+ * and it was reasonable in isolation. 0.9rem and 0.875rem meant the same thing
+ * in two different files for months.
+ *
+ * Two literals survive on purpose and are listed by line, not waved through by
+ * a loose rule: a 2px cap on the burger's 2px bars, and a 1.05s loading bounce,
+ * which is an animation rather than a UI transition.
+ */
+const ALLOWED = new Set(['border-radius: 2px', '1.05s var(--ease)']);
+const tokenErrors = [];
+for (const dir of ['src/pages', 'src/components', 'src/layouts', 'src/styles']) {
+  for (const f of readdirSync(join(root, dir), { recursive: true })) {
+    if (typeof f !== 'string' || !/\.(astro|css)$/.test(f)) continue;
+    if (f === 'tokens.css') continue;
+    const css = readFileSync(join(root, dir, f), 'utf8');
+    for (const rx of [
+      /font-size: (\d[\d.]*rem)(?![\w-])/g,
+      /border-radius: (\d+px)/g,
+      /\b(\d[\d.]*s) var\(--ease\)/g,
+    ]) {
+      for (const m of css.matchAll(rx)) {
+        const hit = m[0].trim();
+        if (ALLOWED.has(hit)) continue;
+        tokenErrors.push(`${dir}/${f}  ${hit}`);
+      }
+    }
+  }
+}
+if (tokenErrors.length) {
+  console.error(`\n✗ ${tokenErrors.length} hard-coded value(s) that belong in tokens.css:`);
+  for (const e of tokenErrors) console.error(`    ${e}`);
+  console.error('  Pick a role: --fs-*, --radius-*, --dur-*.\n');
+  process.exit(1);
+}
+
 const metaErrors = [];
 for (const page of pagesOnDisk) {
   const url = '/' + page.replace(/index\.html$/, '');

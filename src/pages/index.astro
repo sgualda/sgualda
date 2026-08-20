@@ -176,7 +176,7 @@ const voices = await getTestimonials();
   .hero .actions { margin-top: 30px; }
   .skip-to {
     margin-top: var(--space-5);
-    font-size: 0.875rem;
+    font-size: var(--fs-note);
     letter-spacing: 0;
     color: var(--dim);
   }
@@ -207,7 +207,7 @@ const voices = await getTestimonials();
     background: var(--surface);
     border: 1px solid var(--hair);
     border-radius: var(--radius-card);
-    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
   }
   .slot:hover img { opacity: 0.86; transform: translateY(-2px); }
   @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }

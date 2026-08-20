@@ -225,19 +225,19 @@ const STATUS: Record<string, string> = {
      — title, hook, hairline — so the two read as the same kind of object. */
   .wrote { margin-top: var(--gap); text-align: left; }
   .wrote h2 {
-    font-size: 1.125rem;
+    font-size: var(--fs-lead);
     letter-spacing: var(--ls-heading);
     padding-bottom: 16px;
     border-bottom: 1px solid var(--hair);
   }
   .wrote ul { list-style: none; }
   .wrote li { border-bottom: 1px solid var(--hair); }
-  .wrote a { display: block; padding: 20px 0; transition: opacity 0.2s var(--ease); }
+  .wrote a { display: block; padding: 20px 0; transition: opacity var(--dur-fast) var(--ease); }
   .wrote a:hover { opacity: 0.62; }
   .wrote b {
     display: block;
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     font-weight: 600;
     letter-spacing: var(--ls-heading);
     line-height: var(--lh-tight);
@@ -255,7 +255,7 @@ const STATUS: Record<string, string> = {
      things that happened, newest at the bottom so it reads forwards. */
   .log { margin-top: var(--gap); text-align: left; }
   .log h2 {
-    font-size: 1.125rem;
+    font-size: var(--fs-lead);
     letter-spacing: var(--ls-heading);
     padding-bottom: 16px;
     border-bottom: 1px solid var(--hair);
@@ -269,7 +269,7 @@ const STATUS: Record<string, string> = {
     border-bottom: 1px solid var(--hair);
   }
   .log time {
-    font-size: 0.8125rem;
+    font-size: var(--fs-fine);
     letter-spacing: 0;
     line-height: var(--lh-tight);
     color: var(--dim);
@@ -277,13 +277,13 @@ const STATUS: Record<string, string> = {
   }
   .log b {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: var(--fs-body);
     font-weight: 600;
     letter-spacing: var(--ls-heading);
   }
   .log p {
     margin-top: 4px;
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     line-height: var(--lh-read);
     color: var(--dim);
   }
@@ -300,10 +300,10 @@ const STATUS: Record<string, string> = {
     padding-top: 26px; border-top: 1px solid var(--hair);
   }
   .facts dt {
-    font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase;
+    font-size: var(--fs-label); letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--dim); margin-bottom: 5px;
   }
-  .facts dd { margin: 0; font-size: 0.9375rem; line-height: var(--lh-tight); letter-spacing: var(--ls-read); }
+  .facts dd { margin: 0; font-size: var(--fs-sub); line-height: var(--lh-tight); letter-spacing: var(--ls-read); }
 
 
   .cover { width: 100%; border-radius: var(--radius-card); margin-top: var(--space-8); }
@@ -312,7 +312,7 @@ const STATUS: Record<string, string> = {
      couple of paragraphs. */
   .prose {
     margin-top: 48px; text-align: left;
-    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
+    font-size: var(--fs-body); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
   }
   .prose :global(p) { margin-bottom: 1.2em; }
   .prose :global(h2) {
@@ -334,7 +334,7 @@ const STATUS: Record<string, string> = {
     background: var(--surface);
     border: 1px solid var(--hair);
     border-radius: var(--radius-card);
-    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
   }
   .others a:hover .thumb { opacity: 0.86; transform: translateY(-2px); }
   /* The two buried projects have no screenshot, because there is nothing to
@@ -350,7 +350,7 @@ const STATUS: Record<string, string> = {
       var(--surface);
   }
   .others .thumb.none span {
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
@@ -361,7 +361,7 @@ const STATUS: Record<string, string> = {
     backdrop-filter: blur(6px);
   }
   .tag {
-    display: inline-block; font-size: 0.625rem; letter-spacing: 0.12em;
+    display: inline-block; font-size: var(--fs-label); letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--dim);
     background: var(--paper); border-radius: var(--radius-pill);
     padding: 5px 11px; margin-bottom: 12px;

@@ -157,28 +157,28 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
   .intro h1 { margin-bottom: 18px; }
   .stamp {
     margin-top: 22px;
-    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+    font-size: var(--fs-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
   }
 
   /* Left-aligned: it is a document, and nobody reads a centred one. */
-  .consent-reset { font-size: 0.8125rem; padding: 9px 16px; }
+  .consent-reset { font-size: var(--fs-fine); padding: 9px 16px; }
   .consent-now {
     margin-left: var(--space-4);
-    font-size: 0.8125rem;
+    font-size: var(--fs-fine);
     letter-spacing: var(--ls-read);
     color: var(--dim);
   }
 
   .doc { text-align: left; }
   .doc h2 {
-    font-size: 1.125rem;
+    font-size: var(--fs-lead);
     margin: 40px 0 12px;
     padding-top: 26px;
     border-top: 1px solid var(--hair);
   }
   .doc h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
   .doc p {
-    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
+    font-size: var(--fs-body); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
   }
   .doc p + p { margin-top: 1em; }
   .doc a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }

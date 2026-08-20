@@ -144,7 +144,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
     border: 1px solid var(--hair); border-radius: var(--radius-card);
     padding: clamp(26px, 5vw, 38px) clamp(20px, 4vw, 30px);
   }
-  .aside { margin-top: 14px; font-size: 0.8125rem; color: var(--dim); letter-spacing: 0; }
+  .aside { margin-top: 14px; font-size: var(--fs-fine); color: var(--dim); letter-spacing: 0; }
 
 
   /* A rail rather than a stack. Five other checks read as a wall vertically
@@ -161,14 +161,14 @@ const url = `${SITE.url}/tools/${t.slug}/`;
   .more > li { width: 236px; }
   .more > li > a { display: flex; flex-direction: column; height: 100%; }
   .more .meta {
-    font-size: 0.625rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--dim);
     margin-bottom: var(--space-3);
   }
-  .more h3 { font-size: 1rem; margin-bottom: 8px; }
-  .more p { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); margin: 0; }
+  .more h3 { font-size: var(--fs-body); margin-bottom: 8px; }
+  .more p { font-size: var(--fs-note); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); margin: 0; }
 </style>
 
 <script>

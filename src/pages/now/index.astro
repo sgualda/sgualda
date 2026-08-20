@@ -87,7 +87,7 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
     display: flex;
     align-items: center;
     gap: 9px;
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
@@ -100,7 +100,7 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
   }
   .blocks dd {
     margin: 0;
-    font-size: 1rem;
+    font-size: var(--fs-body);
     line-height: var(--lh-read);
     letter-spacing: var(--ls-read);
     color: var(--dim);
@@ -114,18 +114,18 @@ const fmt = UPDATED.toLocaleDateString('en-GB', { year: 'numeric', month: 'long'
 
   .stamp {
     margin-top: 22px;
-    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+    font-size: var(--fs-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
   }
 
   .blocks { text-align: left; }
   .blocks dt {
     font-family: var(--font-body);
-    font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em;
+    font-size: var(--fs-label); font-weight: 500; letter-spacing: 0.16em;
     text-transform: uppercase; color: var(--dim);
     padding-top: 26px; border-top: 1px solid var(--hair); margin-bottom: 10px;
   }
   .blocks dd {
-    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
+    font-size: var(--fs-body); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
     padding-bottom: 26px;
   }
   .blocks strong { color: var(--ink); font-weight: 600; }

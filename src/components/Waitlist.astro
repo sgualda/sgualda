@@ -71,7 +71,7 @@ const { from = '/community/' } = Astro.props;
   }
   .tag {
     display: inline-block;
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
@@ -106,13 +106,13 @@ const { from = '/community/' } = Astro.props;
     flex: 1 1 16rem;
     min-width: 0;
     font: inherit;
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     color: var(--ink);
     background: var(--paper);
     border: 1px solid var(--hair);
     border-radius: var(--radius-pill);
     padding: 12px 20px;
-    transition: border-color 0.2s var(--ease);
+    transition: border-color var(--dur-fast) var(--ease);
   }
   /* Same treatment as the form on /collaborate/: the global double ring is
      built for links and pills, and killing only its outline leaves the 4px ink
@@ -124,12 +124,12 @@ const { from = '/community/' } = Astro.props;
   }
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
-  .wl-msg { margin-top: 16px; font-size: 0.9375rem; min-height: 1.5em; }
+  .wl-msg { margin-top: 16px; font-size: var(--fs-sub); min-height: 1.5em; }
   .wl-msg[data-state='ok'] { color: var(--ok) !important; }
   .wl-msg[data-state='err'] { color: var(--err) !important; }
   .wl-msg:empty { display: none; }
 
-  .fine { margin-top: 12px; font-size: 0.75rem; line-height: var(--lh-ui); color: var(--dim); }
+  .fine { margin-top: 12px; font-size: var(--fs-fine); line-height: var(--lh-ui); color: var(--dim); }
   .fine a { text-decoration: underline; text-underline-offset: 3px; }
 </style>
 

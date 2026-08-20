@@ -129,10 +129,10 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
   /* Centred while they fit, scrolled once they do not. */
   .filters[data-start='true'][data-end='true'] { justify-content: center; }
   .chip {
-    font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500; letter-spacing: var(--ls-read);
+    font-family: var(--font-body); font-size: var(--fs-fine); font-weight: 500; letter-spacing: var(--ls-read);
     padding: 12px 18px; border-radius: var(--radius-pill);
     border: 1px solid var(--hair); background: transparent; color: var(--ink); cursor: pointer;
-    transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+    transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
   }
   .chip span { color: var(--dim); margin-left: 2px; }
   .chip:hover { border-color: var(--ink); }
@@ -141,7 +141,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 
   .fcount {
     margin-top: var(--space-4);
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
@@ -150,7 +150,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 
   /* 42ms between cards: enough to read as a sequence, short enough that six of
      them finish inside a quarter of a second. */
-  .card.in { animation: card-in 0.42s var(--ease) both; animation-delay: calc(var(--d) * 42ms); }
+  .card.in { animation: card-in var(--dur-slow) var(--ease) both; animation-delay: calc(var(--d) * 42ms); }
   @keyframes card-in {
     from { opacity: 0; transform: translateY(10px) scale(0.985); }
     to { opacity: 1; transform: none; }

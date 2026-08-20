@@ -9,28 +9,6 @@ const STAGES = await getStages();
 
 /** /map/, the Figma frame "Map", with the route made interactive. */
 
-/**
- * A smooth path through the five stages, not five straight segments.
- * Catmull-Rom through the points, converted to cubic béziers: each control
- * point is derived from the neighbours, so the curve passes exactly through
- * every stage instead of near it.
- */
-function smooth(pts: { x: number; y: number }[], tension = 0.42) {
-  const d = [`M ${pts[0].x} ${pts[0].y}`];
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[i - 1] ?? pts[i];
-    const p1 = pts[i];
-    const p2 = pts[i + 1];
-    const p3 = pts[i + 2] ?? p2;
-    const c1x = p1.x + ((p2.x - p0.x) / 6) * tension * 2;
-    const c1y = p1.y + ((p2.y - p0.y) / 6) * tension * 2;
-    const c2x = p2.x - ((p3.x - p1.x) / 6) * tension * 2;
-    const c2y = p2.y - ((p3.y - p1.y) / 6) * tension * 2;
-    d.push(`C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${p2.x} ${p2.y}`);
-  }
-  return d.join(' ');
-}
-const routeD = smooth(STAGES);
 ---
 
 <Base
@@ -60,54 +38,27 @@ const routeD = smooth(STAGES);
     </p>
   </section>
 
-  <!-- The only element allowed to break out of the shell. A five-point route
-       is unreadable at 560px. Everything else on the site stays put. -->
-  <div class="map-wide">
-    <figure class="diagram">
-      <div class="route" id="route">
-        <svg class="line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <!-- The route fades in at both ends rather than stopping dead. -->
-            <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="var(--ink)" stop-opacity="0" />
-              <stop offset="0.07" stop-color="var(--ink)" stop-opacity="1" />
-              <stop offset="0.93" stop-color="var(--ink)" stop-opacity="1" />
-              <stop offset="1" stop-color="var(--ink)" stop-opacity="0" />
-            </linearGradient>
-          </defs>
-          <path class="track" d={routeD} />
-          <path class="draw" d={routeD} />
-        </svg>
+  {/* One route, vertical, and it is the navigation.
 
-        <ol class="stops">
-          {
-            STAGES.map((s, i) => (
-              <li class:list={['stop', { up: s.y < 50 }]} style={`--x:${s.x}%; --y:${s.y}%; --i:${i}`}>
-                <a href={`/map/${s.slug}/`} aria-label={`Stage ${s.n} — ${s.name}`}>
-                  <span class="dot"><span class="ring" /><span class="num">{s.n}</span></span>
-                  <span class="label">
-                    <span class="name">{s.name}</span>
-                    <span class="peek">{s.lead}</span>
-                  </span>
-                </a>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-      <figcaption>Every one of them has cost me something. Stage 03 the most.</figcaption>
-    </figure>
-  </div>
+      The page used to show these five stages twice: a horizontal curve that
+      broke out of the site's column, and then a list of the same five things
+      underneath it. Two components, one set of content, and the curve was the
+      one that could not be read on a phone.
 
+      The line is a CSS rule now rather than an animated SVG path. The old one
+      drew itself with `stroke-dasharray: 1000` — a hardcoded length — and the
+      real path is longer than that, so the stroke ran out partway along and
+      the route simply stopped after stage 03. A border cannot run out. */}
   <section class="section col">
     <span class="eyebrow">Pick one</span>
-    <h2>Where are you right now?</h2>
-    <ol class="rows stages">
+    <h2>Where are you<br />right now?</h2>
+
+    <ol class="rows route">
       {
         STAGES.map((s) => (
           <li>
             <a href={`/map/${s.slug}/`}>
-              <span class="r-meta">Stage {s.n}</span>
+              <span class="r-node" aria-hidden="true">{s.n}</span>
               <span class="r-title">{s.name}</span>
               <span class="r-note">{s.lead}</span>
               <span class="r-go" aria-hidden="true">
@@ -118,11 +69,13 @@ const routeD = smooth(STAGES);
         ))
       }
     </ol>
+
+    <p class="route-note">Every one of them has cost me something. Stage 03 the most.</p>
   </section>
 
   <section class="section col">
     <Newsletter
-      title="One decision every other<br />week, and what it cost."
+      title="One decision,<br />and what it cost."
       body="Free. Leave whenever. No roundups, no five tips, no news."
     />
   </section>
@@ -130,250 +83,98 @@ const routeD = smooth(STAGES);
   <Footer slot="footer" />
 </Base>
 
-<style>
+<style><style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro h1 { margin-bottom: 18px; }
 
-  .map-wide { width: var(--shell-full); margin: 44px auto 0; }
-  .diagram {
-    background: var(--surface);
-    border-radius: var(--radius-card);
-    padding: clamp(28px, 4vw, 52px) clamp(20px, 4vw, 44px);
-  }
-  .route { position: relative; aspect-ratio: 1040 / 340; }
-
-  .line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .line path { fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; }
-  .track { stroke: var(--hair); stroke-width: 1.25; stroke-dasharray: 3 5; }
   /* The route draws itself once, on entry. */
-  .draw {
-    stroke: url(#fade);
-    stroke-width: 1.5;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: draw 1.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-    animation-play-state: paused;
-  }
-  .route.go .draw { animation-play-state: running; }
-  @keyframes draw { to { stroke-dashoffset: 0; } }
-
   /* Faint baseline the route sits on, with a tick under each stage. */
-  .route::after {
-    content: '';
-    position: absolute; left: 0; right: 0; bottom: 0;
-    border-bottom: 1px solid var(--hair);
-  }
-  .stops { list-style: none; position: absolute; inset: 0; }
-  .stop::after {
-    content: '';
-    position: absolute; left: 50%; top: 50%;
-    width: 1px;
-    height: calc(50vh);
-    background: linear-gradient(var(--hair), transparent);
-    opacity: 0;
-    transition: opacity 0.35s var(--ease);
-    pointer-events: none;
-    z-index: -1;
-  }
-  .stop {
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    animation: pop 0.55s var(--ease) forwards;
-    animation-delay: calc(0.3s + var(--i) * 0.34s);
-    animation-play-state: paused;
-  }
   @keyframes pop { from { opacity: 0; } to { opacity: 1; } }
-
-  .route.go .stop { animation-play-state: running; }
-
-  .stop a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    width: max-content;
-    max-width: 160px;
-  }
-  .stop.up a { flex-direction: column-reverse; }
 
   /* First and last sit at the edges: centring their labels would push them
      outside the card. */
-  .stop:first-child { transform: translate(0, -50%); }
-  .stop:first-child a { align-items: flex-start; }
-  .stop:first-child .name, .stop:first-child .peek { text-align: left; }
-  .stop:last-child { transform: translate(-100%, -50%); }
-  .stop:last-child a { align-items: flex-end; }
-  .stop:last-child .name, .stop:last-child .peek { text-align: right; }
-
-  .dot {
-    position: relative;
-    width: 52px; height: 52px;
-    border-radius: var(--radius-pill);
-    background: var(--paper);
-    border: 1px solid var(--hair);
-    display: grid; place-items: center;
-    transition: transform 0.32s var(--ease), border-color 0.32s var(--ease),
-      background 0.32s var(--ease);
-  }
-  .num { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink); transition: color 0.32s var(--ease); }
   /* Halo that expands on hover. */
-  .ring {
-    position: absolute; inset: -1px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--ink);
-    opacity: 0;
-    transform: scale(1);
-    transition: transform 0.5s var(--ease), opacity 0.5s var(--ease);
-  }
-
-  .label { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .name {
-    font-family: var(--font-display);
-    font-size: 0.9375rem; font-weight: 600; letter-spacing: var(--ls-heading);
-    line-height: var(--lh-tight); text-align: center;
-    transition: color 0.3s var(--ease);
-  }
   /* The description is hidden until you reach for the node. */
-  .peek {
-    font-size: 0.75rem; line-height: var(--lh-tight); letter-spacing: 0; color: var(--dim);
-    text-align: center;
-    max-height: 0; opacity: 0; overflow: hidden;
-    transition: max-height 0.42s var(--ease), opacity 0.32s var(--ease);
-  }
-
-  .stop a:hover .dot,
-  .stop a:focus-visible .dot { transform: scale(1.12); border-color: var(--ink); background: var(--ink); }
-  .stop a:hover .num,
-  .stop a:focus-visible .num { color: var(--paper); }
-  .stop a:hover .ring,
-  .stop a:focus-visible .ring { opacity: 0.28; transform: scale(1.7); }
-  .stop a:hover .peek,
-  .stop a:focus-visible .peek { max-height: 4.5em; opacity: 1; }
-  .stop:hover::after, .stop:focus-within::after { opacity: 0.7; }
-
-  .diagram figcaption {
-    margin-top: 30px; text-align: center;
-    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
-  }
-
   /* ── mobile: the route turns vertical ──
      A five-point horizontal path cannot be read at 375px. It was hidden here
      for a while, which meant the page’s signature element simply did not
      exist for most visitors. It changes shape instead: same five stops, same
      order, same links, running top to bottom. */
-  @media (max-width: 820px) {
-    .map-wide { width: var(--shell); }
-    .diagram { padding: 26px 20px; }
-
-    /* The SVG path is horizontal by construction; the line is drawn in CSS. */
-    .line { display: none; }
-    .route { aspect-ratio: auto; }
-    .route::after { display: none; }
-
-    .stops { position: static; display: block; }
-
-    /* `:first-child` and `:last-child` beat a bare `.stop` on specificity, so
-       resetting only `.stop` left the two end stages carrying their desktop
-       transforms into the vertical list. Stage 05 was translated a full width
-       to the left and rendered off-screen on every phone. Named explicitly so
-       the cascade cannot lose again. */
-    .stop,
-    .stop:first-child,
-    .stop:last-child {
-      position: relative;
-      left: auto;
-      top: auto;
-      transform: none;
-      animation-name: rise-in;
-      animation-delay: calc(var(--i) * 0.09s);
-    }
-    .stop:first-child a,
-    .stop:last-child a { align-items: flex-start; }
-    .stop:first-child .name, .stop:first-child .peek,
-    .stop:last-child .name, .stop:last-child .peek { text-align: left; }
-    /* The dashed route, redrawn vertically through the middle of each dot. */
-    .stop::before {
-      content: '';
-      position: absolute;
-      left: 25px;
-      top: 0;
-      bottom: 0;
-      border-left: 1px dashed var(--hair);
-    }
-    .stop:first-child::before { top: 50%; }
-    .stop:last-child::before { bottom: 50%; }
-    .stop::after { display: none; }
-
-    .stop a,
-    .stop.up a {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 18px;
-      max-width: none;
-      width: 100%;
-      padding: 16px 0;
-    }
-
-    /* Explicit box on both axes: without a fixed height the dots stretched
-       to whatever their label needed, so no two were the same shape. */
-    .dot {
-      position: relative;
-      z-index: 1;
-      width: 52px;
-      height: 52px;
-      flex: 0 0 52px;
-      align-self: flex-start;
-      border-radius: 50%;
-    }
-    .label { align-items: flex-start; padding-top: 6px; }
-    /* The horizontal diagram right-aligns the last stop so its label cannot
-       spill outside the card. Vertically there’s no such risk, and that rule
-       was left-over-riding stage 05 into a ragged right edge. */
-    .name, .peek,
-    .stop:first-child .name, .stop:first-child .peek,
-    .stop:last-child .name, .stop:last-child .peek { text-align: left; }
-
-    /* No hover on a touch screen, so the description is simply shown. */
-    .peek { max-height: none; opacity: 1; }
-  }
-
   @keyframes rise-in {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: none; }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .draw { animation: none; stroke-dashoffset: 0; }
-    .stop { opacity: 1; animation: none; }
-  }
-
   /* The stage list is `.rows` from base.css. Only its top margin is local. */
   .stages { margin-top: 40px; }
+
+  /* ── the route ──
+     `.rows` from base.css, plus a node column and the line that threads them.
+     The line is a 1px border on each row, clipped at the first and last node so
+     the route starts and ends on a stage rather than in mid-air. It runs behind
+     the nodes, which are painted on the page colour. */
+  .route { margin-top: 44px; }
+  .route > li { border: 0; position: relative; }
+  .route > li:last-child { border-bottom: 0; }
+  .route > li::before {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--hair);
+  }
+  .route > li:first-child::before { top: 50%; }
+  .route > li:last-child::before { bottom: 50%; }
+
+  .route a {
+    grid-template-columns: 44px 1fr auto;
+    grid-template-areas: 'node title go' 'node note go';
+    column-gap: 20px;
+    padding: 20px 0;
+  }
+  .r-node {
+    grid-area: node;
+    align-self: center;
+    position: relative;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hair);
+    background: var(--paper);
+    font-family: var(--font-mono);
+    font-size: var(--fs-fine);
+    color: var(--dim);
+    transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .route a:hover .r-node { border-color: var(--ink); color: var(--ink); }
+  /* No meta line in this variant — the node is the number. */
+  .route .r-title { margin-top: 0; }
+
+  .route-note {
+    margin-top: 34px;
+    font-size: var(--fs-fine);
+    line-height: var(--lh-ui);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* The node stays on a phone: it is the stage's identity, not decoration.
+     The arrow goes, as everywhere else — the row is the target. */
+  @media (max-width: 560px) {
+    .route a {
+      grid-template-columns: 38px 1fr;
+      grid-template-areas: 'node title' 'node note';
+      column-gap: 16px;
+    }
+    .r-node { width: 38px; height: 38px; }
+    .route > li::before { left: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .r-node { transition: none; } }
 </style>
 
-<script>
-  /* The route drew itself on load, so anyone who had not scrolled to it yet
-     missed the whole thing. Now it starts when it’s actually on screen. */
-  const route = document.getElementById('route');
-  if (route) {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      route.classList.add('go');
-    } else {
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              route.classList.add('go');
-              io.disconnect();
-            }
-          }
-        },
-        { threshold: 0.35 }
-      );
-      io.observe(route);
-    }
-  }
-</script>

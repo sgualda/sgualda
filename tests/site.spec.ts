@@ -68,24 +68,35 @@ test('the map is usable on a phone', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/map/');
 
-  // It used to be display:none below 760px, which removed the page's whole
-  // point from most visits.
-  const diagram = page.locator('.diagram');
-  await expect(diagram).toBeVisible();
+  /**
+   * The route is vertical now, and it is the navigation rather than a picture
+   * above it.
+   *
+   * It used to be a horizontal curve with five absolutely-positioned stops,
+   * breaking out of the site's column to 1040px, with the same five stages
+   * listed again underneath it. One set of content, two components, and the
+   * curve was the one that could not be read on a phone.
+   *
+   * What this checks is what has always mattered here: five stages, each a
+   * real link, each with its description readable without hovering, and a
+   * touch target big enough to hit.
+   */
+  const route = page.locator('.route');
+  await expect(route).toBeVisible();
 
-  // All five stops, each a real link, each description readable without hover.
-  await expect(page.locator('.stop')).toHaveCount(5);
-  await expect(page.locator('.stop a')).toHaveCount(5);
-  await expect(page.locator('.stop .peek').first()).toBeVisible();
+  await expect(page.locator('.route > li')).toHaveCount(5);
+  await expect(page.locator('.route a')).toHaveCount(5);
+  await expect(page.locator('.route .r-note').first()).toBeVisible();
 
-  // Touch targets.
-  const dot = await page.locator('.dot').first().boundingBox();
-  expect(dot!.height).toBeGreaterThanOrEqual(44);
+  // The whole row is the target, not just the node.
+  const row = await page.locator('.route a').first().boundingBox();
+  expect(row!.height).toBeGreaterThanOrEqual(44);
 
-  // And nothing spills sideways.
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)
-  ).toBe(false);
+  // Nothing on this page may push the page sideways.
+  const overflows = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth
+  );
+  expect(overflows, 'the map overflows horizontally').toBe(false);
 });
 
 test('no horizontal scroll at any breakpoint', async ({ page }) => {
