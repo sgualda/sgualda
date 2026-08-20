@@ -43,7 +43,7 @@ Three things, and they describe the same journey from different angles:
   Advice that saves you at one stage can hurt you at another.
 - **Tools** — free diagnostic questionnaires, one per common decision.
   They run entirely in the browser; nothing is collected.
-- **The journal** — essays on what specific decisions cost.
+- **Writing** — essays on what specific decisions cost.
 
 ## The five stages of building a product
 

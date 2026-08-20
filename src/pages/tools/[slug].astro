@@ -72,7 +72,28 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       <div class="dots" id="dots" role="presentation">{t.q.map(() => <i></i>)}</div>
       {/* The panel rewrites itself on every answer. Without a live region a
           screen reader user hears nothing change and loses their place. */}
-      <div id="box" role="status" aria-live="polite" aria-atomic="true"></div>
+      {/* The first question is rendered here, on the server.
+
+          It used to start empty and be filled by JavaScript, which cost two
+          things. A layout shift: the panel went from 60px to about 400px after
+          hydration, and Lighthouse measured CLS 0.126 on a phone — above the
+          0.1 that counts as good. And the questions themselves existed only
+          inside the JSON blob below, so a crawler or a language model reading
+          this page saw an intro, a FAQ and an empty box where the actual check
+          is.
+
+          Both go away by printing question one as real HTML. The script picks
+          up from there and replaces it on the first answer; the markup it
+          writes is identical, so nothing flickers. */}
+      <div id="box" role="status" aria-live="polite" aria-atomic="true">
+        <div class="step">
+          <span class="eyebrow">Question 1 of {t.q.length}</span>
+          <h2 class="qq" data-quiz-head tabindex="-1">{t.q[0][0]}</h2>
+          {t.q[0][1].map(([label], n) => (
+            <button class="opt" type="button" data-quiz-opt={n}>{label}</button>
+          ))}
+        </div>
+      </div>
       {/* Only this tool’s data, not all six. See #Q-077. */}
       <script
         type="application/json"

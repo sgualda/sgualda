@@ -37,6 +37,36 @@ const terms = (await getCollection('glossary'))
   description={s.meta}
   schema={[
     {
+      /**
+       * These are articles, and they were not saying so.
+       *
+       * Each stage page is a thousand words of first-person writing about what
+       * a specific mistake cost — the same kind of object as an essay — and the
+       * only structured data on it was a FAQ block. No author, no date, nothing
+       * that tells a search engine or a model who wrote this or when.
+       *
+       * `dateModified` comes from the build rather than being invented: these
+       * are edited in place rather than published once, and the file's own
+       * history is the honest answer. `datePublished` is deliberately absent —
+       * nothing on disk knows it, and a guessed date is worse than none.
+       */
+      '@type': 'Article',
+      '@id': `${SITE.url}/map/${s.slug}/#article`,
+      headline: s.name,
+      name: s.seoTitle,
+      description: s.meta,
+      author: { '@id': `${SITE.url}/#person` },
+      publisher: { '@id': `${SITE.url}/#person` },
+      inLanguage: 'en',
+      isPartOf: {
+        '@type': 'CreativeWorkSeries',
+        '@id': `${SITE.url}/map/#series`,
+        name: 'The five stages of building a product',
+        url: `${SITE.url}/map/`,
+      },
+      about: { '@id': `${SITE.url}/map/#series` },
+    },
+    {
       '@type': 'FAQPage',
       '@id': `${SITE.url}/map/${s.slug}/#faq`,
       mainEntity: s.faqs.map(({ q, a }) => ({
