@@ -54,7 +54,6 @@ description: 'Between 70 and 160 characters. This is what shows in Google, so wr
 published: 2026-08-14
 type: essay          # essay · note · resource
 topics: ['launch', 'craft']
-relatedService: web-design      # optional — puts this on that service page
 relatedProject: glintale        # optional — the project it came out of
 draft: false
 ---
@@ -79,10 +78,14 @@ Images go in `src/assets/essays/` and are referenced relatively:
 Astro optimises them on build. **The alt text is not optional** — an empty one
 fails accessibility and wastes image search.
 
-`relatedService` and `relatedProject` are the whole internal-linking system.
-Declare the relationship once and the link appears on both sides; nothing is
-ever added "for SEO", because if there is no declared relationship there is no
-link.
+`relatedProject` is the one cross-link that is declared rather than written.
+Set it and the essay says which project it came out of while the project page
+lists what was written about it — one statement, two links, and they cannot
+disagree. Nothing is ever added "for SEO": no declared relationship, no link.
+
+**Nothing sets it yet.** The mechanism is wired and every block is absent until
+somebody who knows the answer fills it in, because an essay either came out of
+a project or it did not.
 
 ### A project
 

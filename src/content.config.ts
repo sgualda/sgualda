@@ -46,17 +46,19 @@ const writing = defineCollection({
       // Shown in the index; the hook, not a summary.
       hook: z.string().optional(),
       /**
-       * The two ends of the internal-link ecosystem, declared once rather than
-       * written twice.
+       * The project this piece came out of, declared once rather than linked
+       * twice.
        *
-       * A piece says which project it came out of and which service it is
-       * evidence for; the project page and the service page then collect
-       * whatever points at them. Nothing is linked "for SEO" — either the
-       * relationship is declared here and the link exists on both sides, or
-       * there is no link.
+       * Set it and both pages get the link: the essay says where it came from,
+       * the project collects what was written about it. Nothing is added "for
+       * SEO" — either the relationship is real and stated here, or there is no
+       * link.
+       *
+       * `relatedService` used to sit beside this. The services it pointed at
+       * existed for one day, so a field that could only ever hold a dangling
+       * reference is gone.
        */
       relatedProject: z.string().optional(),
-      relatedService: z.string().optional(),
       /**
        * Questions a reader actually types, answered in full on the page.
        * Rendered as real markup and mirrored as FAQPage, which is what a
@@ -130,8 +132,6 @@ const projects = defineCollection({
           })
         )
         .default([]),
-      /** Which service this is evidence for, if any. See `writing`. */
-      relatedService: z.string().optional(),
       order: z.number().default(99),
     }),
 });
@@ -152,7 +152,9 @@ const tools = defineCollection({
     time: z.string(),
     count: z.string(),
     title: z.string(),
-    meta: z.string().min(70).max(200),
+    /* 160, not 200. The looser limit is what let six of these run to 170–190
+       characters, where Google cuts the sentence off mid-clause. */
+    meta: z.string().min(70).max(160),
     lead: z.string(),
     out: z.string(),
     answers: z.array(z.tuple([z.string(), z.string()])),

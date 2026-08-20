@@ -12,15 +12,30 @@ export async function getStaticPaths() {
   const cases = (await getCollection('projects', ({ data }) => !data.draft)).sort(
     (a, b) => a.data.order - b.data.order
   );
+  const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+  );
   return cases.map((entry, i) => ({
     params: { slug: entry.id },
-    props: { entry, others: cases.filter((c) => c.id !== entry.id).slice(0, 3) },
+    props: {
+      entry,
+      others: cases.filter((c) => c.id !== entry.id).slice(0, 3),
+      /**
+       * Anything written that says it came out of this project.
+       *
+       * The other half of the link the essay page now draws. Collected rather
+       * than curated: the essay declares the relationship once and both pages
+       * get it, so the two can never disagree about whether it exists.
+       */
+      writing: essays.filter((e) => e.data.relatedProject === entry.id),
+    },
   }));
 }
 
-const { entry, others } = Astro.props as {
+const { entry, others, writing } = Astro.props as {
   entry: CollectionEntry<'projects'>;
   others: CollectionEntry<'projects'>[];
+  writing: CollectionEntry<'writing'>[];
 };
 const { Content } = await render(entry);
 const d = entry.data;
@@ -116,6 +131,24 @@ const STATUS: Record<string, string> = {
     </div>
 
     {
+      writing.length > 0 && (
+        <section class="col wrote">
+          <h2>What I wrote about it</h2>
+          <ul>
+            {writing.map((w) => (
+              <li>
+                <a href={`/writing/${w.id}/`}>
+                  <b>{w.data.title}</b>
+                  <span>{w.data.hook ?? w.data.description}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
       /**
        * What has happened since, in order.
        *
@@ -188,6 +221,35 @@ const STATUS: Record<string, string> = {
 </Base>
 
 <style>
+  /* The essays that came out of this project. Same shape as the writing index
+     — title, hook, hairline — so the two read as the same kind of object. */
+  .wrote { margin-top: var(--gap); text-align: left; }
+  .wrote h2 {
+    font-size: 1.125rem;
+    letter-spacing: var(--ls-heading);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .wrote ul { list-style: none; }
+  .wrote li { border-bottom: 1px solid var(--hair); }
+  .wrote a { display: block; padding: 20px 0; transition: opacity 0.2s var(--ease); }
+  .wrote a:hover { opacity: 0.62; }
+  .wrote b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-tight);
+  }
+  .wrote span {
+    display: block;
+    margin-top: 6px;
+    font-size: var(--fs-sub);
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+
   /* A log, not a feature timeline. Hairlines and a date column, the same shape
      as the writing index, because it is the same kind of object: a list of
      things that happened, newest at the bottom so it reads forwards. */

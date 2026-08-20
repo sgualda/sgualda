@@ -212,6 +212,42 @@ for (const page of pagesOnDisk) {
     }
   }
 }
+/**
+ * Head metadata, on every built page.
+ *
+ * Six tool descriptions had drifted to 170–190 characters, where Google cuts
+ * the sentence off mid-clause, and /privacy/ was advertising "No analytics, no
+ * cookies, no tracking" in its own meta description months after GA4 went in.
+ * The schemas guard the content collections; nothing guarded the pages, which
+ * is where both of those lived.
+ *
+ * A missing canonical or a second h1 is the same class of problem: invisible
+ * on the page, wrong in the part machines read.
+ */
+const metaErrors = [];
+for (const page of pagesOnDisk) {
+  const url = '/' + page.replace(/index\.html$/, '');
+  if (url.startsWith('/404')) continue;
+  const html = readFileSync(join(dist, page), 'utf8');
+  const title = html.match(/<title>([^<]*)</)?.[1] ?? '';
+  const desc = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? '';
+  const h1s = (html.match(/<h1[\s>]/g) ?? []).length;
+  if (!title) metaErrors.push(`${url}  no <title>`);
+  else if (title.length > 60) metaErrors.push(`${url}  title ${title.length} chars (max 60)`);
+  if (!desc) metaErrors.push(`${url}  no meta description`);
+  else if (desc.length < 70 || desc.length > 165)
+    metaErrors.push(`${url}  description ${desc.length} chars (want 70–165)`);
+  if (!html.includes('rel="canonical"') && !html.includes('noindex'))
+    metaErrors.push(`${url}  no canonical`);
+  if (h1s !== 1) metaErrors.push(`${url}  ${h1s} h1 elements (want exactly 1)`);
+}
+if (metaErrors.length) {
+  console.error(`\n✗ ${metaErrors.length} metadata problem(s):`);
+  for (const e of metaErrors) console.error(`    ${e}`);
+  console.error('');
+  process.exit(1);
+}
+
 if (linkErrors.length) {
   console.error(`\n✗ ${linkErrors.length} internal link(s) do not resolve:`);
   for (const e of [...new Set(linkErrors)].slice(0, 12)) console.error(`    ${e}`);
