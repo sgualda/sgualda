@@ -25,6 +25,36 @@ const headers = Object.fromEntries(
   [...htaccess.matchAll(/Header always set ([\w-]+) "([^"]+)"/g)].map((m) => [m[1], m[2]])
 );
 
+/**
+ * One directive cannot come over for the ride: `upgrade-insecure-requests`.
+ *
+ * This server is http://localhost, and that directive tells the browser to
+ * re-request every subresource over https. Chromium exempts localhost from it;
+ * WebKit does not, so on the mobile project every stylesheet, script and font
+ * was re-requested as https://localhost:4321 and failed with "A TLS error
+ * caused the secure connection to fail."
+ *
+ * That is why the entire mobile project was failing: pages that assert a clean
+ * console failed on the errors, and every test that needs the CSS or the JS to
+ * have loaded — the theme, the mobile menu, the checks, the intake — failed
+ * because none of it had. It was invisible for two reasons at once: CI died at
+ * `astro check` before reaching the tests, and locally the failures print above
+ * the summary counts where they are easy to mistake for a list of skips.
+ *
+ * Stripping it is correct rather than a workaround. On https://sgualda.com the
+ * directive is a no-op — everything is already https — so removing it here
+ * makes the test environment match production behaviour instead of diverging
+ * from it. Every other directive is kept exactly as generated, which is the
+ * whole point of this file.
+ */
+if (headers['Content-Security-Policy']) {
+  headers['Content-Security-Policy'] = headers['Content-Security-Policy']
+    .split(';')
+    .map((d) => d.trim())
+    .filter((d) => d && d !== 'upgrade-insecure-requests')
+    .join('; ');
+}
+
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css',
   '.woff2': 'font/woff2', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg',

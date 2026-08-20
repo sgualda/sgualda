@@ -7,7 +7,21 @@ const section = (n: string) => {
   const m = src.match(new RegExp(`${n}:\\s*\\[([^\\]]*)\\]`));
   return m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]) : [];
 };
-const URLS = [...section('pages'), ...section('tools'), ...section('writing')];
+/**
+ * Every section of the URL contract, not three of the five.
+ *
+ * `work` and `services` were added to src/lib/site.ts on 2026-08-20 and this
+ * list was not, so nine pages — the whole commercial half of the site, and the
+ * one page somebody fills a form in — were built, linked and shipped without
+ * ever being scanned. A list of section names written by hand is exactly the
+ * kind of thing that goes stale silently, so it is derived instead.
+ *
+ * The intake is excluded on purpose: it is a JavaScript-rendered form with no
+ * content until the first step is painted, and it has its own focus test below.
+ */
+const URLS = ['pages', 'work', 'services', 'tools', 'writing']
+  .flatMap(section)
+  .filter((u) => u !== '/services/start/' && u !== '/services/start/sent/');
 
 for (const url of URLS) {
   test(`${url} has no accessibility violations`, async ({ page }) => {
