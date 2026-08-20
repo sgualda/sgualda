@@ -22,50 +22,37 @@ const cases = (await getCollection('projects', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order || b.data.published.valueOf() - a.data.published.valueOf()
 );
 
+
+
 /**
- * Status is the interesting axis of this particular portfolio.
+ * The status, on every card.
  *
- * The page's own thesis is that some of these are dead and that the dead ones
- * are the useful part — and until now that was visible on two cards out of six,
- * because only the buried ones lack a cover. The other four were unlabelled
- * squares.
+ * A filter used to sit above this grid — five chips for four projects, one of
+ * them ("Buried 0") a control that could only ever return silence. Filtering
+ * four things is machinery for a problem this page does not have, and a button
+ * that does nothing teaches a visitor that the controls here are not to be
+ * trusted. It comes back past roughly eight projects.
  *
- * Wording: 'shipped' and 'buried' were already in the content schema and in the
- * copy on this page, so they are the site's own vocabulary rather than
- * something invented for a filter. 'Finished' was the obvious translation for
- * the fourth state and is wrong — a product is rarely finished, it is shipped.
- * 'Paused' over 'on hold', which is what a company says.
- *
- * Ordered roughly by how alive each thing is, not alphabetically.
+ * The status stays, because it is the interesting axis. It is set in type on
+ * each card, which is where somebody scanning actually reads it.
  */
-const STATES = [
-  { key: 'all', label: 'All' },
-  { key: 'in-progress', label: 'In progress' },
-  { key: 'shipped', label: 'Shipped' },
-  { key: 'paused', label: 'Paused' },
-  { key: 'buried', label: 'Buried' },
-] as const;
-
-const filters = STATES.map((s) => ({
-  ...s,
-  n: s.key === 'all' ? cases.length : cases.filter((c) => c.data.status === s.key).length,
-}));
-
-/** Labels for the cards. Same words as the filters, or they are two vocabularies. */
-const LABEL: Record<string, string> = Object.fromEntries(
-  STATES.filter((s) => s.key !== 'all').map((s) => [s.key, s.label])
-);
+const LABEL: Record<string, string> = {
+  'in-progress': 'In progress',
+  shipped: 'Shipped',
+  paused: 'Paused',
+  buried: 'Buried',
+};
 
 ---
 
 <Base
   title="Work — products I designed and built"
-  description="Products I designed or built, alive and dead. The dead ones have post-mortems, which is the part most portfolios leave out."
+  description="Products I designed or built, with the state each one is really in — in progress, shipped, paused or buried."
   schema={[
     {
       '@type': 'CollectionPage',
       name: 'Work',
-      description: 'Products designed or built by Sergio Gualda, with post-mortems.',
+      description: 'Products designed or built by Sergio Gualda, with the state each one is really in.',
       /* The cards are images now, so the titles and summaries that used to sit
          under them are gone from the page. They stay here, where a crawler
          still reads what this page is a list of. */
@@ -83,30 +70,22 @@ const LABEL: Record<string, string> = Object.fromEntries(
 
   <section class="col intro">
     <span class="eyebrow">Work</span>
-    <h1>Things I’ve built</h1>
+    <h1 class="h1-wide">Things I’ve built</h1>
+    {/* The old line promised "the dead ones have post-mortems, which is the
+        part most portfolios leave out". That was the page's whole thesis and it
+        is no longer true: the two buried projects were the invented ones, and
+        they are gone. Promising a post-mortem and then showing four live
+        projects is worse than never making the promise.
+
+        This says what is actually here. The old line goes back the day a real
+        project gets buried and written up — and that piece is worth writing,
+        because almost nobody publishes it. */}
     <p class="sub">
-      Products I designed or built, alive and dead. The dead ones have post-mortems, which is
-      the part most portfolios leave out.
+      What I am building and what I have built, with the state each one is really in.
     </p>
   </section>
 
-  <div class="col">
-    <div class="filters rail" role="group" aria-label="Filter by status">
-      {
-        filters.map((f, i) => (
-          <button
-            class:list={['chip', { on: i === 0 }]}
-            type="button"
-            data-filter={f.key}
-            aria-pressed={i === 0}
-          >
-            {f.label} <span>{f.n}</span>
-          </button>
-        ))
-      }
-    </div>
-    <p class="fcount" id="filterCount" role="status" aria-live="polite"></p>
-
+  <div class="wide">
     <div class="grid" id="grid">
       {
         cases.length
@@ -125,7 +104,7 @@ const LABEL: Record<string, string> = Object.fromEntries(
                     src={c.data.cover}
                     alt={c.data.coverAlt ?? ''}
                     widths={[320, 640, 960]}
-                    sizes="(max-width: 560px) calc(100vw - 40px), 272px"
+                    sizes="(max-width: 480px) calc(100vw - 40px), (max-width: 820px) 50vw, 212px"
                     loading="lazy"
                     style={`object-position:${c.data.coverPosition}`}
                   />
@@ -148,12 +127,6 @@ const LABEL: Record<string, string> = Object.fromEntries(
       }
     </div>
 
-    {/* Shown by the filter script when a state has nothing in it. Every state
-        has at least one project today, so this is for the day one empties —
-        a filter that returns silence reads as a broken page. */}
-    <p class="none-here" id="noneHere" hidden>
-      Nothing here yet. <button type="button" class="linky" data-filter="all">Show everything</button>.
-    </p>
 
     {cases.length === 0 && (
       <p class="empty">Case studies are being written. <a href="/writing/">Read something meanwhile</a>.</p>
@@ -168,41 +141,8 @@ const LABEL: Record<string, string> = Object.fromEntries(
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
 
-  /* Same chips as /tools/, same rail behaviour: centred while they fit,
-     scrolled with faded edges once they do not. */
-  .filters { gap: 8px; margin-top: 44px; padding-block: 4px; }
-  .filters[data-start='true'][data-end='true'] { justify-content: center; }
-  .chip {
-    font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500;
-    letter-spacing: var(--ls-read);
-    padding: 12px 18px; border-radius: var(--radius-pill);
-    border: 1px solid var(--hair); background: transparent; color: var(--ink);
-    cursor: pointer; white-space: nowrap;
-    transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
-  }
-  .chip span { color: var(--dim); margin-left: 2px; }
-  .chip:hover { border-color: var(--ink); }
-  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-  .chip.on span { color: color-mix(in srgb, var(--paper) 60%, transparent); }
 
-  .fcount {
-    margin-top: var(--space-4);
-    font-size: 0.6875rem; letter-spacing: var(--ls-caps); text-transform: uppercase;
-    color: var(--dim); min-height: 1em;
-  }
 
-  .none-here {
-    margin-top: var(--space-8);
-    text-align: center;
-    color: var(--dim);
-    font-size: 1.0625rem;
-  }
-  .none-here[hidden] { display: none; }
-  .linky {
-    color: var(--ink); text-decoration: underline; text-underline-offset: 3px;
-    text-decoration-color: var(--hair); cursor: pointer; font: inherit;
-  }
-  .linky:hover { text-decoration-color: var(--ink); }
 
   /* The status, on every card. Quiet — it labels the work, it is not the work. */
   .state {
@@ -216,18 +156,20 @@ const LABEL: Record<string, string> = Object.fromEntries(
   }
   .state[data-state='buried'] { color: var(--err); }
 
-  .card.in { animation: card-in 0.42s var(--ease) both; animation-delay: calc(var(--d) * 42ms); }
-  @keyframes card-in {
-    from { opacity: 0; transform: translateY(10px) scale(0.985); }
-    to { opacity: 1; transform: none; }
-  }
-  @media (prefers-reduced-motion: reduce) { .card.in { animation: none; } }
 
   .intro h1 { margin-bottom: 18px; }
 
 
 
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
+  /* One row at --shell-wide. It was 2×2 inside a 560px reading column, which
+     put four small tiles in the middle of a 1280px screen with the whole
+     right-hand side empty beside them. */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 44px;
+  }
   .thumb {
     display: block;
     width: 100%;
@@ -287,67 +229,8 @@ const LABEL: Record<string, string> = Object.fromEntries(
   .empty a { text-decoration: underline; text-underline-offset: 3px; }
 
 
-  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 820px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
 </style>
 
 
-<script>
-  import { rails } from '@lib/rail';
-  rails();
-
-  /* ── status filter ── */
-  const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
-  const cards = document.querySelectorAll<HTMLElement>('.card');
-  const count = document.getElementById('filterCount');
-  const none = document.getElementById('noneHere');
-
-  function apply(f: string) {
-    chips.forEach((c) => {
-      const on = c.dataset.filter === f;
-      c.classList.toggle('on', on);
-      c.setAttribute('aria-pressed', String(on));
-    });
-
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let shown = 0;
-    cards.forEach((card) => {
-      const keep = f === 'all' || card.dataset.state === f;
-      card.hidden = !keep;
-      if (!keep) return;
-      if (!reduced) {
-        card.style.setProperty('--d', String(Math.min(shown, 6)));
-        // Restart the animation: removing and re-adding in one frame is a
-        // no-op, so the reflow read forces it.
-        card.classList.remove('in');
-        void card.offsetWidth;
-        card.classList.add('in');
-      }
-      shown++;
-    });
-
-    /**
-     * A filter that returns nothing has to say so.
-     *
-     * Every state has at least one project today, so this is for the day one
-     * empties — Paused holds a single project, and it only takes Sergio
-     * restarting ecoco for that chip to return silence. An empty grid with no
-     * message reads as a page that broke, and the way out is a control the
-     * visitor has to work out for themselves.
-     */
-    if (none) none.hidden = shown > 0;
-
-    if (count) {
-      const label = chips2label(f);
-      count.textContent =
-        f === 'all' ? '' : shown === 1 ? `1 project — ${label}` : `${shown} projects — ${label}`;
-    }
-  }
-
-  const chips2label = (f: string) =>
-    (document.querySelector<HTMLButtonElement>(`.chip[data-filter="${f}"]`)?.firstChild
-      ?.textContent ?? '').trim().toLowerCase();
-
-  chips.forEach((chip) => chip.addEventListener('click', () => apply(chip.dataset.filter!)));
-  // The way out of an empty state, which is the only reason it is a button.
-  none?.querySelector<HTMLButtonElement>('.linky')?.addEventListener('click', () => apply('all'));
-</script>

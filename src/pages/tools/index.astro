@@ -28,7 +28,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 ---
 
 <Base
-  title="Free checks on your product"
+  title="Tools — free checks on your product"
   description="Six free checks on your product: why nobody is using it, whether that feedback was real, if a feature is worth building, and whether you can charge yet. Under a minute each."
   schema={[
     {
@@ -63,14 +63,17 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 
   <section class="col intro">
     <span class="eyebrow">Tools</span>
-    <h1>Free checks<br />on your product</h1>
+    <h1 class="h1-wide">Tools for the decisions that stick</h1>
     <p class="sub">
       Pick the one that matches what you’re stuck on. Each asks you a few multiple-choice
       questions and gives you a straight answer, not a score, not a report you have to interpret.
     </p>
   </section>
 
-  <div class="col">
+  {/* --shell-wide, not --shell. The five chips measure 651px and were being
+      clipped inside a 560px column with no affordance, and six cards were
+      stacking one per row on a 1280px screen. */}
+  <div class="wide">
     <div class="filters rail" role="group" aria-label="Filter by topic">
       {
         cats.map((c, i) => (
@@ -152,7 +155,10 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 
   /* Two columns, as in the comp. */
   /* One card per row. */
-  .cards { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 30px; }
+  /* Two columns at --shell-wide. Six checks in a single column meant six
+     screenfuls of scroll to see six options that fit in three rows. */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 34px; }
+  @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
   .card[hidden] { display: none; }
 
   .card:hover .go i { transform: translateX(5px); }

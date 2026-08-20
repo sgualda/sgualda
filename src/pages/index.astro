@@ -96,9 +96,6 @@ const voices = await getTestimonials();
       }
     </div>
 
-    <div class="col actions" style="margin-top:34px">
-      <a class="btn btn--ghost" href="/work/">See the work</a>
-    </div>
   </section>
 
   <!-- ── the idea ── -->
@@ -116,8 +113,8 @@ const voices = await getTestimonials();
         src={studio}
         alt="The desk where most of this gets made"
         class="wide-shot"
-        widths={[560, 1120]}
-        sizes="(max-width: 560px) calc(100vw - 40px), 560px"
+        widths={[560, 880, 1760]}
+        sizes="(max-width: 560px) calc(100vw - 40px), 880px"
       />
     </div>
   </section>
@@ -149,8 +146,10 @@ const voices = await getTestimonials();
       the end of the front door. */}
 
   <!-- ── newsletter ── -->
+  {/* A band, so it stays on --shell with the header, the footer and every
+      other band. Only grids step out to --shell-wide. */}
   <section class="section">
-    <div class="wide">
+    <div class="col">
       <Newsletter />
     </div>
   </section>
@@ -186,12 +185,16 @@ const voices = await getTestimonials();
   .skip-to a:hover { opacity: 0.6; }
   h2 + .sub { margin-top: 16px; }
 
-  /* Four projects, 2×2, bare images as in the comp. No caption: Sergio's
-     call. The link name comes from aria-label instead, so the four are still
-     distinguishable to anybody not looking at them. */
+  /* Four projects, bare images as in the comp. No caption: Sergio's call. The
+     link name comes from aria-label instead, so the four are still
+     distinguishable to anybody not looking at them.
+
+     One row at --shell-wide, two at tablet, one column on a phone. It was a
+     2×2 block inside a 560px column with the right-hand half of a 1280px
+     screen empty next to it. */
   .grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     margin-top: 42px;
   }
@@ -210,6 +213,9 @@ const voices = await getTestimonials();
     transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
   }
   .slot:hover img { opacity: 0.86; transform: translateY(-2px); }
+  @media (max-width: 820px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+
   .wide-shot {
     width: 100%;
     aspect-ratio: 16 / 10;

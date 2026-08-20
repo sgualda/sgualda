@@ -81,8 +81,23 @@ img, picture, svg, video { max-width: 100%; height: auto; display: block; }
    pages read naturally, but they resolve to the identical shell — that is
    what makes the header, footer and banners align. */
 .shell,
-.col,
-.wide { width: var(--shell); margin-inline: auto; text-align: center; }
+.col { width: var(--shell); margin-inline: auto; text-align: center; }
+
+/* `.wide` is now actually wide.
+   It used to resolve to --shell like the other two, which made its name a lie
+   and left every grid on the site inside a reading column. Anything laid out
+   in more than one column belongs here; anything read as a sentence stays in
+   `.col`. */
+.wide { width: var(--shell-wide); margin-inline: auto; text-align: center; }
+.full { width: var(--shell-full); margin-inline: auto; text-align: center; }
+
+/* A display heading that may use the wide container from inside a reading one.
+   Negative inline margins are the breakout: at 1280 the parent is 560, so
+   `50% - 880/2` is -160 a side and the heading resolves to 880. On a phone both
+   widths collapse to `100vw - 40px`, the margin computes to 0, and nothing
+   overflows. Only headings get this — the paragraph under them stays at the
+   reading measure, because a 880px line of body copy is unreadable. */
+.h1-wide { margin-inline: calc(50% - var(--shell-wide) / 2); }
 input, textarea, select { text-align: left; font-family: inherit; }
 
 /* Sub-heading: the paragraph that sits under a title. */
