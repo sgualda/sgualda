@@ -88,10 +88,6 @@ const sourceFor = (path) => {
     // one on the first run.
     `src/content/stages/${clean.replace('map/', '')}.yaml`,
     `src/content/stages/${clean.replace('map/', '')}.md`,
-    // The three service pages are rendered by one [slug].astro from the
-    // services collection, so the template's own history says nothing about
-    // when any individual page changed. The content file does.
-    `src/content/services/${clean.replace('services/', '')}.md`,
   ].find((p) => existsSync(join(root, p)));
 };
 

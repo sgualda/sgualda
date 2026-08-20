@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { SITE } from '@lib/site';
 
 /**
@@ -159,14 +160,7 @@ const LABEL: Record<string, string> = Object.fromEntries(
     )}
   </div>
 
-  <section class="section col">
-    <div class="band">
-      <h2>Want to build<br />something together?</h2>
-      <p>Tell me where you are and where you want to go.</p>
-      <a class="btn btn--on-band" href="/services/start/">Tell me about your project</a>
-      <p class="fine">A written reply within five working days. No call.</p>
-    </div>
-  </section>
+  <Collaborate line="Want to build something together?" />
 
   <Footer slot="footer" />
 </Base>
@@ -292,24 +286,6 @@ const LABEL: Record<string, string> = Object.fromEntries(
   .empty { margin-top: 26px; font-size: 0.9375rem; color: var(--dim); }
   .empty a { text-decoration: underline; text-underline-offset: 3px; }
 
-  .band {
-    background: var(--band);
-    color: var(--on-band);
-    border: 1px solid color-mix(in srgb, var(--on-band) 8%, var(--band));
-    border-radius: var(--radius-band);
-    padding: clamp(38px, 6vw, 58px) 24px;
-  }
-  .band h2 { color: var(--on-band); }
-  .band p {
-    margin-top: 12px;
-    font-size: 1rem;
-    color: color-mix(in srgb, var(--on-band) 70%, transparent);
-  }
-  .fine {
-    margin-top: 16px;
-    font-size: 0.75rem;
-    color: color-mix(in srgb, var(--on-band) 55%, transparent);
-  }
 
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
 </style>

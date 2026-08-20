@@ -3,7 +3,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { getTools, CATS, type Tool } from '@lib/content';
 import { SITE } from '@lib/site';
 import '@styles/quiz.css';
@@ -131,11 +131,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
   </section>
 
 
-  <NextStep
-    line="Want somebody to look at the actual product?"
-    secondLabel="All checks"
-    secondHref="/tools/"
-  />
+  <Collaborate line="Stuck on the answer this gave you?" />
 
   <Footer slot="footer" />
 </Base>
@@ -228,7 +224,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       `<p class="vnote">${questions.length} questions cannot know your product. Treat this as a ` +
       `strong opinion from somebody who has made the same call.</p>` +
       `<div class="vacts">` +
-      `<a class="btn btn--dark" href="/services/start/">Tell me about your project</a>` +
+      `<a class="btn btn--dark" href="/collaborate/">Let’s talk</a>` +
       `<button class="again" type="button" data-quiz-restart>Run it again</button>` +
       `</div></div>`,
 

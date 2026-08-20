@@ -107,7 +107,7 @@ for (const f of FILES) {
 /**
  * CTA vocabulary.
  *
- * Six labels had accumulated for /services/ — "Hire me", "Work with me",
+ * Six labels had accumulated for /collaborate/ — "Hire me", "Work with me",
  * "See if I can help", "Book a call", "Book an intro call", "Four questions" —
  * each one correct on the day it was written and collectively meaning the
  * visitor never learns what the primary action is called. Repetition is the

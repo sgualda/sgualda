@@ -53,7 +53,7 @@ const section = (name) => {
 const groups = {
   pages: section('pages'),
   work: section('work'),
-  services: section('services'),
+  collaborate: section('collaborate'),
   tools: section('tools'),
   writing: section('writing'),
 };

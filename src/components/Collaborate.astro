@@ -1,0 +1,56 @@
+---
+import { CTA } from '@lib/site';
+
+/**
+ * The collaborate banner. One component, one wording, one shape.
+ *
+ * It replaces four hand-written bands that had drifted apart — "Want to build
+ * something together?", "Recognise any of this in your own product?", "Tell me
+ * about your project", each with its own heading size, its own paragraph
+ * colour and its own button label. Four versions of one component is how a
+ * small site stops looking like one site.
+ *
+ * `line` is the only thing a page changes, because the sentence that earns the
+ * click is different at the end of an essay than at the end of a project. The
+ * label never changes: two words, everywhere, so it is recognised rather than
+ * read.
+ */
+interface Props {
+  /** The sentence above the button. Written for the page it sits on. */
+  line?: string;
+}
+const { line = 'Want to build something together?' } = Astro.props;
+---
+
+<section class="section col">
+  <div class="band">
+    <h2 set:html={line} />
+    <a class="btn btn--on-band" href={CTA.href}>{CTA.label}</a>
+    <p class="fine">A written reply within five working days. No call to book.</p>
+  </div>
+</section>
+
+<style>
+  .band {
+    background: var(--band);
+    color: var(--on-band);
+    border: 1px solid color-mix(in srgb, var(--on-band) 8%, var(--band));
+    border-radius: var(--radius-band);
+    padding: clamp(34px, 6vw, 56px) 20px;
+    text-align: center;
+  }
+  /* Sized off the page's h2, not a value of its own. The four bands this
+     replaces ran from 1.25rem to the full display size. */
+  .band h2 {
+    color: var(--on-band);
+    max-width: 16em;
+    margin-inline: auto;
+  }
+  .band .btn { margin-top: 26px; }
+  .fine {
+    margin-top: 16px;
+    font-size: 0.75rem;
+    line-height: var(--lh-ui);
+    color: color-mix(in srgb, var(--on-band) 55%, transparent);
+  }
+</style>

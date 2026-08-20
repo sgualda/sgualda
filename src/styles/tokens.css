@@ -88,6 +88,21 @@
   --ls-display: -0.03em;  /* h1 only, and only because 64px needs it */
   --ls-heading: -0.015em; /* h2, h3 */
   --ls-read: 0em;         /* everything else */
+
+  /* ── the size scale ──
+     Six steps, and every one has a job. They were already the sizes in use —
+     this names them so the next component picks a role rather than a number,
+     which is how 0.9rem and 0.875rem ended up meaning the same thing in two
+     different files.
+
+     Anything that is *read as a paragraph* uses --fs-body or --fs-sub. Nothing
+     should sit between them. */
+  --fs-lead: 1.125rem;    /* the sentence under an h1 on a long page */
+  --fs-body: 1.0625rem;   /* body copy, and .sub */
+  --fs-sub: 0.9375rem;    /* secondary copy: list rows, form labels, footer */
+  --fs-note: 0.875rem;    /* supporting text under a card or a list item */
+  --fs-fine: 0.8125rem;   /* captions, hints, legal */
+  --fs-label: 0.6875rem;  /* uppercase labels and eyebrows */
   --ls-caps: 0.16em;      /* uppercase eyebrows and labels */
 
   /* Title — ZSE SemiBold, from Figma at 64/68 */

@@ -17,9 +17,6 @@ export async function GET(_: APIContext) {
   const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
   );
-  const services = (await getCollection('services', ({ data }) => !data.draft)).sort(
-    (a, b) => a.data.order - b.data.order
-  );
   const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
     (a, b) => a.data.order - b.data.order
   );
@@ -88,22 +85,13 @@ ${essays
   )
   .join('\n')}
 
-## Services
+## Working together
 
-Three, and only three. Each is quoted per project after a written brief; there
-is no hourly billing and no published price list. Roughly a third of enquiries
-get told that none of it fits, which is a real answer rather than a negotiating
-position.
+No service list and no prices. Projects are taken on one at a time and scoped
+after a conversation; roughly a third of enquiries get told that none of it
+fits, which is a real answer rather than a negotiating position.
 
-${services
-  .map(
-    (s) =>
-      `- **${s.data.title}** — ${s.data.lead}\n  For: ${s.data.forWho[0]}\n  Not for: ${s.data.notFor[0]}\n  ${SITE.url}/services/${s.id}/`
-  )
-  .join('\n')}
-
-- Start a project: ${SITE.url}/services/start/
-- All services: ${SITE.url}/services/
+- Tell me what you are working on: ${SITE.url}/collaborate/
 
 ## Work
 

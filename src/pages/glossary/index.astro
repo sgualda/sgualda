@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { getTools, getStages } from '@lib/content';
 import { SITE } from '@lib/site';
 
@@ -91,7 +91,7 @@ const stages = await getStages();
   </div>
 
 
-  <NextStep line="These are the decisions I get hired to help with." />
+  <Collaborate line="These are the decisions I get hired to help with." />
 
   <Footer slot="footer" />
 </Base>

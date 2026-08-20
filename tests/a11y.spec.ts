@@ -10,18 +10,12 @@ const section = (n: string) => {
 /**
  * Every section of the URL contract, not three of the five.
  *
- * `work` and `services` were added to src/lib/site.ts on 2026-08-20 and this
- * list was not, so nine pages — the whole commercial half of the site, and the
- * one page somebody fills a form in — were built, linked and shipped without
- * ever being scanned. A list of section names written by hand is exactly the
- * kind of thing that goes stale silently, so it is derived instead.
- *
- * The intake is excluded on purpose: it is a JavaScript-rendered form with no
- * content until the first step is painted, and it has its own focus test below.
+ * `work` was added to src/lib/site.ts and this list was not, so a whole
+ * section was built, linked and shipped without ever being scanned. A list of
+ * section names written by hand is exactly the kind of thing that goes stale
+ * silently, so it is derived from the contract instead.
  */
-const URLS = ['pages', 'work', 'services', 'tools', 'writing']
-  .flatMap(section)
-  .filter((u) => u !== '/services/start/' && u !== '/services/start/sent/');
+const URLS = ['pages', 'work', 'collaborate', 'tools', 'writing'].flatMap(section);
 
 for (const url of URLS) {
   test(`${url} has no accessibility violations`, async ({ page }) => {
@@ -92,15 +86,14 @@ test('a check announces each question and moves focus to it', async ({ page }) =
   await expectFocusOnHeading();
 });
 
-test('the intake moves focus to each step, not just the scroll position', async ({ page }) => {
-  // Scrolling moves the page; focus moves the screen reader with it. Repainting
-  // a step without this leaves somebody on a keyboard at the top of a form they
-  // have already filled in.
-  await page.goto('/services/start/?s=web-design');
-  await page.getByRole('button', { name: 'Start' }).click();
-  expect(
-    await page.evaluate(() => document.activeElement?.hasAttribute('data-quiz-head'))
-  ).toBe(true);
+test('every field on the form has a label a screen reader can find', async ({ page }) => {
+  // The form is one screen of plain inputs now, so the thing worth checking is
+  // the boring thing: that each control is actually named. A placeholder is not
+  // a label, and that is the mistake this catches.
+  await page.goto('/collaborate/');
+  for (const id of ['name', 'email', 'about', 'help', 'budget']) {
+    await expect(page.locator(`label[for="${id}"]`)).toBeVisible();
+  }
 });
 
 // WebKit only honours Tab when macOS Full Keyboard Access is on, so this one

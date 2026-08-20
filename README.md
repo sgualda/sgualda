@@ -3,10 +3,14 @@
 Personal site of Sergio Gualda — sgualda — designer and developer in Barcelona.
 Astro, static output, hosted on Hostinger.
 
-**Rearchitected 2026-08-20.** Four sections in the navigation instead of eight,
-`/case-studies/` is now `/work/`, `/work-with-me/` is now `/services/` with
-three landings and one intake, and two invented projects were deleted. Every
-old URL redirects. See `public/_redirects`.
+**Rearchitected 2026-08-20.** Three items in the navigation instead of eight
+destinations, `/case-studies/` is now `/work/`, and two invented projects were
+deleted. Every old URL redirects — see `public/_redirects`.
+
+**No services page, deliberately.** One existed for a day: three landings with
+intent, deliverables and a page each. It turned a personal site into a
+catalogue, which is the one thing it is not for. The way to work together is a
+banner and one short form at `/collaborate/`.
 
 - **Quality backlog:** [QUALITY.md](./QUALITY.md) — 78 tickets, the single source of truth for what is left
 - **Voice:** [BRAND.md](./BRAND.md) — how the site sounds, and the rules that keep it sounding that way
@@ -29,7 +33,7 @@ npm run dev          # http://localhost:4321
 | `npm run build` | Build, generate OG images, generate `.htaccess` |
 | `npm run preview` | Serve the built site |
 | `npm run audit:urls` | Check every promised URL exists |
-| `npm test` | 219 Playwright tests, Chromium and WebKit |
+| `npm test` | 306 Playwright tests, Chromium and WebKit |
 | `npx astro check` | TypeScript |
 
 Run `npm run build && npm run audit:urls && npm test` before any deploy. CI does
@@ -99,15 +103,6 @@ updates:
 The most recent entry drives `dateModified` in the schema, so a project that is
 still moving reads as fresh without anybody touching the prose.
 
-### A service
-
-`src/content/services/*.md`. Three of them, and the bar for a fourth is high:
-`intent` must be a query none of the other three is written towards.
-
-The `intake` field is the one to notice — it defines the questions
-`/services/start/` asks when somebody arrives from that page. Service copy and
-the questions it triggers live in one file so they cannot drift.
-
 See every schema in [`src/content.config.ts`](./src/content.config.ts).
 
 ### Without opening the editor
@@ -162,20 +157,19 @@ changes in the same commit. It has already been wrong twice.
 src/
   content/writing/    essays, notes and reference pieces → /writing/{slug}/
   content/projects/   project stories → /work/{slug}/
-  content/services/   the three services → /services/{slug}/
   content/tools/      the six checks
   content/stages/     the five stages of the map
   content/glossary/   defined vocabulary
   content/testimonials/  empty — see CONTENT.md
   lib/site.ts         identity, nav, URL contract, legal details
-  lib/intake.ts       the common intake questions; per-service ones are content
+  lib/intake.ts       the four questions on /collaborate/
   lib/content.ts      ordered accessors for tools and stages
   lib/topics.ts       taxonomy, mapped onto the stages
   layouts/Base.astro  head, SEO, JSON-LD, fonts
   pages/              one file per route
   styles/tokens.css   every design value
 public/
-  api/brief.php       the intake endpoint, and the community waitlist
+  api/brief.php       the collaborate form, and the community waitlist
   api/log.php         JavaScript error reporting
   fonts/              self-hosted woff2 — no Google request
   _redirects          source of truth for redirects → .htaccess
@@ -187,15 +181,18 @@ scripts/
 
 ### The shape of the site
 
-Four items in the navigation — Writing, Services, About, Community — and that
-is the constraint, not an accident. Tools, the map and the glossary are
-reference material about building products, so they are surfaced from the top
-of `/writing/` and kept out of the menu. `/work/` is linked from the home page,
-`/about/` and every service page, which are the three places somebody actually
-wants proof of it.
+Three items in the navigation — Writing, About, Community — and that is the
+constraint, not an accident. Tools, the map and the glossary keep their URLs and
+stay out of the menu. `/work/` is linked from the home page and `/about/`, which
+are the two places somebody actually wants proof of it.
 
-Before adding a top-level page, the question is whether it needs to be one. If
-the answer is no, it belongs in Writing.
+Before adding a top-level page, the question is whether it needs to be one. The
+answer has been no every time it has been asked.
+
+**One closing block, one label.** Every page that has finished making its point
+ends with `<Collaborate />`. It replaced four hand-written bands that had
+drifted into four heading sizes and four button labels. The label is two words
+and never changes; only the sentence above it does.
 
 ### Why Astro
 

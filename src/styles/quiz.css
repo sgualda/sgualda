@@ -1,5 +1,5 @@
 /* Shared chrome for every question-and-answer panel: the qualifier on
-   /services/ and the six tool checks. Imported by both. */
+   /collaborate/ and the six tool checks. Imported by both. */
 
 /* Shared chrome for both interactive panels. */
   .dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 24px; }

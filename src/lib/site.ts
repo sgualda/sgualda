@@ -129,8 +129,7 @@ export const SAME_AS = [
  * Nothing aspirational, because a `knowsAbout` claiming ground the pages do
  * not cover is a claim a model can check and find wanting. Everything below is
  * drawn from what the site actually contains: the six checks, the five stages,
- * the glossary, the essays, the projects — and, since 2026-08-20, the three
- * services.
+ * the glossary, the essays and the projects.
  */
 export const EXPERTISE = [
   'Product design',
@@ -181,7 +180,7 @@ export const EXPERTISE = [
 ] as const;
 
 /**
- * The main navigation. Four items, down from five.
+ * The main navigation. Three items, down from eight destinations.
  *
  * The rule this encodes is the one the site kept breaking: *does this need to
  * exist as a top-level page?* Tools, Map and Work were all in here, which put
@@ -194,34 +193,28 @@ export const EXPERTISE = [
  *    products. That is what Writing is, so they are surfaced from the top of
  *    /writing/ and keep their URLs. Demoting costs nothing; deleting would
  *    have thrown away 27 pieces of content and six working questionnaires.
- *  · Work is linked from the home page, /about/ and every service page — the
- *    three places somebody actually wants proof of it. It stays out of here
- *    because a portfolio in the menu is what makes a personal site read as a
- *    portfolio.
+ *  · Work is linked from the home page and /about/, which are the two places
+ *    somebody actually wants proof of it. It stays out of here because a
+ *    portfolio in the menu is what makes a personal site read as a portfolio.
+ *  · Services existed for one day. Three landings with intent, deliverables
+ *    and a page each was a catalogue, and this is not a shop — the way to work
+ *    together is one banner and one short form, which is what it was before.
  */
 export const NAV = [
   { label: 'Writing', href: '/writing/' },
-  { label: 'Services', href: '/services/' },
   { label: 'About', href: '/about/' },
   { label: 'Community', href: '/community/' },
 ] as const;
 
 /**
- * The dark pill in the header.
+ * The dark pill in the header, and the label on every collaborate banner.
  *
- * "Hire me" is about him. "Start a project" is about the thing the visitor
- * arrived with, and it names what happens next rather than the transaction.
+ * Two words, and the same two everywhere. "Hire me" is about him; "Start a
+ * project" and "Tell me about your project" were both accurate and both too
+ * long to read at a glance on a phone. A control should say what happens next
+ * in the fewest words that still mean something.
  */
-export const CTA = { label: 'Start a project', href: '/services/start/' } as const;
-
-/**
- * The three services, in the order they appear on /services/.
- *
- * Three, not the five the brief listed. Product design and landing page design
- * are subsets of these — they have no search intent of their own worth a page,
- * and a page per near-synonym is the thing the brief explicitly rules out.
- */
-export const SERVICES = ['web-design', 'web-development', 'website-audit'] as const;
+export const CTA = { label: 'Let’s talk', href: '/collaborate/' } as const;
 
 /**
  * The URL structure.
@@ -266,14 +259,7 @@ export const URL_MAP = {
     '/work/ecoco-mobile-app/',
   ],
 
-  services: [
-    '/services/',
-    '/services/web-design/',
-    '/services/web-development/',
-    '/services/website-audit/',
-    '/services/start/',
-    '/services/start/sent/',
-  ],
+  collaborate: ['/collaborate/', '/collaborate/sent/'],
 
   tools: [
     '/tools/',
@@ -305,7 +291,7 @@ export const URL_MAP = {
  */
 export const MORE = [
   { label: 'Work', href: '/work/' },
-  { label: 'Start a project', href: '/services/start/' },
+  { label: 'Let’s talk', href: '/collaborate/' },
   { label: 'The checks', href: '/tools/' },
   { label: 'The map', href: '/map/' },
   // Glossary is not here: the footer's first column already lists it, and one

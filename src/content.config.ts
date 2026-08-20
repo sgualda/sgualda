@@ -137,57 +137,6 @@ const projects = defineCollection({
 });
 
 /**
- * The three services.
- *
- * Content rather than code so the copy can be rewritten without opening a
- * page template, and so the intake form, the related work and the related
- * writing are all declared in one place per service.
- *
- * `intent` is the single query the page is written towards. One per page, and
- * it is a field rather than a comment because it is the thing that stops this
- * turning into a folder of near-identical pages: if two services want the same
- * intent, one of them should not exist.
- */
-const services = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/services' }),
-  schema: z.object({
-    title: z.string(),
-    /** The <h1>. Named the way somebody would say it out loud. */
-    heading: z.string(),
-    seoTitle: z.string().max(70).optional(),
-    description: z.string().min(70).max(160),
-    /** The one query this page is for. Not a keyword list. */
-    intent: z.string(),
-    /** The line under the h1. What it is, in one sentence. */
-    lead: z.string(),
-    order: z.number().default(99),
-    draft: z.boolean().default(false),
-    /**
-     * Who it is for, and who it is not for.
-     *
-     * The second half is not modesty. A service page that describes everybody
-     * qualifies nobody, and the fastest way to stop the wrong brief arriving
-     * is to say plainly whose problem this does not solve.
-     */
-    forWho: z.array(z.string()).min(1),
-    notFor: z.array(z.string()).min(1),
-    /** The real process, in order, with what each step produces. */
-    howIWork: z.array(z.object({ name: z.string(), body: z.string() })).min(2),
-    /** What lands in your hands at the end. */
-    deliverables: z.array(z.string()).min(1),
-    /** Slugs from `projects`. Rendered as proof, collected automatically. */
-    relatedProjects: z.array(z.string()).default([]),
-    faqs: z.array(z.object({ q: z.string(), a: z.string().min(120) })).min(2),
-    /**
-     * The extra questions the intake asks when somebody arrives from this
-     * page. [name, label, type, hint] — the same shape the brief already uses,
-     * so one engine serves all three.
-     */
-    intake: z.array(z.tuple([z.string(), z.string(), z.string(), z.string()])).default([]),
-  }),
-});
-
-/**
  * The six free checks. YAML rather than TypeScript so the copy can be edited
  * without opening code, validated by the schema below, and reached by a CMS.
  *
@@ -311,7 +260,6 @@ const testimonials = defineCollection({
 export const collections = {
   writing,
   projects,
-  services,
   tools,
   stages,
   glossary,

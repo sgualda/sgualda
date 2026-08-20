@@ -145,7 +145,7 @@ const graph = [
    * ends up describing a company as a human being.
    *
    * `ProfessionalService` rather than plain `Organization`, and declared once
-   * here rather than again on /services/. That page had its own
+   * here rather than again on /collaborate/. That page had its own
    * ProfessionalService node, so adding an Organization created two nodes
    * describing the same business under two types — the precise conflation this
    * comment warns about, introduced while writing it. One node, referenced by
@@ -164,30 +164,6 @@ const graph = [
     address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
     areaServed: { '@type': 'Place', name: 'Worldwide' },
     priceRange: '$$',
-    /**
-     * The three services, on the node that represents the business, so they
-     * are declared on every page rather than only on /services/.
-     *
-     * The catalogue lives here and the individual `Service` nodes live on
-     * their own pages, each pointing back at this @id as its provider. One
-     * fact, stated once, from both directions.
-     */
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Services',
-      itemListElement: [
-        ['Web design', 'web-design'],
-        ['Web development', 'web-development'],
-        ['Website audit', 'website-audit'],
-      ].map(([name, slug]) => ({
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name,
-          url: `${SITE.url}/services/${slug}/`,
-        },
-      })),
-    },
     founder: { '@id': `${SITE.url}/#person` },
     employee: { '@id': `${SITE.url}/#person` },
     knowsAbout: [...EXPERTISE],

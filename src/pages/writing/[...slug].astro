@@ -6,7 +6,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { SITE } from '@lib/site';
 import { TOPICS } from '@lib/topics';
 import { getStages, getTools } from '@lib/content';
@@ -160,7 +160,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
         <p class="who"><strong>Sergio Gualda</strong> — product designer in Barcelona.</p>
         <p class="what">
           I take vague problems to shipped first versions for small teams, and write down what
-          the decisions cost. <a href="/about/">More about me</a> · <a href="/services/">Services</a>
+          the decisions cost. <a href="/about/">More about me</a> · <a href="/collaborate/">Let’s talk</a>
         </p>
       </div>
     </aside>
@@ -213,11 +213,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
   }
 
 
-  <NextStep
-    line="Recognise any of this in your own product?"
-    secondLabel="More essays"
-    secondHref="/writing/"
-  />
+  <Collaborate line="Working on something this applies to?" />
 
   {/* The disagreement invitation stays, but as a line rather than a button:
       a mailto: opens a mail client, which on a phone is one of the heaviest
@@ -276,7 +272,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     border-radius: 14px;
     padding: 18px;
     overflow-x: auto;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
   }
 
   /* The wrapper the rehype plugin adds. The table keeps its own semantics;

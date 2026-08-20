@@ -38,7 +38,7 @@
 /getting-things-done-transformed-my-life/  /writing/  301
 
 # ── retired page ──
-/mvp-prototype-design-startups/  /services/  301
+/mvp-prototype-design-startups/  /collaborate/  301
 
 # The chooser is now a section of /tools/ rather than its own page.
 /tools/which-check-do-you-need/  /tools/  301
@@ -81,6 +81,20 @@
 # The qualifier sorted people by the shape of the engagement — a session, a
 # review, a project — which is not what anybody arrives holding. The axis is the
 # work now, and the qualifying happens inside the intake where it is free.
-/work-with-me/             /services/            301
-/work-with-me/brief/       /services/start/      301
-/work-with-me/brief/sent/  /services/start/sent/ 301
+/work-with-me/             /collaborate/       301
+/work-with-me/brief/       /collaborate/       301
+/work-with-me/brief/sent/  /collaborate/sent/  301
+
+# /services/ lasted one day.
+#
+# Three landings with intent, deliverables and a page each turned a personal
+# site into a catalogue, which is the one thing it is not for. Sergio's call,
+# and correct. The way to work together is a banner and one short form, which
+# is what it was before. These rules exist because the pages were live and
+# indexable for a day, not because anybody linked them.
+/services/                    /collaborate/  301
+/services/web-design/         /collaborate/  301
+/services/web-development/    /collaborate/  301
+/services/website-audit/      /collaborate/  301
+/services/start/              /collaborate/  301
+/services/start/sent/         /collaborate/sent/  301

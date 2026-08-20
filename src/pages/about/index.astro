@@ -2,7 +2,7 @@
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { SITE } from '@lib/site';
 import { Image } from 'astro:assets';
 import portrait from '../../assets/portrait.jpg';
@@ -139,23 +139,31 @@ const notFor = [
       <div><dt>Languages</dt><dd>Spanish and English.</dd></div>
     </dl>
 
-    <section class="block">
-      <h2>What I’m good at.</h2>
-      <dl>
-        {goodAt.map((x) => (<><dt>{x.title}</dt><dd>{x.body}</dd></>))}
-      </dl>
-    </section>
-
-    <section class="block">
-      <h2>…and what I’m not.</h2>
-      <dl class="spaced">
-        {notFor.map((x) => (<><dt>{x.title}</dt><dd>{x.body}</dd></>))}
-      </dl>
+    {/* One comparison, not two lists.
+        These were two stacked sections with two headings — "What I'm good at."
+        and "…and what I'm not." — which reads as an afterthought tacked onto a
+        boast, and puts the honest half where most people have stopped
+        scrolling. Side by side, they are a single idea: here is the shape of
+        the work, and here is its edge. On a phone they stack, and the second
+        heading is what tells you the register has changed. */}
+    <section class="block pair">
+      <div>
+        <h2>Good at</h2>
+        <dl>
+          {goodAt.map((x) => (<div><dt>{x.title}</dt><dd>{x.body}</dd></div>))}
+        </dl>
+      </div>
+      <div>
+        <h2>Not good at</h2>
+        <dl>
+          {notFor.map((x) => (<div><dt>{x.title}</dt><dd>{x.body}</dd></div>))}
+        </dl>
+      </div>
     </section>
 
   </article>
 
-  <NextStep line="Think we would work well together?" />
+  <Collaborate line="Think we would work well together?" />
 
   <Footer slot="footer" />
 </Base>
@@ -231,6 +239,28 @@ const notFor = [
     letter-spacing: 0;
     color: var(--dim);
   }
-  dl dd + dt { margin-top: 26px; }
-  .spaced dd + dt { margin-top: 34px; }
+  /* Two columns, one comparison. Each entry is a hairline-topped row, the
+     same row the rest of the site uses for a list of things. */
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    align-items: start;
+  }
+  .pair h2 {
+    font-size: 1.125rem;
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-tight);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .pair dl { display: grid; gap: 0; }
+  .pair dl > div { padding: 20px 0; border-bottom: 1px solid var(--hair); }
+  .pair dt { margin-bottom: 8px; }
+  /* One paragraph size on this page, and one colour for it. */
+  .pair dd { font-size: 0.9375rem; line-height: var(--lh-read); }
+
+  @media (max-width: 720px) {
+    .pair { grid-template-columns: 1fr; gap: 34px; }
+  }
 </style>

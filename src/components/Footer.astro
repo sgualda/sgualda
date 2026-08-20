@@ -139,8 +139,24 @@ const year = new Date().getFullYear();
   .legal a:hover { color: var(--ink); }
   .legal-links { display: flex; gap: 18px; }
 
+  /* Centred on a phone.
+     The footer is the one place the site broke its own alignment rule: every
+     other section centres its headings and its short blocks at this width, and
+     the footer stayed hard left, so the last thing on every page looked like a
+     different site. Two columns collapsing to one left-aligned column also put
+     ten links in a tall ragged strip down the left edge.
+
+     Centred is the right choice rather than the easy one: at 390px the link
+     labels are two or three words, a single centred column reads as one block
+     rather than a list of leftovers, and it matches the hero, the bands and the
+     newsletter directly above it. */
   @media (max-width: 560px) {
+    .inner { text-align: center; }
     .map { grid-template-columns: 1fr; gap: 28px; }
-    .bottom { flex-direction: column; align-items: flex-start; }
+    .bottom { flex-direction: column; align-items: center; }
+    .mark { margin-inline: auto; }
+    .elsewhere { justify-content: center; flex-wrap: wrap; }
+    .legal { flex-direction: column; align-items: center; gap: 10px; }
+    .legal-links { justify-content: center; }
   }
 </style>

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 
 /** Every URL the site promises to serve, read from the contract itself. */
 const src = readFileSync('src/lib/site.ts', 'utf8');
@@ -42,18 +42,11 @@ test.describe('every page', () => {
       // Chrome and footer are present. This is the check that would have
       // caught the newsletter band disappearing from /map/.
       //
-      // The brief is the one page without either, on purpose: it is a
-      // full-screen form, and every link in a header is an invitation to
-      // abandon it. It gets a close control instead, which is checked here so
-      // "no chrome" cannot quietly become "no way out".
-      if (url === '/services/start/') {
-        await expect(page.locator('header.site-header')).toHaveCount(0);
-        await expect(page.locator('footer.site-footer')).toHaveCount(0);
-        await expect(page.locator('a.close[href="/services/"]')).toBeVisible();
-      } else {
-        await expect(page.locator('header.site-header')).toBeVisible();
-        await expect(page.locator('footer.site-footer')).toBeVisible();
-      }
+      // Every page has both now, including the form. It used to be a stripped
+      // full-screen task with a close control instead of a header, which is
+      // right for a checkout and wrong for a page that says "let's talk".
+      await expect(page.locator('header.site-header')).toBeVisible();
+      await expect(page.locator('footer.site-footer')).toBeVisible();
 
       expect(errors, 'console errors').toEqual([]);
     });
@@ -61,7 +54,7 @@ test.describe('every page', () => {
 });
 
 test.describe('structured data', () => {
-  for (const url of ['/', '/services/', '/tools/', '/map/', '/writing/']) {
+  for (const url of ['/', '/collaborate/', '/tools/', '/map/', '/writing/']) {
     test(`${url} emits valid JSON-LD`, async ({ page }) => {
       await page.goto(url);
       const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
@@ -205,111 +198,44 @@ test.describe('the answer gets a reaction', () => {
 });
 
 /**
- * The qualifier is gone.
+ * The funnel is one page and one form.
  *
- * /work-with-me/ asked four questions and recommended a shape of engagement.
- * It sorted people along an axis nobody arrives holding, and it charged the
- * most motivated visitor the most friction. /services/ is a page you read, and
- * the qualifying happens inside the intake where it is free.
+ * It has been three things: a four-question qualifier, a six-step intake that
+ * branched by service, and now four questions on one screen. Sergio's call
+ * each time, and the direction has been the same each time — less of it.
  */
-test('services names all three, and every one has a page', async ({ page }) => {
-  await page.goto('/services/');
-  for (const slug of ['web-design', 'web-development', 'website-audit']) {
-    await expect(page.locator(`main a[href="/services/${slug}/"]`).first()).toBeVisible();
-    const res = await page.goto(`/services/${slug}/`);
-    expect(res?.status(), slug).toBe(200);
-    await page.goBack();
+test('the form is one screen, and every question is on it', async ({ page }) => {
+  await page.goto('/collaborate/');
+  for (const id of ['name', 'email', 'about', 'help', 'budget']) {
+    await expect(page.locator(`#${id}`)).toBeVisible();
   }
+  // No steps to abandon halfway through.
+  await expect(page.locator('#stepper')).toHaveCount(0);
 });
 
-test('a service page says who it is not for', async ({ page }) => {
-  // The half that qualifies. A service page describing everybody qualifies
-  // nobody, and this is the section most likely to be quietly dropped.
-  await page.goto('/services/website-audit/');
-  await expect(page.getByRole('heading', { name: 'Who it is not for' })).toBeVisible();
-});
-
-test('every service page routes into the intake carrying its own slug', async ({ page }) => {
-  await page.goto('/services/web-design/');
-  await expect(page.locator('main a[href="/services/start/?s=web-design"]').first()).toBeVisible();
-});
-
-
-/**
- * Advance the brief one step, and wait for the step to actually be there.
- *
- * Each Continue repaints the panel and rebinds its handlers, so under parallel
- * load a click could land on a button that had just been replaced and do
- * nothing — the test then failed one run in twenty, and only on mobile WebKit.
- * Asserting the stepper moved is both the wait and the assertion.
- */
-async function nextStep(page: import('@playwright/test').Page, to: number) {
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', String(to));
-}
-
-test('the intake refuses to submit without an email', async ({ page }) => {
-  // Arriving without ?s= is a supported state, not a broken one — a bookmark,
-  // the footer, a shared link. Step one is simply unanswered, and gated.
-  await page.goto('/services/start/');
-  await page.getByRole('button', { name: 'Start' }).click();
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.locator('.formErr')).toContainText('Pick one');
-
-  await page.locator('input[name=kind][value=website-audit]').check();
-  await nextStep(page, 2);
-
-  // Step 3 is gated on the way out of it, so you cannot reach the last step and
-  // then be told about step 3 with no way back.
-  await nextStep(page, 3);
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.locator('.formErr')).toContainText('I actually read');
-  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '3');
-
-  await page.locator('#blocked').fill('The launch went quiet and nobody can agree on why.');
-  await nextStep(page, 4);
-  await nextStep(page, 5);
-  await nextStep(page, 6);
-
-  // And the email is caught where the email is.
+test('the form refuses to submit without an email', async ({ page }) => {
+  await page.goto('/collaborate/');
+  await page.locator('#about').fill('We launched a month ago and nobody is coming back.');
   await page.getByRole('button', { name: 'Send it' }).click();
-  await expect(page.locator('.formErr')).toContainText('email address that works');
-  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '6');
+  await expect(page.locator('#err')).toContainText('email address that works');
 });
 
-test('the intake carries the service across, and the stepper tracks it', async ({ page }) => {
-  await page.goto('/services/start/?s=web-development');
-
-  // Step 0 is context only: what was chosen, how long this takes, what happens
-  // next. Nothing is asked yet, so no step is marked current.
-  await expect(page.getByText('Build the site')).toBeVisible();
-  await expect(page.locator('#stepper li[data-state=now]')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Start' }).click();
-
-  await expect(page.locator('input[name=kind][value=web-development]')).toBeChecked();
-  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '1');
-  await nextStep(page, 2);
-  await expect(page.locator('#stepper li[data-step="1"]')).toHaveAttribute('data-state', 'done');
-
-  // Going back must not lose what was typed.
-  await page.locator('#company').fill('example.com');
-  await page.getByRole('button', { name: 'Back' }).click();
-  await expect(page.locator('#stepper li[data-state=now]')).toHaveAttribute('data-step', '1');
-  await nextStep(page, 2);
-  await expect(page.locator('#company')).toHaveValue('example.com');
+test('the form refuses to submit an empty description', async ({ page }) => {
+  await page.goto('/collaborate/');
+  await page.locator('#email').fill('someone@example.com');
+  await page.locator('#about').fill('hi');
+  await page.getByRole('button', { name: 'Send it' }).click();
+  await expect(page.locator('#err')).toContainText('actually read');
 });
 
-test('the specifics step follows the service that was chosen', async ({ page }) => {
-  // The per-service questions live in each service's own content file. This is
-  // the check that the wiring between the two still exists: pick the audit and
-  // step four has to ask for a URL, which is a question no other service asks.
-  await page.goto('/services/start/?s=website-audit');
-  await page.getByRole('button', { name: 'Start' }).click();
-  await nextStep(page, 2);
-  await nextStep(page, 3);
-  await page.locator('#blocked').fill('Traffic halved after we migrated and nobody knows why.');
-  await nextStep(page, 4);
-  await expect(page.locator('label[for=s1]')).toContainText('The URL');
+test('nothing on the site sells a list of services', async ({ page }) => {
+  // /services/ existed for one day. This is the guard against it coming back
+  // by accident — a personal site with a catalogue is the thing the brief
+  // rules out, and the pages are gone but the instinct is not.
+  for (const url of ['/', '/about/', '/writing/', '/work/']) {
+    await page.goto(url);
+    await expect(page.locator('main a[href^="/services/"]')).toHaveCount(0);
+  }
 });
 
 test.describe('the journal', () => {
@@ -511,36 +437,20 @@ test('every redirect target resolves', async ({ page }) => {
   }
 });
 
-test('the brief has no theme toggle, and one way out', async ({ page }) => {
-  // A focused screen with a floating control in the corner is not focused, and
-  // on a phone it landed on top of the last option.
-  await page.goto('/services/start/');
-  await expect(page.locator('.theme-toggle')).toBeHidden();
-  await expect(page.locator('a.close')).toBeVisible();
-});
 
-test('a failing brief endpoint says something a person can act on', async ({ page }) => {
+test('a failing endpoint says something a person can act on', async ({ page }) => {
   // The endpoint is PHP. When it is misconfigured it answers with an HTML error
   // page, and parsing that as JSON used to surface "Unexpected token '<'" to
   // somebody who just wanted to send a message.
   await page.route('**/api/brief.php', (route) =>
     route.fulfill({ status: 500, contentType: 'text/html', body: '<!DOCTYPE html><h1>500</h1>' })
   );
-  await page.goto('/services/start/?s=web-design');
-  await page.getByRole('button', { name: 'Start' }).click();
-  await nextStep(page, 2);
-  await nextStep(page, 3);
-  // Step 3 is the one that is actually validated, so it has to be filled in
-  // before the network error is the thing under test.
-  await page.locator('#blocked').fill('The launch went quiet and nobody can agree on why.');
-  await nextStep(page, 4);
-  await nextStep(page, 5);
-  await nextStep(page, 6);
-
+  await page.goto('/collaborate/');
   await page.locator('#email').fill('someone@example.com');
+  await page.locator('#about').fill('We launched a month ago and nobody is coming back.');
   await page.getByRole('button', { name: 'Send it' }).click();
 
-  const err = page.locator('.formErr');
+  const err = page.locator('#err');
   await expect(err).toBeVisible();
   await expect(err).toContainText('hello@sgualda.com');
   await expect(err).not.toContainText('JSON');
@@ -574,17 +484,12 @@ test('the glossary filter narrows the list, and only exists with JavaScript', as
 test('no page title is truncated by Google', async ({ page }) => {
   // The site name is appended only when it fits. Eight pages were losing the
   // end of the real title purely to carry a 16-character suffix.
-  for (const url of ['/', '/services/', '/community/', '/map/worth-building/', '/tools/why-is-nobody-using-your-product/']) {
+  for (const url of ['/', '/collaborate/', '/community/', '/map/worth-building/', '/tools/why-is-nobody-using-your-product/']) {
     await page.goto(url);
     expect((await page.title()).length, `title length on ${url}`).toBeLessThanOrEqual(60);
   }
 });
 
-test('the brief offers a way home, not only a way back', async ({ page }) => {
-  await page.goto('/services/start/');
-  await expect(page.locator('a.home[href="/"]')).toBeVisible();
-  await expect(page.locator('a.close[href="/services/"]')).toBeVisible();
-});
 
 test.describe('the funnel', () => {
   // Five of the seven page types used to end without offering anything, and
@@ -603,7 +508,7 @@ test.describe('the funnel', () => {
   for (const url of ENTRY_POINTS) {
     test(`${url} offers a route to the brief`, async ({ page }) => {
       await page.goto(url);
-      await expect(page.locator('main a[href="/services/start/"]').first()).toBeVisible();
+      await expect(page.locator('main a[href="/collaborate/"]').first()).toBeVisible();
     });
   }
 
@@ -611,37 +516,22 @@ test.describe('the funnel', () => {
     // The model is contactless: a brief, then an email. "First call is 20
     // minutes" survived on /work/ for days after the button above it
     // had already been changed.
-    for (const url of ['/', '/services/', '/work/', '/services/start/']) {
+    for (const url of ['/', '/collaborate/', '/work/', '/collaborate/']) {
       await page.goto(url);
       const text = (await page.locator('main').innerText()).toLowerCase();
       expect(text, `${url} promises a call`).not.toMatch(/book a call|first call is|schedule a call/);
     }
   });
 
-  test('the brief says where the email goes, and survives a reload', async ({ page }) => {
-    await page.goto('/services/start/?s=web-design');
-    await page.getByRole('button', { name: 'Start' }).click();
-    await nextStep(page, 2);
-    await page.locator('#company').fill('example.com');
-    await nextStep(page, 3);
-    await page.locator('#blocked').fill('The launch went quiet and nobody agrees why.');
-    await nextStep(page, 4);
-    await nextStep(page, 5);
-    await nextStep(page, 6);
-
+  test('the form says where the email goes', async ({ page }) => {
+    await page.goto('/collaborate/');
     // The commonest silent objection to a form is not knowing what happens to
     // the address, answered where the address is asked for.
-    await expect(page.locator('.privacy a[href="/privacy/"]')).toBeVisible();
-
-    // Closing the tab used to lose everything. Going back already survived.
-    await page.reload();
-    await page.getByRole('button', { name: 'Start' }).click();
-    await nextStep(page, 2);
-    await expect(page.locator('#company')).toHaveValue('example.com');
+    await expect(page.locator('.fine a[href="/privacy/"]')).toBeVisible();
   });
 
   test('the success page commits to a date, not to "soon"', async ({ page }) => {
-    await page.goto('/services/start/sent/');
+    await page.goto('/collaborate/sent/');
     await expect(page.locator('#when')).toBeVisible();
     await expect(page.locator('#when')).toContainText('spam');
   });
@@ -653,7 +543,7 @@ test.describe('the funnel', () => {
     // everybody else, and it is the last thing somebody reads after sending.
     const ctx = await browser.newContext({ locale: 'es-ES' });
     const page = await ctx.newPage();
-    await page.goto('/services/start/sent/');
+    await page.goto('/collaborate/sent/');
     const text = (await page.locator('#when').textContent()) ?? '';
     expect(text).toMatch(
       /by (Monday|Tuesday|Wednesday|Thursday|Friday) \d{1,2} (January|February|March|April|May|June|July|August|September|October|November|December)\./
@@ -668,10 +558,28 @@ test.describe('the sitemap', () => {
   const xml = () => readFileSync(new URL('../dist/sitemap-0.xml', import.meta.url), 'utf8');
 
   test('never announces a page that tells crawlers not to index it', async () => {
-    // /services/start/ was in the sitemap and carried noindex at the same
-    // time. Two opposite instructions for one URL is a reason to trust the
-    // whole file less, not just that entry.
-    expect(xml()).not.toContain('/services/start/');
+    /**
+     * The rule, not one URL.
+     *
+     * This used to name the page that had the problem — the brief was in the
+     * sitemap and carried noindex at the same time. Naming it meant the test
+     * kept passing for the wrong reason every time that page was renamed, and
+     * it was renamed twice in three days. Two opposite instructions for one URL
+     * is a reason to trust the whole file less, not just that entry, so the
+     * check is now against every page that actually carries the tag.
+     */
+    const dist = new URL('../dist/', import.meta.url);
+    const noindexed = readdirSync(dist, { recursive: true })
+      .filter((f): f is string => typeof f === 'string' && f.endsWith('index.html'))
+      .filter((f) => /name="robots"[^>]*noindex|noindex[^>]*name="robots"/.test(
+        readFileSync(new URL(f, dist), 'utf8')
+      ))
+      .map((f) => '/' + f.replace(/index\.html$/, ''));
+
+    expect(noindexed.length, 'nothing carries noindex — has the tag moved?').toBeGreaterThan(0);
+    for (const url of noindexed) {
+      expect(xml(), `${url} is noindex and in the sitemap`).not.toContain(`<loc>https://sgualda.com${url}</loc>`);
+    }
   });
 
   test('every URL carries a lastmod, and none carries priority', async () => {
@@ -747,11 +655,11 @@ test('one label for the primary action, everywhere', async ({ page }) => {
   const labels = new Set<string>();
   for (const url of ['/', '/about/', '/glossary/', '/community/', '/work/', '/map/nobody-came/', '/writing/mvp-vs-prototype/']) {
     await page.goto(url);
-    for (const t of await page.locator('main a.btn[href="/services/start/"]').allInnerTexts()) {
+    for (const t of await page.locator('a.btn[href="/collaborate/"]').allInnerTexts()) {
       labels.add(t.trim());
     }
   }
-  expect([...labels]).toEqual(['Tell me about your project']);
+  expect([...labels]).toEqual(['Let’s talk']);
 });
 
 test('no page violates its own Content Security Policy', async ({ page }) => {
@@ -762,7 +670,7 @@ test('no page violates its own Content Security Policy', async ({ page }) => {
   page.on('console', (m) => {
     if (m.type() === 'error' && /Content Security Policy/i.test(m.text())) violations.push(m.text());
   });
-  for (const url of ['/', '/tools/', '/services/', '/services/start/', '/glossary/', '/community/']) {
+  for (const url of ['/', '/tools/', '/collaborate/', '/collaborate/', '/glossary/', '/community/']) {
     await page.goto(url, { waitUntil: 'networkidle' });
   }
   expect(violations).toEqual([]);

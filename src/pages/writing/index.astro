@@ -53,46 +53,8 @@ const PAGE = 6;
       thin pages competing with this one for the same queries. Worth revisiting
       at roughly five substantial pieces per cluster.
     */}
-    <p class="sub">
-      What specific decisions cost me. Mostly three questions: what to build and what to leave
-      out, how to tell whether it is working, and when the craft matters more than the tool.
-    </p>
+    <p class="sub">What decisions actually cost me, written down while I still remember.</p>
   </section>
-
-  {/* The reference material, surfaced here because it stopped being in the
-      navigation on 2026-08-20.
-
-      Tools, the map and the glossary were three of the eight top-level
-      destinations on a site whose stated principle is that most things should
-      not exist. They are not deleted — they are 27 pieces of content and six
-      working questionnaires — they are put where they belong: this is all
-      writing about building products, and this is the page for that.
-
-      One line, above the list, before anything else competes for it. A reader
-      who wants the essays scrolls past it in a second; a reader who arrived
-      looking for the checks finds them without a menu. */}
-  <div class="col">
-    <ul class="shelf">
-      <li>
-        <a href="/tools/">
-          <b>The checks</b>
-          <span>Six free questionnaires, one per decision people get stuck on.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/map/">
-          <b>The map</b>
-          <span>Five stages of building a product, and what goes wrong at each.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/glossary/">
-          <b>Glossary</b>
-          <span>The words this site uses with a specific meaning.</span>
-        </a>
-      </li>
-    </ul>
-  </div>
 
   <div class="col">
     <!-- Every essay is in the HTML from the start; the ones past the first six
@@ -140,41 +102,6 @@ const PAGE = 6;
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
 
-  /* Quiet on purpose. This is a shelf you can reach, not a second index
-     competing with the list underneath it — hairlines and body type, no cards,
-     no icons. */
-  .shelf {
-    list-style: none;
-    text-align: left;
-    margin-top: 44px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-  .shelf li { border-top: 1px solid var(--hair); }
-  .shelf a {
-    display: block;
-    padding-top: 12px;
-    transition: opacity 0.2s var(--ease);
-  }
-  .shelf a:hover { opacity: 0.6; }
-  .shelf b {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 0.9375rem;
-    font-weight: 600;
-    letter-spacing: var(--ls-heading);
-  }
-  .shelf span {
-    display: block;
-    margin-top: 4px;
-    font-size: 0.8125rem;
-    line-height: var(--lh-read);
-    color: var(--dim);
-  }
-  @media (max-width: 720px) {
-    .shelf { grid-template-columns: 1fr; gap: 12px; }
-  }
 
   .intro h1 { margin-bottom: 18px; }
 
@@ -246,7 +173,22 @@ const PAGE = 6;
     margin-top: 18px; text-align: center;
     font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
   }
-  @media (max-width: 480px) { .list a { grid-template-columns: 74px 1fr; gap: 16px; } }
+  /* On a phone the date stops being a column.
+     Ninety-six pixels of date against a 390px screen left the titles in a
+     narrow ragged strip, wrapping every two or three words, and the whole list
+     read as a broken table sitting left of a centred page. Stacked, each row is
+     one full-width block: date, then title. The list is still left-aligned —
+     centring a column of titles of different lengths is the one thing that
+     would look worse — but now it reads as a deliberate block rather than a
+     column that ran out of room. */
+  @media (max-width: 560px) {
+    .list a { grid-template-columns: 1fr; gap: 6px; }
+    .when { display: flex; align-items: baseline; gap: 6px; }
+    .when em, .when b { display: inline; }
+    .when b { font-size: 0.9375rem; }
+    .what { font-size: 1.0625rem; line-height: var(--lh-tight); }
+    .row + .row { margin-top: 26px; }
+  }
 </style>
 
 <script>
