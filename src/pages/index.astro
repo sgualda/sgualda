@@ -19,10 +19,10 @@ import { SITE } from '@lib/site';
  * Deliberately a hand-written list rather than the collection's `order`
  * field: the work page shows everything, and this one shows the four he
  * wants a stranger to see first. Two of the six are buried on purpose and
- * belong on /case-studies/, not here.
+ * belong on /work/, not here.
  */
 const FEATURED = ['truvi', 'ecoco-mobile-app', 'glintale', 'truvi-developer-portal'];
-const all = await getCollection('cases', ({ data }) => !data.draft);
+const all = await getCollection('projects', ({ data }) => !data.draft);
 const featured = FEATURED.map((id) => all.find((c) => c.id === id)).filter((c) => c !== undefined);
 if (featured.length !== FEATURED.length) {
   throw new Error(
@@ -30,66 +30,30 @@ if (featured.length !== FEATURED.length) {
   );
 }
 
-/**
- * Three essays on the home page.
- *
- * The section above this one ends with "the only part worth writing down" and
- * then linked to nothing, which is a sentence setting up a door and no door.
- *
- * It also fixes the worst number in the internal link graph. The home body
- * linked to three destinations, all of them the commercial funnel, so every
- * essay sat at depth 5 and /about/ at depth 6 — the anchor of the author
- * entity, six hops from the front page. With this section the essays move to
- * depth 2, /writing/ to 1 and /about/ to 1.
- *
- * Newest three rather than a hand-picked list: a chosen list goes stale the
- * moment something better is published, and nobody remembers to come back.
- */
-const essays = (await getCollection('essays', ({ data }) => !data.draft))
-  .sort((a, b) => (b.data.updated ?? b.data.published).valueOf() - (a.data.updated ?? a.data.published).valueOf())
-  .slice(0, 3);
 
 /* Same call the component renders from, so the markup can never describe a
    quote the page does not show. Empty until the quotes arrive, and an empty
    array adds no node. */
 const voices = await getTestimonials();
 
-const principles = [
-  {
-    n: '01',
-    title: 'Most of the work is avoiding work',
-    body: 'What you do not build shapes the product more than what you do. Products rarely die of one bad feature. They die of forty reasonable ones.',
-  },
-  {
-    n: '02',
-    title: 'Enthusiasm is not demand',
-    body: 'The only signal that means anything is somebody using the thing a second time, on their own, without you in the room. Everything else is manners.',
-  },
-  {
-    n: '03',
-    title: 'The cost is the lesson',
-    body: 'If it cost me nothing, then I read it somewhere and I’m repeating it. That’s the filter for everything I publish here.',
-  },
-];
 ---
 
 <Base
   title={`${SITE.role} in Barcelona — ${SITE.name}`}
-  description="I build products from zero, and I write down what the mistakes cost. Product design and strategy for small teams, from Barcelona."
+  description="I design and build things on the internet, and write down what the mistakes cost. Web design, development and audits for small teams, from Barcelona."
   schema={reviewSchema(voices)}
 >
   <Header slot="nav" />
 
   <!-- ── hero ── -->
   <section class="col hero">
-    {/* Sergio's wording, kept deliberately. It was swapped for "Building
-        products, not just experiences" to get a commercial term into the h1 and
-        swapped back on his call.
+    {/* Sergio's wording, and this is the third time it has been put back.
+        Twice for SEO, once — 2026-08-20 — because the site started selling web
+        development and an h1 ending "through design" names half of what is on
+        offer. He prefers his line, so his line stays. Do not swap it again.
 
-        The trade is real and stays open: this line carries no term anybody
-        searches for, so the <title> is doing that work alone. See H1 in
-        SEARCH-INTELLIGENCE-AUDIT.md — the finding is about the four commercial
-        pages being thin, and the h1 is one part of it, not the whole. */}
+        The trade is known and accepted: this line carries no term anybody
+        searches for, so the <title> does that work alone. */}
     <h1>Building<br />experiences<br />through design</h1>
     <p class="sub">
       I’ve built products from zero, failed, iterated, and figured out what actually matters in
@@ -99,14 +63,9 @@ const principles = [
       {/* One primary, one secondary. Two solid buttons side by side make the
           reader choose between two equals, which is a decision nobody came
           here to make. The work is the supporting act. */}
-      <a class="btn btn--dark" href="/work-with-me/">Hire me</a>
-      <a class="btn btn--ghost" href="/case-studies/">See the work</a>
+      <a class="btn btn--dark" href="/collaborate/">Let’s talk</a>
+      <a class="btn btn--ghost" href="/work/">See the work</a>
     </div>
-    {/* The visitor who arrives already decided is the most valuable one, and
-        the four qualifying questions were charging them the most friction. */}
-    <p class="skip-to">
-      Already know what you need? <a href="/work-with-me/brief/">Send a brief</a>.
-    </p>
   </section>
 
   <!-- ── what I do ── -->
@@ -115,15 +74,15 @@ const principles = [
       <span class="eyebrow">What I do</span>
       <h2>I take vague problems<br />to shipped first versions.</h2>
       <p class="sub">
-        Usually with two or three other people, usually with less time than the plan needed.
-        7+ years of it, mostly SaaS and mobile apps.
+        Design and code, usually with two or three other people, usually with less time than
+        the plan needed. 7+ years of it, mostly SaaS, mobile apps and the sites around them.
       </p>
     </div>
 
-    <div class="wide grid">
+    <div class="col grid">
       {
         featured.map((c) => (
-          <a class="slot" href={`/case-studies/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
+          <a class="slot" href={`/work/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
             <Image
               src={c.data.cover!}
               alt={c.data.coverAlt ?? ''}
@@ -137,9 +96,6 @@ const principles = [
       }
     </div>
 
-    <div class="col actions" style="margin-top:34px">
-      <a class="btn btn--ghost" href="/case-studies/">See the work</a>
-    </div>
   </section>
 
   <!-- ── the idea ── -->
@@ -148,72 +104,20 @@ const principles = [
       <h2>Making things is<br />no longer the hard part.</h2>
       <p class="sub">
         Anyone can produce a screen. Almost nobody can say why that one and not another.
-        That’s the part I work on, and the only part worth writing down. Most of it happens
-        <a href="/about/">here in Barcelona</a>, and <a href="/now/">this is what I’m on now</a>.
+        That’s the part I work on, and the only part <a href="/writing/">worth writing down</a>.
+        Most of it happens <a href="/about/">here in Barcelona</a>, and
+        <a href="/now/">this is what I’m on now</a>.
       </p>
     </div>
-    <div class="wide">
+    <div class="col">
       <Image
         src={studio}
         alt="The desk where most of this gets made"
         class="wide-shot"
-        widths={[560, 1120]}
-        sizes="(max-width: 560px) calc(100vw - 40px), 560px"
+        widths={[560, 880, 1760]}
+        sizes="(max-width: 560px) calc(100vw - 40px), 880px"
       />
     </div>
-  </section>
-
-  <!-- ── writing ── -->
-  <section class="section">
-    <div class="col">
-      <span class="eyebrow">Written down</span>
-      <h2>The three most<br />recent things I got wrong.</h2>
-      <p class="sub">Every other week, one decision and what it cost. No roundups, no five tips.</p>
-    </div>
-
-    {/* `wide` is what constrains the column and centres it, the same wrapper the
-        project grid uses. Without it the list ran the full width of the viewport
-        and the text sat against the left edge of the screen. */}
-    <ul class="wide reads">
-      {
-        essays.map((e) => (
-          <li>
-            <a href={`/writing/${e.id}/`}>
-              <h3>{e.data.title}</h3>
-              <p>{e.data.hook ?? e.data.description}</p>
-              <span class="more" aria-hidden="true">Read it →</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-
-    <div class="col actions" style="margin-top:34px">
-      <a class="btn btn--ghost" href="/writing/">All writing</a>
-    </div>
-  </section>
-
-  <!-- ── how I decide ── -->
-  <section class="section">
-    <div class="col">
-      <span class="eyebrow">How I decide</span>
-      <h2>Three things<br />I’m fairly sure of.</h2>
-      <p class="sub">Each one cost me something specific, which is the only reason I trust them.</p>
-    </div>
-
-    <ol class="col principles">
-      {
-        principles.map((p) => (
-          <li>
-            <span class="n" aria-hidden="true">{p.n}</span>
-            <div>
-              <h3>{p.title}</h3>
-              <p>{p.body}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
   </section>
 
   <!-- ── what it cost ── -->
@@ -225,7 +129,7 @@ const principles = [
       on a team, a market and a moment you will never have.
     </p>
     <div class="actions" style="margin-top:30px">
-      <a class="btn btn--dark" href="/case-studies/">See the work</a>
+      <a class="btn btn--dark" href="/work/">See the work</a>
     </div>
   </section>
 
@@ -235,9 +139,16 @@ const principles = [
       failures. Renders nothing until there are quotes to show. */}
   <Testimonials />
 
+  {/* No collaborate banner here, on purpose.
+      The home already ends on the work and then asks for an email. A third
+      block asking for something else in between turns the bottom of the page
+      into a queue of requests. The banner belongs at the end of a page that
+      has just made an argument — an essay, a project, the about page — not at
+      the end of the front door. */}
+
   <!-- ── newsletter ── -->
   <section class="section">
-    <div class="wide">
+    <div class="col">
       <Newsletter />
     </div>
   </section>
@@ -246,12 +157,26 @@ const principles = [
 </Base>
 
 <style>
-  .hero { padding-top: clamp(56px, 10vh, 96px); }
+  /* Three rows, not three cards. A card grid here would be the first thing on
+     the page that looks like a services company, forty pixels above a section
+
+
+
+
+
+
+  /* Room to breathe under the header.
+     The header is sticky and about 64px tall, so 56px of padding on a laptop
+     put the top of a 96px headline within a few pixels of the nav — the two
+     read as one block, and the largest type on the site had nothing above it.
+     The floor is now more than the header's own height, so there is always a
+     clear band of paper between the menu and the first word. */
+  .hero { padding-top: clamp(96px, 16vh, 176px); }
   .hero h1 { margin-bottom: 22px; }
   .hero .actions { margin-top: 30px; }
   .skip-to {
     margin-top: var(--space-5);
-    font-size: 0.875rem;
+    font-size: var(--fs-note);
     letter-spacing: 0;
     color: var(--dim);
   }
@@ -259,9 +184,11 @@ const principles = [
   .skip-to a:hover { opacity: 0.6; }
   h2 + .sub { margin-top: 16px; }
 
-  /* Four projects, 2×2, bare images as in the comp. No caption: Sergio's
-     call. The link name comes from aria-label instead, so the four are still
-     distinguishable to anybody not looking at them. */
+  /* Four projects, bare images as in the comp. No caption: Sergio's call. The
+     link name comes from aria-label instead, so the four are still
+     distinguishable to anybody not looking at them.
+
+     Two across, one column on a phone. */
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -280,86 +207,23 @@ const principles = [
     background: var(--surface);
     border: 1px solid var(--hair);
     border-radius: var(--radius-card);
-    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
   }
   .slot:hover img { opacity: 0.86; transform: translateY(-2px); }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+
   .wide-shot {
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
     border-radius: var(--radius-card);
     margin-top: var(--space-8);
-  }
 
-  .principles {
-    list-style: none;
-    text-align: left;
-    margin-top: 54px;
-  }
-  .principles li {
-    display: grid;
-    grid-template-columns: 88px 1fr;
-    gap: 10px;
-    padding: 22px 0;
-  }
-  .principles .n {
-    font-family: var(--font-display);
-    font-size: 1.375rem;
-    font-weight: 600;
-    letter-spacing: 0em;
-    color: var(--dim);
-  }
-  .principles h3 { margin-bottom: 10px; }
-  .principles p { color: var(--dim); font-size: 1.0625rem; line-height: var(--lh-ui); }
 
-  /* Three essays, in the same rhythm as .principles rather than as cards.
-     The page already has one grid of image tiles; a second grid of boxes
-     directly below would read as a template. These are text on the page. */
-  .reads {
-    list-style: none;
-    text-align: left;
-    margin-top: 48px;
-    display: grid;
-    gap: 2px;
-  }
-  .reads a {
-    display: block;
-    padding: 24px 0;
-    border-top: 1px solid var(--hair);
-  }
-  .reads li:last-child a { border-bottom: 1px solid var(--hair); }
-  .reads h3 {
-    font-size: 1.25rem;
-    letter-spacing: var(--ls-heading);
-    line-height: var(--lh-tight);
-    margin-bottom: 8px;
-    transition: opacity 0.2s var(--ease);
-  }
-  .reads p {
-    color: var(--dim);
-    font-size: 1.0625rem;
-    line-height: var(--lh-ui);
-    max-width: 62ch;
-  }
-  .reads .more {
-    display: inline-block;
-    margin-top: 12px;
-    font-size: 0.75rem;
-    letter-spacing: var(--ls-caps);
-    text-transform: uppercase;
-    color: var(--dim);
-    transition: color 0.2s var(--ease), transform 0.2s var(--ease);
-  }
-  .reads a:hover h3 { opacity: 0.7; }
-  .reads a:hover .more { color: var(--ink); transform: translateX(3px); }
 
-  @media (prefers-reduced-motion: reduce) {
-    .reads .more { transition: none; }
-  }
 
-  @media (max-width: 720px) {
-    .grid { grid-template-columns: 1fr; }
-    .principles li { grid-template-columns: 1fr; gap: 4px; }
-    .reads a { padding: 20px 0; }
+
+
+
   }
 </style>

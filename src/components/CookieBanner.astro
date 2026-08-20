@@ -71,13 +71,13 @@ const active = typeof LEGAL.analytics === 'string' && LEGAL.analytics.length > 0
 
     opacity: 0;
     transform: translateY(12px);
-    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+    transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
   }
   .cookie[data-in='true'] { opacity: 1; transform: none; }
   .cookie[hidden] { display: none; }
 
   .cookie p {
-    font-size: 0.875rem;
+    font-size: var(--fs-note);
     line-height: var(--lh-read);
     letter-spacing: var(--ls-read);
     color: var(--dim);
@@ -94,12 +94,12 @@ const active = typeof LEGAL.analytics === 'string' && LEGAL.analytics.length > 0
     flex: 1;
     min-height: 44px;
     padding: 11px 14px;
-    font-size: 0.8125rem;
+    font-size: var(--fs-fine);
   }
   .more {
     display: inline-block;
     margin-top: var(--space-4);
-    font-size: 0.75rem;
+    font-size: var(--fs-fine);
     letter-spacing: var(--ls-read);
     color: var(--dim);
     text-decoration: underline;

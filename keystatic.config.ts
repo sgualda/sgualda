@@ -17,17 +17,17 @@ export default config({
   ui: {
     brand: { name: 'sgualda.com' },
     navigation: {
-      Writing: ['essays'],
-      Work: ['cases'],
+      Writing: ['writing'],
+      Work: ['projects'],
       'Free checks': ['tools'],
       'The map': ['stages'],
     },
   },
 
   collections: {
-    essays: collection({
-      label: 'Essays',
-      path: 'src/content/essays/*',
+    writing: collection({
+      label: 'Writing',
+      path: 'src/content/writing/*',
       slugField: 'title',
       format: { contentField: 'body' },
       entryLayout: 'content',
@@ -69,9 +69,9 @@ export default config({
       },
     }),
 
-    cases: collection({
+    projects: collection({
       label: 'Case studies',
-      path: 'src/content/cases/*',
+      path: 'src/content/projects/*',
       slugField: 'title',
       format: { contentField: 'body' },
       entryLayout: 'content',

@@ -52,7 +52,7 @@
   --inverse: var(--ink);
   --on-inverse: #ffffff;
 
-  /* The full-width bands — newsletter, the case-studies footer, the "you are
+  /* The full-width bands — newsletter, the work footer, the "you are
      past this stage when" panel. In light they are the inverse of the page,
      which is the Figma design. In dark they cannot be: inverting an already
      dark page produces a cream slab that is the brightest thing on screen and
@@ -88,6 +88,21 @@
   --ls-display: -0.03em;  /* h1 only, and only because 64px needs it */
   --ls-heading: -0.015em; /* h2, h3 */
   --ls-read: 0em;         /* everything else */
+
+  /* ── the size scale ──
+     Six steps, and every one has a job. They were already the sizes in use —
+     this names them so the next component picks a role rather than a number,
+     which is how 0.9rem and 0.875rem ended up meaning the same thing in two
+     different files.
+
+     Anything that is *read as a paragraph* uses --fs-body or --fs-sub. Nothing
+     should sit between them. */
+  --fs-lead: 1.125rem;    /* the sentence under an h1 on a long page */
+  --fs-body: 1.0625rem;   /* body copy, and .sub */
+  --fs-sub: 0.9375rem;    /* secondary copy: list rows, form labels, footer */
+  --fs-note: 0.875rem;    /* supporting text under a card or a list item */
+  --fs-fine: 0.8125rem;   /* captions, hints, legal */
+  --fs-label: 0.6875rem;  /* uppercase labels and eyebrows */
   --ls-caps: 0.16em;      /* uppercase eyebrows and labels */
 
   /* Title — ZSE SemiBold, from Figma at 64/68 */
@@ -124,13 +139,36 @@
   --eyebrow-size: 0.6875rem;
   --eyebrow-ls: var(--ls-caps);
 
-  /* ── layout ── */
-/* ── the shell ──
-     ONE container width for the whole site: header, footer, every section
-     and every banner line up on it. Roughly half the 1512px Figma frame,
-     which is the 2/4 proportion Sergio asked for. */
+  /* ── layout ──
+     ONE content width for the whole site, and one exception.
+
+     There were briefly three. That was a mistake and it is worth writing down
+     why, because the reasoning for it was sound and the result was wrong: two
+     real problems — a filter rail clipped inside the column, six cards stacked
+     one per screenful — got solved by widening the containers those components
+     sat in. Each fix was locally correct. Together they meant a single page ran
+     880 → 560 → 880 → 880 → 560 down its left edge, and three lists of
+     clickable things on three pages came out at three different widths.
+
+     A container is a property of the site, not of the component. Anything that
+     does not fit inside 560 is a component problem and gets fixed as one: the
+     rail wraps instead of scrolling, the cards get tighter.
+
+     --shell-full is the one exception and it earns it by not being content: the
+     route diagram on /map/ is a picture, full-bleed on purpose, and it reads as
+     deliberate precisely because nothing else does it. */
   --shell: min(560px, calc(100vw - 40px));
+  --shell-full: min(1040px, calc(100vw - 40px)); /* the map diagram. Only that. */
   --measure: 62ch;   /* long-form reading width, used inside the shell */
+
+  /* ── motion ──
+     Three durations. There were ten — 0.2, 0.24, 0.25, 0.28, 0.3, 0.36, 0.4,
+     0.42, 0.5 — which is not a system, it is nine people's guesses. Nothing on
+     this site moves for long enough that a 40ms difference between two of them
+     was ever a decision. */
+  --dur-fast: 0.2s;   /* colour, opacity, border — things that just switch */
+  --dur: 0.28s;       /* movement: a hover lift, an arrow sliding */
+  --dur-slow: 0.42s;  /* something entering the page for the first time */
   /* ── spacing ──
      Named steps so a future component has somewhere to reach for instead of
      inventing a number. The site currently uses 42 distinct literal values,
@@ -166,6 +204,7 @@
   --radius-sm: 18px;     /* nested cards, inline blocks */
   --radius-card: 28px;   /* the standard card */
   --radius-band: 34px;   /* full-bleed banners like the newsletter */
+  --radius-xs: 8px;      /* code blocks, inline chips, small insets */
   --radius-pill: 999px;
 
   /* ── motion ── */

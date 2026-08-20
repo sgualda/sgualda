@@ -1,55 +1,55 @@
 /* Shared chrome for every question-and-answer panel: the qualifier on
-   /work-with-me/ and the six tool checks. Imported by both. */
+   /collaborate/ and the six tool checks. Imported by both. */
 
 /* Shared chrome for both interactive panels. */
   .dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 24px; }
-  .dots i { width: 22px; height: 3px; border-radius: 99px; background: var(--hair); transition: background 0.3s var(--ease); }
+  .dots i { width: 22px; height: 3px; border-radius: var(--radius-pill); background: var(--hair); transition: background var(--dur) var(--ease); }
   .dots i.on { background: var(--ink); }
 
-  .step { animation: rise 0.4s var(--ease) both; }
+  .step { animation: rise var(--dur-slow) var(--ease) both; }
   @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
   .qq {
-    font-family: var(--font-display); font-size: 1.25rem; font-weight: 700;
+    font-family: var(--font-display); font-size: var(--h3-size); font-weight: 700;
     letter-spacing: var(--ls-heading); line-height: var(--lh-tight); margin: 14px 0 20px;
   }
   .opt, .ck {
     display: block; width: 100%; text-align: left; font-family: var(--font-body);
-    font-size: 0.9375rem; line-height: var(--lh-ui); letter-spacing: 0;
+    font-size: var(--fs-sub); line-height: var(--lh-ui); letter-spacing: 0;
     background: var(--surface); color: var(--ink);
-    border: 1px solid transparent; border-radius: 14px;
+    border: 1px solid transparent; border-radius: var(--radius-xs);
     padding: 14px 17px; cursor: pointer;
-    transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
   }
   .opt + .opt, .ck + .ck { margin-top: 8px; }
   .opt:hover, .ck:hover { border-color: var(--ink); transform: translateX(3px); }
-  .opt em { font-style: normal; display: block; font-size: 0.8125rem; color: var(--dim); margin-top: 3px; }
+  .opt em { font-style: normal; display: block; font-size: var(--fs-fine); color: var(--dim); margin-top: 3px; }
   .ck { display: flex; gap: 10px; align-items: center; }
   .ck input { accent-color: var(--ink); }
 
   .back {
     display: block;
     margin: 24px auto 0;
-    font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.1em;
+    font-family: var(--font-body); font-size: var(--fs-fine); letter-spacing: 0.1em;
     text-transform: uppercase; color: var(--dim); background: none; border: 0;
     cursor: pointer; padding: 8px 12px;
-    transition: color 0.2s var(--ease);
+    transition: color var(--dur-fast) var(--ease);
   }
   .back:hover { color: var(--ink); }
 
   .vlab {
-    display: inline-block; font-size: 0.6875rem; letter-spacing: 0.16em;
+    display: inline-block; font-size: var(--fs-label); letter-spacing: 0.16em;
     text-transform: uppercase; color: var(--dim); margin-bottom: 14px;
   }
-  .vname { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: var(--ls-heading); line-height: var(--lh-display); }
-  .vmeta { display: block; font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin: 8px 0 22px; }
-  .vwhy { text-align: left; font-size: 1rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
+  .vname { font-family: var(--font-display); font-size: var(--h2-size); font-weight: 700; letter-spacing: var(--ls-heading); line-height: var(--lh-display); }
+  .vmeta { display: block; font-size: var(--fs-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin: 8px 0 22px; }
+  .vwhy { text-align: left; font-size: var(--fs-body); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
   .vwhy p + p { margin-top: 12px; }
   .vwhy strong { color: var(--ink); font-weight: 600; }
   .vcols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; text-align: left; margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--hair); }
-  .vcols h4 { font-family: var(--font-body); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); font-weight: 500; margin-bottom: 10px; }
+  .vcols h4 { font-family: var(--font-body); font-size: var(--fs-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); font-weight: 500; margin-bottom: 10px; }
   .vcols ul { list-style: none; }
-  .vcols li { font-size: 0.9375rem; line-height: var(--lh-ui); letter-spacing: 0; padding: 5px 0 5px 16px; position: relative; }
+  .vcols li { font-size: var(--fs-sub); line-height: var(--lh-ui); letter-spacing: 0; padding: 5px 0 5px 16px; position: relative; }
   /* A tick and a cross, drawn in CSS and coloured — the only place on the site
      where hue carries meaning rather than decoration. Two lists distinguished
      by a 6px dash and a 6px ring asked the reader to notice a detail they had
@@ -82,15 +82,15 @@
   }
   .vcols h4 { display: flex; align-items: center; gap: 7px; }
   .vcols .no h4 { color: color-mix(in srgb, var(--err) 70%, var(--dim)); }
-  .vnote { font-size: 0.875rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); text-align: left; margin-top: 22px; }
+  .vnote { font-size: var(--fs-note); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); text-align: left; margin-top: 22px; }
   .vacts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 26px; }
-  .tag { font-size: 0.75rem; letter-spacing: 0.06em; color: var(--dim); margin-top: 10px; }
+  .tag { font-size: var(--fs-fine); letter-spacing: 0.06em; color: var(--dim); margin-top: 10px; }
 
   /* The one-off line under the first question. Deliberately not a .sub: it is
      read once and never again, so it sits below the question rather than above
      it competing for the same attention. */
   .step .intro {
-    font-size: 0.875rem;
+    font-size: var(--fs-note);
     line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
@@ -99,7 +99,7 @@
 
   .step .privacy {
     margin-top: var(--space-5);
-    font-size: 0.75rem;
+    font-size: var(--fs-fine);
     line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
@@ -108,11 +108,11 @@
   .step .privacy a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
   .f { text-align: left; margin-bottom: 16px; }
-  .f label { display: block; font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; }
+  .f label { display: block; font-size: var(--fs-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; }
   .f input, .f textarea, .f select {
-    width: 100%; font-family: var(--font-body); font-size: 0.9375rem;
+    width: 100%; font-family: var(--font-body); font-size: var(--fs-sub);
     padding: 12px 15px; color: var(--ink); background: var(--surface);
-    border: 1px solid transparent; border-radius: 13px; outline: none;
+    border: 1px solid transparent; border-radius: var(--radius-xs); outline: none;
   }
   .f textarea { min-height: 104px; resize: vertical; line-height: var(--lh-ui); }
   .f input:focus, .f textarea:focus, .f select:focus { border-color: var(--ink); }
@@ -125,7 +125,7 @@
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink) 26%, transparent);
     border-color: var(--ink);
   }
-  .f .hint { font-size: 0.75rem; color: var(--dim); margin-top: 6px; letter-spacing: 0; }
+  .f .hint { font-size: var(--fs-fine); color: var(--dim); margin-top: 6px; letter-spacing: 0; }
   .fnav { display: flex; justify-content: space-between; gap: 10px; margin-top: 24px; align-items: center; }
   /* Step 0 has nothing to go back to. */
   .fnav.one { justify-content: center; }
@@ -140,7 +140,7 @@
   margin-top: 18px;
   padding: 10px 0 0;
   border-top: 1px solid var(--err);
-  font-size: 0.875rem;
+  font-size: var(--fs-note);
   line-height: var(--lh-ui);
   letter-spacing: 0;
   color: var(--err);
@@ -162,13 +162,13 @@
   border: 0;
   padding: 10px 4px;
   font: inherit;
-  font-size: 0.875rem;
+  font-size: var(--fs-note);
   letter-spacing: 0;
   color: var(--dim);
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 4px;
-  transition: color 0.2s var(--ease);
+  transition: color var(--dur-fast) var(--ease);
 }
 .vacts .again:hover { color: var(--ink); }
 
@@ -176,7 +176,7 @@
 /* The line of small print under a panel — "or just email me", "everything runs
    in your browser". Was declared separately on three pages; the fourth one
    inherited nothing and rendered at body size. */
-.aside { margin-top: 16px; font-size: 0.875rem; color: var(--dim); letter-spacing: 0; }
+.aside { margin-top: 16px; font-size: var(--fs-note); color: var(--dim); letter-spacing: 0; }
 .aside a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
 /* Honeypot. Off-canvas rather than display:none, because a bot that reads CSS

@@ -44,13 +44,16 @@ export default defineConfig({
       /**
        * Out of the sitemap: internal pages, and anything carrying `noindex`.
        *
-       * /work-with-me/brief/ was in both — announced in the sitemap and told
-       * not to index itself in the same breath. Two opposite instructions for
-       * one URL is not just a wasted crawl of that page; it is a reason to
-       * trust the rest of the file less.
+       * The thank-you page was in both — announced in the sitemap and told not
+       * to index itself in the same breath. Two opposite instructions for one
+       * URL is not just a wasted crawl of that page; it is a reason to trust
+       * the rest of the file less.
+       *
+       * /collaborate/ itself stays in: it is a real page somebody can land on
+       * and read, which is exactly what the six-step version was not.
        */
       filter: (page) =>
-        !['/draft/', '/styleguide/', '/work-with-me/brief/'].some((x) => page.includes(x)),
+        !['/draft/', '/styleguide/', '/collaborate/sent/'].some((x) => page.includes(x)),
       serialize(item) {
         /**
          * lastmod, and no priority.

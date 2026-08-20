@@ -1,6 +1,6 @@
 <?php
 /**
- * POST /api/brief.php — receives the project brief from /work-with-me/.
+ * POST /api/brief.php — receives the project intake from /services/start/.
  *
  * PHP because Hostinger's shared hosting runs PHP, not JavaScript. Sends two
  * emails through the Resend HTTP API: the brief to Sergio, and a confirmation
@@ -93,7 +93,21 @@ $blocked = trim((string)($data['blocked'] ?? ''));
 if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     reply(['ok' => false, 'error' => 'That email address does not look right.'], 422);
 }
-if (mb_strlen($blocked) < 20) {
+/**
+ * Two things arrive here, and only one of them is a brief.
+ *
+ * `type: 'waitlist'` is the community sign-up: an address and nothing else,
+ * because the community does not exist yet and asking somebody to describe
+ * their project in order to register interest in a room is absurd.
+ *
+ * It reuses this endpoint rather than getting its own because everything that
+ * makes this file worth having — the config check, the honeypot, the timing
+ * gate, the rate limit, the Resend call — would otherwise be copied into a
+ * second file and then drift.
+ */
+$type = ($data['type'] ?? '') === 'waitlist' ? 'waitlist' : 'brief';
+
+if ($type === 'brief' && mb_strlen($blocked) < 20) {
     reply(['ok' => false, 'error' => 'Tell me a little more about what is blocked.'], 422);
 }
 
@@ -121,14 +135,27 @@ foreach ((array)($data['specifics'] ?? []) as $label => $value) {
 }
 
 $name = trim((string)($data['name'] ?? '')) ?: 'Someone';
+
+/* ── the waitlist: one address, one line, no confirmation email ── */
+if ($type === 'waitlist') {
+    $sent = send(
+        $cfg,
+        $cfg['MAIL_TO'],
+        'Community waitlist — ' . $email,
+        '<h2>Someone joined the community waitlist</h2>'
+            . '<p><strong>Email</strong> ' . $esc($email) . '</p>'
+            . '<p><strong>Where from</strong> ' . $esc((string)($data['from'] ?? '/community/')) . '</p>'
+    );
+    reply($sent ? ['ok' => true] : ['ok' => false, 'error' => 'Could not save that. Try again in a moment.'], $sent ? 200 : 502);
+}
+
 $body = '<h2>' . $esc($name) . ' sent a brief</h2>'
     . '<p><strong>Email</strong> ' . $esc($email) . '</p>'
     . '<p><strong>Looking for</strong> ' . $esc((string)($data['kind'] ?? '—')) . '</p>'
-    . (!empty($data['recommendation'])
-        ? '<p><strong>Qualifier said</strong> ' . $esc((string)$data['recommendation']) . '</p>' : '')
+
     . '<hr>'
     . '<p><strong>Product</strong> ' . $esc((string)($data['product'] ?? '—')) . '</p>'
-    . '<p><strong>Team</strong> ' . $esc((string)($data['team'] ?? '—')) . '</p>'
+    . '<p><strong>Stage</strong> ' . $esc((string)($data['stage'] ?? '—')) . '</p>'
     . '<hr>'
     . '<p><strong>What is blocked</strong><br>' . $esc($blocked) . '</p>'
     . $specifics

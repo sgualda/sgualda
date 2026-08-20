@@ -31,14 +31,29 @@ const VIEWPORTS = [
   { name: 'large desktop', w: 2560, h: 1440 },
 ];
 
-/** One page per kind of layout, rather than all 41. */
+/**
+ * One page per kind of layout.
+ *
+ * The four indexes were missing, and all four were rebuilt on 2026-08-20: the
+ * writing index went from a two-column date grid to the shared row component,
+ * /tools/ went from filled cards to the same rows, /work/ lost its filter, and
+ * /map/ lost the horizontal diagram that used to be the reason it was here.
+ * Testing the article template and not the index that links to it is testing
+ * the half that did not change.
+ */
 const PAGES = [
   '/',
-  '/work-with-me/',
+  '/writing/',
+  '/writing/heart-framework-vs-nps-user-experience/',
+  '/tools/',
   '/tools/why-is-nobody-using-your-product/',
   '/map/',
-  '/case-studies/glintale/',
-  '/writing/heart-framework-vs-nps-user-experience/',
+  '/map/nobody-came/',
+  '/work/',
+  '/work/glintale/',
+  '/about/',
+  '/community/',
+  '/collaborate/',
   '/glossary/',
 ];
 
@@ -53,13 +68,21 @@ async function overflowing(page: Page) {
       // Parked off-canvas on purpose — the skip link lives at left:-9999px
       // until it takes focus. Anything entirely left of the viewport is that.
       if (r.right <= 0) continue;
-      // Inside a deliberate scroll container. A wide comparison table is meant
-      // to extend past its box; that is what the box is for. What matters is
-      // that the container itself fits, and it is checked on its own turn.
-      let scrollable = false;
+      /**
+       * Inside a container that owns the overflow. A wide comparison table is
+       * meant to extend past its box; that is what the box is for. What matters
+       * is that the container itself fits, and it is checked on its own turn.
+       *
+       * `hidden` and `clip` count as much as `auto` and `scroll`. The question
+       * wall on /community/ is a 6,857px marquee inside a clipped box — it
+       * cannot move the page by a pixel, and the test was reporting it at every
+       * viewport because it only recognised the two overflow values that
+       * scroll, not the two that cut.
+       */
+      let contained = false;
       for (let p = el.parentElement; p && p !== document.body; p = p.parentElement)
-        if (/auto|scroll/.test(getComputedStyle(p).overflowX)) { scrollable = true; break; }
-      if (scrollable) continue;
+        if (/auto|scroll|hidden|clip/.test(getComputedStyle(p).overflowX)) { contained = true; break; }
+      if (contained) continue;
       // 1px of tolerance: sub-pixel layout rounds up on fractional widths.
       if (r.right > limit + 1 || r.left < -1) {
         const parent = el.parentElement;

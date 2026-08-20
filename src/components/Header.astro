@@ -78,14 +78,14 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
   .links a {
     display: block;
     padding: 7px 10px;
-    border-radius: 8px;
-    font-size: 0.6875rem;
+    border-radius: var(--radius-xs);
+    font-size: var(--fs-label);
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--dim);
     white-space: nowrap;
-    transition: color 0.2s var(--ease);
+    transition: color var(--dur-fast) var(--ease);
   }
   .links a:hover,
   .links a[aria-current='page'] { color: var(--ink); }
@@ -111,7 +111,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
     margin: 5px auto;
     background: var(--ink);
     border-radius: 2px;
-    transition: transform 0.36s var(--ease), opacity 0.24s var(--ease);
+    transition: transform var(--dur) var(--ease), opacity var(--dur-fast) var(--ease);
   }
   .burger[aria-expanded='true'] span:first-child { transform: translateY(3.25px) rotate(45deg); }
   .burger[aria-expanded='true'] span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
@@ -153,7 +153,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
     opacity: 0;
     /* Fades in, never scales: a scaled-down button is a smaller touch target
        for the length of the animation, and 48px × 0.9 is below the minimum. */
-    transition: opacity 0.3s var(--ease), background 0.2s var(--ease);
+    transition: opacity var(--dur) var(--ease), background var(--dur-fast) var(--ease);
     transition-delay: 0.2s;
   }
   .sheet.open .sheet-close { opacity: 1; }
@@ -168,7 +168,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
   .sheet-links li {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+    transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
     transition-delay: calc(0.16s + var(--i) * 0.055s);
   }
   .sheet.open .sheet-links li { opacity: 1; transform: none; }
@@ -183,14 +183,14 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
   }
   .sheet-links a[aria-current='page'] { color: var(--accent); }
   .sheet-cta { margin-top: 22px; }
-  .sheet-cta a { font-family: var(--font-body); font-size: 0.9375rem; letter-spacing: var(--ls-read); }
+  .sheet-cta a { font-family: var(--font-body); font-size: var(--fs-sub); letter-spacing: var(--ls-read); }
 
   .sheet-foot {
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     color: var(--dim);
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+    transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
     transition-delay: calc(0.16s + var(--i) * 0.055s);
   }
   .sheet.open .sheet-foot { opacity: 1; transform: none; }

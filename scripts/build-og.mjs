@@ -94,9 +94,9 @@ function pages(dir = dist, found = []) {
 
 /** Section label from the URL, so the card says where it lives. */
 const eyebrowFor = (url) => {
-  if (url === '/') return 'Product designer, Barcelona';
+  if (url === '/') return 'Designer & developer, Barcelona';
   const first = url.split('/').filter(Boolean)[0];
-  return { tools: 'Free check', writing: 'Journal', map: 'The map', 'case-studies': 'Work' }[first] ?? 'sgualda.com';
+  return { tools: 'Free check', writing: 'Writing', map: 'The map', 'work': 'Work' }[first] ?? 'sgualda.com';
 };
 
 let n = 0;
@@ -124,7 +124,7 @@ for (const file of pages()) {
 
 // The fallback every page falls back to.
 jobs.push(
-  sharp(Buffer.from(svg('I help teams skip the expensive mistakes', 'Product designer, Barcelona')))
+  sharp(Buffer.from(svg('I help teams skip the expensive mistakes', 'Designer & developer, Barcelona')))
     .png({ compressionLevel: 9 })
     .toFile(join(dist, 'og-default.png'))
 );

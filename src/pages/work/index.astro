@@ -1,0 +1,232 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import Collaborate from '@components/Collaborate.astro';
+import { SITE } from '@lib/site';
+
+/**
+ * /work/ — matches the Figma frame "Work".
+ *
+ * The grid is driven by the `cases` collection, so it can never disagree with
+ * what is on the page. Two of the six have no cover on purpose: they are the
+ * buried ones, and there is nothing to show. They get the status set in type
+ * instead of a grey rectangle, which reads as a decision rather than a
+ * missing asset.
+ *
+ * Note: the comp says "Burried". Fixed to "Buried".
+ */
+const cases = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order || b.data.published.valueOf() - a.data.published.valueOf()
+);
+
+
+
+/**
+ * The status, on every card.
+ *
+ * A filter used to sit above this grid — five chips for four projects, one of
+ * them ("Buried 0") a control that could only ever return silence. Filtering
+ * four things is machinery for a problem this page does not have, and a button
+ * that does nothing teaches a visitor that the controls here are not to be
+ * trusted. It comes back past roughly eight projects.
+ *
+ * The status stays, because it is the interesting axis. It is set in type on
+ * each card, which is where somebody scanning actually reads it.
+ */
+const LABEL: Record<string, string> = {
+  'in-progress': 'In progress',
+  shipped: 'Shipped',
+  paused: 'Paused',
+  buried: 'Buried',
+};
+
+---
+
+<Base
+  title="Work — products I designed and built"
+  description="Products I designed or built, with the state each one is really in — in progress, shipped, paused or buried."
+  schema={[
+    {
+      '@type': 'CollectionPage',
+      name: 'Work',
+      description: 'Products designed or built by Sergio Gualda, with the state each one is really in.',
+      /* The cards are images now, so the titles and summaries that used to sit
+         under them are gone from the page. They stay here, where a crawler
+         still reads what this page is a list of. */
+      hasPart: cases.map((c) => ({
+        '@type': 'CreativeWork',
+        name: c.data.title,
+        abstract: c.data.summary,
+        url: `${SITE.url}/work/${c.id}/`,
+        dateCreated: c.data.year,
+      })),
+    },
+  ]}
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <span class="eyebrow">Work</span>
+    <h1>Things I’ve built</h1>
+    {/* The old line promised "the dead ones have post-mortems, which is the
+        part most portfolios leave out". That was the page's whole thesis and it
+        is no longer true: the two buried projects were the invented ones, and
+        they are gone. Promising a post-mortem and then showing four live
+        projects is worse than never making the promise.
+
+        This says what is actually here. The old line goes back the day a real
+        project gets buried and written up — and that piece is worth writing,
+        because almost nobody publishes it. */}
+    <p class="sub">
+      What I am building and what I have built, with the state each one is really in.
+    </p>
+  </section>
+
+  <div class="col">
+    <div class="grid" id="grid">
+      {
+        cases.length
+          ? /* Image only. With no visible text the link needs a name of its
+               own, or a screen reader announces six links called "image". */
+            cases.map((c) => (
+              <a
+                class="card"
+                data-state={c.data.status}
+                href={`/work/${c.id}/`}
+                aria-label={`${c.data.title} — ${LABEL[c.data.status]} — ${c.data.summary}`}
+              >
+                {c.data.cover ? (
+                  <Image
+                    class="thumb"
+                    src={c.data.cover}
+                    alt={c.data.coverAlt ?? ''}
+                    widths={[320, 640, 960]}
+                    sizes="(max-width: 480px) calc(100vw - 40px), 272px"
+                    loading="lazy"
+                    style={`object-position:${c.data.coverPosition}`}
+                  />
+                ) : (
+                  <div class="thumb none"><span>{LABEL[c.data.status]}</span></div>
+                )}
+                {/* Title and status on every card, at every width.
+                    It used to be title-only and phone-only: on desktop the
+                    status was visible on the two buried ones and nowhere else,
+                    so four of the six were squares that said nothing. The
+                    status is the most interesting thing about this portfolio
+                    and it was the thing the grid hid. */}
+                <span class="name">
+                  {c.data.title}
+                  <b class="state" data-state={c.data.status}>{LABEL[c.data.status]}</b>
+                </span>
+              </a>
+            ))
+          : [0, 1, 2, 3].map(() => <div class="thumb placeholder" aria-hidden="true" />)
+      }
+    </div>
+
+
+    {cases.length === 0 && (
+      <p class="empty">Case studies are being written. <a href="/writing/">Read something meanwhile</a>.</p>
+    )}
+  </div>
+
+  <Collaborate line="Want to build something together?" />
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+
+
+
+
+  /* The status, on every card. Quiet — it labels the work, it is not the work. */
+  .state {
+    display: block;
+    margin-top: 3px;
+    font-weight: 400;
+    font-size: var(--fs-fine);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .state[data-state='buried'] { color: var(--err); }
+
+
+  .intro h1 { margin-bottom: 18px; }
+
+
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 44px;
+  }
+  .thumb {
+    display: block;
+    width: 100%;
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    /* Square, as in the comp. A square crop of a 2304×1271 screenshot shows
+       about 55% of its width, anchored left so the navigation and the first
+       column survive and the crop falls on the empty right-hand side. */
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    /* The covers are screenshots on light interfaces. A hairline stops them
+       dissolving into the page in light and floating in dark. */
+    border: 1px solid var(--hair);
+    transition: opacity var(--dur) var(--ease);
+  }
+  /* The two buried projects have no screenshot, because there is nothing to
+     show, which is the whole point of them. A flat grey rectangle read as a
+     missing asset; a soft gradient with the status set into a pill reads as a
+     decision. Built from --ink, so it follows the theme. */
+  .thumb.none {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--ink) 13%, transparent), transparent 60%),
+      radial-gradient(110% 80% at 85% 95%, color-mix(in srgb, var(--ink) 20%, transparent), transparent 55%),
+      var(--surface);
+  }
+  .thumb.none span {
+    font-size: var(--fs-label);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 7px 14px;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--paper) 72%, transparent);
+    backdrop-filter: blur(6px);
+  }
+  .card { text-align: left; display: block; }
+  .card:hover .thumb { opacity: 0.82; }
+
+  /* Visible at every width now, not just on a phone. The grid used to rely on
+     hover to reveal what a tile was, which leaves a touch screen with six
+     unlabelled squares — and hid the status, which is the point of this page. */
+  .name {
+    display: block;
+    margin-top: var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--fs-sub);
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+    color: var(--ink);
+  }
+  .card[hidden] { display: none; }
+
+  .empty { margin-top: 26px; font-size: var(--fs-sub); color: var(--dim); }
+  .empty a { text-decoration: underline; text-underline-offset: 3px; }
+
+
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+</style>
+
+

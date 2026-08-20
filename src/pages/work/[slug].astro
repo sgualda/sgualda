@@ -4,22 +4,38 @@ import { Image } from 'astro:assets';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import Collaborate from '@components/Collaborate.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import { SITE } from '@lib/site';
 
 export async function getStaticPaths() {
-  const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort(
+  const cases = (await getCollection('projects', ({ data }) => !data.draft)).sort(
     (a, b) => a.data.order - b.data.order
+  );
+  const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
   );
   return cases.map((entry, i) => ({
     params: { slug: entry.id },
-    props: { entry, others: cases.filter((c) => c.id !== entry.id).slice(0, 3) },
+    props: {
+      entry,
+      others: cases.filter((c) => c.id !== entry.id).slice(0, 3),
+      /**
+       * Anything written that says it came out of this project.
+       *
+       * The other half of the link the essay page now draws. Collected rather
+       * than curated: the essay declares the relationship once and both pages
+       * get it, so the two can never disagree about whether it exists.
+       */
+      writing: essays.filter((e) => e.data.relatedProject === entry.id),
+    },
   }));
 }
 
-const { entry, others } = Astro.props as {
-  entry: CollectionEntry<'cases'>;
-  others: CollectionEntry<'cases'>[];
+const { entry, others, writing } = Astro.props as {
+  entry: CollectionEntry<'projects'>;
+  others: CollectionEntry<'projects'>[];
+  writing: CollectionEntry<'writing'>[];
 };
 const { Content } = await render(entry);
 const d = entry.data;
@@ -47,6 +63,24 @@ const STATUS: Record<string, string> = {
       author: { '@id': `${SITE.url}/#person` },
       publisher: { '@id': `${SITE.url}/#person` },
       datePublished: d.published.toISOString(),
+      /**
+       * The last time something actually happened to this project, not the
+       * last time the prose was edited.
+       *
+       * A project page is the one kind of page on this site that keeps being
+       * true in instalments. Declaring the newest update as `dateModified` is
+       * what lets a crawler tell a project that is moving from one that was
+       * written once in 2024 — without anybody having to remember to touch a
+       * date field.
+       */
+      ...(d.updates.length
+        ? {
+            dateModified: d.updates
+              .map((u) => u.date)
+              .sort((a, b) => b.valueOf() - a.valueOf())[0]
+              .toISOString(),
+          }
+        : {}),
       inLanguage: 'en',
       // What the article is *about*. Without this the page is prose with a
       // title; with it, the product is an entity a search engine can hold.
@@ -66,7 +100,7 @@ const STATUS: Record<string, string> = {
       {/* The project, not its status. Three of the six are "In progress", so the
         status made the breadcrumb identical on three pages and answered a
         question nobody navigating had asked. */}
-      <Breadcrumbs items={[{ label: 'Work', href: '/case-studies/' }, { label: d.title }]} />
+      <Breadcrumbs items={[{ label: 'Work', href: '/work/' }, { label: d.title }]} />
       <h1>{d.title}</h1>
       <p class="sub">{d.summary}</p>
 
@@ -95,6 +129,59 @@ const STATUS: Record<string, string> = {
     <div class="col prose">
       <Content />
     </div>
+
+    {
+      writing.length > 0 && (
+        <section class="col wrote">
+          <h2>What I wrote about it</h2>
+          <ul>
+            {writing.map((w) => (
+              <li>
+                <a href={`/writing/${w.id}/`}>
+                  <b>{w.data.title}</b>
+                  <span>{w.data.hook ?? w.data.description}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      /**
+       * What has happened since, in order.
+       *
+       * Most portfolios freeze a project at the moment it shipped, which is why
+       * they age so badly — the reader cannot tell whether they are looking at
+       * something alive or a screenshot from four years ago. Appending a line
+       * here is cheaper than rewriting the page, so it is the thing most likely
+       * to actually get done.
+       *
+       * Absent entirely when there is nothing to say. An empty timeline is
+       * worse than none: it advertises that nothing has happened.
+       */
+      d.updates.length > 0 && (
+        <section class="col log">
+          <h2>What has happened since</h2>
+          <ol>
+            {[...d.updates]
+              .sort((a, b) => a.date.valueOf() - b.date.valueOf())
+              .map((u) => (
+                <li>
+                  <time datetime={u.date.toISOString().slice(0, 10)}>
+                    {u.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
+                  </time>
+                  <div>
+                    <b>{u.label}</b>
+                    {u.note && <p>{u.note}</p>}
+                  </div>
+                </li>
+              ))}
+          </ol>
+        </section>
+      )
+    }
   </article>
 
   <section class="section col">
@@ -106,7 +193,7 @@ const STATUS: Record<string, string> = {
       {
         others.map((c) => (
           <li>
-            <a href={`/case-studies/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
+            <a href={`/work/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
               {c.data.cover ? (
                 <Image
                   class="thumb"
@@ -128,18 +215,82 @@ const STATUS: Record<string, string> = {
     </ul>
   </section>
 
-  <section class="col next">
-    <p class="sub">Recognise any of this in your own product?</p>
-    <div class="actions">
-      <a class="btn btn--dark" href="/work-with-me/">Hire me</a>
-      <a class="btn btn--ghost" href="/tools/">Run a free check</a>
-    </div>
-  </section>
+  <Collaborate line="Recognise any of this in your own product?" />
 
   <Footer slot="footer" />
 </Base>
 
 <style>
+  /* The essays that came out of this project. Same shape as the writing index
+     — title, hook, hairline — so the two read as the same kind of object. */
+  .wrote { margin-top: var(--gap); text-align: left; }
+  .wrote h2 {
+    font-size: var(--fs-lead);
+    letter-spacing: var(--ls-heading);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .wrote ul { list-style: none; }
+  .wrote li { border-bottom: 1px solid var(--hair); }
+  .wrote a { display: block; padding: 20px 0; transition: opacity var(--dur-fast) var(--ease); }
+  .wrote a:hover { opacity: 0.62; }
+  .wrote b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--fs-body);
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-tight);
+  }
+  .wrote span {
+    display: block;
+    margin-top: 6px;
+    font-size: var(--fs-sub);
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+
+  /* A log, not a feature timeline. Hairlines and a date column, the same shape
+     as the writing index, because it is the same kind of object: a list of
+     things that happened, newest at the bottom so it reads forwards. */
+  .log { margin-top: var(--gap); text-align: left; }
+  .log h2 {
+    font-size: var(--fs-lead);
+    letter-spacing: var(--ls-heading);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .log ol { list-style: none; }
+  .log li {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .log time {
+    font-size: var(--fs-fine);
+    letter-spacing: 0;
+    line-height: var(--lh-tight);
+    color: var(--dim);
+    font-variant-numeric: tabular-nums;
+  }
+  .log b {
+    font-family: var(--font-display);
+    font-size: var(--fs-body);
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+  }
+  .log p {
+    margin-top: 4px;
+    font-size: var(--fs-sub);
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+  @media (max-width: 560px) {
+    .log li { grid-template-columns: 1fr; gap: 4px; }
+  }
+
   .head { padding-top: clamp(44px, 8vh, 72px); }
   .head h1 { margin-bottom: 16px; }
 
@@ -149,10 +300,10 @@ const STATUS: Record<string, string> = {
     padding-top: 26px; border-top: 1px solid var(--hair);
   }
   .facts dt {
-    font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase;
+    font-size: var(--fs-label); letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--dim); margin-bottom: 5px;
   }
-  .facts dd { margin: 0; font-size: 0.9375rem; line-height: var(--lh-tight); letter-spacing: var(--ls-read); }
+  .facts dd { margin: 0; font-size: var(--fs-sub); line-height: var(--lh-tight); letter-spacing: var(--ls-read); }
 
 
   .cover { width: 100%; border-radius: var(--radius-card); margin-top: var(--space-8); }
@@ -161,7 +312,7 @@ const STATUS: Record<string, string> = {
      couple of paragraphs. */
   .prose {
     margin-top: 48px; text-align: left;
-    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
+    font-size: var(--fs-body); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
   }
   .prose :global(p) { margin-bottom: 1.2em; }
   .prose :global(h2) {
@@ -183,7 +334,7 @@ const STATUS: Record<string, string> = {
     background: var(--surface);
     border: 1px solid var(--hair);
     border-radius: var(--radius-card);
-    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
   }
   .others a:hover .thumb { opacity: 0.86; transform: translateY(-2px); }
   /* The two buried projects have no screenshot, because there is nothing to
@@ -199,7 +350,7 @@ const STATUS: Record<string, string> = {
       var(--surface);
   }
   .others .thumb.none span {
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
@@ -210,14 +361,12 @@ const STATUS: Record<string, string> = {
     backdrop-filter: blur(6px);
   }
   .tag {
-    display: inline-block; font-size: 0.625rem; letter-spacing: 0.12em;
+    display: inline-block; font-size: var(--fs-label); letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--dim);
     background: var(--paper); border-radius: var(--radius-pill);
     padding: 5px 11px; margin-bottom: 12px;
   }
 
-  .next { margin-top: var(--gap); padding-top: 44px; border-top: 1px solid var(--hair); }
-  .next .actions { margin-top: 22px; }
 
   @media (max-width: 560px) {
     .facts { grid-template-columns: 1fr; gap: 14px; }

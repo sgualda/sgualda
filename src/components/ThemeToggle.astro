@@ -51,9 +51,9 @@
     cursor: pointer;
 
     transition:
-      border-color 0.24s var(--ease),
-      transform 0.24s var(--ease),
-      opacity 0.24s var(--ease);
+      border-color var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease),
+      opacity var(--dur-fast) var(--ease);
   }
 
   .theme-toggle:hover {
@@ -82,7 +82,7 @@
     height: 18px;
     /* The rotation is the whole animation. Slower than the hover, because it
        is a state change rather than a response to the pointer. */
-    transition: transform 0.5s var(--ease);
+    transition: transform var(--dur-slow) var(--ease);
   }
   :global(:root[data-theme='dark']) .theme-toggle svg { transform: rotate(180deg); }
 

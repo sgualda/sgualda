@@ -5,22 +5,29 @@ import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Newsletter from '@components/Newsletter.astro';
 
-const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
 );
 
-/** The comp shows the month on one line and DD/YY under it. */
-const month = (d: Date) => d.toLocaleDateString('en-GB', { month: 'long' });
-const dayYear = (d: Date) =>
-  `${String(d.getDate()).padStart(2, '0')}/${String(d.getFullYear()).slice(-2)}`;
+/**
+ * One date, small and out of the way.
+ *
+ * It used to be two lines — the month above DD/YY, the second set in the
+ * display face at 1.125rem semibold. That made the date the loudest thing in
+ * every row, louder than the title it belonged to, and it ate a 96px column
+ * that pushed every headline into a narrow ragged strip. A date is metadata.
+ * It goes above the title, quiet, in one line.
+ */
+const stamp = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
 /** Rendered up front, revealed six at a time. */
 const PAGE = 6;
 ---
 
 <Base
-  title="My journal, product design, honestly"
-  description="Essays on product design, discovery and the decisions that cost me something. Written from ten years of building products in small teams."
+  title="Writing — what building things actually cost"
+  description="Essays, notes and reference material on designing and building digital products. Written from what specific decisions cost, including the ones that went badly."
   schema={[
     {
       '@type': 'CollectionPage',
@@ -38,8 +45,8 @@ const PAGE = 6;
   <Header slot="nav" />
 
   <section class="col intro">
-    <span class="eyebrow">Journal</span>
-    <h1>My journal</h1>
+    <span class="eyebrow">Writing</span>
+    <h1>Writing</h1>
     {/*
       The subject, not the format. "Stories, thoughts and reflections" is what
       every blog subtitle on the internet says.
@@ -53,10 +60,7 @@ const PAGE = 6;
       thin pages competing with this one for the same queries. Worth revisiting
       at roughly five substantial pieces per cluster.
     */}
-    <p class="sub">
-      What specific decisions cost me. Mostly three questions: what to build and what to leave
-      out, how to tell whether it is working, and when the craft matters more than the tool.
-    </p>
+    <p class="sub">What decisions actually cost me, written down while I still remember.</p>
   </section>
 
   <div class="col">
@@ -64,16 +68,19 @@ const PAGE = 6;
          are only hidden. Loading them over the network would make them
          invisible to crawlers, which is the usual way infinite scroll quietly
          costs a site its long tail. -->
-    <ol class="list" id="list">
+    <ol class="rows list" id="list">
       {
         essays.map((e, i) => (
           <li class:list={['row', { hidden: i >= PAGE }]}>
             <a href={`/writing/${e.id}/`}>
-              <span class="when">
-                <em>{month(e.data.published)}</em>
-                <b>{dayYear(e.data.published)}</b>
+              <time class="r-meta" datetime={e.data.published.toISOString().slice(0, 10)}>
+                {stamp(e.data.published)}
+              </time>
+              <span class="r-title">{e.data.title}</span>
+              <span class="r-note">{e.data.hook ?? e.data.description}</span>
+              <span class="r-go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </span>
-              <span class="what">{e.data.title}</span>
             </a>
           </li>
         ))
@@ -105,44 +112,12 @@ const PAGE = 6;
 <style>
   .intro { padding-top: clamp(52px, 9vh, 84px); }
 
+
   .intro h1 { margin-bottom: 18px; }
 
-  /* The h1 and the first row were 54px apart, which reads as one block.
-     A journal index is a change of register: the heading introduces, the list
-     begins. */
-  .list { list-style: none; text-align: left; margin-top: clamp(64px, 11vh, 104px); }
-  .row.hidden { display: none; }
-  .row + .row { margin-top: 34px; }
-  .list a {
-    display: grid; grid-template-columns: 96px 1fr; gap: 24px; align-items: start;
-    transition: opacity 0.2s var(--ease);
-  }
-  .list a:hover { opacity: 0.55; }
-  .when { color: var(--dim); }
-  .when em { display: block; font-style: normal; font-size: 0.8125rem; letter-spacing: 0; line-height: var(--lh-tight); }
-  .when b {
-    display: block; margin-top: 2px;
-    font-family: var(--font-display); font-size: 1.125rem; font-weight: 600;
-    letter-spacing: var(--ls-heading); line-height: var(--lh-tight);
-  }
-  /* Body face at medium rather than the display face at semibold. A list of
-     fifteen titles set in Zalando Sans Expanded 600 reads as fifteen headlines
-     competing with each other; the index is for scanning, and the headline
-     belongs on the essay itself. */
-  .what {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: var(--ls-read);
-    line-height: var(--lh-ui);
-  }
-  /* Rows below the fold are skipped by layout and paint until revealed. */
-  .row.hidden { content-visibility: hidden; }
-  .row.enter { animation: rise 0.45s var(--ease) both; animation-delay: calc(var(--d) * 70ms); }
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: none; }
-  }
+  /* Layout comes from `.rows` in base.css — the same component /map/ and
+     /tools/ use. Only the top margin is this page's. */
+  .list { margin-top: clamp(48px, 8vh, 80px); }
 
   .more { margin-top: 52px; text-align: center; }
   .more .btn { min-width: 168px; }
@@ -173,9 +148,16 @@ const PAGE = 6;
   }
   .count {
     margin-top: 18px; text-align: center;
-    font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
+    font-size: var(--fs-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim);
   }
-  @media (max-width: 480px) { .list a { grid-template-columns: 74px 1fr; gap: 16px; } }
+  /* On a phone the date stops being a column.
+     Ninety-six pixels of date against a 390px screen left the titles in a
+     narrow ragged strip, wrapping every two or three words, and the whole list
+     read as a broken table sitting left of a centred page. Stacked, each row is
+     one full-width block: date, then title. The list is still left-aligned —
+     centring a column of titles of different lengths is the one thing that
+     would look worse — but now it reads as a deliberate block rather than a
+     column that ran out of room. */
 </style>
 
 <script>

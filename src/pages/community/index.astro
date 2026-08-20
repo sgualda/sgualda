@@ -2,7 +2,8 @@
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
+import Waitlist from '@components/Waitlist.astro';
 import { SITE, SOCIAL } from '@lib/site';
 
 /**
@@ -46,24 +47,6 @@ const WALL = [
   ],
 ];
 
-const TOPICS = [
-  {
-    h: 'Product design and UX',
-    p: 'Flows that lose people, onboarding that does not land, research at the scale you can actually afford. The practical end of it, not the theory.',
-  },
-  {
-    h: 'UI and craft',
-    p: 'When polish is the work and when it is procrastination wearing a lanyard. Design systems, components, and whether you need one yet.',
-  },
-  {
-    h: 'Startups and early product',
-    p: 'First versions, launches that went quiet, deciding what not to build. Most of the room is two to ten people with less time than the plan needed.',
-  },
-  {
-    h: 'Going out on your own',
-    p: 'Rates, scope, saying no, the first client, and the client you should have said no to. Freelancers, consultants and founders in the same thread.',
-  },
-];
 
 const FAQS = [
   {
@@ -122,12 +105,11 @@ const FAQS = [
     <span class="eyebrow">Community</span>
     <h1>Say what is<br />not working.</h1>
     <p class="sub">
-      A small chat for product designers, founders and people building software. You bring the
-      thing you are stuck on, other people tell you what they tried. That is the whole format.
+      You bring the thing you are stuck on. Other people tell you what they tried. That is the
+      whole format.
     </p>
     <div class="actions">
       <a class="btn btn--dark" href={SOCIAL.community} target="_blank" rel="noopener">Join the chat</a>
-      <a class="btn btn--ghost" href="/writing/">More essays</a>
     </div>
   </section>
 
@@ -147,74 +129,31 @@ const FAQS = [
     }
   </div>
 
+  {/* Three sections used to sit here: what gets talked about, a four-step
+      guide to asking a good question, and a list of what it is not. All of it
+      true, and all of it explaining a room you can be inside in one click. The
+      wall of real questions above already says what this is, faster and
+      without adjectives, so the explanations went and the wall stayed. */}
   <section class="section col">
-    <span class="eyebrow">What gets talked about</span>
-    <h2>Four things,<br />and their awkward parts.</h2>
-    <dl class="topics">
-      {TOPICS.map((t) => (<><dt>{t.h}</dt><dd>{t.p}</dd></>))}
-    </dl>
-  </section>
-
-
-  <section class="section col">
-    <span class="eyebrow">The only rule</span>
-    <h2>How to ask so you<br />get a useful answer.</h2>
-    <p class="sub">
-      Most questions in product communities get sympathy instead of answers, and it is almost
-      always the fault of how they were asked. Four things fix it.
-    </p>
-    <ol class="how">
-      <li>
-        <h3>Say what you already tried</h3>
-        <p>
-          Without it, the first six replies are things you have already ruled out. One line
-          about what you tried and why it did not work skips all of them.
-        </p>
-      </li>
-      <li>
-        <h3>Give one number</h3>
-        <p>
-          «Nobody is using it» could be four people or four thousand. «Sixty signed up, eleven
-          came back» is a completely different problem, and it is answerable.
-        </p>
-      </li>
-      <li>
-        <h3>Say what you would do if nobody replied</h3>
-        <p>
-          It forces you to name your own default, which is usually where the actual
-          disagreement is. Half the time you answer your own question writing this line.
-        </p>
-      </li>
-      <li>
-        <h3>Say what kind of answer you want</h3>
-        <p>
-          A gut reaction, a sanity check, or somebody to argue with you. They are three
-          different favours and people give the wrong one when you do not say.
-        </p>
-      </li>
-    </ol>
-  </section>
-
-
-  <section class="section col">
-    <h2>What it is not.</h2>
-    <ul class="nots">
-      <li>Not a Slack you will mute in four days.</li>
-      <li>Not a place to post your launch.</li>
-      <li>Not a course, a cohort, or a funnel with a nice name.</li>
-      <li>Not free advice from me on demand — I am in there as one more person.</li>
-    </ul>
-    <p class="sub small">
-      It is on Substack because it is one login you already have, and because if it ever stops
-      being useful you can leave in one click. Both of those matter more than they sound.
+    <p class="plain">
+      It runs on Substack chat — one login you probably already have, and one click to leave
+      if it stops being useful. It’s deliberately quiet: a handful of real conversations a
+      week, not a channel you mute by Thursday.
     </p>
     <div class="actions">
       <a class="btn btn--dark" href={SOCIAL.community} target="_blank" rel="noopener">Join the chat</a>
     </div>
   </section>
 
+  {/* The second room, which does not exist.
+      Placed after "what it is not" and before the FAQ, so nobody reads about a
+      paid community until they have understood the free one they can join
+      today. Getting that order wrong turns a working page into a teaser. */}
   <section class="section col">
-    <span class="eyebrow">Questions</span>
+    <Waitlist from="/community/" />
+  </section>
+
+  <section class="section col">
     <h2>Before you join.</h2>
     <div class="faq">
       {
@@ -228,17 +167,22 @@ const FAQS = [
     </div>
   </section>
 
-  <NextStep
-    line="Some questions are too specific for a group chat."
-    secondLabel="More essays"
-    secondHref="/writing/"
-    community={false}
-  />
+  <Collaborate line="Some questions are too specific for a group chat." />
 
   <Footer slot="footer" />
 </Base>
 
 <style>
+  /* One paragraph style on this page. */
+  .plain {
+    max-width: 34em;
+    margin-inline: auto;
+    font-size: var(--fs-body);
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+  .plain + .actions { margin-top: 26px; }
+
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro h1 { margin-bottom: 18px; }
   .intro .actions { margin-top: 30px; }
@@ -249,7 +193,7 @@ const FAQS = [
      you find on the other side of the link. */
   .wall-lab {
     margin-top: clamp(52px, 8vw, 84px);
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--dim);
@@ -277,11 +221,11 @@ const FAQS = [
     border: 1px solid var(--hair);
     border-radius: var(--radius-pill);
     background: var(--surface);
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     letter-spacing: var(--ls-read);
     color: var(--dim);
     white-space: nowrap;
-    transition: color 0.24s var(--ease), border-color 0.24s var(--ease);
+    transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
   }
   .row li:hover { color: var(--ink); border-color: var(--ink); }
 
@@ -302,69 +246,8 @@ const FAQS = [
     .wall { mask-image: linear-gradient(to right, #000 86%, transparent); }
   }
 
-  .topics { text-align: left; margin-top: var(--space-8); }
-  .topics dt {
-    font-family: var(--font-display);
-    font-size: 1.0625rem;
-    font-weight: 600;
-    letter-spacing: var(--ls-heading);
-    margin-bottom: var(--space-2);
-  }
-  .topics dd {
-    margin: 0 0 var(--space-6);
-    font-size: 0.9375rem;
-    line-height: var(--lh-read);
-    letter-spacing: 0;
-    color: var(--dim);
-  }
 
-  .how { list-style: none; text-align: left; margin-top: var(--space-8); counter-reset: n; }
-  .how li { padding: var(--space-6) 0; border-top: 1px solid var(--hair); counter-increment: n; }
-  .how li:last-child { border-bottom: 1px solid var(--hair); }
-  .how h3 {
-    font-size: 1.0625rem;
-    margin-bottom: var(--space-2);
-  }
-  .how h3::before {
-    content: counter(n, decimal-leading-zero);
-    display: inline-block;
-    min-width: 32px;
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: var(--ls-caps);
-    color: var(--dim);
-    vertical-align: 2px;
-  }
-  .how p {
-    font-size: 0.9375rem;
-    line-height: var(--lh-read);
-    letter-spacing: var(--ls-read);
-    color: var(--dim);
-    padding-left: 32px;
-  }
 
-  .nots { list-style: none; text-align: left; margin: 34px 0 30px; }
-  .nots li {
-    position: relative;
-    padding: 14px 0 14px 34px;
-    font-size: 1.0625rem;
-    line-height: var(--lh-ui);
-    color: var(--dim);
-  }
-  .nots li::before {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 21px;
-    width: 12px;
-    height: 12px;
-    background:
-      linear-gradient(var(--err), var(--err)) center / 100% 2px no-repeat,
-      linear-gradient(var(--err), var(--err)) center / 2px 100% no-repeat;
-    rotate: 45deg;
-  }
-  .nots li + li { border-top: 1px solid var(--hair); }
-  .small { font-size: 1rem; }
+  .small { font-size: var(--fs-body); }
   .section .actions { margin-top: 28px; }
 </style>

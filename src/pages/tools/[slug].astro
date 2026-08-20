@@ -3,7 +3,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { getTools, CATS, type Tool } from '@lib/content';
 import { SITE } from '@lib/site';
 import '@styles/quiz.css';
@@ -29,19 +29,24 @@ const url = `${SITE.url}/tools/${t.slug}/`;
   schema={[
     {
       '@type': 'WebApplication',
-      // The fields that turn a type into a rich result. `offers` at zero is
-      // how "free" becomes machine-readable rather than a word in the copy.
-      applicationCategory: 'BusinessApplication',
-      operatingSystem: 'Any',
-      isAccessibleForFree: true,
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
-      author: { '@id': `${SITE.url}/#person` },
+      /**
+       * The fields that turn a type into a rich result. `offers` at zero is
+       * how "free" becomes machine-readable rather than a word in the copy.
+       *
+       * Four of these were declared twice — two blocks of properties merged at
+       * some point and nobody removed the overlap. JavaScript silently keeps
+       * the last one, so the node was correct and TypeScript had been failing
+       * CI over it since 4 August. `operatingSystem` is the one that actually
+       * differed: 'Any' was written first and 'Web browser' won, which is the
+       * true answer for six questionnaires that run in a browser.
+       */
       name: t.n,
+      url,
+      description: t.lead,
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web browser',
-      url,
+      isAccessibleForFree: true,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
-      description: t.lead,
       author: { '@id': `${SITE.url}/#person` },
     },
     {
@@ -67,7 +72,28 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       <div class="dots" id="dots" role="presentation">{t.q.map(() => <i></i>)}</div>
       {/* The panel rewrites itself on every answer. Without a live region a
           screen reader user hears nothing change and loses their place. */}
-      <div id="box" role="status" aria-live="polite" aria-atomic="true"></div>
+      {/* The first question is rendered here, on the server.
+
+          It used to start empty and be filled by JavaScript, which cost two
+          things. A layout shift: the panel went from 60px to about 400px after
+          hydration, and Lighthouse measured CLS 0.126 on a phone — above the
+          0.1 that counts as good. And the questions themselves existed only
+          inside the JSON blob below, so a crawler or a language model reading
+          this page saw an intro, a FAQ and an empty box where the actual check
+          is.
+
+          Both go away by printing question one as real HTML. The script picks
+          up from there and replaces it on the first answer; the markup it
+          writes is identical, so nothing flickers. */}
+      <div id="box" role="status" aria-live="polite" aria-atomic="true">
+        <div class="step">
+          <span class="eyebrow">Question 1 of {t.q.length}</span>
+          <h2 class="qq" data-quiz-head tabindex="-1">{t.q[0][0]}</h2>
+          {t.q[0][1].map(([label], n) => (
+            <button class="opt" type="button" data-quiz-opt={n}>{label}</button>
+          ))}
+        </div>
+      </div>
       {/* Only this tool’s data, not all six. See #Q-077. */}
       <script
         type="application/json"
@@ -126,11 +152,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
   </section>
 
 
-  <NextStep
-    line="Want somebody to look at the actual product?"
-    secondLabel="All checks"
-    secondHref="/tools/"
-  />
+  <Collaborate line="Stuck on the answer this gave you?" />
 
   <Footer slot="footer" />
 </Base>
@@ -143,7 +165,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
     border: 1px solid var(--hair); border-radius: var(--radius-card);
     padding: clamp(26px, 5vw, 38px) clamp(20px, 4vw, 30px);
   }
-  .aside { margin-top: 14px; font-size: 0.8125rem; color: var(--dim); letter-spacing: 0; }
+  .aside { margin-top: 14px; font-size: var(--fs-fine); color: var(--dim); letter-spacing: 0; }
 
 
   /* A rail rather than a stack. Five other checks read as a wall vertically
@@ -160,14 +182,14 @@ const url = `${SITE.url}/tools/${t.slug}/`;
   .more > li { width: 236px; }
   .more > li > a { display: flex; flex-direction: column; height: 100%; }
   .more .meta {
-    font-size: 0.625rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--dim);
     margin-bottom: var(--space-3);
   }
-  .more h3 { font-size: 1rem; margin-bottom: 8px; }
-  .more p { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); margin: 0; }
+  .more h3 { font-size: var(--fs-body); margin-bottom: 8px; }
+  .more p { font-size: var(--fs-note); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); margin: 0; }
 </style>
 
 <script>
@@ -223,7 +245,7 @@ const url = `${SITE.url}/tools/${t.slug}/`;
       `<p class="vnote">${questions.length} questions cannot know your product. Treat this as a ` +
       `strong opinion from somebody who has made the same call.</p>` +
       `<div class="vacts">` +
-      `<a class="btn btn--dark" href="/work-with-me/">Have me look at it properly</a>` +
+      `<a class="btn btn--dark" href="/collaborate/">Let’s talk</a>` +
       `<button class="again" type="button" data-quiz-restart>Run it again</button>` +
       `</div></div>`,
 

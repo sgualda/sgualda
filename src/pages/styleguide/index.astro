@@ -37,7 +37,7 @@ const type = [
 ];
 ---
 
-<Base title="Styleguide" description="Design tokens and components for sgualda.com." noindex={true}>
+<Base title="Styleguide" description="Every design token and component on sgualda.com in one place: the type scale, the colour tokens, the buttons and the states. Internal reference, not indexed." noindex={true}>
   <Header slot="nav" />
 
   <section class="col intro">
@@ -49,7 +49,7 @@ const type = [
     </p>
   </section>
 
-  <div class="wide sg">
+  <div class="col sg">
     <section>
       <h2>Colour</h2>
       <p class="hint">Contrast is measured live against the page background.</p>
@@ -75,7 +75,11 @@ const type = [
           type.map(([token, tag, family]) => (
             <li>
               <span class="meta"><code>{token}</code> · {family} · <span data-val={token}>—</span></span>
-              {tag === 'h1' && <h1>Making things is no longer the hard part</h1>}
+              {/* A div, not a second h1. This is a type specimen showing what
+                  the h1 style looks like, and a page with two h1s tells a
+                  screen reader it has two titles. The class does the styling;
+                  the element stays out of the document outline. */}
+              {tag === 'h1' && <div class="as-h1">Making things is no longer the hard part</div>}
               {tag === 'h2' && <h2>Three things I’m fairly sure of</h2>}
               {tag === 'h3' && <h3>Enthusiasm is not demand</h3>}
               {tag === '.sub' && <p class="sub" style="margin:0;max-width:none">The only signal that means anything is somebody using the thing a second time.</p>}
@@ -175,29 +179,38 @@ const type = [
 </Base>
 
 <style>
+  /* Type specimen for the h1 style, without being an h1. */
+  .as-h1 {
+    font-family: var(--font-display);
+    font-size: var(--title-size);
+    font-weight: var(--title-weight);
+    line-height: var(--title-lh);
+    letter-spacing: var(--title-ls);
+  }
+
   .intro { padding-top: clamp(44px, 8vh, 72px); }
   .sg { text-align: left; }
   .sg > section { margin-top: var(--gap); padding-top: 34px; border-top: 1px solid var(--hair); }
   .sg h2 { margin-bottom: 8px; }
-  .hint { font-size: 0.9375rem; letter-spacing: 0; color: var(--dim); margin-bottom: 26px; }
+  .hint { font-size: var(--fs-sub); letter-spacing: 0; color: var(--dim); margin-bottom: 26px; }
   code {
-    font-family: var(--font-mono); font-size: 0.8125rem;
-    background: var(--surface); padding: 2px 6px; border-radius: 5px;
+    font-family: var(--font-mono); font-size: var(--fs-fine);
+    background: var(--surface); padding: 2px 6px; border-radius: var(--radius-xs);
   }
 
   .swatches { list-style: none; display: grid; gap: 10px; }
   .swatches li {
     display: grid; grid-template-columns: 44px 130px 90px 70px 1fr;
-    gap: 14px; align-items: center; font-size: 0.875rem; letter-spacing: 0;
+    gap: 14px; align-items: center; font-size: var(--fs-note); letter-spacing: 0;
   }
-  .chip { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--hair); }
-  .val, .ratio { font-family: var(--font-mono); font-size: 0.75rem; color: var(--dim); }
+  .chip { width: 44px; height: 44px; border-radius: var(--radius-xs); border: 1px solid var(--hair); }
+  .val, .ratio { font-family: var(--font-mono); font-size: var(--fs-fine); color: var(--dim); }
   .ratio[data-fail='true'] { color: #b00; font-weight: 600; }
   .use { color: var(--dim); }
 
   .typelist { list-style: none; display: grid; gap: 34px; }
   .typelist .meta {
-    display: block; font-size: 0.75rem; letter-spacing: 0.06em;
+    display: block; font-size: var(--fs-fine); letter-spacing: 0.06em;
     color: var(--dim); margin-bottom: 10px;
   }
 
@@ -209,13 +222,13 @@ const type = [
   .dark-strip .inv { background: var(--paper); color: var(--ink); border-color: var(--paper); }
 
   .cards { list-style: none; display: grid; gap: 14px; }
-  .cards h3 { font-size: 1rem; margin-bottom: 8px; }
-  .cards p { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
+  .cards h3 { font-size: var(--fs-body); margin-bottom: 8px; }
+  .cards p { font-size: var(--fs-note); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
 
   .chips { list-style: none; display: flex; gap: 8px; flex-wrap: wrap; }
   .chips a {
     display: block; padding: 9px 18px; border-radius: var(--radius-pill);
-    border: 1px solid var(--hair); font-size: 0.8125rem; font-weight: 500; letter-spacing: var(--ls-read);
+    border: 1px solid var(--hair); font-size: var(--fs-fine); font-weight: 500; letter-spacing: var(--ls-read);
   }
   .chips a:hover { border-color: var(--ink); }
 
@@ -225,7 +238,7 @@ const type = [
   }
   .shellbox {
     background: var(--surface); border-radius: var(--radius-card);
-    padding: 26px; text-align: center; font-family: var(--font-mono); font-size: 0.8125rem;
+    padding: 26px; text-align: center; font-family: var(--font-mono); font-size: var(--fs-fine);
     color: var(--dim); width: var(--shell); max-width: 100%;
   }
 

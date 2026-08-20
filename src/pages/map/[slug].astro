@@ -37,6 +37,36 @@ const terms = (await getCollection('glossary'))
   description={s.meta}
   schema={[
     {
+      /**
+       * These are articles, and they were not saying so.
+       *
+       * Each stage page is a thousand words of first-person writing about what
+       * a specific mistake cost — the same kind of object as an essay — and the
+       * only structured data on it was a FAQ block. No author, no date, nothing
+       * that tells a search engine or a model who wrote this or when.
+       *
+       * `dateModified` comes from the build rather than being invented: these
+       * are edited in place rather than published once, and the file's own
+       * history is the honest answer. `datePublished` is deliberately absent —
+       * nothing on disk knows it, and a guessed date is worse than none.
+       */
+      '@type': 'Article',
+      '@id': `${SITE.url}/map/${s.slug}/#article`,
+      headline: s.name,
+      name: s.seoTitle,
+      description: s.meta,
+      author: { '@id': `${SITE.url}/#person` },
+      publisher: { '@id': `${SITE.url}/#person` },
+      inLanguage: 'en',
+      isPartOf: {
+        '@type': 'CreativeWorkSeries',
+        '@id': `${SITE.url}/map/#series`,
+        name: 'The five stages of building a product',
+        url: `${SITE.url}/map/`,
+      },
+      about: { '@id': `${SITE.url}/map/#series` },
+    },
+    {
       '@type': 'FAQPage',
       '@id': `${SITE.url}/map/${s.slug}/#faq`,
       mainEntity: s.faqs.map(({ q, a }) => ({
@@ -118,7 +148,7 @@ const terms = (await getCollection('glossary'))
         <h3>{s.cta.title}</h3>
         <p>{s.cta.body}</p>
       </div>
-      <a class="btn btn--dark" href="/work-with-me/">Hire me</a>
+      <a class="btn btn--dark" href="/collaborate/">Let’s talk</a>
     </div>
     <p class="fine">
       Four questions on that page tell you whether this is worth it for you — including when it’s not.
@@ -191,12 +221,12 @@ const terms = (await getCollection('glossary'))
     background: var(--surface);
     border-radius: var(--radius-card);
     font-family: var(--font-display);
-    font-size: 1.125rem; font-weight: 600; letter-spacing: var(--ls-heading); line-height: var(--lh-tight);
+    font-size: var(--fs-lead); font-weight: 600; letter-spacing: var(--ls-heading); line-height: var(--lh-tight);
   }
 
   .body {
     margin-top: 28px;
-    font-size: 1.0625rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
+    font-size: var(--fs-body); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim);
   }
   .body :global(p + p) { margin-top: 1.1em; }
   .body :global(strong) { color: var(--ink); font-weight: 600; }
@@ -205,13 +235,13 @@ const terms = (await getCollection('glossary'))
   .traps { list-style: none; counter-reset: t; text-align: left; margin-top: 34px; }
   .traps li {
     counter-increment: t; position: relative; padding: 18px 0 18px 40px;
-    font-size: 1rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim);
+    font-size: var(--fs-body); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim);
   }
   .traps li + li { border-top: 1px solid var(--hair); }
   .traps li::before {
     content: counter(t, decimal-leading-zero);
     position: absolute; left: 0; top: 21px;
-    font-family: var(--font-mono); font-size: 0.6875rem; color: var(--ink);
+    font-family: var(--font-mono); font-size: var(--fs-label); color: var(--ink);
   }
 
   /* No slab, no border. It is one sentence: the strongest thing on the page,
@@ -220,7 +250,7 @@ const terms = (await getCollection('glossary'))
   .signal { padding: clamp(20px, 4vw, 34px) 0; }
   .signal p {
     margin-top: 16px;
-    font-family: var(--font-display); font-size: 1.25rem; font-weight: 600;
+    font-family: var(--font-display); font-size: var(--h3-size); font-weight: 600;
     letter-spacing: var(--ls-heading); line-height: var(--lh-tight);
   }
 
@@ -233,24 +263,24 @@ const terms = (await getCollection('glossary'))
     display: flex; flex-direction: column; height: 100%;
     background: var(--surface); border-radius: var(--radius-card); padding: 22px;
     border: 1px solid transparent;
-    transition: border-color 0.24s var(--ease), transform 0.24s var(--ease);
+    transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
   }
   .tools a:hover { border-color: var(--ink); transform: translateY(-2px); }
   .pill {
-    display: inline-block; font-size: 0.625rem; letter-spacing: 0.12em;
+    display: inline-block; font-size: var(--fs-label); letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--dim);
     background: var(--paper); border-radius: var(--radius-pill); padding: 5px 10px;
     margin-bottom: 12px;
   }
   .tools .h {
-    display: block; font-family: var(--font-display); font-size: 1rem;
+    display: block; font-family: var(--font-display); font-size: var(--fs-body);
     font-weight: 600; letter-spacing: var(--ls-heading); margin-bottom: 6px;
   }
-  .tools .p { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
+  .tools .p { font-size: var(--fs-note); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
 
   .why {
     margin-top: var(--space-5);
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     line-height: var(--lh-read);
     letter-spacing: 0;
     color: var(--dim);
@@ -265,22 +295,22 @@ const terms = (await getCollection('glossary'))
     display: flex; flex-direction: column; gap: 22px; align-items: flex-start;
   }
   .offer h3 { margin-bottom: 10px; }
-  .offer p { font-size: 1rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
-  .fine { margin-top: 18px; font-size: 0.8125rem; letter-spacing: 0; color: var(--dim); }
+  .offer p { font-size: var(--fs-body); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
+  .fine { margin-top: 18px; font-size: var(--fs-fine); letter-spacing: 0; color: var(--dim); }
 
   .pager {
     display: flex; justify-content: space-between; gap: 16px;
     padding-top: 26px; border-top: 1px solid var(--hair); text-align: left;
   }
-  .pager a { display: block; transition: opacity 0.2s var(--ease); }
+  .pager a { display: block; transition: opacity var(--dur-fast) var(--ease); }
   .pager a:hover { opacity: 0.6; }
   .pager .next { text-align: right; }
   .pager em {
-    display: block; font-style: normal; font-size: 0.6875rem;
+    display: block; font-style: normal; font-size: var(--fs-label);
     letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 5px;
   }
   .pager span {
-    font-family: var(--font-display); font-size: 0.9375rem;
+    font-family: var(--font-display); font-size: var(--fs-sub);
     font-weight: 600; letter-spacing: var(--ls-heading);
   }
 </style>
@@ -291,7 +321,7 @@ const terms = (await getCollection('glossary'))
   .terms-inline > div + div { border-top: 1px solid var(--hair); }
   .terms-inline dt {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: var(--fs-body);
     font-weight: 600;
     letter-spacing: var(--ls-heading);
     margin-bottom: var(--space-2);
@@ -300,7 +330,7 @@ const terms = (await getCollection('glossary'))
   .terms-inline dt a:hover { opacity: 0.6; }
   .terms-inline dd {
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     line-height: var(--lh-read);
     letter-spacing: 0;
     color: var(--dim);

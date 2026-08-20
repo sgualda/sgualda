@@ -34,7 +34,7 @@ import Footer from '@components/Footer.astro';
         </a>
       </li>
       <li>
-        <a href="/work-with-me/">
+        <a href="/collaborate/">
           <span class="h">Work with me</span>
           <span class="p">Four questions and a straight answer on whether I can help.</span>
         </a>
@@ -51,15 +51,15 @@ import Footer from '@components/Footer.astro';
 
   .ways { list-style: none; text-align: left; margin-top: 48px; }
   .ways li + li { border-top: 1px solid var(--hair); }
-  .ways a { display: block; padding: 22px 0; transition: opacity 0.2s var(--ease); }
+  .ways a { display: block; padding: 22px 0; transition: opacity var(--dur-fast) var(--ease); }
   .ways a:hover { opacity: 0.55; }
   .ways .h {
     display: block;
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     font-weight: 600;
     letter-spacing: var(--ls-heading);
     margin-bottom: 6px;
   }
-  .ways .p { font-size: 0.9375rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
+  .ways .p { font-size: var(--fs-sub); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
 </style>

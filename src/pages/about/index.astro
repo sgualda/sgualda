@@ -2,7 +2,7 @@
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { SITE } from '@lib/site';
 import { Image } from 'astro:assets';
 import portrait from '../../assets/portrait.jpg';
@@ -70,8 +70,8 @@ const notFor = [
 ---
 
 <Base
-  title="About — Sergio Gualda, product designer in Barcelona"
-  description="I’m a product designer based in Barcelona, originally from Almeria. I help founders and companies turn messy ideas into clear, usable products."
+  title="About — Sergio Gualda, designer and developer in Barcelona"
+  description="I’m a designer and developer based in Barcelona, originally from Almeria. I help founders and small teams turn messy ideas into products and sites that work."
   schema={[
     {
       // ProfilePage rather than AboutPage: this is the author page every
@@ -86,7 +86,7 @@ const notFor = [
 >
   <Header slot="nav" />
 
-  <article class="shell page">
+  <article class="col page">
     <Image
       src={portrait}
       alt="Sergio Gualda"
@@ -100,8 +100,8 @@ const notFor = [
 
     <div class="bio">
       <p>
-        My name is Sergio, and I’m a product designer based in Barcelona, originally from
-        Almeria (southern Spain).
+        My name is Sergio — most places on the internet, sgualda. I design and build digital
+        products, based in Barcelona, originally from Almeria (southern Spain).
       </p>
       <p>
         I’ve always been drawn to understanding how things could be different. As a kid, I was
@@ -139,23 +139,50 @@ const notFor = [
       <div><dt>Languages</dt><dd>Spanish and English.</dd></div>
     </dl>
 
-    <section class="block">
-      <h2>What I’m good at.</h2>
-      <dl>
-        {goodAt.map((x) => (<><dt>{x.title}</dt><dd>{x.body}</dd></>))}
-      </dl>
-    </section>
+    {/* One column, two halves, and the honest one sits apart.
 
-    <section class="block">
-      <h2>…and what I’m not.</h2>
-      <dl class="spaced">
-        {notFor.map((x) => (<><dt>{x.title}</dt><dd>{x.body}</dd></>))}
-      </dl>
+        This was side-by-side columns, which is the obvious way to lay out a
+        comparison and the wrong one here. Two columns inside a 560px reading
+        column give about 28 characters a line — less than half a comfortable
+        measure — so every four words the eye jumped, four-word headlines broke
+        across three lines, and the rows never aligned across the gap, which
+        meant it did not even read as a comparison. It read as two unrelated
+        lists that happened to be adjacent.
+
+        Full width fixes the measure. The contrast is carried by the surface
+        instead: "not good at" is a filled block, set apart from the page the
+        way its content is set apart from the pitch. One quiet move, no icons,
+        no colour, and the half most people skip is the half that now has an
+        edge around it. */}
+    <section class="block strengths">
+      <div class="half">
+        <span class="tag">Good at</span>
+        <dl>
+          {goodAt.map((x) => (
+            <div>
+              <dt>{x.title}</dt>
+              <dd>{x.body}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <div class="half half--not">
+        <span class="tag">Not good at</span>
+        <dl>
+          {notFor.map((x) => (
+            <div>
+              <dt>{x.title}</dt>
+              <dd>{x.body}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
     </section>
 
   </article>
 
-  <NextStep line="Think we would work well together?" />
+  <Collaborate line="Think we would work well together?" />
 
   <Footer slot="footer" />
 </Base>
@@ -174,7 +201,7 @@ const notFor = [
   h1 { margin-bottom: 26px; }
 
   .bio p {
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     line-height: var(--lh-read);
     letter-spacing: 0;
     color: var(--dim);
@@ -191,7 +218,7 @@ const notFor = [
     margin: var(--space-9) 0;
     padding: var(--space-7) 0;
     border-block: 1px solid var(--hair);
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     line-height: var(--lh-read);
     letter-spacing: var(--ls-read);
   }
@@ -211,7 +238,7 @@ const notFor = [
   .block h2 { margin-bottom: 26px; }
   .block .lead {
     margin: -14px 0 26px;
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
@@ -219,18 +246,46 @@ const notFor = [
 
   dl dt {
     font-family: var(--font-display);
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     font-weight: 600;
     letter-spacing: var(--ls-heading);
     line-height: var(--lh-tight);
     margin-bottom: 8px;
   }
   dl dd {
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
   }
-  dl dd + dt { margin-top: 26px; }
-  .spaced dd + dt { margin-top: 34px; }
+  /* ── good at / not good at ── */
+  .strengths { display: grid; gap: 34px; }
+
+  .tag {
+    display: block;
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: var(--space-5);
+  }
+
+  .half dl { display: grid; gap: 0; }
+  .half dl > div { padding: var(--space-6) 0; border-top: 1px solid var(--hair); }
+  .half dl > div:first-of-type { border-top: 0; padding-top: 0; }
+
+  /* The second half is a block, not a column.
+     Same rows, same type, one surface — which is the whole difference. */
+  .half--not {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    padding: clamp(24px, 5vw, 38px);
+  }
+  .half--not dl > div { border-top-color: color-mix(in srgb, var(--ink) 10%, transparent); }
+  .half--not dl > div:first-of-type { padding-top: 0; }
+
+  .half dt { margin-bottom: var(--space-3); }
+  /* One paragraph size on this page, at a measure somebody can read. */
+  .half dd { font-size: var(--fs-sub); line-height: var(--lh-read); max-width: 60ch; }
 </style>

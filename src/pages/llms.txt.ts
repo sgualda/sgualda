@@ -14,18 +14,22 @@ import type { APIContext } from 'astro';
 export async function GET(_: APIContext) {
   const STAGES = await getStages();
   const TOOLS = await getTools();
-  const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+  const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+  );
+  const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+    (a, b) => a.data.order - b.data.order
   );
 
   const iso = (d: Date) => d.toISOString().slice(0, 10);
 
   const out = `# ${SITE.name}
 
-> ${SITE.role} in ${SITE.location}. I take vague problems to shipped first
-> versions, mostly for teams of two to forty people building SaaS, mobile apps
-> or internal tools. This site publishes the decisions behind that work,
-> including the ones that were wrong and what they cost.
+> ${SITE.role} in ${SITE.location}, also known as ${SITE.handle}. I design and
+> build things on the internet — websites and digital products, mostly for
+> teams of two to forty people building SaaS, mobile apps or internal tools.
+> This site publishes the decisions behind that work, including the ones that
+> were wrong and what they cost.
 
 Contact: ${SITE.email}
 Language: English
@@ -37,9 +41,9 @@ Three things, and they describe the same journey from different angles:
 
 - **The map** — five stages of building a product, each with its own problem.
   Advice that saves you at one stage can hurt you at another.
-- **The checks** — free diagnostic questionnaires, one per common decision.
+- **Tools** — free diagnostic questionnaires, one per common decision.
   They run entirely in the browser; nothing is collected.
-- **The journal** — essays on what specific decisions cost.
+- **Writing** — essays on what specific decisions cost.
 
 ## The five stages of building a product
 
@@ -83,13 +87,30 @@ ${essays
 
 ## Working together
 
-Engagements are scoped and priced before anything starts. There is no hourly
-billing. Roughly a third of enquiries get told that none of it fits, which is
-a real answer rather than a negotiating position.
+No service list and no prices. Projects are taken on one at a time and scoped
+after a conversation; roughly a third of enquiries get told that none of it
+fits, which is a real answer rather than a negotiating position.
 
-- Work with me: ${SITE.url}/work-with-me/
+- Tell me what you are working on: ${SITE.url}/collaborate/
+
+## Work
+
+Projects designed or built, with their honest status. The buried ones are kept
+in public on purpose — a portfolio of things that worked teaches nobody
+anything.
+
+${projects
+  .map(
+    (c) =>
+      `- **${c.data.title}** (${c.data.year}, ${c.data.status}) — ${c.data.role}. ${c.data.summary}\n  ${SITE.url}/work/${c.id}/`
+  )
+  .join('\n')}
+
+## Elsewhere
+
 - About: ${SITE.url}/about/
 - Currently: ${SITE.url}/now/
+- Community: ${SITE.url}/community/
 
 ## Positions worth quoting
 

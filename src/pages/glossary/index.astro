@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { getTools, getStages } from '@lib/content';
 import { SITE } from '@lib/site';
 
@@ -72,7 +72,7 @@ const stages = await getStages();
                   and each term becomes a heading a search engine can lift as
                   an answer on its own. Sixteen terms under one h2 were
                   invisible individually. */}
-              <dt><h3>{t.data.name}</h3></dt>
+              <dt><h2>{t.data.name}</h2></dt>
               <dd>
                 <p class="def">{t.data.definition}</p>
                 <p class="note">{t.data.note}</p>
@@ -91,7 +91,7 @@ const stages = await getStages();
   </div>
 
 
-  <NextStep line="These are the decisions I get hired to help with." />
+  <Collaborate line="These are the decisions I get hired to help with." />
 
   <Footer slot="footer" />
 </Base>
@@ -104,14 +104,14 @@ const stages = await getStages();
   .find input {
     width: 100%;
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: var(--fs-body);
     padding: 14px 18px;
     color: var(--ink);
     background: var(--surface);
     border: 1px solid var(--hair);
     border-radius: var(--radius-pill);
     outline: none;
-    transition: border-color 0.2s var(--ease);
+    transition: border-color var(--dur-fast) var(--ease);
   }
   .find input::placeholder { color: var(--dim); }
   .find input:focus { border-color: var(--ink); }
@@ -121,7 +121,7 @@ const stages = await getStages();
   }
   .find .count {
     margin-top: var(--space-3);
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--dim);
@@ -136,26 +136,26 @@ const stages = await getStages();
   .term { scroll-margin-top: 80px; }
 
   dt { margin-bottom: var(--space-3); }
-  dt h3 {
+  dt h2 {
     font-family: var(--font-display);
-    font-size: 1.125rem;
+    font-size: var(--fs-lead);
     font-weight: 600;
     letter-spacing: var(--ls-heading);
   }
   dd { margin: 0; }
-  .def { font-size: 1rem; line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
+  .def { font-size: var(--fs-body); line-height: var(--lh-read); letter-spacing: 0; color: var(--dim); }
   .note {
     margin-top: var(--space-3);
     padding-left: var(--space-4);
     border-left: 2px solid var(--hair);
-    font-size: 0.9375rem;
+    font-size: var(--fs-sub);
     line-height: var(--lh-ui);
     letter-spacing: 0;
     color: var(--dim);
   }
   .where { margin-top: var(--space-4); display: flex; gap: var(--space-4); flex-wrap: wrap; }
   .where a {
-    font-size: 0.8125rem;
+    font-size: var(--fs-fine);
     letter-spacing: 0;
     color: var(--ink);
     text-decoration: underline;
@@ -172,7 +172,7 @@ const stages = await getStages();
   if (q && count) {
     // The field only appears once JavaScript has run: without it, filtering is
     // impossible and an empty box that does nothing is worse than no box.
-    q.closest('.find')!.hidden = false;
+    q.closest<HTMLElement>('.find')!.hidden = false;
 
     q.addEventListener('input', () => {
       const v = q.value.trim().toLowerCase();

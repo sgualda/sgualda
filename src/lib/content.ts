@@ -34,9 +34,15 @@ export async function getStages() {
 export type Tool = Awaited<ReturnType<typeof getTools>>[number];
 export type Stage = Awaited<ReturnType<typeof getStages>>[number];
 
+/**
+ * Short. Five chips at the old wording measured 651px against a 560px column,
+ * which turned a row of filters into a horizontal scroller on a desktop screen.
+ * One word each fits, and none of them lost meaning: nobody was reading "Launch
+ * & growth" and "Growth" differently.
+ */
 export const CATS: Record<string, string> = {
-  growth: 'Launch & growth',
-  users: 'Users & feedback',
+  growth: 'Growth',
+  users: 'Feedback',
   decisions: 'Decisions',
-  team: 'Team & process',
+  team: 'Team',
 };

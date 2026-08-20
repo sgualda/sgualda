@@ -1,21 +1,44 @@
 /**
  * Single source of truth for identity, navigation and the URL contract.
  *
- * URL map derived from the live sitemap of sgualda.com on 2026-07-31.
- * Anything under `existing` is already indexed by Google and MUST keep its
- * exact path, trailing slash included.
+ * URL map derived from the live sitemap of sgualda.com on 2026-07-31, then
+ * rearchitected on 2026-08-20. Anything that was already indexed keeps working
+ * — via this file where the URL survived, via public/_redirects where it did
+ * not.
  */
 
 export const SITE = {
   url: 'https://sgualda.com',
   name: 'Sergio Gualda',
-  role: 'Product Designer',
+  /**
+   * The handle, not a second name.
+   *
+   * The site said "Sergio Gualda" everywhere and the brief was signed
+   * "Sgualda", which is two strings for one person — the exact ambiguity that
+   * stops an engine merging a set of pages into one entity. The person is
+   * Sergio Gualda; sgualda is what he is called on every platform. It ships as
+   * `alternateName` so both resolve to the same node instead of competing.
+   */
+  handle: 'sgualda',
+  /**
+   * Designer *and* developer, as of 2026-08-20.
+   *
+   * Everything here used to say "Product Designer", and web development is now
+   * one of three things being sold. Selling development from an entity that
+   * declares design is a claim the pages contradict, and it is the half of the
+   * work that had no supporting signal anywhere in the markup.
+   *
+   * "Product designer" stays in front because it is the phrase the site
+   * already ranks for; the addition extends the entity rather than replacing
+   * it.
+   */
+  role: 'Product designer and developer',
   location: 'Barcelona, Spain',
   // Confirmed by Sergio 2026-07-31. The Figma footer shows sergio@, that is
   // the one that is wrong, not this.
   email: 'hello@sgualda.com',
   locale: 'en',
-  tagline: 'Product designer in Barcelona',
+  tagline: 'I design and build things on the internet',
 } as const;
 
 /**
@@ -46,6 +69,9 @@ export const LEGAL = {
    * Set it to false and the site goes back to shipping no cookies at all, with
    * no banner and no third-party request. Nothing about analytics is loaded
    * before consent is given — not the script, not a cookie, not a DNS lookup.
+   *
+   * Kept on GA4 by Sergio's decision, 2026-08-20, against the recommendation
+   * to move to a cookieless product and drop the consent banner with it.
    */
   analytics: 'G-JQL9QJ5RTC',
 } as const;
@@ -72,9 +98,10 @@ export const SOCIAL = {
  *  · An empty Dribbble. A designer's portfolio profile with nothing in it is
  *    worse than no profile — it is a link that answers "what has he made?"
  *    with "nothing". Add it the day there is work on it.
- *  · Pinterest and Threads, unless they are professional and active. Quantity
- *    is not the goal; every entry is a page an engine may follow to decide who
- *    this is, and a dead one is a weak answer.
+ *  · Pinterest, Threads and YouTube, which the brief lists as future
+ *    channels. They go in the day they are professional and active, not the
+ *    day they are created. Every entry here is a page an engine may follow to
+ *    decide who this is, and a dead one is a weak answer.
  *
  * uxerfy.com/about/ is the strongest entry: a real page about him on a
  * different domain, which already declares its own Person node pointing back
@@ -84,7 +111,7 @@ export const SOCIAL = {
  * hosting account. Cross-linking your own properties is a legitimate identity
  * declaration and helps disambiguation, but it is not third-party
  * corroboration and will not move Authority the way a client saying something
- * would. That is still H2.
+ * would.
  */
 export const SAME_AS = [
   'https://www.linkedin.com/in/sgualda/',
@@ -98,21 +125,11 @@ export const SAME_AS = [
  * the string "Sergio Gualda" with a known person rather than treating it as
  * text; `knowsAbout` is what a language model reads to decide what he is an
  * authority on.
- */
-/**
- * Nine entries, all of them the generic label anybody in the field would list.
- * They said what job he has, not what he knows — "Product design" describes a
- * profession; "Opportunity solution trees" describes somebody who has used one.
  *
- * The additions are all drawn from what the site actually contains: the six
- * checks, the five stages, the glossary and the essays. Nothing aspirational,
- * because a `knowsAbout` claiming ground the pages do not cover is a claim a
- * model can check and find wanting.
- *
- * This matters more as Google retires rich results. FAQ stopped producing them
- * in May 2026 and HowTo in 2023, so the value of markup is shifting away from
- * how a result looks and toward whether an engine can resolve who this is and
- * what he is an authority on. See §15 of SEARCH-INTELLIGENCE-AUDIT.md.
+ * Nothing aspirational, because a `knowsAbout` claiming ground the pages do
+ * not cover is a claim a model can check and find wanting. Everything below is
+ * drawn from what the site actually contains: the six checks, the five stages,
+ * the glossary, the essays and the projects.
  */
 export const EXPERTISE = [
   'Product design',
@@ -124,7 +141,7 @@ export const EXPERTISE = [
   'Mobile apps',
   'Minimum viable products',
   'Design critique',
-  // The specific ground the writing and the checks actually cover.
+  // The specific ground the writing and the checks cover.
   'Jobs to be done',
   'Opportunity solution trees',
   'Continuous discovery',
@@ -141,65 +158,111 @@ export const EXPERTISE = [
   'Design tokens',
   'Figma',
   'Prototyping',
+  /**
+   * The build half, added when web development became something being sold.
+   *
+   * Each of these is demonstrable from the site itself rather than asserted:
+   * it is a static Astro build with hand-written tokens, a generated
+   * structured-data graph, a URL contract enforced at build time and an
+   * accessibility suite. That is the evidence, and it is public.
+   */
+  'Web design',
+  'Web development',
+  'Front-end development',
+  'Astro',
+  'Static site generation',
+  'Web performance',
+  'Core Web Vitals',
+  'Web accessibility',
+  'Technical SEO',
+  'Structured data',
+  'Website audits',
 ] as const;
 
-/** Nav order taken from the Figma header component. */
+/**
+ * The main navigation. Four items.
+ *
+ * Tools and Map are back, and they belong here: they are the two things on
+ * this site somebody can *use* rather than read, they are 11 pages of real
+ * work, and demoting them to a line above the essay list meant nobody who did
+ * not already know about them would ever find them. A menu is for the things
+ * worth arriving for, and a diagnostic you can run in ninety seconds qualifies.
+ *
+ * Community moves to the footer. It is one link to a chat on somebody else's
+ * platform plus a waitlist for a room that does not exist — real, worth having,
+ * and not one of the four things this site is about.
+ *
+ * Two that stay out, and why:
+ *
+ *  · Work is linked from the home page and /about/, which are the two places
+ *    somebody actually wants proof of it. A portfolio in the menu is what makes
+ *    a personal site read as a portfolio.
+ *  · Services existed for one day. Three landings with intent, deliverables
+ *    and a page each was a catalogue, and this is not a shop — the way to work
+ *    together is one banner and one short form, which is what it was before.
+ */
 export const NAV = [
+  { label: 'Writing', href: '/writing/' },
   { label: 'Tools', href: '/tools/' },
   { label: 'Map', href: '/map/' },
-  { label: 'Work', href: '/case-studies/' },
-  { label: 'Writing', href: '/writing/' },
   { label: 'About', href: '/about/' },
 ] as const;
 
-/** The dark pill in the header. */
-export const CTA = { label: 'Hire me', href: '/work-with-me/' } as const;
+/**
+ * The dark pill in the header, and the label on every collaborate banner.
+ *
+ * Two words, and the same two everywhere. "Hire me" is about him; "Start a
+ * project" and "Tell me about your project" were both accurate and both too
+ * long to read at a glance on a phone. A control should say what happens next
+ * in the fewest words that still mean something.
+ */
+export const CTA = { label: 'Let’s talk', href: '/collaborate/' } as const;
 
 /**
- * The URL structure, decided for what the site is becoming rather than what
- * WordPress happened to do.
+ * The URL structure.
  *
- * Two deliberate breaks from the old site:
- *
- * 1. Essays move from the root (/good-product-design/) into /writing/.
- *    The root namespace should belong to pages, not posts — otherwise every
- *    new page we ever add has to check it does not collide with an essay
- *    slug. It also matches the nav in Figma, which says WRITING.
- *
- * 2. /blog/ becomes /writing/. Same reason: the design says Writing.
- *
- * Both old shapes 301 from public/_redirects, so nothing dangles.
- */
-/**
  * Read as text by scripts/check-urls.mjs rather than imported, so a tool that
  * scans for unused exports will report it. It is not unused.
+ *
+ * Three deliberate breaks from the old site, all of them 301'd in
+ * public/_redirects so nothing dangles:
+ *
+ * 1. Essays moved from the root (/good-product-design/) into /writing/.
+ *    The root namespace belongs to pages, not posts.
+ * 2. /blog/ became /writing/.
+ * 3. /work/ became /work/ (2026-08-20). "Case study" is the
+ *    vocabulary of an agency deliverable; these are project stories, and the
+ *    shorter URL is the one that survives being read aloud.
  */
 export const URL_MAP = {
   pages: [
     '/',
     '/about/',
-    '/work-with-me/',
-    '/work-with-me/brief/',
-    '/case-studies/',
-    '/case-studies/glintale/',
-    '/case-studies/truvi/',
-    '/case-studies/truvi-developer-portal/',
-    '/case-studies/ecoco-mobile-app/',
-    '/case-studies/weeknotes/',
-    '/case-studies/rangos/',
     '/writing/',
+    '/community/',
+    '/now/',
+    '/privacy/',
+    '/glossary/',
+    '/legal/',
     '/map/',
     '/map/worth-building/',
     '/map/first-version/',
     '/map/nobody-came/',
     '/map/make-it-repeatable/',
     '/map/charging-for-it/',
-    '/community/',
-    '/now/',
-    '/privacy/',
-    '/glossary/',
-    '/legal/',
   ],
+
+  /** Project stories. Renamed from /work/ on 2026-08-20. */
+  work: [
+    '/work/',
+    '/work/glintale/',
+    '/work/truvi/',
+    '/work/truvi-developer-portal/',
+    '/work/ecoco-mobile-app/',
+  ],
+
+  collaborate: ['/collaborate/', '/collaborate/sent/'],
+
   tools: [
     '/tools/',
     '/tools/why-is-nobody-using-your-product/',
@@ -222,12 +285,17 @@ export const URL_MAP = {
   ],
 } as const;
 
-
-
-/** Pages that belong in the footer sitemap, beyond the main nav. */
+/**
+ * Pages that belong in the footer sitemap, beyond the main nav.
+ *
+ * Work lives here rather than in NAV — reachable in one click from the footer
+ * of every page, without occupying one of the four slots at the top.
+ */
 export const MORE = [
-  { label: 'Work with me', href: '/work-with-me/' },
-  { label: 'Work', href: '/case-studies/' },
-  { label: 'Now', href: '/now/' },
+  { label: 'Work', href: '/work/' },
   { label: 'Community', href: '/community/' },
+  { label: 'Let’s talk', href: '/collaborate/' },
+  { label: 'Now', href: '/now/' },
+  // Glossary is not here: the footer's first column already lists it, and one
+  // link twice in one footer reads as an oversight rather than emphasis.
 ] as const;

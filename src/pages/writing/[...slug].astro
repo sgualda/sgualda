@@ -6,7 +6,7 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import NextStep from '@components/NextStep.astro';
+import Collaborate from '@components/Collaborate.astro';
 import { SITE } from '@lib/site';
 import { TOPICS } from '@lib/topics';
 import { getStages, getTools } from '@lib/content';
@@ -15,9 +15,10 @@ const STAGES = await getStages();
 const TOOLS = await getTools();
 
 export async function getStaticPaths() {
-  const essays = (await getCollection('essays', ({ data }) => !data.draft)).sort(
+  const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
   );
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
 
   return essays.map((entry, i) => {
     // Related by shared topic, most recent first. Never the essay itself.
@@ -30,14 +31,29 @@ export async function getStaticPaths() {
       props: {
         entry,
         related,
+        /**
+         * The project this came out of, if it says so.
+         *
+         * `relatedProject` has been in the schema since the content model was
+         * rebuilt and nothing has ever rendered it — which meant the two halves
+         * of this site, what I build and what it taught me, never pointed at
+         * each other in either direction. This is one half of that link; the
+         * other is on the project page.
+         *
+         * Nothing sets it yet, and nothing should be invented: an essay claims
+         * to have come out of a project or it does not. The block is absent
+         * until somebody who knows says so.
+         */
+        project: projects.find((p) => p.id === entry.data.relatedProject) ?? null,
       },
     };
   });
 }
 
-const { entry, related } = Astro.props as {
-  entry: CollectionEntry<'essays'>;
-  related: CollectionEntry<'essays'>[];
+const { entry, related, project } = Astro.props as {
+  entry: CollectionEntry<'writing'>;
+  related: CollectionEntry<'writing'>[];
+  project: CollectionEntry<'projects'> | null;
 };
 const { Content } = await render(entry);
 const d = entry.data;
@@ -160,7 +176,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
         <p class="who"><strong>Sergio Gualda</strong> — product designer in Barcelona.</p>
         <p class="what">
           I take vague problems to shipped first versions for small teams, and write down what
-          the decisions cost. <a href="/about/">More about me</a> · <a href="/work-with-me/">Work with me</a>
+          the decisions cost. <a href="/about/">More about me</a> · <a href="/collaborate/">Let’s talk</a>
         </p>
       </div>
     </aside>
@@ -213,11 +229,19 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
   }
 
 
-  <NextStep
-    line="Recognise any of this in your own product?"
-    secondLabel="More essays"
-    secondHref="/writing/"
-  />
+  {
+    project && (
+      <section class="col from-project">
+        <p>
+          <span>This came out of</span>
+          <a href={`/work/${project.id}/`}>{project.data.title}</a>
+        </p>
+        <p class="what">{project.data.summary}</p>
+      </section>
+    )
+  }
+
+  <Collaborate line="Working on something this applies to?" />
 
   {/* The disagreement invitation stays, but as a line rather than a button:
       a mailto: opens a mail client, which on a phone is one of the heaviest
@@ -230,9 +254,42 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
 </Base>
 
 <style>
+  /* The project an essay came out of. One line, at the end, in the same
+     register as the byline above it — it is a provenance note, not a card. */
+  .from-project {
+    margin-top: var(--gap);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--hair);
+    text-align: left;
+  }
+  .from-project span {
+    display: block;
+    font-size: var(--fs-label);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 6px;
+  }
+  .from-project a {
+    font-family: var(--font-display);
+    font-size: var(--fs-lead);
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--hair);
+  }
+  .from-project a:hover { text-decoration-color: var(--ink); }
+  .from-project .what {
+    margin-top: 6px;
+    font-size: var(--fs-sub);
+    line-height: var(--lh-read);
+    color: var(--dim);
+  }
+
   .head { padding-top: clamp(44px, 8vh, 72px); }
   .head h1 { font-size: clamp(1.9rem, 4.4vw, 2.9rem); }
-  .meta { margin-top: 18px; font-size: 0.875rem; color: var(--dim); }
+  .meta { margin-top: 18px; font-size: var(--fs-note); color: var(--dim); }
 
   /* Article body: left-aligned. Centred text is fine for headings and short
      blocks, but it destroys readability over 400 words. */
@@ -242,7 +299,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
        under a title; this reads as a beginning. */
     margin-top: clamp(64px, 10vh, 96px);
     text-align: left;
-    font-size: 1.125rem;
+    font-size: var(--fs-lead);
     line-height: var(--lh-read);
     letter-spacing: var(--ls-read);
   }
@@ -273,10 +330,10 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
   .prose :global(hr) { border: 0; border-top: 1px solid var(--hair); margin: 2.4em 0; }
   .prose :global(pre) {
     background: var(--surface);
-    border-radius: 14px;
+    border-radius: var(--radius-xs);
     padding: 18px;
     overflow-x: auto;
-    font-size: 0.9rem;
+    font-size: var(--fs-note);
   }
 
   /* The wrapper the rehype plugin adds. The table keeps its own semantics;
@@ -291,7 +348,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     border-collapse: collapse;
     width: 100%;
     min-width: 420px;
-    font-size: 0.875rem;
+    font-size: var(--fs-note);
     letter-spacing: 0;
   }
   .prose :global(th), .prose :global(td) {
@@ -317,7 +374,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
 
   .essay-faq { margin-top: var(--space-9); text-align: left; }
   .essay-faq h2 {
-    font-size: 1.25rem;
+    font-size: var(--h3-size);
     letter-spacing: var(--ls-heading);
     text-align: center;
     margin-bottom: var(--space-6);
@@ -326,7 +383,7 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
   .disagree {
     margin-top: var(--space-7);
     text-align: center;
-    font-size: 0.875rem;
+    font-size: var(--fs-note);
     letter-spacing: 0;
     color: var(--dim);
   }
@@ -348,29 +405,29 @@ const fmt = (x: Date) => x.toLocaleDateString('en-GB', { year: 'numeric', month:
     border-radius: var(--radius-sm);
     object-fit: cover;
   }
-  .byline .who { font-size: 0.9375rem; letter-spacing: 0; margin-bottom: 6px; }
-  .byline .what { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
+  .byline .who { font-size: var(--fs-sub); letter-spacing: 0; margin-bottom: 6px; }
+  .byline .what { font-size: var(--fs-note); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
   .byline a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
   .byline a:hover { opacity: 0.6; }
 
   .cross, .related { list-style: none; text-align: left; margin-top: 32px; display: grid; gap: 14px; }
-  .cross h3 { font-size: 1rem; margin-bottom: 8px; }
-  .cross p { font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
+  .cross h3 { font-size: var(--fs-body); margin-bottom: 8px; }
+  .cross p { font-size: var(--fs-note); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
   .related li + li { border-top: 1px solid var(--hair); }
-  .related a { display: block; padding: 20px 0; transition: opacity 0.2s var(--ease); }
+  .related a { display: block; padding: 20px 0; transition: opacity var(--dur-fast) var(--ease); }
   .related a:hover { opacity: 0.55; }
   .related .h {
-    display: block; font-family: var(--font-display); font-size: 1.0625rem;
+    display: block; font-family: var(--font-display); font-size: var(--fs-body);
     font-weight: 600; letter-spacing: var(--ls-heading); margin-bottom: 6px;
   }
-  .related .p { font-size: 0.9375rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
+  .related .p { font-size: var(--fs-sub); line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
 
   .pager em {
-    display: block; font-style: normal; font-size: 0.6875rem;
+    display: block; font-style: normal; font-size: var(--fs-label);
     letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 6px;
   }
   .pager span {
-    font-family: var(--font-display); font-size: 0.9375rem;
+    font-family: var(--font-display); font-size: var(--fs-sub);
     font-weight: 600; letter-spacing: var(--ls-heading); line-height: var(--lh-tight);
   }
 

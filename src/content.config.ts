@@ -2,15 +2,16 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 /**
- * Essays.
+ * Writing.
  *
- * IMPORTANT — the 13 posts migrated from WordPress live at the ROOT of the
- * site (/good-product-design/), not under /blog/. That is how they are
- * indexed today, so that is where they stay. The `id` of each entry IS the
- * live URL slug; renaming a file breaks a live URL.
+ * Renamed from `essays` on 2026-08-20, when the section stopped being a blog
+ * with a nicer name and became the place the whole knowledge layer lives. The
+ * `id` of each entry IS the live URL slug (/writing/{id}/); renaming a file
+ * breaks a live URL, and several of these were indexed on WordPress before
+ * they were ever here.
  */
-const essays = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/essays' }),
+const writing = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/writing' }),
   schema: ({ image }) =>
     z.object({
       /** The <h1>. No length limit — three migrated posts run long and
@@ -22,6 +23,19 @@ const essays = defineCollection({
       description: z.string().min(70).max(160, 'Meta descriptions cut off after ~160'),
       published: z.coerce.date(),
       updated: z.coerce.date().optional(),
+      /**
+       * What kind of thing this is.
+       *
+       * Deliberately NOT a navigation axis. Topic was tried as one three times
+       * — filters on the index, chips on each essay, five hub pages — and
+       * retired three times, and this would fail the same way. It is a label
+       * on a row and a signal for how the piece is written: an essay argues,
+       * a note is one thought, a resource is a list somebody can use.
+       *
+       * Project stories are not a type here. They live in `projects`, because
+       * a project has a status and a history and this does not.
+       */
+      type: z.enum(['essay', 'note', 'resource']).default('essay'),
       // Was this post live on WordPress? If so its slug is load-bearing.
       migrated: z.boolean().default(false),
       draft: z.boolean().default(false),
@@ -29,8 +43,22 @@ const essays = defineCollection({
       coverAlt: z.string().optional(),
       // Free-form, but keep the list short — tags with one post each are noise.
       topics: z.array(z.string()).default([]),
-      // Shown in the essay index; the hook, not a summary.
+      // Shown in the index; the hook, not a summary.
       hook: z.string().optional(),
+      /**
+       * The project this piece came out of, declared once rather than linked
+       * twice.
+       *
+       * Set it and both pages get the link: the essay says where it came from,
+       * the project collects what was written about it. Nothing is added "for
+       * SEO" — either the relationship is real and stated here, or there is no
+       * link.
+       *
+       * `relatedService` used to sit beside this. The services it pointed at
+       * existed for one day, so a field that could only ever hold a dangling
+       * reference is gone.
+       */
+      relatedProject: z.string().optional(),
       /**
        * Questions a reader actually types, answered in full on the page.
        * Rendered as real markup and mirrored as FAQPage, which is what a
@@ -44,11 +72,15 @@ const essays = defineCollection({
 });
 
 /**
- * Case studies. These live under /case-studies/{slug}/ — the two existing
- * ones (truvi, ecoco-mobile-app) keep their URLs exactly.
+ * Projects. These live under /work/{slug}/.
+ *
+ * Renamed from `cases` on 2026-08-20 along with the URL. "Case study" is the
+ * vocabulary of an agency deliverable — client, role, stack, results — and
+ * these are meant to read as stories about building something, including the
+ * parts that went wrong.
  */
-const cases = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/cases' }),
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -78,7 +110,28 @@ const cases = defineCollection({
        */
       coverPosition: z.string().default('left center'),
       summary: z.string(),
-      // What it cost / what went wrong. The part that makes it worth reading.
+      /**
+       * The history, which is what stops a project being a page that was true
+       * once.
+       *
+       * Most portfolios freeze a project at the moment it shipped. These
+       * things keep happening — an idea becomes a prototype becomes a launch
+       * becomes, often, nothing. Each entry is a date and what changed, and
+       * the most recent one drives `dateModified` in the schema, so a project
+       * that is still moving reads as fresh to a crawler without anybody
+       * touching the prose.
+       */
+      updates: z
+        .array(
+          z.object({
+            date: z.coerce.date(),
+            /** Short label: "Idea", "First prototype", "Launched". */
+            label: z.string(),
+            /** One or two sentences. What actually happened. */
+            note: z.string().optional(),
+          })
+        )
+        .default([]),
       order: z.number().default(99),
     }),
 });
@@ -86,6 +139,10 @@ const cases = defineCollection({
 /**
  * The six free checks. YAML rather than TypeScript so the copy can be edited
  * without opening code, validated by the schema below, and reached by a CMS.
+ *
+ * Off the main navigation since 2026-08-20 and surfaced from /writing/ — this
+ * is reference material about building products, which is what Writing is.
+ * The URLs did not move.
  */
 const tools = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/tools' }),
@@ -95,7 +152,9 @@ const tools = defineCollection({
     time: z.string(),
     count: z.string(),
     title: z.string(),
-    meta: z.string().min(70).max(200),
+    /* 160, not 200. The looser limit is what let six of these run to 170–190
+       characters, where Google cuts the sentence off mid-clause. */
+    meta: z.string().min(70).max(160),
     lead: z.string(),
     out: z.string(),
     answers: z.array(z.tuple([z.string(), z.string()])),
@@ -116,7 +175,7 @@ const tools = defineCollection({
   }),
 });
 
-/** The five stages of the map. */
+/** The five stages of the map. Also off the main navigation since 2026-08-20. */
 const stages = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/stages' }),
   schema: z.object({
@@ -194,10 +253,17 @@ const testimonials = defineCollection({
     company: z.string(),
     /** Their profile, so the claim is checkable. */
     linkedin: z.string().url(),
-    /** What we worked on, if it maps to a case study. */
+    /** What we worked on, if it maps to a project. */
     project: z.string().optional(),
     order: z.number().default(99),
   }),
 });
 
-export const collections = { essays, cases, tools, stages, glossary, testimonials };
+export const collections = {
+  writing,
+  projects,
+  tools,
+  stages,
+  glossary,
+  testimonials,
+};

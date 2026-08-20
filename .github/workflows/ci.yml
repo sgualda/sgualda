@@ -14,6 +14,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history, because the sitemap needs it.
+          #
+          # build-sitemap-dates.mjs falls back to a file's last commit date for
+          # any page without a date in its frontmatter — the map stages, the
+          # checks, the standalone pages. A shallow clone has no such history,
+          # so those dates were silently dropped and the sitemap shipped with
+          # 20 of 39 URLs missing a lastmod. It passed locally, where the clone
+          # is complete, and failed only here.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:

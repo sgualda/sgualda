@@ -76,6 +76,23 @@ const fullTitle =
  * from fetching the file to find out.
  */
 const ARTICLE_TYPES = new Set(['Article', 'BlogPosting', 'NewsArticle', 'TechArticle']);
+
+/**
+ * og:type, read off the page's own schema instead of being hard-coded.
+ *
+ * Every page declared `website`, including thirteen essays and project stories
+ * that are plainly articles. `article` is what unlocks the published time and
+ * the author byline in a share card, and it is the one og property that says
+ * what kind of thing a link is rather than repeating the title.
+ *
+ * Derived rather than passed as a prop: the page already tells this layout it
+ * is an Article by handing over an Article node. Asking it to say so a second
+ * time is how the two come to disagree.
+ */
+const articleNode = schema.find((n) => ARTICLE_TYPES.has(n['@type'] as string));
+const ogType = articleNode ? 'article' : 'website';
+const articleTime = articleNode?.datePublished as string | undefined;
+const articleModified = articleNode?.dateModified as string | undefined;
 const withImage = (node: Record<string, unknown>) =>
   ARTICLE_TYPES.has(node['@type'] as string) && !node.image
     ? { ...node, image: { '@type': 'ImageObject', url: ogImage, width: 1200, height: 630 } }
@@ -87,12 +104,21 @@ const graph = [
     '@type': 'Person',
     '@id': `${SITE.url}/#person`,
     name: SITE.name,
+    /**
+     * The handle, declared as the same entity rather than a second one.
+     *
+     * Half the internet calls him sgualda — the domain, every social profile,
+     * the way he signs things. Without this, a model reading "sgualda" and a
+     * model reading "Sergio Gualda" have no stated reason to believe they are
+     * looking at one person.
+     */
+    alternateName: SITE.handle,
     jobTitle: SITE.role,
     url: SITE.url,
     email: `mailto:${SITE.email}`,
     image: new URL('/img/sergio-gualda.jpg', SITE.url).href,
     description:
-      'Product designer in Barcelona. Takes vague problems to shipped first versions for small teams building SaaS, mobile apps and internal tools, and publishes what the decisions cost.',
+      'Designer and developer in Barcelona. Designs and builds websites and digital products for small teams, takes vague problems to shipped first versions, and publishes what the decisions cost.',
     address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
     knowsAbout: [...EXPERTISE],
     sameAs: [...SAME_AS],
@@ -136,7 +162,7 @@ const graph = [
    * ends up describing a company as a human being.
    *
    * `ProfessionalService` rather than plain `Organization`, and declared once
-   * here rather than again on /work-with-me/. That page had its own
+   * here rather than again on /collaborate/. That page had its own
    * ProfessionalService node, so adding an Organization created two nodes
    * describing the same business under two types — the precise conflation this
    * comment warns about, introduced while writing it. One node, referenced by
@@ -145,13 +171,13 @@ const graph = [
   {
     '@type': 'ProfessionalService',
     '@id': `${SITE.url}/#practice`,
-    name: `${SITE.name} — Product Design`,
+    name: `${SITE.name} — Design & Development`,
     url: SITE.url,
     email: `mailto:${SITE.email}`,
     logo: new URL('/icon-512.png', SITE.url).href,
     image: new URL('/img/sergio-gualda.jpg', SITE.url).href,
     description:
-      'Independent product design practice in Barcelona. Product strategy, discovery and design for small teams building SaaS, mobile apps and internal tools.',
+      'Independent design and development practice in Barcelona. Web design, web development and website audits for small teams building software products.',
     address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
     areaServed: { '@type': 'Place', name: 'Worldwide' },
     priceRange: '$$',
@@ -186,7 +212,7 @@ const graph = [
     {canonical !== false && <link rel="canonical" href={url} />}
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={url} />
@@ -195,6 +221,9 @@ const graph = [
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={`${title} — ${SITE.name}`} />
     <meta property="og:locale" content="en_GB" />
+    {articleTime && <meta property="article:published_time" content={articleTime} />}
+    {articleModified && <meta property="article:modified_time" content={articleModified} />}
+    {articleNode && <meta property="article:author" content={SITE.name} />}
     <meta name="twitter:card" content="summary_large_image" />
 
     {/* The tab icon is the memoji, the same mark as the header and the app

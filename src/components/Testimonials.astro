@@ -34,7 +34,7 @@ const items = await getTestimonials();
         </p>
       </div>
 
-      <div class="wide voices">
+      <div class="col voices">
         {/*
           A carousel that moves on its own, built so it cannot trap anybody.
 
@@ -132,7 +132,7 @@ const items = await getTestimonials();
   }
 
   .voice blockquote p {
-    font-size: 1.0625rem;
+    font-size: var(--fs-body);
     line-height: var(--lh-read);
     letter-spacing: var(--ls-read);
     color: var(--ink);
@@ -148,13 +148,13 @@ const items = await getTestimonials();
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-color: var(--hair);
-    transition: text-decoration-color 0.2s var(--ease);
+    transition: text-decoration-color var(--dur-fast) var(--ease);
   }
   .who:hover .nm { text-decoration-color: var(--ink); }
   .rl {
     display: block;
     margin-top: 4px;
-    font-size: 0.8125rem;
+    font-size: var(--fs-fine);
     color: var(--dim);
   }
 
@@ -166,15 +166,15 @@ const items = await getTestimonials();
     margin-top: var(--space-6);
   }
   .ctrl button {
-    font-size: 0.6875rem;
+    font-size: var(--fs-label);
     letter-spacing: var(--ls-caps);
     text-transform: uppercase;
     color: var(--dim);
     padding: 10px 14px;
     min-height: 44px;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     border: 1px solid var(--hair);
-    transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+    transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
   }
   .ctrl button:hover { color: var(--ink); border-color: var(--ink); }
 
@@ -184,7 +184,7 @@ const items = await getTestimonials();
     height: 6px;
     border-radius: 50%;
     background: var(--hair);
-    transition: background 0.25s var(--ease);
+    transition: background var(--dur-fast) var(--ease);
   }
   .dot[data-on='true'] { background: var(--ink); }
 

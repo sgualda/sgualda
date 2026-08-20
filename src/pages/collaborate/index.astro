@@ -1,0 +1,236 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { SITE } from '@lib/site';
+import { FIELDS, BUDGET } from '@lib/intake';
+
+/**
+ * /collaborate/ — one page, one form, four questions.
+ *
+ * The two versions before this were a qualifier that sorted people by the
+ * shape of the engagement, and a six-step intake that branched by service.
+ * Both worked and both were wrong: they asked a stranger to fill in a funnel
+ * before anybody had said hello.
+ *
+ * So it keeps a header and a footer now rather than being a stripped task
+ * screen. It is a page on the site, not a checkout. Somebody who lands here
+ * and changes their mind should be able to go and read something instead.
+ *
+ * The form is real HTML that works as a form: labels, one column, no steps,
+ * no progress bar to abandon halfway through.
+ */
+---
+
+<Base
+  title="Let’s talk"
+  description="Tell me what you’re working on and where I might come in. I read everything myself and reply within five working days, including when the answer is no."
+>
+  <Header slot="nav" />
+
+  <section class="col intro">
+    <h1>Let’s talk</h1>
+    <p class="sub">
+      Tell me what you’re building and where I might come in. A written reply within five
+      working days, including when the answer is no.
+    </p>
+  </section>
+
+  <div class="col">
+    <form class="form" id="form" novalidate>
+      {
+        FIELDS.map(([id, label, type, hint]) => (
+          <div class="f">
+            <label for={id}>{label}</label>
+            {type === 'input' ? (
+              <input id={id} name={id} autocomplete={id === 'email' ? 'email' : id === 'name' ? 'name' : 'off'} />
+            ) : (
+              <textarea id={id} name={id} rows="4" />
+            )}
+            {hint && <p class="hint">{hint}</p>}
+          </div>
+        ))
+      }
+
+      <div class="f">
+        <label for={BUDGET[0]}>{BUDGET[1]}</label>
+        <select id={BUDGET[0]} name={BUDGET[0]}>
+          {BUDGET[2].split('|').slice(1).map((o) => <option>{o}</option>)}
+        </select>
+      </div>
+
+      {/* Honeypot. Hidden from people, irresistible to bots. */}
+      <div class="hp" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <p class="err" id="err" role="alert" hidden></p>
+
+      <button class="btn btn--dark" type="submit" id="send">Send it</button>
+
+      <p class="fine">
+        Your email is used to reply to you and nothing else. No list, no sequence, no third
+        party. <a href="/privacy/">What I do with it</a>.
+      </p>
+    </form>
+
+    <p class="aside">
+      Or just email me — <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+    </p>
+  </div>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(52px, 9vh, 84px); }
+  .intro h1 { margin-bottom: 16px; }
+
+  /* One column, left-aligned, at a width a paragraph is comfortable in.
+     The rest of the site centres its headings and left-aligns its prose; a
+     form is prose you write into, so it follows the prose rule. */
+  .form {
+    max-width: 34rem;
+    margin: 44px auto 0;
+    text-align: left;
+    display: grid;
+    gap: 26px;
+  }
+  .f { display: grid; gap: 8px; }
+  .f label {
+    font-family: var(--font-display);
+    font-size: var(--fs-sub);
+    font-weight: 600;
+    letter-spacing: var(--ls-heading);
+  }
+  .form input,
+  .form textarea,
+  .form select {
+    font: inherit;
+    font-size: var(--fs-body);
+    line-height: var(--lh-read);
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    /* --radius-sm, not --radius-card. A 28px corner on a 108px-tall textarea
+       eats most of its height in curve and reads as a bubble rather than a
+       field to type in; the card radius is for cards. */
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    width: 100%;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .form textarea { resize: vertical; min-height: 108px; }
+  /* A field focuses by sharpening its own edge, not by growing a slab.
+     The global :focus-visible is a double ring — a 2px paper outline over a 4px
+     ink box-shadow — which is right for a link or a pill and much too heavy
+     around a 108px textarea, where it reads as a 3px black frame. Killing the
+     outline alone was not enough: the box-shadow stayed and was doing most of
+     the damage. This is a 2px perimeter of ink against paper, which is high
+     contrast and unmistakably focused, and it follows the field's own radius
+     instead of the ring's. */
+  .form input:focus-visible,
+  .form textarea:focus-visible,
+  .form select:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--ink);
+    border-color: var(--ink);
+  }
+  .hint { font-size: var(--fs-fine); line-height: var(--lh-ui); color: var(--dim); }
+
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .err { color: var(--err); font-size: var(--fs-sub); line-height: var(--lh-read); }
+  .err[hidden] { display: none; }
+
+  .form .btn { justify-self: start; }
+  .fine { font-size: var(--fs-fine); line-height: var(--lh-ui); color: var(--dim); }
+  .fine a { text-decoration: underline; text-underline-offset: 3px; }
+
+  .aside {
+    max-width: 34rem;
+    margin: 34px auto 0;
+    text-align: left;
+    font-size: var(--fs-sub);
+    color: var(--dim);
+  }
+  .aside a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 720px) {
+    .form, .aside { text-align: left; }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('form') as HTMLFormElement | null;
+  const err = document.getElementById('err');
+  const btn = document.getElementById('send') as HTMLButtonElement | null;
+
+  if (form && err && btn) {
+    // Anything faster than this is not somebody who read the questions.
+    const opened = Date.now();
+    const val = (id: string) =>
+      (document.getElementById(id) as HTMLInputElement | null)?.value.trim() ?? '';
+
+    const fail = (msg: string, focus?: string) => {
+      err.textContent = msg;
+      err.hidden = false;
+      if (focus) document.getElementById(focus)?.focus();
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.hidden = true;
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('email'))) {
+        return fail('I need an email address that works, or I cannot reply.', 'email');
+      }
+      if (val('about').length < 20) {
+        return fail('A couple of sentences is enough — this is the bit I actually read.', 'about');
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch('/api/brief.php', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            name: val('name'),
+            email: val('email'),
+            blocked: val('about'),
+            specifics: {
+              'Where I come in': val('help'),
+              Budget: val('budget'),
+            },
+            website: val('website'),
+            elapsed: Date.now() - opened,
+          }),
+        });
+        // The endpoint is PHP, so a misconfiguration answers with an HTML error
+        // page. Parsing that as JSON throws a stack trace at somebody who just
+        // wanted to send a message.
+        if (!(res.headers.get('content-type') ?? '').includes('application/json')) {
+          throw new Error(
+            `Something broke at my end (${res.status}). Email hello@sgualda.com and I’ll pick it up there.`
+          );
+        }
+        const out = await res.json();
+        if (!res.ok || !out.ok) throw new Error(out.error || 'Something went wrong.');
+
+        sessionStorage.setItem('brief-sent', val('email'));
+        location.href = '/collaborate/sent/';
+      } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Send it';
+        fail(
+          e instanceof Error && e.message
+            ? e.message
+            : 'Could not send. Check your connection, or email hello@sgualda.com instead.'
+        );
+      }
+    });
+  }
+</script>

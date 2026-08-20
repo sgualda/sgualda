@@ -24,7 +24,7 @@ I am not writing that as advice. I am writing it because I am bad at it, and the
 
 ## The three weekends
 
-A few years ago I spent three weekends building [a tool for organising my own notes](/case-studies/weeknotes/). Data model, interface, the lot. It worked.
+A few years ago I spent three weekends building a tool for organising my own notes. Data model, interface, the lot. It worked.
 
 I never showed it to anybody.
 
@@ -46,7 +46,7 @@ It is not sentimentality. It is arithmetic that your brain does badly.
 
 None of these are about the idea. They are all about your own behaviour, which is the part you can actually observe.
 
-**1 · You are polishing what was never at risk.** This is the strongest one. If the core assumption is untested and you are refining the interface, you are avoiding, and the craft is a costume. I did exactly this on [a pricing calculator I never launched](/case-studies/rangos/), and called it attention to detail.
+**1 · You are polishing what was never at risk.** This is the strongest one. If the core assumption is untested and you are refining the interface, you are avoiding, and the craft is a costume. I did exactly this on a pricing calculator I never launched, and called it attention to detail.
 
 **2 · You have not shown it to anyone who could say no.** Showing it to people who will be encouraging is not showing it. The test is whether the last person you demoed it to was in a position to tell you it was pointless, and whether you gave them room to.
 

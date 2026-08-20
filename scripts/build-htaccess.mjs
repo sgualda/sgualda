@@ -93,7 +93,30 @@ const rules = readFileSync(join(root, 'public/_redirects'), 'utf8')
   .map((l) => l.split(/\s+/))
   .filter(([from, to]) => from && to);
 
-const redirects = rules
+/**
+ * Longest path first, and this is load-bearing.
+ *
+ * Apache's `Redirect` matches a PREFIX, not a URL, and the first directive that
+ * matches wins. So a file that lists
+ *
+ *     Redirect 301 /case-studies/         /work/
+ *     Redirect 301 /case-studies/rangos/  /work/
+ *
+ * in that order never reaches the second line: /case-studies/rangos/ matches
+ * the first, Apache appends the leftover "rangos/", and a URL that was supposed
+ * to land on the index 404s at /work/rangos/ instead.
+ *
+ * Four rules were wrong this way — the two deleted projects and both brief
+ * URLs — and one had been wrong since the WordPress cutover: /blog/feed/ was
+ * listed after /blog/ and had been resolving to /writing/feed/.
+ *
+ * Sorting by descending length means the most specific rule is always tested
+ * first, which is what the file reads as if it means. The order inside
+ * public/_redirects stays human — grouped by why, with the comments — because
+ * that file is for people and this transformation is for Apache.
+ */
+const redirects = [...rules]
+  .sort((a, b) => b[0].length - a[0].length)
   .map(([from, to, code = '301']) => `Redirect ${code} ${from} ${to}`)
   .join('\n');
 

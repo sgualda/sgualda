@@ -15,7 +15,7 @@ coverAlt: 'The glintale reading interface with story series and progress'
 
 glintale is a platform for illustrated serialised fiction. Readers work through story series a chapter at a time, and the product is built around the habit rather than around the catalogue.
 
-The idea was mine. I design it. I build it with one engineer — the same setup as [ecoco](/case-studies/ecoco-mobile-app/), which is apparently a pattern I’m not learning my way out of.
+The idea was mine. I design it. I build it with one engineer — the same setup as [ecoco](/work/ecoco-mobile-app/), which is apparently a pattern I’m not learning my way out of.
 
 ## The bet
 
