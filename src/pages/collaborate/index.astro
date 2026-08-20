@@ -113,15 +113,30 @@ import { FIELDS, BUDGET } from '@lib/intake';
     color: var(--ink);
     background: var(--paper);
     border: 1px solid var(--hair);
-    border-radius: var(--radius-card);
+    /* --radius-sm, not --radius-card. A 28px corner on a 108px-tall textarea
+       eats most of its height in curve and reads as a bubble rather than a
+       field to type in; the card radius is for cards. */
+    border-radius: var(--radius-sm);
     padding: 12px 16px;
     width: 100%;
     transition: border-color 0.2s var(--ease);
   }
   .form textarea { resize: vertical; min-height: 108px; }
+  /* A field focuses by sharpening its own edge, not by growing a slab.
+     The global :focus-visible is a double ring — a 2px paper outline over a 4px
+     ink box-shadow — which is right for a link or a pill and much too heavy
+     around a 108px textarea, where it reads as a 3px black frame. Killing the
+     outline alone was not enough: the box-shadow stayed and was doing most of
+     the damage. This is a 2px perimeter of ink against paper, which is high
+     contrast and unmistakably focused, and it follows the field's own radius
+     instead of the ring's. */
   .form input:focus-visible,
   .form textarea:focus-visible,
-  .form select:focus-visible { outline: none; border-color: var(--ink); }
+  .form select:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--ink);
+    border-color: var(--ink);
+  }
   .hint { font-size: 0.8125rem; line-height: var(--lh-ui); color: var(--dim); }
 
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

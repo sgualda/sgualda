@@ -4,7 +4,6 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import Newsletter from '@components/Newsletter.astro';
-import Collaborate from '@components/Collaborate.astro';
 import Testimonials from '@components/Testimonials.astro';
 import { getTestimonials, reviewSchema } from '@lib/testimonials';
 import { Image } from 'astro:assets';
@@ -142,7 +141,12 @@ const voices = await getTestimonials();
       failures. Renders nothing until there are quotes to show. */}
   <Testimonials />
 
-  <Collaborate />
+  {/* No collaborate banner here, on purpose.
+      The home already ends on the work and then asks for an email. A third
+      block asking for something else in between turns the bottom of the page
+      into a queue of requests. The banner belongs at the end of a page that
+      has just made an argument — an essay, a project, the about page — not at
+      the end of the front door. */}
 
   <!-- ── newsletter ── -->
   <section class="section">
@@ -163,7 +167,13 @@ const voices = await getTestimonials();
 
 
 
-  .hero { padding-top: clamp(56px, 10vh, 96px); }
+  /* Room to breathe under the header.
+     The header is sticky and about 64px tall, so 56px of padding on a laptop
+     put the top of a 96px headline within a few pixels of the nav — the two
+     read as one block, and the largest type on the site had nothing above it.
+     The floor is now more than the header's own height, so there is always a
+     clear band of paper between the menu and the first word. */
+  .hero { padding-top: clamp(96px, 16vh, 176px); }
   .hero h1 { margin-bottom: 22px; }
   .hero .actions { margin-top: 30px; }
   .skip-to {

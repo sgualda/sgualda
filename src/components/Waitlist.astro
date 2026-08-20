@@ -114,8 +114,12 @@ const { from = '/community/' } = Astro.props;
     padding: 12px 20px;
     transition: border-color 0.2s var(--ease);
   }
+  /* Same treatment as the form on /collaborate/: the global double ring is
+     built for links and pills, and killing only its outline leaves the 4px ink
+     box-shadow doing the damage. */
   .wl-form input[type='email']:focus-visible {
     outline: none;
+    box-shadow: 0 0 0 1px var(--ink);
     border-color: var(--ink);
   }
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

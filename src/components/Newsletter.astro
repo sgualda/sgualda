@@ -70,7 +70,15 @@ const {
     outline: none;
   }
   .signup input::placeholder { color: color-mix(in srgb, var(--on-band) 68%, transparent); }
-  .signup input:focus { border-color: var(--on-band); }
+  /* On a band, the ring is drawn in the band's own foreground.
+     The global :focus-visible paints its shadow in --ink, which on this dark
+     surface is close to invisible — and `outline: none` above already won the
+     outline half, so focus was being shown by a 1px border change alone. */
+  .signup input:focus-visible {
+    outline: none;
+    border-color: var(--on-band);
+    box-shadow: 0 0 0 1px var(--on-band);
+  }
   
   .fine {
     flex-basis: 100%;
