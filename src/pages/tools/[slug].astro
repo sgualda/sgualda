@@ -29,19 +29,24 @@ const url = `${SITE.url}/tools/${t.slug}/`;
   schema={[
     {
       '@type': 'WebApplication',
-      // The fields that turn a type into a rich result. `offers` at zero is
-      // how "free" becomes machine-readable rather than a word in the copy.
-      applicationCategory: 'BusinessApplication',
-      operatingSystem: 'Any',
-      isAccessibleForFree: true,
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
-      author: { '@id': `${SITE.url}/#person` },
+      /**
+       * The fields that turn a type into a rich result. `offers` at zero is
+       * how "free" becomes machine-readable rather than a word in the copy.
+       *
+       * Four of these were declared twice — two blocks of properties merged at
+       * some point and nobody removed the overlap. JavaScript silently keeps
+       * the last one, so the node was correct and TypeScript had been failing
+       * CI over it since 4 August. `operatingSystem` is the one that actually
+       * differed: 'Any' was written first and 'Web browser' won, which is the
+       * true answer for six questionnaires that run in a browser.
+       */
       name: t.n,
+      url,
+      description: t.lead,
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web browser',
-      url,
+      isAccessibleForFree: true,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
-      description: t.lead,
       author: { '@id': `${SITE.url}/#person` },
     },
     {

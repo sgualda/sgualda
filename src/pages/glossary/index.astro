@@ -172,7 +172,7 @@ const stages = await getStages();
   if (q && count) {
     // The field only appears once JavaScript has run: without it, filtering is
     // impossible and an empty box that does nothing is worse than no box.
-    q.closest('.find')!.hidden = false;
+    q.closest<HTMLElement>('.find')!.hidden = false;
 
     q.addEventListener('input', () => {
       const v = q.value.trim().toLowerCase();
