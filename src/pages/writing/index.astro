@@ -68,17 +68,17 @@ const PAGE = 6;
          are only hidden. Loading them over the network would make them
          invisible to crawlers, which is the usual way infinite scroll quietly
          costs a site its long tail. -->
-    <ol class="list" id="list">
+    <ol class="rows list" id="list">
       {
         essays.map((e, i) => (
           <li class:list={['row', { hidden: i >= PAGE }]}>
             <a href={`/writing/${e.id}/`}>
-              <time datetime={e.data.published.toISOString().slice(0, 10)}>
+              <time class="r-meta" datetime={e.data.published.toISOString().slice(0, 10)}>
                 {stamp(e.data.published)}
               </time>
-              <h2>{e.data.title}</h2>
-              <p>{e.data.hook ?? e.data.description}</p>
-              <span class="go" aria-hidden="true">
+              <span class="r-title">{e.data.title}</span>
+              <span class="r-note">{e.data.hook ?? e.data.description}</span>
+              <span class="r-go" aria-hidden="true">
                 <svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </span>
             </a>
@@ -115,97 +115,9 @@ const PAGE = 6;
 
   .intro h1 { margin-bottom: 18px; }
 
-  /* ── the index ──
-     A list of things to read, so the title leads and everything else gets out
-     of its way: date above in the small size, hook underneath in the secondary
-     one, a hairline between rows and nothing else. The arrow is the only
-     decoration and it only moves on hover.
-
-     The previous version was a two-column grid — date on the left, title on the
-     right — which is a table, and a table of seven things is a table too few.
-     It also broke below 560px, where 96px of date left the titles wrapping
-     every three words. */
-  .list {
-    /* An ordered list because the order means something — newest first — but
-       the markers do not: "1." on the most recent essay numbers nothing a
-       reader needs. Semantics kept, decoration dropped. */
-    list-style: none;
-    text-align: left;
-    margin-top: clamp(48px, 8vh, 80px);
-  }
-  .row.hidden { display: none; content-visibility: hidden; }
-  .row { border-top: 1px solid var(--hair); }
-  .row:last-of-type { border-bottom: 1px solid var(--hair); }
-
-  .list a {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas: 'time  go' 'title go' 'hook  go';
-    align-items: start;
-    column-gap: 24px;
-    padding: clamp(24px, 3.5vw, 34px) 0;
-    transition: opacity 0.24s var(--ease);
-  }
-  .list a:hover { opacity: 0.62; }
-
-  .list time {
-    grid-area: time;
-    font-size: var(--fs-fine);
-    line-height: var(--lh-ui);
-    letter-spacing: var(--ls-read);
-    color: var(--dim);
-  }
-  /* The title is the row. Display face, and the only thing at this size. */
-  .list h2 {
-    grid-area: title;
-    margin-top: 8px;
-    font-size: clamp(1.125rem, 2.4vw, 1.375rem);
-    font-weight: 600;
-    letter-spacing: var(--ls-heading);
-    line-height: var(--lh-tight);
-    max-width: 30ch;
-  }
-  /* The hook, which the list never showed and every essay already has. It is
-     the difference between scanning seven titles and knowing which one is for
-     you. */
-  .list p {
-    grid-area: hook;
-    margin-top: 10px;
-    max-width: 52ch;
-    font-size: var(--fs-sub);
-    line-height: var(--lh-read);
-    color: var(--dim);
-  }
-  .go {
-    grid-area: go;
-    align-self: center;
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--hair);
-    flex: none;
-  }
-  .go svg {
-    width: 15px; height: 15px;
-    stroke: var(--ink); stroke-width: 1.7; fill: none;
-    stroke-linecap: round; stroke-linejoin: round;
-    transition: transform 0.24s var(--ease);
-  }
-  .list a:hover .go svg { transform: translateX(3px); }
-
-  /* On a phone the arrow goes: a 34px circle beside a wrapping headline is the
-     first thing to squeeze the text, and the whole row is already the target. */
-  @media (max-width: 560px) {
-    .list a { grid-template-columns: 1fr; grid-template-areas: 'time' 'title' 'hook'; }
-    .list h2 { max-width: none; }
-    .go { display: none; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .list a, .go svg { transition: none; }
-  }
+  /* Layout comes from `.rows` in base.css — the same component /map/ and
+     /tools/ use. Only the top margin is this page's. */
+  .list { margin-top: clamp(48px, 8vh, 80px); }
 
   .more { margin-top: 52px; text-align: center; }
   .more .btn { min-width: 168px; }

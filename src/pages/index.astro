@@ -79,7 +79,7 @@ const voices = await getTestimonials();
       </p>
     </div>
 
-    <div class="wide grid">
+    <div class="col grid">
       {
         featured.map((c) => (
           <a class="slot" href={`/work/${c.id}/`} aria-label={`${c.data.title} — ${c.data.summary}`}>
@@ -109,7 +109,7 @@ const voices = await getTestimonials();
         <a href="/now/">this is what I’m on now</a>.
       </p>
     </div>
-    <div class="wide">
+    <div class="col">
       <Image
         src={studio}
         alt="The desk where most of this gets made"
@@ -147,8 +147,6 @@ const voices = await getTestimonials();
       the end of the front door. */}
 
   <!-- ── newsletter ── -->
-  {/* A band, so it stays on --shell with the header, the footer and every
-      other band. Only grids step out to --shell-wide. */}
   <section class="section">
     <div class="col">
       <Newsletter />
@@ -190,12 +188,10 @@ const voices = await getTestimonials();
      link name comes from aria-label instead, so the four are still
      distinguishable to anybody not looking at them.
 
-     One row at --shell-wide, two at tablet, one column on a phone. It was a
-     2×2 block inside a 560px column with the right-hand half of a 1280px
-     screen empty next to it. */
+     Two across, one column on a phone. */
   .grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-top: 42px;
   }
@@ -214,7 +210,6 @@ const voices = await getTestimonials();
     transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
   }
   .slot:hover img { opacity: 0.86; transform: translateY(-2px); }
-  @media (max-width: 820px) { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
 
   .wide-shot {

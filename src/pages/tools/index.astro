@@ -63,17 +63,14 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 
   <section class="col intro">
     <span class="eyebrow">Tools</span>
-    <h1 class="h1-wide">Tools for the decisions that stick</h1>
+    <h1>Six checks,<br />one decision.</h1>
     <p class="sub">
       Pick the one that matches what you’re stuck on. Each asks you a few multiple-choice
       questions and gives you a straight answer, not a score, not a report you have to interpret.
     </p>
   </section>
 
-  {/* --shell-wide, not --shell. The five chips measure 651px and were being
-      clipped inside a 560px column with no affordance, and six cards were
-      stacking one per row on a 1280px screen. */}
-  <div class="wide">
+  <div class="col">
     <div class="filters rail" role="group" aria-label="Filter by topic">
       {
         cats.map((c, i) => (
@@ -85,21 +82,27 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
     </div>
     <p class="fcount" id="filterCount" role="status" aria-live="polite"></p>
 
-    <div class="cards">
+    {/* The same rows as /writing/ and /map/.
+        These were filled cards with pills on top and no arrow, which made the
+        third list of clickable things on this site look like a third kind of
+        object. What is actually different about a check is what it costs you
+        to run one, so that is what the meta line says. */}
+    <ol class="rows cards">
       {
         TOOLS.map((t) => (
-          <article class="card card-link" data-cat={t.cat}>
+          <li class="card" data-cat={t.cat}>
             <a href={`/tools/${t.slug}/`}>
-              {/* "Free" is already the first word of the h1. The cost that is not obvious
-                  is how many questions it asks. */}
-              <p class="pills"><span>{t.time}</span><span>{t.count}</span></p>
-              <h2>{t.n}</h2>
-              <p class="use">{t.lead}</p>
+              <span class="r-meta">{t.time} · {t.count}</span>
+              <span class="r-title">{t.n}</span>
+              <span class="r-note">{t.lead}</span>
+              <span class="r-go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
             </a>
-          </article>
+          </li>
         ))
       }
-    </div>
+    </ol>
   </div>
 
   <section class="section col">
@@ -113,6 +116,9 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
 
 
 <style>
+  /* The list is `.rows` from base.css; only its top margin is local. */
+  .cards { margin-top: 34px; }
+
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro h1 { margin-bottom: 18px; }
 
@@ -153,32 +159,7 @@ const faqs = [...INDEX_FAQ_HTML.matchAll(/<summary>([\s\S]*?)<span class="pm">[\
     .card.in { animation: none; }
   }
 
-  /* Two columns, as in the comp. */
-  /* One card per row. */
-  /* Two columns at --shell-wide. Six checks in a single column meant six
-     screenfuls of scroll to see six options that fit in three rows. */
-  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 34px; }
-  @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
   .card[hidden] { display: none; }
-
-  .card:hover .go i { transform: translateX(5px); }
-
-  .pills { display: flex; gap: 6px; margin-bottom: 16px; }
-  .pills span {
-    font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim);
-    border: 1px solid var(--hair); border-radius: var(--radius-pill); padding: 5px 10px;
-    /* Derived from the card, not fixed: the card turns white on hover, and a
-       fixed white pill vanished into it leaving a floating outline. */
-    background: color-mix(in srgb, var(--paper) 65%, var(--surface));
-    transition: background 0.3s var(--ease);
-  }
-  .card-link:hover .pills span { background: var(--surface); }
-  .card h2 { font-size: 1.0625rem; margin-bottom: 10px; }
-  .card .use {
-    font-size: 0.875rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim);
-    margin-bottom: 22px;
-  }
-
 
 </style>
 

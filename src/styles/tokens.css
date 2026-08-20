@@ -140,27 +140,25 @@
   --eyebrow-ls: var(--ls-caps);
 
   /* ── layout ──
-     THREE container widths, and only three. Named, so nobody invents a fourth.
+     ONE content width for the whole site, and one exception.
 
-     For a long time there was one, and `.shell`, `.col` and `.wide` all
-     resolved to it — a class called `.wide` that was not wide. 560px is the
-     right measure for prose, roughly 70 characters, and the wrong one for
-     everything that is not prose: six cards stacked in a single column on a
-     1280px screen, a filter rail 651px long clipped inside 560, and display
-     headlines breaking into three lines because the column is narrow rather
-     than because the type is big.
+     There were briefly three. That was a mistake and it is worth writing down
+     why, because the reasoning for it was sound and the result was wrong: two
+     real problems — a filter rail clipped inside the column, six cards stacked
+     one per screenful — got solved by widening the containers those components
+     sat in. Each fix was locally correct. Together they meant a single page ran
+     880 → 560 → 880 → 880 → 560 down its left edge, and three lists of
+     clickable things on three pages came out at three different widths.
 
-     The proof it works was already here. /map/ had a hard-coded
-     `min(1040px, …)` on its diagram, and that diagram is the best-looking
-     thing on the site at full width. This names what it was doing so the rest
-     can do it too.
+     A container is a property of the site, not of the component. Anything that
+     does not fit inside 560 is a component problem and gets fixed as one: the
+     rail wraps instead of scrolling, the cards get tighter.
 
-     What does NOT move: the header, the footer, every band and every section
-     heading stay on --shell. That vertical line is what makes the site feel
-     like one site, and only grids step outside it. */
-  --shell: min(560px, calc(100vw - 40px));       /* prose, headings, bands */
-  --shell-wide: min(880px, calc(100vw - 40px));  /* grids, rails, card lists */
-  --shell-full: min(1040px, calc(100vw - 40px)); /* diagrams that need the room */
+     --shell-full is the one exception and it earns it by not being content: the
+     route diagram on /map/ is a picture, full-bleed on purpose, and it reads as
+     deliberate precisely because nothing else does it. */
+  --shell: min(560px, calc(100vw - 40px));
+  --shell-full: min(1040px, calc(100vw - 40px)); /* the map diagram. Only that. */
   --measure: 62ch;   /* long-form reading width, used inside the shell */
   /* ── spacing ──
      Named steps so a future component has somewhere to reach for instead of

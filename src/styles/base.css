@@ -80,24 +80,108 @@ img, picture, svg, video { max-width: 100%; height: auto; display: block; }
 /* Every container is the same width. .col and .wide are kept as aliases so
    pages read naturally, but they resolve to the identical shell — that is
    what makes the header, footer and banners align. */
-.shell,
+/* One container class, one width.
+   There were three names — `.shell`, `.col` and `.wide` — all resolving to the
+   same value, which is how somebody (me) came to widen `.wide` on the
+   reasonable grounds that it was called wide. One name cannot drift from
+   itself. `.full` is the single exception and it is not content: the route
+   diagram on /map/. */
 .col { width: var(--shell); margin-inline: auto; text-align: center; }
-
-/* `.wide` is now actually wide.
-   It used to resolve to --shell like the other two, which made its name a lie
-   and left every grid on the site inside a reading column. Anything laid out
-   in more than one column belongs here; anything read as a sentence stays in
-   `.col`. */
-.wide { width: var(--shell-wide); margin-inline: auto; text-align: center; }
 .full { width: var(--shell-full); margin-inline: auto; text-align: center; }
 
-/* A display heading that may use the wide container from inside a reading one.
-   Negative inline margins are the breakout: at 1280 the parent is 560, so
-   `50% - 880/2` is -160 a side and the heading resolves to 880. On a phone both
-   widths collapse to `100vw - 40px`, the margin computes to 0, and nothing
-   overflows. Only headings get this — the paragraph under them stays at the
-   reading measure, because a 880px line of body copy is unreadable. */
-.h1-wide { margin-inline: calc(50% - var(--shell-wide) / 2); }
+/* ── the row list ──────────────────────────────────────────────
+   ONE component for every list of things you can click into.
+
+   There were three, on the three pages that are each a list of things you can
+   click into. /writing/ had hairline rows with the date above the title and a
+   circled arrow. /map/ had hairline rows with a stage number to the left and a
+   bare → . /tools/ had filled cards with pills on top and no arrow at all.
+   Three lists, three visual languages, and nothing about the content justified
+   the difference: they are all "here are N things, pick one".
+
+   The pattern is the one the writing index arrived at, because it is the one
+   that puts the title first and the metadata out of its way:
+
+       meta      small, dim, one line — a date, a stage, a duration
+       title     display face, the only thing at this size in the row
+       note      the hook, the lead, the one line that says why you would click
+       go        a circled arrow, right, vertically centred
+
+   On a phone the arrow goes: a 34px circle beside a wrapping headline is the
+   first thing to squeeze the text, and the whole row is already the target. */
+.rows { list-style: none; text-align: left; }
+.rows > li { border-top: 1px solid var(--hair); }
+.rows > li:last-child { border-bottom: 1px solid var(--hair); }
+ /* Two ways of hiding a row, both used: the `hidden` attribute where the
+    markup knows, and a class where a script reveals them in batches. Rows
+    below the fold are skipped by layout and paint until shown. */
+.rows > li[hidden],
+.rows > li.hidden { display: none; content-visibility: hidden; }
+
+.rows a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'meta go' 'title go' 'note go';
+  align-items: start;
+  column-gap: 24px;
+  padding: clamp(24px, 3.5vw, 34px) 0;
+  transition: opacity 0.24s var(--ease);
+}
+.rows a:hover { opacity: 0.62; }
+
+.rows .r-meta {
+  grid-area: meta;
+  font-size: var(--fs-fine);
+  line-height: var(--lh-ui);
+  letter-spacing: var(--ls-read);
+  color: var(--dim);
+}
+.rows .r-title {
+  grid-area: title;
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 2.4vw, 1.375rem);
+  font-weight: 600;
+  letter-spacing: var(--ls-heading);
+  line-height: var(--lh-tight);
+  max-width: 30ch;
+}
+.rows .r-note {
+  grid-area: note;
+  display: block;
+  margin-top: 10px;
+  max-width: 52ch;
+  font-size: var(--fs-sub);
+  line-height: var(--lh-read);
+  color: var(--dim);
+}
+.rows .r-go {
+  grid-area: go;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hair);
+}
+.rows .r-go svg {
+  width: 15px; height: 15px;
+  stroke: var(--ink); stroke-width: 1.7; fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 0.24s var(--ease);
+}
+.rows a:hover .r-go svg { transform: translateX(3px); }
+
+@media (max-width: 560px) {
+  .rows a { grid-template-columns: 1fr; grid-template-areas: 'meta' 'title' 'note'; }
+  .rows .r-title { max-width: none; }
+  .rows .r-go { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rows a, .rows .r-go svg { transition: none; }
+}
 input, textarea, select { text-align: left; font-family: inherit; }
 
 /* Sub-heading: the paragraph that sits under a title. */

@@ -53,7 +53,7 @@ const routeD = smooth(STAGES);
 
   <section class="col intro">
     <span class="eyebrow">Map</span>
-    <h1 class="h1-wide">The five stages of building a product.</h1>
+    <h1>Five stages,<br />five problems.</h1>
     <p class="sub">
       Each stage has a different problem, and advice that saves you in one can hurt you in
       another. They are numbered, not ordered — pick the one you are in.
@@ -102,17 +102,17 @@ const routeD = smooth(STAGES);
   <section class="section col">
     <span class="eyebrow">Pick one</span>
     <h2>Where are you right now?</h2>
-    <ol class="stages">
+    <ol class="rows stages">
       {
         STAGES.map((s) => (
           <li>
             <a href={`/map/${s.slug}/`}>
-              <span class="idx"><em>Stage</em>{s.n}</span>
-              <span class="text">
-                <span class="h">{s.name}</span>
-                <span class="p">{s.lead}</span>
+              <span class="r-meta">Stage {s.n}</span>
+              <span class="r-title">{s.name}</span>
+              <span class="r-note">{s.lead}</span>
+              <span class="r-go" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </span>
-              <span class="chev" aria-hidden="true">→</span>
             </a>
           </li>
         ))
@@ -134,7 +134,7 @@ const routeD = smooth(STAGES);
   .intro { padding-top: clamp(52px, 9vh, 84px); }
   .intro h1 { margin-bottom: 18px; }
 
-  .map-wide { width: min(1040px, calc(100vw - 40px)); margin: 44px auto 0; }
+  .map-wide { width: var(--shell-full); margin: 44px auto 0; }
   .diagram {
     background: var(--surface);
     border-radius: var(--radius-card);
@@ -350,40 +350,8 @@ const routeD = smooth(STAGES);
     .stop { opacity: 1; animation: none; }
   }
 
-  /* ── pick one ── */
-  .stages { list-style: none; text-align: left; margin-top: 40px; }
-  .stages li + li { border-top: 1px solid var(--hair); }
-  .stages a {
-    display: grid;
-    grid-template-columns: 84px 1fr 20px;
-    gap: 12px;
-    align-items: center;
-    padding: 22px 0;
-    transition: opacity 0.2s var(--ease);
-  }
-  .idx {
-    font-family: var(--font-display); font-size: 1.375rem; font-weight: 600;
-    letter-spacing: 0em; color: var(--dim); line-height: var(--lh-display);
-  }
-  .idx em {
-    display: block; font-family: var(--font-body); font-style: normal;
-    font-size: 0.6875rem; font-weight: 400; letter-spacing: 0.02em; margin-bottom: 2px;
-  }
-  .text .h {
-    display: block; font-family: var(--font-display); font-size: 1.0625rem;
-    font-weight: 600; letter-spacing: var(--ls-heading); margin-bottom: 6px;
-  }
-  .text .p { font-size: 1rem; line-height: var(--lh-ui); letter-spacing: 0; color: var(--dim); }
-  .chev { color: var(--dim); transition: transform 0.28s var(--ease), color 0.28s var(--ease); }
-  .stages a:hover .chev { transform: translateX(5px); color: var(--ink); }
-  .stages a:hover .idx { color: var(--ink); }
-
-  @media (max-width: 560px) {
-    .stages a { grid-template-columns: 1fr 20px; }
-    .idx { display: flex; align-items: baseline; gap: 6px; font-size: 1.125rem; }
-    .idx em { margin-bottom: 0; }
-    .stages a > .idx { grid-column: 1 / -1; }
-  }
+  /* The stage list is `.rows` from base.css. Only its top margin is local. */
+  .stages { margin-top: 40px; }
 </style>
 
 <script>
