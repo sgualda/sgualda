@@ -139,24 +139,43 @@ const notFor = [
       <div><dt>Languages</dt><dd>Spanish and English.</dd></div>
     </dl>
 
-    {/* One comparison, not two lists.
-        These were two stacked sections with two headings — "What I'm good at."
-        and "…and what I'm not." — which reads as an afterthought tacked onto a
-        boast, and puts the honest half where most people have stopped
-        scrolling. Side by side, they are a single idea: here is the shape of
-        the work, and here is its edge. On a phone they stack, and the second
-        heading is what tells you the register has changed. */}
-    <section class="block pair">
-      <div>
-        <h2>Good at</h2>
+    {/* One column, two halves, and the honest one sits apart.
+
+        This was side-by-side columns, which is the obvious way to lay out a
+        comparison and the wrong one here. Two columns inside a 560px reading
+        column give about 28 characters a line — less than half a comfortable
+        measure — so every four words the eye jumped, four-word headlines broke
+        across three lines, and the rows never aligned across the gap, which
+        meant it did not even read as a comparison. It read as two unrelated
+        lists that happened to be adjacent.
+
+        Full width fixes the measure. The contrast is carried by the surface
+        instead: "not good at" is a filled block, set apart from the page the
+        way its content is set apart from the pitch. One quiet move, no icons,
+        no colour, and the half most people skip is the half that now has an
+        edge around it. */}
+    <section class="block strengths">
+      <div class="half">
+        <span class="tag">Good at</span>
         <dl>
-          {goodAt.map((x) => (<div><dt>{x.title}</dt><dd>{x.body}</dd></div>))}
+          {goodAt.map((x) => (
+            <div>
+              <dt>{x.title}</dt>
+              <dd>{x.body}</dd>
+            </div>
+          ))}
         </dl>
       </div>
-      <div>
-        <h2>Not good at</h2>
+
+      <div class="half half--not">
+        <span class="tag">Not good at</span>
         <dl>
-          {notFor.map((x) => (<div><dt>{x.title}</dt><dd>{x.body}</dd></div>))}
+          {notFor.map((x) => (
+            <div>
+              <dt>{x.title}</dt>
+              <dd>{x.body}</dd>
+            </div>
+          ))}
         </dl>
       </div>
     </section>
@@ -239,28 +258,34 @@ const notFor = [
     letter-spacing: 0;
     color: var(--dim);
   }
-  /* Two columns, one comparison. Each entry is a hairline-topped row, the
-     same row the rest of the site uses for a list of things. */
-  .pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 44px;
-    align-items: start;
-  }
-  .pair h2 {
-    font-size: var(--fs-lead);
-    letter-spacing: var(--ls-heading);
-    line-height: var(--lh-tight);
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--hair);
-  }
-  .pair dl { display: grid; gap: 0; }
-  .pair dl > div { padding: 20px 0; border-bottom: 1px solid var(--hair); }
-  .pair dt { margin-bottom: 8px; }
-  /* One paragraph size on this page, and one colour for it. */
-  .pair dd { font-size: var(--fs-sub); line-height: var(--lh-read); }
+  /* ── good at / not good at ── */
+  .strengths { display: grid; gap: 34px; }
 
-  @media (max-width: 720px) {
-    .pair { grid-template-columns: 1fr; gap: 34px; }
+  .tag {
+    display: block;
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: var(--space-5);
   }
+
+  .half dl { display: grid; gap: 0; }
+  .half dl > div { padding: var(--space-6) 0; border-top: 1px solid var(--hair); }
+  .half dl > div:first-of-type { border-top: 0; padding-top: 0; }
+
+  /* The second half is a block, not a column.
+     Same rows, same type, one surface — which is the whole difference. */
+  .half--not {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    padding: clamp(24px, 5vw, 38px);
+  }
+  .half--not dl > div { border-top-color: color-mix(in srgb, var(--ink) 10%, transparent); }
+  .half--not dl > div:first-of-type { padding-top: 0; }
+
+  .half dt { margin-bottom: var(--space-3); }
+  /* One paragraph size on this page, at a measure somebody can read. */
+  .half dd { font-size: var(--fs-sub); line-height: var(--lh-read); max-width: 60ch; }
 </style>
